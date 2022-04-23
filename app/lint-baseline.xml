@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.1.3" type="baseline" client="gradle" dependencies="false" name="AGP (7.1.3)" variant="all" version="7.1.3">
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 31 (current min is 26): `android.app.PendingIntent#FLAG_MUTABLE`"
+        errorLine1="          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE,"
+        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/dev/msfjarvis/aps/ui/autofill/AutofillDecryptActivity.kt"
+            line="81"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 31 (current min is 26): `android.app.PendingIntent#FLAG_MUTABLE`"
+        errorLine1="          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE,"
+        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/dev/msfjarvis/aps/ui/autofill/AutofillDecryptActivityV2.kt"
+            line="70"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 31 (current min is 26): `android.app.PendingIntent#FLAG_MUTABLE`"
+        errorLine1="          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE,"
+        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/dev/msfjarvis/aps/ui/autofill/AutofillFilterView.kt"
+            line="77"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 31 (current min is 26): `android.app.PendingIntent#FLAG_MUTABLE`"
+        errorLine1="          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE,"
+        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/dev/msfjarvis/aps/ui/autofill/AutofillPublisherChangedActivity.kt"
+            line="57"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 31 (current min is 23): `android.app.PendingIntent#FLAG_MUTABLE`"
+        errorLine1="      PendingIntent.FLAG_MUTABLE"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/dev/msfjarvis/aps/util/autofill/AutofillViewUtils.kt"
+            line="59"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 31 (current min is 23): `android.app.PendingIntent#FLAG_MUTABLE`"
+        errorLine1="          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE"
+        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/dev/msfjarvis/aps/util/services/ClipboardService.kt"
+            line="122"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Resource references will not work correctly in images generated for this vector icon for API &lt; 24; check generated icon to make sure it looks acceptable"
+        errorLine1="  android:tint=&quot;?attr/colorControlNormal&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/drawable/ic_push_pin_24dp.xml"
+            line="4"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="Deprecated"
+        message="`android:editable` is deprecated: Use an `&lt;EditText>` to make it editable"
+        errorLine1="      android:editable=&quot;false&quot;"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_field.xml"
+            line="24"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="MissingQuantity"
+        message="For locale &quot;fr&quot; (French) the following quantities should also be defined: `many`"
+        errorLine1="  &lt;plurals name=&quot;delete_title&quot;>"
+        errorLine2="  ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="7"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="MissingQuantity"
+        message="For locale &quot;fr&quot; (French) the following quantities should also be defined: `many`"
+        errorLine1="  &lt;plurals name=&quot;delete_dialog_text&quot;>"
+        errorLine2="  ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="21"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
+        <location
+            file="org/bouncycastle/est/jcajce/JcaJceUtils$1.class"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        message="`checkServerTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
+        <location
+            file="org/bouncycastle/est/jcajce/JcaJceUtils$1.class"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
+        <location
+            file="org/bouncycastle/est/jcajce/JcaJceUtils$2.class"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
+        <location
+            file="org/eclipse/jgit/transport/TransportHttp$DummyX509TrustManager.class"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        message="`checkServerTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
+        <location
+            file="org/eclipse/jgit/transport/TransportHttp$DummyX509TrustManager.class"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:attr/windowBackground` with a theme that also paints a background (inferred theme is `@style/AppThemeM3`)"
+        errorLine1="  android:background=&quot;?android:attr/windowBackground&quot;"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_git_clone.xml"
+            line="11"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:attr/colorBackground` with a theme that also paints a background (inferred theme is `@style/AppThemeM3`)"
+        errorLine1="  android:background=&quot;?android:attr/colorBackground&quot;>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_clone.xml"
+            line="10"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:attr/colorBackground` with a theme that also paints a background (inferred theme is `@style/AppThemeM3`)"
+        errorLine1="  android:background=&quot;?android:attr/colorBackground&quot;"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_key_selection.xml"
+            line="10"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:attr/colorBackground` with a theme that also paints a background (inferred theme is `@style/AppThemeM3`)"
+        errorLine1="  android:background=&quot;?android:attr/colorBackground&quot;"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_welcome.xml"
+            line="10"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.bool.leak_canary_allow_in_non_debuggable_build` appears to be unused"
+        errorLine1="  &lt;bool name=&quot;leak_canary_allow_in_non_debuggable_build&quot;>true&lt;/bool>"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/bools.xml"
+            line="7"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.seed` appears to be unused"
+        errorLine1="  &lt;color name=&quot;seed&quot;>#003E5B&lt;/color>"
+        errorLine2="         ~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors_material3.xml"
+            line="59"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.error` appears to be unused"
+        errorLine1="  &lt;color name=&quot;error&quot;>#BA1B1B&lt;/color>"
+        errorLine2="         ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors_material3.xml"
+            line="60"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.change` appears to be unused"
+        errorLine1="  &lt;string name=&quot;change&quot;>Change&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="35"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.use` appears to be unused"
+        errorLine1="  &lt;string name=&quot;use&quot;>Use&lt;/string>"
+        errorLine2="          ~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="36"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.directory_selected_title` appears to be unused"
+        errorLine1="  &lt;string name=&quot;directory_selected_title&quot;>Directory already selected&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="37"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.directory_selected_message` appears to be unused"
+        errorLine1="  &lt;string name=&quot;directory_selected_message&quot;>Do you want to use \&quot;%1$s\&quot;?&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="38"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.location_dialog_create_text` appears to be unused"
+        errorLine1="  &lt;string name=&quot;location_dialog_create_text&quot;>Select where do you want to create your password repository&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="73"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.location_sdcard` appears to be unused"
+        errorLine1="  &lt;string name=&quot;location_sdcard&quot;>SD-Card&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="74"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.location_hidden` appears to be unused"
+        errorLine1="  &lt;string name=&quot;location_hidden&quot;>Hidden (Preferred)&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="75"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.external_repository_dialog_title` appears to be unused"
+        errorLine1="  &lt;string name=&quot;external_repository_dialog_title&quot;>Choose where to store the passwords&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="76"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.external_repository_dialog_text` appears to be unused"
+        errorLine1="  &lt;string name=&quot;external_repository_dialog_text&quot;>You must select a directory where to store your passwords. If you want to store your passwords within the hidden storage of the application, cancel this dialog and disable the \&quot;External Repository\&quot; option.&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="77"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.pref_external_repository_title` appears to be unused"
+        errorLine1="  &lt;string name=&quot;pref_external_repository_title&quot;>External repository&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="139"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.pref_external_repository_summary` appears to be unused"
+        errorLine1="  &lt;string name=&quot;pref_external_repository_summary&quot;>Use an external password repository&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="140"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.pref_select_external_repository_title` appears to be unused"
+        errorLine1="  &lt;string name=&quot;pref_select_external_repository_title&quot;>Select external repository&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="141"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.pref_select_external_repository_summary_no_repo_selected` appears to be unused"
+        errorLine1="  &lt;string name=&quot;pref_select_external_repository_summary_no_repo_selected&quot;>No external repository selected&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="142"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.sdcard_root_warning_title` appears to be unused"
+        errorLine1="  &lt;string name=&quot;sdcard_root_warning_title&quot;>SD-Card root selected&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="256"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.sdcard_root_warning_message` appears to be unused"
+        errorLine1="  &lt;string name=&quot;sdcard_root_warning_message&quot;>You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="257"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.sdcard_root_warning_remove_everything` appears to be unused"
+        errorLine1="  &lt;string name=&quot;sdcard_root_warning_remove_everything&quot;>Remove everything&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="258"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.access_sdcard_text` appears to be unused"
+        errorLine1="  &lt;string name=&quot;access_sdcard_text&quot;>The store location is in your SD Card or Internal storage, but the app does not have permission to access it.&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="266"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.snackbar_action_grant` appears to be unused"
+        errorLine1="  &lt;string name=&quot;snackbar_action_grant&quot;>Grant&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="299"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.repository_n_location` appears to be unused"
+        errorLine1="  &lt;string name=&quot;repository_n_location&quot;>Repository \nLocation&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="356"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_pwgen.xml"
+            line="90"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="  &lt;ImageView"
+        errorLine2="   ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/oreo_autofill_dataset.xml"
+            line="17"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="  &lt;ImageView"
+        errorLine2="   ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/oreo_autofill_filter_row.xml"
+            line="15"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="  &lt;ImageView"
+        errorLine2="   ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/oreo_autofill_filter_row.xml"
+            line="57"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_pwgen.xml"
+            line="90"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        warningAppName.text = &quot;“${packageManager.getApplicationLabel(appInfo)}”&quot;"
+        errorLine2="                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/dev/msfjarvis/aps/ui/autofill/AutofillPublisherChangedActivity.kt"
+            line="110"
+            column="31"/>
+    </issue>
+
+</issues>

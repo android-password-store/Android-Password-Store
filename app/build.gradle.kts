@@ -44,6 +44,7 @@ android {
     disable.add("MissingTranslation")
     disable.add("PluralsCandidate")
     disable.add("ImpliedQuantity")
+    baseline = file("lint-baseline.xml")
   }
 }
 
