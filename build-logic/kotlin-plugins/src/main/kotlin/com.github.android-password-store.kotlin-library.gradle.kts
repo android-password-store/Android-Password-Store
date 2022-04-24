@@ -10,8 +10,10 @@ plugins { id("com.github.android-password-store.kotlin-common") }
 
 tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
-    if (!name.contains("test", ignoreCase = true)) {
-      freeCompilerArgs += listOf("-Xexplicit-api=strict")
+    if (project.providers.gradleProperty("android.injected.invoked.from.ide").orNull != "true") {
+      if (!name.contains("test", ignoreCase = true)) {
+        freeCompilerArgs = freeCompilerArgs + listOf("-Xexplicit-api=strict")
+      }
     }
   }
 }
