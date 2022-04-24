@@ -2,17 +2,6 @@
 <issues format="6" by="lint 7.1.3" type="baseline" client="gradle" dependencies="false" name="AGP (7.1.3)" variant="all" version="7.1.3">
 
     <issue
-        id="Autofill"
-        message="Missing `autofillHints` attribute"
-        errorLine1="        &lt;EditText"
-        errorLine2="         ~~~~~~~~">
-        <location
-            file="src/main/res/layout/fragment_pwgen.xml"
-            line="90"
-            column="10"/>
-    </issue>
-
-    <issue
         id="ContentDescription"
         message="Missing `contentDescription` attribute on image"
         errorLine1="  &lt;ImageView"
