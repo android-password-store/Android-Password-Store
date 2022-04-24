@@ -2,17 +2,6 @@
 <issues format="6" by="lint 7.1.3" type="baseline" client="gradle" dependencies="false" name="AGP (7.1.3)" variant="all" version="7.1.3">
 
     <issue
-        id="Deprecated"
-        message="`android:editable` is deprecated: Use an `&lt;EditText>` to make it editable"
-        errorLine1="      android:editable=&quot;false&quot;"
-        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/item_field.xml"
-            line="24"
-            column="7"/>
-    </issue>
-
-    <issue
         id="MissingQuantity"
         message="For locale &quot;fr&quot; (French) the following quantities should also be defined: `many`"
         errorLine1="  &lt;plurals name=&quot;delete_title&quot;>"

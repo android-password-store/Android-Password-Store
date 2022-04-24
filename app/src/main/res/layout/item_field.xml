@@ -21,8 +21,8 @@
       android:id="@+id/item_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:editable="false"
       android:fontFamily="@font/sourcecodepro"
+      android:inputType="none"
       android:textIsSelectable="true"
       tools:text="p@55w0rd!" />
 
