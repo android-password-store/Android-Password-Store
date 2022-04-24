@@ -111,7 +111,11 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
         warningAppInstallDate.text =
           getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
         val appInfo = packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
-        warningAppName.text = "“${packageManager.getApplicationLabel(appInfo)}”"
+        warningAppName.text =
+          getString(
+            R.string.oreo_autofill_warning_publisher_app_name,
+            packageManager.getApplicationLabel(appInfo)
+          )
 
         val currentHash = computeCertificatesHash(this@AutofillPublisherChangedActivity, appPackage)
         warningAppAdvancedInfo.text =
