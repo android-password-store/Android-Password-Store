@@ -48,6 +48,8 @@ class PGPKeyImportActivity : AppCompatActivity() {
                 .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
                 .setOnCancelListener { finish() }
                 .show()
+            } else {
+              finish()
             }
           },
           { throwable ->
