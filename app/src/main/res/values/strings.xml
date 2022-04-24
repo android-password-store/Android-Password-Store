@@ -32,10 +32,6 @@
   <string name="move">Move</string>
   <string name="edit">Edit</string>
   <string name="delete">Delete</string>
-  <string name="change">Change</string>
-  <string name="use">Use</string>
-  <string name="directory_selected_title">Directory already selected</string>
-  <string name="directory_selected_message">Do you want to use \"%1$s\"?</string>
   <string name="password_exists_title">Password already exists!</string>
   <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
   <string name="password_move_error_title">Error while moving passwords</string>
@@ -70,11 +66,6 @@
   <string name="password_dialog_text">Please provide the password for this repository</string>
 
   <!-- Clone fragment -->
-  <string name="location_dialog_create_text">Select where do you want to create your password repository</string>
-  <string name="location_sdcard">SD-Card</string>
-  <string name="location_hidden">Hidden (Preferred)</string>
-  <string name="external_repository_dialog_title">Choose where to store the passwords</string>
-  <string name="external_repository_dialog_text">You must select a directory where to store your passwords. If you want to store your passwords within the hidden storage of the application, cancel this dialog and disable the \"External Repository\" option.</string>
 
   <string name="server_url">Repository URL</string>
   <string name="server_branch">Branch</string>
@@ -136,10 +127,6 @@
   <string name="pref_clear_clipboard_title">Workaround clipboard history feature</string>
   <string name="pref_clear_clipboard_summary">Enable to flood clipboard history on devices that include such a feature with consecutive numbers, flushing out any passwords</string>
   <string name="pref_git_delete_repo_summary">Deletes local (hidden) repository</string>
-  <string name="pref_external_repository_title">External repository</string>
-  <string name="pref_external_repository_summary">Use an external password repository</string>
-  <string name="pref_select_external_repository_title">Select external repository</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">No external repository selected</string>
   <string name="prefs_export_passwords_title">Export passwords</string>
   <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
   <string name="pref_rebase_on_pull_title">Rebase on pull</string>
@@ -253,9 +240,6 @@
   <string name="git_head_on_branch">On branch %1$s</string>
   <string name="git_head_detached">HEAD detached at %1$s</string>
   <string name="git_head_missing">Unable to locate HEAD</string>
-  <string name="sdcard_root_warning_title">SD-Card root selected</string>
-  <string name="sdcard_root_warning_message">You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted</string>
-  <string name="sdcard_root_warning_remove_everything">Remove everything</string>
   <string name="git_abort_and_push_title">Abort and Push</string>
   <string name="biometric_prompt_title">Biometric Prompt</string>
   <string name="biometric_auth_error_reason">Authentication failure: %s</string>
@@ -263,7 +247,6 @@
   <string name="pref_biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
   <string name="pref_biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
   <string name="pref_title_openkeystore_clear_keyid">Clear remembered OpenKeystore SSH Key ID</string>
-  <string name="access_sdcard_text">The store location is in your SD Card or Internal storage, but the app does not have permission to access it.</string>
   <string name="your_public_key">Your public key</string>
   <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
   <string name="pref_show_hidden_title">Show all files and folders</string>
@@ -296,7 +279,6 @@
   <string name="git_operation_wrong_password">Wrong password</string>
   <string name="bottom_sheet_create_new_folder">Create new folder</string>
   <string name="bottom_sheet_create_new_password">Create new password</string>
-  <string name="snackbar_action_grant">Grant</string>
   <string name="pref_debug_logging_summary">Enable debug logging (requires app restart)</string>
   <string name="pref_debug_logging_title">Debug logging</string>
   <string name="preference_default_username_summary">If Autofill is unable to determine a username from your password file or directory structure, it will use the value specified here</string>
@@ -353,7 +335,6 @@
   <string name="folder_creation_err_folder_exists">A folder by that name already exists</string>
 
   <!-- Onboarding flow -->
-  <string name="repository_n_location">Repository \nLocation</string>
   <string name="let_s_go">Let\'s Go</string>
   <string name="select_n_repository_type">Select \nRepository Type</string>
   <string name="select_repo_type_text">Select if you want to create a local repo or clone a remote repo.</string>

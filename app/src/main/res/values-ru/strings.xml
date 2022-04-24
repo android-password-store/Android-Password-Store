@@ -30,10 +30,6 @@
   <string name="move">Переместить</string>
   <string name="edit">Редактировать</string>
   <string name="delete">Удалить</string>
-  <string name="change">Изменить</string>
-  <string name="use">Использовать</string>
-  <string name="directory_selected_title">Директория уже выбрана</string>
-  <string name="directory_selected_message">Вы хотите использовать \"%1$s\"?</string>
   <string name="password_exists_title">Пароль уже существует!</string>
   <string name="password_exists_message">Это перезапишет %1$sна%2$s</string>
   <string name="password_move_error_title">Ошибка при перемещении паролей</string>
@@ -63,11 +59,6 @@
   <string name="passphrase_dialog_text">Пожалуйста, введите пароль от SSH ключа. Оставьте поле пустым, если пароль отсутствует.</string>
   <string name="password_dialog_text">Пожалуйста, введите пароль для репозитория</string>
   <!-- Clone fragment -->
-  <string name="location_dialog_create_text">Выберите, где вы хотите создать хранилище паролей</string>
-  <string name="location_sdcard">SD-Карта</string>
-  <string name="location_hidden">Скрытый (Предпочтительно)</string>
-  <string name="external_repository_dialog_title">Выберете где хранить пароли</string>
-  <string name="external_repository_dialog_text">Вы должны выбрать директорию где хранить пароли. Если вы хотите хранить пароли в скрытом хранилище приложения, тогда отмените этот диалог и отключите настройку \"Внешний репозиторий\".</string>
   <string name="server_url">URL репозитория</string>
   <string name="server_branch">Ветка</string>
   <string name="connection_mode">Тип авторизации</string>
@@ -121,10 +112,6 @@
   <string name="pref_autofill_enable_title">Включить автозаполнение</string>
   <string name="pref_category_misc_title">Другое</string>
   <string name="pref_git_delete_repo_summary">Удалить локальный (скрытый) репозиторий</string>
-  <string name="pref_external_repository_title">Внешний репозиторий</string>
-  <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>
-  <string name="pref_select_external_repository_title">Выбрать внешний репозиторий</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">Внешний репозиторий не выбран</string>
   <string name="prefs_export_passwords_title">Экспортировать пароли</string>
   <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
   <!-- PasswordGenerator fragment -->
@@ -225,8 +212,6 @@
   <string name="git_head_on_branch">Используется ветка %1$s</string>
   <string name="git_head_detached">HEAD отсоединён на %1$s</string>
   <string name="git_head_missing">HEAD не найден</string>
-  <string name="sdcard_root_warning_title">Выбран корень SD-Карты</string>
-  <string name="sdcard_root_warning_message">Вы выбрали корень вашей sd-карты для хранения. Это очень опасно и вы потеряете ваши данные, поскольку они будут в конечном итоге удалены</string>
   <string name="git_abort_and_push_title">Прервать и записать изменения</string>
   <string name="biometric_prompt_title">Запрос биометрии</string>
   <string name="biometric_auth_error_reason">Ошибка аутентификации: %s</string>
@@ -234,7 +219,6 @@
   <string name="pref_biometric_auth_summary">Когда ключено, Password Store будет запрашивать ваш опечаток пальца при каждом запуске приложения</string>
   <string name="pref_biometric_auth_summary_error">Сенсор отпечатка пальца не доступен или отсутствует</string>
   <string name="pref_title_openkeystore_clear_keyid">Очистить сохраненный SSH Key идентификатор OpenKystortore</string>
-  <string name="access_sdcard_text">Хранилище расположено на вашей SD-карте или во внутреннем хранилище, но у приложения нет разрешения на доступ к нему.</string>
   <string name="your_public_key">Ваш публичный ключ</string>
   <string name="error_generate_ssh_key">Возникла ошибка при попытке генерации ssh ключа</string>
   <string name="pref_show_hidden_title">Показать все файлы и директории</string>
@@ -266,7 +250,6 @@
   <string name="git_operation_wrong_password">Неверный пароль</string>
   <string name="bottom_sheet_create_new_folder">Новая папка</string>
   <string name="bottom_sheet_create_new_password">Создать новый пароль</string>
-  <string name="snackbar_action_grant">Разрешить</string>
   <string name="pref_debug_logging_summary">Включить журнал отладки (требуется перезапуск приложения)</string>
   <string name="pref_debug_logging_title">Журнал отладки</string>
   <string name="preference_default_username_summary">Если автозаполнение не сможет определить имя пользователя из файла пароля или структуры каталога, оно будет использовать значение, указанное здесь</string>
@@ -315,7 +298,6 @@
   <string name="folder_creation_err_file_exists">Файл с таким именем уже существует</string>
   <string name="folder_creation_err_folder_exists">Папка с таким именем уже существует</string>
   <!-- Onboarding flow -->
-  <string name="repository_n_location">Расположение \nрепозитория</string>
   <string name="let_s_go">Поехали</string>
   <string name="select_n_repository_type">Выберите \nтип репозитория</string>
   <string name="select_repo_type_text">Создать локальное хранилище, или клонировать удаленный репозиторий.</string>

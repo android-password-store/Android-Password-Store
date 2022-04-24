@@ -26,10 +26,6 @@
   <string name="move">Mover</string>
   <string name="edit">Editar</string>
   <string name="delete">Excluir</string>
-  <string name="change">Alterar</string>
-  <string name="use">Usar</string>
-  <string name="directory_selected_title">Diretório já selecionado</string>
-  <string name="directory_selected_message">Você quer usar \"%1$s\"?</string>
   <string name="password_exists_title">Senha já existe!</string>
   <string name="password_exists_message">Isso irá sobrescrever %1$s com %2$s.</string>
   <string name="password_move_error_title">Erro ao mover senhas</string>
@@ -59,11 +55,6 @@
   <string name="passphrase_dialog_text">Por favor, forneça a senha para a sua chave SSH</string>
   <string name="password_dialog_text">Por favor, forneça a senha para este repositório</string>
   <!-- Clone fragment -->
-  <string name="location_dialog_create_text">Selecione onde você deseja criar o repositório de suas senhas</string>
-  <string name="location_sdcard">Cartão SD</string>
-  <string name="location_hidden">Oculto (preferencial)</string>
-  <string name="external_repository_dialog_title">Escolha onde armazenar as senhas</string>
-  <string name="external_repository_dialog_text">Você deve selecionar um diretório onde armazenar suas senhas. Se você deseja armazenar suas senhas dentro do armazenamento oculto do aplicativo, cancele esta caixa de diálogo e desative a opção \"Repositório Externo\".</string>
   <string name="server_url">URL do repositório</string>
   <string name="server_branch">Branch</string>
   <string name="connection_mode">Modo de autenticação</string>
@@ -119,10 +110,6 @@
   <string name="pref_clear_clipboard_title">Solução do histórico de transferência</string>
   <string name="pref_clear_clipboard_summary">Ative para inundar o histórico de área de transferência em dispositivos que incluem tal recurso com números consecutivos, expurgando quaisquer senhas</string>
   <string name="pref_git_delete_repo_summary">Exclui o repositório local (oculto)</string>
-  <string name="pref_external_repository_title">Repositório externo</string>
-  <string name="pref_external_repository_summary">Use um repositório de senha externo</string>
-  <string name="pref_select_external_repository_title">Selecionar repositório externo</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">Nenhum repositório externo selecionado</string>
   <string name="prefs_export_passwords_title">Exportar senhas</string>
   <string name="prefs_export_passwords_summary">Exporta as senhas criptografadas para um diretório externo</string>
   <string name="pref_rebase_on_pull_title">Rebasear em pull</string>
@@ -227,9 +214,6 @@
   <string name="git_head_on_branch">Na branch %1$s</string>
   <string name="git_head_detached">HEAD destacada em %1$s</string>
   <string name="git_head_missing">Impossível localizar o HEAD</string>
-  <string name="sdcard_root_warning_title">Raiz do cartão SD selecionada</string>
-  <string name="sdcard_root_warning_message">Você selecionou a raiz do seu cartão SD para armazenar. Isto é extremamente perigoso e você perderá seus dados, pois seu conteúdo será eventualmente apagado</string>
-  <string name="sdcard_root_warning_remove_everything">Remover tudo</string>
   <string name="git_abort_and_push_title">Abortar e executar Push</string>
   <string name="biometric_prompt_title">Confirmação Biométrica</string>
   <string name="biometric_auth_error_reason">Falha de autenticação: %s</string>
@@ -237,7 +221,6 @@
   <string name="pref_biometric_auth_summary">Quando ativado, o Password Store irá pedir a sua impressão digital ao iniciar o aplicativo</string>
   <string name="pref_biometric_auth_summary_error">Hardware de impressão digital não acessível ou ausente</string>
   <string name="pref_title_openkeystore_clear_keyid">Limpar ID de chave SSH lembrada do OpenKeystore</string>
-  <string name="access_sdcard_text">O local do armazenamento está em seu cartão SD ou armazenamento interno, mas o aplicativo não tem permissão para acessá-lo.</string>
   <string name="your_public_key">Sua chave pública</string>
   <string name="error_generate_ssh_key">Erro ao tentar gerar a chave SSH</string>
   <string name="pref_show_hidden_title">Mostrar todos os arquivos e pastas</string>
@@ -269,7 +252,6 @@
   <string name="git_operation_wrong_password">Senha incorreta</string>
   <string name="bottom_sheet_create_new_folder">Criar nova pasta</string>
   <string name="bottom_sheet_create_new_password">Criar nova senha</string>
-  <string name="snackbar_action_grant">Conceder</string>
   <string name="pref_debug_logging_summary">Ativar log de depuração (requer reinicialização da aplicação)</string>
   <string name="pref_debug_logging_title">Debug log</string>
   <string name="preference_default_username_summary">Se o preenchimento automático não puder determinar um nome de usuário a partir do seu arquivo de senha ou estrutura de diretório, ele usará o valor especificado aqui</string>
@@ -319,7 +301,6 @@
   <string name="folder_creation_err_file_exists">Já existe um arquivo com esse nome</string>
   <string name="folder_creation_err_folder_exists">Já existe uma pasta com esse nome</string>
   <!-- Onboarding flow -->
-  <string name="repository_n_location">Local \ndo repositório</string>
   <string name="let_s_go">Vamos lá</string>
   <string name="select_n_repository_type">Selecione \nTipo de Repositório</string>
   <string name="select_repo_type_text">Selecione se você quer criar um repositório local ou clonar um repositório remoto.</string>

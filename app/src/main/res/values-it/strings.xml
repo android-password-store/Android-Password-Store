@@ -26,10 +26,6 @@
   <string name="move">Sposta</string>
   <string name="edit">Modifica</string>
   <string name="delete">Elimina</string>
-  <string name="change">Modifica</string>
-  <string name="use">Usa</string>
-  <string name="directory_selected_title">Directory già selezionata</string>
-  <string name="directory_selected_message">Vuoi usare \"%1$s\"?</string>
   <string name="password_exists_title">La password esiste già!</string>
   <string name="password_exists_message">Questo sovrascriverà %1$s con %2$s.</string>
   <string name="password_move_error_title">Errore spostando le password</string>
@@ -59,11 +55,6 @@
   <string name="passphrase_dialog_text">Sei pregato di fornire una frase segreta per la tua chiave SSH</string>
   <string name="password_dialog_text">Sei pregato di fornire la password per questa repository</string>
   <!-- Clone fragment -->
-  <string name="location_dialog_create_text">Seleziona dove vuoi creare la tua repository della password</string>
-  <string name="location_sdcard">Scheda-SD</string>
-  <string name="location_hidden">Nascosto (Preferito)</string>
-  <string name="external_repository_dialog_title">Scegli dove memorizzare le password</string>
-  <string name="external_repository_dialog_text">Devi selezionare una directory in cui memorizzare le tue password. Se vuoi memorizzare le tue password entro l\'archiviazione nascosta dell\'applicazione, annulla questa finestra di dialogo e disabilita l\'opzione \"Repository Esterna\".</string>
   <string name="server_url">URL della repository</string>
   <string name="server_branch">Ramo</string>
   <string name="connection_mode">Modalità di Autenticazione</string>
@@ -117,10 +108,6 @@
   <string name="pref_autofill_enable_title">Abilita Auto-Compilazione</string>
   <string name="pref_category_misc_title">Varie</string>
   <string name="pref_git_delete_repo_summary">Elimina repository locale (nascosta)</string>
-  <string name="pref_external_repository_title">Repository Esterna</string>
-  <string name="pref_external_repository_summary">Usa una repository di password esterna</string>
-  <string name="pref_select_external_repository_title">Seleziona repository esterna</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">Nessuna repository esterna selezionata</string>
   <string name="prefs_export_passwords_title">Esporta password</string>
   <string name="prefs_export_passwords_summary">Esporta le password crittografate ad una directory esterna</string>
   <!-- PasswordGenerator fragment -->
@@ -222,8 +209,6 @@
   <string name="git_head_on_branch">Sul ramo %1$s</string>
   <string name="git_head_detached">HEAD staccata a %1$s</string>
   <string name="git_head_missing">Impossibile localizzare HEAD</string>
-  <string name="sdcard_root_warning_title">Root della Scheda-SD selezionato</string>
-  <string name="sdcard_root_warning_message">Hai selezionato il root della tua sdcard per il negozio. Questo è estremamente pericoloso e perderai i tuoi dati poiché i suoi contenuti saranno, infine, eliminati</string>
   <string name="git_abort_and_push_title">Interrompi e Spingi</string>
   <string name="biometric_prompt_title">Richiesta Biometrica</string>
   <string name="biometric_auth_error_reason">Autenticazione non riuscita: %s</string>
@@ -231,7 +216,6 @@
   <string name="pref_biometric_auth_summary">Quando abilitata, il Password Store ti chiederà la tua impronta digitale al lancio dell\'app</string>
   <string name="pref_biometric_auth_summary_error">L\'hardware delle impronte digitali non è accessibile o mancante</string>
   <string name="pref_title_openkeystore_clear_keyid">Elimina l\'ID della Chiave SSH di OpenKeystore memorizzato</string>
-  <string name="access_sdcard_text">La posizione dell\'archiviazione nella tua Scheda SD o Archiviazione Interna, ma l\'app non ha i permessi per accedervi.</string>
   <string name="your_public_key">La tua chiave pubblica</string>
   <string name="error_generate_ssh_key">Errore provando a generare la chiave-ssh</string>
   <string name="pref_show_hidden_title">Mostra tutti i file e cartelle</string>
@@ -263,7 +247,6 @@
   <string name="git_operation_wrong_password">Password errata</string>
   <string name="bottom_sheet_create_new_folder">Crea nuova cartella</string>
   <string name="bottom_sheet_create_new_password">Crea nuova password</string>
-  <string name="snackbar_action_grant">Garantisci</string>
   <string name="pref_debug_logging_summary">Abilita la registrazione di debug (richiede il riavvio dell\'app)</string>
   <string name="pref_debug_logging_title">Registrazione di debug</string>
   <string name="preference_default_username_summary">Se l\'autocompletamento non può determinare un nome utente dal tuo file della password o la struttura della directory, userà il valore qui specificato</string>
@@ -312,7 +295,6 @@
   <string name="folder_creation_err_file_exists">Un file con quel nome esiste già</string>
   <string name="folder_creation_err_folder_exists">Una cartella con quel nome esiste già</string>
   <!-- Onboarding flow -->
-  <string name="repository_n_location">Repository \nLocation</string>
   <string name="let_s_go">Andiamo</string>
   <string name="select_n_repository_type">Seleziona \nTipo di repository</string>
   <string name="select_repo_type_text">Seleziona se vuoi creare una repo locale o clonarne una remota.</string>
