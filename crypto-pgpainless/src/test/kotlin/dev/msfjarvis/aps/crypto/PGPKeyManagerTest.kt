@@ -5,6 +5,9 @@ import com.github.michaelbull.result.unwrapError
 import dev.msfjarvis.aps.crypto.GpgIdentifier.KeyId
 import dev.msfjarvis.aps.crypto.GpgIdentifier.UserId
 import dev.msfjarvis.aps.crypto.TestUtils.getArmoredPrivateKeyWithMultipleIdentities
+import dev.msfjarvis.aps.crypto.errors.KeyAlreadyExistsException
+import dev.msfjarvis.aps.crypto.errors.KeyNotFoundException
+import dev.msfjarvis.aps.crypto.errors.NoKeysAvailableException
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -69,7 +72,7 @@ class PGPKeyManagerTest {
       keyManager.addKey(key, false).unwrap()
       val error = keyManager.addKey(key, false).unwrapError()
 
-      assertIs<KeyManagerException.KeyAlreadyExistsException>(error)
+      assertIs<KeyAlreadyExistsException>(error)
     }
 
   @Test
@@ -142,7 +145,7 @@ class PGPKeyManagerTest {
 
       // Check returned key
       val error = keyManager.getKeyById(keyId).unwrapError()
-      assertIs<KeyManagerException.KeyNotFoundException>(error)
+      assertIs<KeyNotFoundException>(error)
       assertEquals("No key found with id: $keyId", error.message)
     }
 
@@ -151,7 +154,7 @@ class PGPKeyManagerTest {
     scope.runTest {
       // Check returned key
       val error = keyManager.getKeyById(KeyId(0x08edf7567183ce44)).unwrapError()
-      assertIs<KeyManagerException.NoKeysAvailableException>(error)
+      assertIs<NoKeysAvailableException>(error)
       assertEquals("No keys were found", error.message)
     }
 

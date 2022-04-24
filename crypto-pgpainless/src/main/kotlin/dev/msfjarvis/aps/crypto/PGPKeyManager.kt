@@ -10,6 +10,12 @@ import androidx.annotation.VisibleForTesting
 import com.github.michaelbull.result.Result
 import dev.msfjarvis.aps.crypto.KeyUtils.tryGetId
 import dev.msfjarvis.aps.crypto.KeyUtils.tryParseKeyring
+import dev.msfjarvis.aps.crypto.errors.InvalidKeyException
+import dev.msfjarvis.aps.crypto.errors.KeyAlreadyExistsException
+import dev.msfjarvis.aps.crypto.errors.KeyDeletionFailedException
+import dev.msfjarvis.aps.crypto.errors.KeyDirectoryUnavailableException
+import dev.msfjarvis.aps.crypto.errors.KeyNotFoundException
+import dev.msfjarvis.aps.crypto.errors.NoKeysAvailableException
 import dev.msfjarvis.aps.util.coroutines.runSuspendCatching
 import java.io.File
 import javax.inject.Inject
@@ -29,16 +35,16 @@ constructor(
   override suspend fun addKey(key: PGPKey, replace: Boolean): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
-        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
-        if (tryParseKeyring(key) == null) throw KeyManagerException.InvalidKeyException
+        if (!keyDirExists()) throw KeyDirectoryUnavailableException
+        if (tryParseKeyring(key) == null) throw InvalidKeyException
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
         if (keyFile.exists()) {
           // Check for replace flag first and if it is false, throw an error
           if (!replace)
-            throw KeyManagerException.KeyAlreadyExistsException(
+            throw KeyAlreadyExistsException(
               tryGetId(key)?.toString() ?: "Failed to retrieve key ID"
             )
-          if (!keyFile.delete()) throw KeyManagerException.KeyDeletionFailedException
+          if (!keyFile.delete()) throw KeyDeletionFailedException
         }
 
         keyFile.writeBytes(key.contents)
@@ -50,11 +56,11 @@ constructor(
   override suspend fun removeKey(key: PGPKey): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
-        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
-        if (tryParseKeyring(key) == null) throw KeyManagerException.InvalidKeyException
+        if (!keyDirExists()) throw KeyDirectoryUnavailableException
+        if (tryParseKeyring(key) == null) throw InvalidKeyException
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
         if (keyFile.exists()) {
-          if (!keyFile.delete()) throw KeyManagerException.KeyDeletionFailedException
+          if (!keyFile.delete()) throw KeyDeletionFailedException
         }
 
         key
@@ -64,9 +70,9 @@ constructor(
   override suspend fun getKeyById(id: GpgIdentifier): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
-        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
+        if (!keyDirExists()) throw KeyDirectoryUnavailableException
         val keyFiles = keyDir.listFiles()
-        if (keyFiles.isNullOrEmpty()) throw KeyManagerException.NoKeysAvailableException
+        if (keyFiles.isNullOrEmpty()) throw NoKeysAvailableException
         val keys = keyFiles.map { file -> PGPKey(file.readBytes()) }
 
         val matchResult =
@@ -92,14 +98,14 @@ constructor(
           return@runSuspendCatching matchResult
         }
 
-        throw KeyManagerException.KeyNotFoundException("$id")
+        throw KeyNotFoundException("$id")
       }
     }
 
   override suspend fun getAllKeys(): Result<List<PGPKey>, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
-        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
+        if (!keyDirExists()) throw KeyDirectoryUnavailableException
         val keyFiles = keyDir.listFiles()
         if (keyFiles.isNullOrEmpty()) return@runSuspendCatching emptyList()
         keyFiles.map { keyFile -> PGPKey(keyFile.readBytes()) }.toList()
