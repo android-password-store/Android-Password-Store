@@ -78,7 +78,11 @@ class AutofillDecryptActivity : AppCompatActivity() {
           context,
           decryptFileRequestCode++,
           intent,
-          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE,
+          if (Build.VERSION.SDK_INT >= 31) {
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+          } else {
+            PendingIntent.FLAG_CANCEL_CURRENT
+          },
         )
         .intentSender
     }
@@ -147,15 +151,11 @@ class AutofillDecryptActivity : AppCompatActivity() {
     }
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
-  }
-
   private suspend fun executeOpenPgpApi(
     data: Intent,
     input: InputStream,
     output: OutputStream
-  ): Intent? {
+  ): Intent {
     var openPgpServiceConnection: OpenPgpServiceConnection? = null
     val openPgpService =
       suspendCoroutine<IOpenPgpService2> { cont ->
@@ -196,7 +196,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
           }
           .onSuccess { result ->
             return when (val resultCode =
-                result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)
+                result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)
             ) {
               OpenPgpApi.RESULT_CODE_SUCCESS -> {
                 runCatching {

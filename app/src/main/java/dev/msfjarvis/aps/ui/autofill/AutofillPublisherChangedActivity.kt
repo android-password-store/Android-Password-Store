@@ -54,7 +54,11 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
           context,
           publisherChangedRequestCode++,
           intent,
-          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE,
+          if (Build.VERSION.SDK_INT >= 31) {
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+          } else {
+            PendingIntent.FLAG_CANCEL_CURRENT
+          },
         )
         .intentSender
     }

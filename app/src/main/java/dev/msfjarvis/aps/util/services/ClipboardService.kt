@@ -119,7 +119,11 @@ class ClipboardService : Service() {
           this,
           0,
           clearIntent,
-          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+          if (Build.VERSION.SDK_INT >= 31) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+          } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+          },
         )
       }
     val notification =

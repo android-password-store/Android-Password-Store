@@ -56,7 +56,11 @@ fun makeInlinePresentation(
       context,
       0,
       Intent(context, PasswordStore::class.java),
-      PendingIntent.FLAG_MUTABLE
+      if (Build.VERSION.SDK_INT >= 31) {
+        PendingIntent.FLAG_MUTABLE
+      } else {
+        0
+      },
     )
   val slice =
     InlineSuggestionUi.newContentBuilder(launchIntent).run {
