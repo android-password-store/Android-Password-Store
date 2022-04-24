@@ -6,6 +6,9 @@
   <issue id="InvalidPackage">
     <ignore regexp="X509LDAPCertStoreSpi" />
   </issue>
+  <issue id="MissingQuantity">
+    <ignore path="src/main/res/values-fr/strings.xml" />
+  </issue>
   <issue id="TrustAllX509TrustManager">
     <ignore regexp="bouncycastle" />
     <ignore regexp="eclipse/jgit" />

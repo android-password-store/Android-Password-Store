@@ -2,28 +2,6 @@
 <issues format="6" by="lint 7.1.3" type="baseline" client="gradle" dependencies="false" name="AGP (7.1.3)" variant="all" version="7.1.3">
 
     <issue
-        id="MissingQuantity"
-        message="For locale &quot;fr&quot; (French) the following quantities should also be defined: `many`"
-        errorLine1="  &lt;plurals name=&quot;delete_title&quot;>"
-        errorLine2="  ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="7"
-            column="3"/>
-    </issue>
-
-    <issue
-        id="MissingQuantity"
-        message="For locale &quot;fr&quot; (French) the following quantities should also be defined: `many`"
-        errorLine1="  &lt;plurals name=&quot;delete_dialog_text&quot;>"
-        errorLine2="  ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="21"
-            column="3"/>
-    </issue>
-
-    <issue
         id="Autofill"
         message="Missing `autofillHints` attribute"
         errorLine1="        &lt;EditText"
