@@ -6,6 +6,10 @@
   <issue id="InvalidPackage">
     <ignore regexp="X509LDAPCertStoreSpi" />
   </issue>
+  <issue id="TrustAllX509TrustManager">
+    <ignore regexp="bouncycastle" />
+    <ignore regexp="eclipse/jgit" />
+  </issue>
   <issue id="UnusedResources">
     <ignore path="src/main/res/values/bools.xml" />
     <ignore path="src/main/res/values/colors_material3.xml" />

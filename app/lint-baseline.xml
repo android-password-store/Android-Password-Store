@@ -24,41 +24,6 @@
     </issue>
 
     <issue
-        id="TrustAllX509TrustManager"
-        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
-        <location
-            file="org/bouncycastle/est/jcajce/JcaJceUtils$1.class"/>
-    </issue>
-
-    <issue
-        id="TrustAllX509TrustManager"
-        message="`checkServerTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
-        <location
-            file="org/bouncycastle/est/jcajce/JcaJceUtils$1.class"/>
-    </issue>
-
-    <issue
-        id="TrustAllX509TrustManager"
-        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
-        <location
-            file="org/bouncycastle/est/jcajce/JcaJceUtils$2.class"/>
-    </issue>
-
-    <issue
-        id="TrustAllX509TrustManager"
-        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
-        <location
-            file="org/eclipse/jgit/transport/TransportHttp$DummyX509TrustManager.class"/>
-    </issue>
-
-    <issue
-        id="TrustAllX509TrustManager"
-        message="`checkServerTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
-        <location
-            file="org/eclipse/jgit/transport/TransportHttp$DummyX509TrustManager.class"/>
-    </issue>
-
-    <issue
         id="Overdraw"
         message="Possible overdraw: Root element paints background `?android:attr/windowBackground` with a theme that also paints a background (inferred theme is `@style/AppThemeM3`)"
         errorLine1="  android:background=&quot;?android:attr/windowBackground&quot;"
