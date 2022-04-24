@@ -2,39 +2,6 @@
 <issues format="6" by="lint 7.1.3" type="baseline" client="gradle" dependencies="false" name="AGP (7.1.3)" variant="all" version="7.1.3">
 
     <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="  &lt;ImageView"
-        errorLine2="   ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/oreo_autofill_dataset.xml"
-            line="17"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="  &lt;ImageView"
-        errorLine2="   ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/oreo_autofill_filter_row.xml"
-            line="15"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="  &lt;ImageView"
-        errorLine2="   ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/oreo_autofill_filter_row.xml"
-            line="57"
-            column="4"/>
-    </issue>
-
-    <issue
         id="LabelFor"
         message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
         errorLine1="        &lt;EditText"
