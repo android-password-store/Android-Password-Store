@@ -10,6 +10,7 @@ plugins {
 }
 
 val SENTRY_DSN_PROPERTY = "SENTRY_DSN"
+val SENTRY_UPLOAD_MAPPINGS_PROPERTY = "sentryUploadMappings"
 
 android {
   androidComponents {
@@ -23,7 +24,9 @@ android {
 }
 
 sentry {
-  autoUploadProguardMapping.set(true)
+  autoUploadProguardMapping.set(
+    project.providers.gradleProperty(SENTRY_UPLOAD_MAPPINGS_PROPERTY).isPresent
+  )
   ignoredBuildTypes.set(setOf("debug"))
   ignoredFlavors.set(setOf(ProductFlavors.FREE))
   tracingInstrumentation {
