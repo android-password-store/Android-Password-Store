@@ -200,18 +200,18 @@ class AutofillDecryptActivity : AppCompatActivity() {
             ) {
               OpenPgpApi.RESULT_CODE_SUCCESS -> {
                 runCatching {
-                  val entry =
-                    withContext(Dispatchers.IO) {
-                      @Suppress("BlockingMethodInNonBlockingContext")
-                      passwordEntryFactory.create(decryptedOutput.toByteArray())
-                    }
-                  AutofillPreferences.credentialsFromStoreEntry(
-                    this,
-                    file,
-                    entry,
-                    directoryStructure
-                  )
-                }
+                    val entry =
+                      withContext(Dispatchers.IO) {
+                        @Suppress("BlockingMethodInNonBlockingContext")
+                        passwordEntryFactory.create(decryptedOutput.toByteArray())
+                      }
+                    AutofillPreferences.credentialsFromStoreEntry(
+                      this,
+                      file,
+                      entry,
+                      directoryStructure
+                    )
+                  }
                   .getOrElse { e ->
                     logcat(ERROR) { e.asLog("Failed to parse password entry") }
                     return null
@@ -221,17 +221,17 @@ class AutofillDecryptActivity : AppCompatActivity() {
                 val pendingIntent: PendingIntent =
                   result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)!!
                 runCatching {
-                  val intentToResume =
-                    withContext(Dispatchers.Main) {
-                      suspendCoroutine<Intent> { cont ->
-                        continueAfterUserInteraction = cont
-                        decryptInteractionRequiredAction.launch(
-                          IntentSenderRequest.Builder(pendingIntent.intentSender).build()
-                        )
+                    val intentToResume =
+                      withContext(Dispatchers.Main) {
+                        suspendCoroutine<Intent> { cont ->
+                          continueAfterUserInteraction = cont
+                          decryptInteractionRequiredAction.launch(
+                            IntentSenderRequest.Builder(pendingIntent.intentSender).build()
+                          )
+                        }
                       }
-                    }
-                  decryptCredential(file, intentToResume)
-                }
+                    decryptCredential(file, intentToResume)
+                  }
                   .getOrElse { e ->
                     logcat(ERROR) {
                       e.asLog("OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction")

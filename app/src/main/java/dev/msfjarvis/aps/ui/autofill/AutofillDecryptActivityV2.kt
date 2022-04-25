@@ -150,25 +150,25 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
       }
       .onSuccess { encryptedInput ->
         runCatching {
-          withContext(Dispatchers.IO) {
-            val outputStream = ByteArrayOutputStream()
-            repository.decrypt(
-              password,
-              encryptedInput,
-              outputStream,
-            )
-            outputStream
+            withContext(Dispatchers.IO) {
+              val outputStream = ByteArrayOutputStream()
+              repository.decrypt(
+                password,
+                encryptedInput,
+                outputStream,
+              )
+              outputStream
+            }
           }
-        }
           .onFailure { e ->
             logcat(ERROR) { e.asLog("Decryption failed") }
             return null
           }
           .onSuccess { result ->
             return runCatching {
-              val entry = passwordEntryFactory.create(result.toByteArray())
-              AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
-            }
+                val entry = passwordEntryFactory.create(result.toByteArray())
+                AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
+              }
               .getOrElse { e ->
                 logcat(ERROR) { e.asLog("Failed to parse password entry") }
                 return null

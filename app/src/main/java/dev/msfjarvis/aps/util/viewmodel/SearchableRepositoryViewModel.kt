@@ -229,9 +229,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 .filter { it.first > 0 }
                 .toList()
                 .sortedWith(
-                  compareByDescending<Pair<Int, PasswordItem>> { it.first }.thenBy(itemComparator) {
-                    it.second
-                  }
+                  compareByDescending<Pair<Int, PasswordItem>> { it.first }
+                    .thenBy(itemComparator) { it.second }
                 )
                 .map { it.second }
             }

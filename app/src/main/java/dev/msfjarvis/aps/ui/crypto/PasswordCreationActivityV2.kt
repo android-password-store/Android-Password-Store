@@ -119,15 +119,15 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
 
       val reader = QRCodeReader()
       runCatching {
-        val result = reader.decode(binaryBitmap)
-        val text = result.text
-        val currentExtras = binding.extraContent.text.toString()
-        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
-          binding.extraContent.append("\n$text")
-        else binding.extraContent.append(text)
-        snackbar(message = getString(R.string.otp_import_success))
-        binding.otpImportButton.isVisible = false
-      }
+          val result = reader.decode(binaryBitmap)
+          val text = result.text
+          val currentExtras = binding.extraContent.text.toString()
+          if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+            binding.extraContent.append("\n$text")
+          else binding.extraContent.append(text)
+          snackbar(message = getString(R.string.otp_import_success))
+          binding.otpImportButton.isVisible = false
+        }
         .onFailure { snackbar(message = getString(R.string.otp_import_failure)) }
     }
 
@@ -357,86 +357,87 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
 
       lifecycleScope.launch(Dispatchers.Main) {
         runCatching {
-          val result =
-            withContext(Dispatchers.IO) {
-              val outputStream = ByteArrayOutputStream()
-              repository.encrypt(content.byteInputStream(), outputStream)
-              outputStream
-            }
-          val file = File(path)
-          // If we're not editing, this file should not already exist!
-          // Additionally, if we were editing and the incoming and outgoing
-          // filenames differ, it means we renamed. Ensure that the target
-          // doesn't already exist to prevent an accidental overwrite.
-          if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) && file.exists()
-          ) {
-            snackbar(message = getString(R.string.password_creation_duplicate_error))
-            return@runCatching
-          }
-
-          if (!file.isInsideRepository()) {
-            snackbar(message = getString(R.string.message_error_destination_outside_repo))
-            return@runCatching
-          }
-
-          withContext(Dispatchers.IO) { file.writeBytes(result.toByteArray()) }
-
-          // associate the new password name with the last name's timestamp in
-          // history
-          val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
-          val oldFilePathHash = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg".base64()
-          val timestamp = preference.getString(oldFilePathHash)
-          if (timestamp != null) {
-            preference.edit {
-              remove(oldFilePathHash)
-              putString(file.absolutePath.base64(), timestamp)
-            }
-          }
-
-          val returnIntent = Intent()
-          returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
-          returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
-          returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
-
-          if (shouldGeneratePassword) {
-            val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
-            val entry = passwordEntryFactory.create(content.encodeToByteArray())
-            returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
-            val username = entry.username ?: directoryStructure.getUsernameFor(file)
-            returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
-          }
-
-          if (directoryInputLayout.isVisible &&
-              directoryInputLayout.isEnabled &&
-              oldFileName != null
-          ) {
-            val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
-            if (oldFile.path != file.path && !oldFile.delete()) {
-              setResult(RESULT_CANCELED)
-              MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
-                .setTitle(R.string.password_creation_file_fail_title)
-                .setMessage(
-                  getString(R.string.password_creation_file_delete_fail_message, oldFileName)
-                )
-                .setCancelable(false)
-                .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-                .show()
+            val result =
+              withContext(Dispatchers.IO) {
+                val outputStream = ByteArrayOutputStream()
+                repository.encrypt(content.byteInputStream(), outputStream)
+                outputStream
+              }
+            val file = File(path)
+            // If we're not editing, this file should not already exist!
+            // Additionally, if we were editing and the incoming and outgoing
+            // filenames differ, it means we renamed. Ensure that the target
+            // doesn't already exist to prevent an accidental overwrite.
+            if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) &&
+                file.exists()
+            ) {
+              snackbar(message = getString(R.string.password_creation_duplicate_error))
               return@runCatching
             }
-          }
 
-          val commitMessageRes =
-            if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
-          lifecycleScope.launch {
-            commitChange(
-                resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName))
-              )
-              .onSuccess {
-                setResult(RESULT_OK, returnIntent)
-                finish()
+            if (!file.isInsideRepository()) {
+              snackbar(message = getString(R.string.message_error_destination_outside_repo))
+              return@runCatching
+            }
+
+            withContext(Dispatchers.IO) { file.writeBytes(result.toByteArray()) }
+
+            // associate the new password name with the last name's timestamp in
+            // history
+            val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+            val oldFilePathHash = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg".base64()
+            val timestamp = preference.getString(oldFilePathHash)
+            if (timestamp != null) {
+              preference.edit {
+                remove(oldFilePathHash)
+                putString(file.absolutePath.base64(), timestamp)
               }
+            }
+
+            val returnIntent = Intent()
+            returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
+            returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
+            returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
+
+            if (shouldGeneratePassword) {
+              val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
+              val entry = passwordEntryFactory.create(content.encodeToByteArray())
+              returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
+              val username = entry.username ?: directoryStructure.getUsernameFor(file)
+              returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
+            }
+
+            if (directoryInputLayout.isVisible &&
+                directoryInputLayout.isEnabled &&
+                oldFileName != null
+            ) {
+              val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
+              if (oldFile.path != file.path && !oldFile.delete()) {
+                setResult(RESULT_CANCELED)
+                MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
+                  .setTitle(R.string.password_creation_file_fail_title)
+                  .setMessage(
+                    getString(R.string.password_creation_file_delete_fail_message, oldFileName)
+                  )
+                  .setCancelable(false)
+                  .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
+                  .show()
+                return@runCatching
+              }
+            }
+
+            val commitMessageRes =
+              if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
+            lifecycleScope.launch {
+              commitChange(
+                  resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName))
+                )
+                .onSuccess {
+                  setResult(RESULT_OK, returnIntent)
+                  finish()
+                }
+            }
           }
-        }
           .onFailure { e ->
             if (e is IOException) {
               logcat(ERROR) { e.asLog("Failed to write password file") }

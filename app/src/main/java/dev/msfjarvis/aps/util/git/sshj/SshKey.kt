@@ -84,19 +84,19 @@ object SshKey {
   val mustAuthenticate: Boolean
     get() {
       return runCatching {
-        if (type !in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)) return false
-        when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
-          is PrivateKey -> {
-            val factory = KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
-            return factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
+          if (type !in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)) return false
+          when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
+            is PrivateKey -> {
+              val factory = KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
+              return factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
+            }
+            is SecretKey -> {
+              val factory = SecretKeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
+              (factory.getKeySpec(key, KeyInfo::class.java) as KeyInfo).isUserAuthenticationRequired
+            }
+            else -> throw IllegalStateException("SSH key does not exist in Keystore")
           }
-          is SecretKey -> {
-            val factory = SecretKeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
-            (factory.getKeySpec(key, KeyInfo::class.java) as KeyInfo).isUserAuthenticationRequired
-          }
-          else -> throw IllegalStateException("SSH key does not exist in Keystore")
         }
-      }
         .getOrElse { error ->
           // It is fine to swallow the exception here since it will reappear when the key
           // is
@@ -316,19 +316,24 @@ object SshKey {
   private object KeystoreNativeKeyProvider : KeyProvider {
 
     override fun getPublic(): PublicKey =
-      runCatching { androidKeystore.sshPublicKey!! }.getOrElse { error ->
-        logcat { error.asLog() }
-        throw IOException("Failed to get public key '$KEYSTORE_ALIAS' from Android Keystore", error)
-      }
+      runCatching { androidKeystore.sshPublicKey!! }
+        .getOrElse { error ->
+          logcat { error.asLog() }
+          throw IOException(
+            "Failed to get public key '$KEYSTORE_ALIAS' from Android Keystore",
+            error
+          )
+        }
 
     override fun getPrivate(): PrivateKey =
-      runCatching { androidKeystore.sshPrivateKey!! }.getOrElse { error ->
-        logcat { error.asLog() }
-        throw IOException(
-          "Failed to access private key '$KEYSTORE_ALIAS' from Android Keystore",
-          error
-        )
-      }
+      runCatching { androidKeystore.sshPrivateKey!! }
+        .getOrElse { error ->
+          logcat { error.asLog() }
+          throw IOException(
+            "Failed to access private key '$KEYSTORE_ALIAS' from Android Keystore",
+            error
+          )
+        }
 
     override fun getType(): KeyType = KeyType.fromKey(public)
   }
@@ -336,22 +341,23 @@ object SshKey {
   private object KeystoreWrappedEd25519KeyProvider : KeyProvider {
 
     override fun getPublic(): PublicKey =
-      runCatching { parseSshPublicKey(sshPublicKey!!)!! }.getOrElse { error ->
-        logcat { error.asLog() }
-        throw IOException("Failed to get the public key for wrapped ed25519 key", error)
-      }
+      runCatching { parseSshPublicKey(sshPublicKey!!)!! }
+        .getOrElse { error ->
+          logcat { error.asLog() }
+          throw IOException("Failed to get the public key for wrapped ed25519 key", error)
+        }
 
     override fun getPrivate(): PrivateKey =
       runCatching {
-        // The current MasterKey API does not allow getting a reference to an existing one
-        // without specifying the KeySpec for a new one. However, the value for passed here
-        // for `requireAuthentication` is not used as the key already exists at this point.
-        val encryptedPrivateKeyFile = runBlocking { getOrCreateWrappedPrivateKeyFile(false) }
-        val rawPrivateKey = encryptedPrivateKeyFile.openFileInput().use { it.readBytes() }
-        EdDSAPrivateKey(
-          EdDSAPrivateKeySpec(rawPrivateKey, EdDSANamedCurveTable.ED_25519_CURVE_SPEC)
-        )
-      }
+          // The current MasterKey API does not allow getting a reference to an existing one
+          // without specifying the KeySpec for a new one. However, the value for passed here
+          // for `requireAuthentication` is not used as the key already exists at this point.
+          val encryptedPrivateKeyFile = runBlocking { getOrCreateWrappedPrivateKeyFile(false) }
+          val rawPrivateKey = encryptedPrivateKeyFile.openFileInput().use { it.readBytes() }
+          EdDSAPrivateKey(
+            EdDSAPrivateKeySpec(rawPrivateKey, EdDSANamedCurveTable.ED_25519_CURVE_SPEC)
+          )
+        }
         .getOrElse { error ->
           logcat { error.asLog() }
           throw IOException("Failed to unwrap wrapped ed25519 key", error)

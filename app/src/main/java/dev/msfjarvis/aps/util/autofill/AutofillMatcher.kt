@@ -107,11 +107,13 @@ class AutofillMatcher {
       val matchedFiles =
         matchPreferences.getStringSet(matchesKey(formOrigin), emptySet())!!.map { File(it) }
       return Ok(
-        matchedFiles.filter { it.exists() }.also { validFiles ->
-          matchPreferences.edit {
-            putStringSet(matchesKey(formOrigin), validFiles.map { it.absolutePath }.toSet())
+        matchedFiles
+          .filter { it.exists() }
+          .also { validFiles ->
+            matchPreferences.edit {
+              putStringSet(matchesKey(formOrigin), validFiles.map { it.absolutePath }.toSet())
+            }
           }
-        }
       )
     }
 

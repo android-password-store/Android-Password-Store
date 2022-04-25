@@ -109,14 +109,14 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
   private fun getSshKey(make: Boolean) {
     runCatching {
-      val intent =
-        if (make) {
-          Intent(callingActivity.applicationContext, SshKeyGenActivity::class.java)
-        } else {
-          Intent(callingActivity.applicationContext, SshKeyImportActivity::class.java)
-        }
-      callingActivity.startActivity(intent)
-    }
+        val intent =
+          if (make) {
+            Intent(callingActivity.applicationContext, SshKeyGenActivity::class.java)
+          } else {
+            Intent(callingActivity.applicationContext, SshKeyImportActivity::class.java)
+          }
+        callingActivity.startActivity(intent)
+      }
       .onFailure { e -> logcat(ERROR) { e.asLog() } }
   }
 

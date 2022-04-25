@@ -251,8 +251,7 @@ public fun getInstalledBrowsersWithAutofillSupportLevel(
     .map { it to getBrowserAutofillSupportLevel(context, it.activityInfo.packageName) }
     .filter { it.first.isDefault || it.second != BrowserAutofillSupportLevel.None }
     .map {
-      context
-        .packageManager
+      context.packageManager
         .getApplicationLabel(it.first.activityInfo.applicationInfo)
         .toString() to it.second
     }

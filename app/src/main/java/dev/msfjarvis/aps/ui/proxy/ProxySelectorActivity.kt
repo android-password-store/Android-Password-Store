@@ -42,9 +42,10 @@ class ProxySelectorActivity : AppCompatActivity() {
     with(binding) {
       proxyHost.setText(proxyPrefs.getString(PreferenceKeys.PROXY_HOST))
       proxyUser.setText(proxyPrefs.getString(PreferenceKeys.PROXY_USERNAME))
-      proxyPrefs.getInt(PreferenceKeys.PROXY_PORT, -1).takeIf { it != -1 }?.let {
-        proxyPort.setText("$it")
-      }
+      proxyPrefs
+        .getInt(PreferenceKeys.PROXY_PORT, -1)
+        .takeIf { it != -1 }
+        ?.let { proxyPort.setText("$it") }
       proxyPassword.setText(proxyPrefs.getString(PreferenceKeys.PROXY_PASSWORD))
       save.setOnClickListener { saveSettings() }
       proxyHost.doOnTextChanged { text, _, _, _ ->
@@ -70,18 +71,22 @@ class ProxySelectorActivity : AppCompatActivity() {
 
   private fun saveSettings() {
     proxyPrefs.edit {
-      binding.proxyHost.text?.toString()?.takeIf { it.isNotEmpty() }.let {
-        gitSettings.proxyHost = it
-      }
-      binding.proxyUser.text?.toString()?.takeIf { it.isNotEmpty() }.let {
-        gitSettings.proxyUsername = it
-      }
-      binding.proxyPort.text?.toString()?.takeIf { it.isNotEmpty() }?.let {
-        gitSettings.proxyPort = it.toInt()
-      }
-      binding.proxyPassword.text?.toString()?.takeIf { it.isNotEmpty() }.let {
-        gitSettings.proxyPassword = it
-      }
+      binding.proxyHost.text
+        ?.toString()
+        ?.takeIf { it.isNotEmpty() }
+        .let { gitSettings.proxyHost = it }
+      binding.proxyUser.text
+        ?.toString()
+        ?.takeIf { it.isNotEmpty() }
+        .let { gitSettings.proxyUsername = it }
+      binding.proxyPort.text
+        ?.toString()
+        ?.takeIf { it.isNotEmpty() }
+        ?.let { gitSettings.proxyPort = it.toInt() }
+      binding.proxyPassword.text
+        ?.toString()
+        ?.takeIf { it.isNotEmpty() }
+        .let { gitSettings.proxyPassword = it }
     }
     proxyUtils.setDefaultProxy()
     Handler(Looper.getMainLooper()).postDelayed(500) { finish() }

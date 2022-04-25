@@ -32,9 +32,9 @@ afterEvaluate {
   }
 }
 // disable kapt tasks for unit tests
-tasks.matching { it.name.startsWith("kapt") && it.name.endsWith("UnitTestKotlin") }.configureEach {
-  enabled = false
-}
+tasks
+  .matching { it.name.startsWith("kapt") && it.name.endsWith("UnitTestKotlin") }
+  .configureEach { enabled = false }
 
 fun Project.hasDaggerCompilerDependency(): Boolean {
   return configurations.any {

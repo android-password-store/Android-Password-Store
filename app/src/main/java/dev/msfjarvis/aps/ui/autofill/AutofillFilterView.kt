@@ -149,31 +149,31 @@ class AutofillFilterView : AppCompatActivity() {
               ::PasswordViewHolder,
               lifecycleScope,
             ) { item ->
-            val file = item.file.relativeTo(item.rootDir)
-            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
-            val identifier = directoryStructure.getIdentifierFor(file)
-            val accountPart = directoryStructure.getAccountPartFor(file)
-            check(identifier != null || accountPart != null) {
-              "At least one of identifier and accountPart should always be non-null"
-            }
-            title.text =
-              if (identifier != null) {
-                buildSpannedString {
-                  if (pathToIdentifier != null) append("$pathToIdentifier/")
-                  bold { underline { append(identifier) } }
+              val file = item.file.relativeTo(item.rootDir)
+              val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
+              val identifier = directoryStructure.getIdentifierFor(file)
+              val accountPart = directoryStructure.getAccountPartFor(file)
+              check(identifier != null || accountPart != null) {
+                "At least one of identifier and accountPart should always be non-null"
+              }
+              title.text =
+                if (identifier != null) {
+                  buildSpannedString {
+                    if (pathToIdentifier != null) append("$pathToIdentifier/")
+                    bold { underline { append(identifier) } }
+                  }
+                } else {
+                  accountPart
                 }
-              } else {
-                accountPart
-              }
-            subtitle.apply {
-              if (identifier != null && accountPart != null) {
-                text = accountPart
-                visibility = View.VISIBLE
-              } else {
-                visibility = View.GONE
+              subtitle.apply {
+                if (identifier != null && accountPart != null) {
+                  text = accountPart
+                  visibility = View.VISIBLE
+                } else {
+                  visibility = View.GONE
+                }
               }
             }
-          }
             .onItemClicked { _, item -> decryptAndFill(item) }
         layoutManager = LinearLayoutManager(context)
       }

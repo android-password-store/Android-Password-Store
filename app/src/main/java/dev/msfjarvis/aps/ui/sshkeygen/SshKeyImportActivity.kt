@@ -25,16 +25,16 @@ class SshKeyImportActivity : AppCompatActivity() {
         return@registerForActivityResult
       }
       runCatching {
-        SshKey.import(uri)
-        Toast.makeText(
-            this,
-            resources.getString(R.string.ssh_key_success_dialog_title),
-            Toast.LENGTH_LONG
-          )
-          .show()
-        setResult(RESULT_OK)
-        finish()
-      }
+          SshKey.import(uri)
+          Toast.makeText(
+              this,
+              resources.getString(R.string.ssh_key_success_dialog_title),
+              Toast.LENGTH_LONG
+            )
+            .show()
+          setResult(RESULT_OK)
+          finish()
+        }
         .onFailure { e ->
           MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))

@@ -55,13 +55,13 @@ class CloneFragment : Fragment(R.layout.fragment_clone) {
   private fun createRepository() {
     val localDir = PasswordRepository.getRepositoryDirectory()
     runCatching {
-      check(localDir.exists() || localDir.mkdir()) { "Failed to create directory!" }
-      PasswordRepository.createRepository(localDir)
-      if (!PasswordRepository.isInitialized) {
-        PasswordRepository.initialize()
+        check(localDir.exists() || localDir.mkdir()) { "Failed to create directory!" }
+        PasswordRepository.createRepository(localDir)
+        if (!PasswordRepository.isInitialized) {
+          PasswordRepository.initialize()
+        }
+        parentFragmentManager.performTransactionWithBackStack(KeySelectionFragment.newInstance())
       }
-      parentFragmentManager.performTransactionWithBackStack(KeySelectionFragment.newInstance())
-    }
       .onFailure { e ->
         logcat(ERROR) { e.asLog() }
         if (!localDir.delete()) {

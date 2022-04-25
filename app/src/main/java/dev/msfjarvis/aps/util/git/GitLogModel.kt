@@ -25,10 +25,11 @@ private fun commits(): Iterable<RevCommit> {
     logcat(TAG, ERROR) { "Could not access git repository" }
     return listOf()
   }
-  return runCatching { Git(repo).log().call() }.getOrElse { e ->
-    logcat(TAG, ERROR) { e.asLog("Failed to obtain git commits") }
-    listOf()
-  }
+  return runCatching { Git(repo).log().call() }
+    .getOrElse { e ->
+      logcat(TAG, ERROR) { e.asLog("Failed to obtain git commits") }
+      listOf()
+    }
 }
 
 /**

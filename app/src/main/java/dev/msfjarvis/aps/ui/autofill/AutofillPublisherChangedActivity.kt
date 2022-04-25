@@ -105,27 +105,28 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
 
   private fun showPackageInfo() {
     runCatching {
-      with(binding) {
-        val packageInfo = packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
-        val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
-        warningAppInstallDate.text =
-          getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
-        val appInfo = packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
-        warningAppName.text =
-          getString(
-            R.string.oreo_autofill_warning_publisher_app_name,
-            packageManager.getApplicationLabel(appInfo)
-          )
+        with(binding) {
+          val packageInfo = packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
+          val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
+          warningAppInstallDate.text =
+            getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
+          val appInfo = packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
+          warningAppName.text =
+            getString(
+              R.string.oreo_autofill_warning_publisher_app_name,
+              packageManager.getApplicationLabel(appInfo)
+            )
 
-        val currentHash = computeCertificatesHash(this@AutofillPublisherChangedActivity, appPackage)
-        warningAppAdvancedInfo.text =
-          getString(
-            R.string.oreo_autofill_warning_publisher_advanced_info_template,
-            appPackage,
-            currentHash
-          )
+          val currentHash =
+            computeCertificatesHash(this@AutofillPublisherChangedActivity, appPackage)
+          warningAppAdvancedInfo.text =
+            getString(
+              R.string.oreo_autofill_warning_publisher_advanced_info_template,
+              appPackage,
+              currentHash
+            )
+        }
       }
-    }
       .onFailure { e ->
         logcat(ERROR) { e.asLog("Failed to retrieve package info for $appPackage") }
         finish()

@@ -34,9 +34,10 @@ fun File.contains(other: File): Boolean {
   if (!isDirectory) return false
   if (!other.exists()) return false
   val relativePath =
-    runCatching { other.relativeTo(this) }.getOrElse {
-      return false
-    }
+    runCatching { other.relativeTo(this) }
+      .getOrElse {
+        return false
+      }
   // Direct containment is equivalent to the relative path being equal to the filename.
   return relativePath.path == other.name
 }

@@ -130,8 +130,8 @@ class AutofillSmsActivity : AppCompatActivity() {
   private suspend fun waitForSms() {
     val smsClient = SmsCodeRetriever.getAutofillClient(this@AutofillSmsActivity)
     runCatching {
-      withContext(Dispatchers.IO) { smsClient.startSmsCodeRetriever().suspendableAwait() }
-    }
+        withContext(Dispatchers.IO) { smsClient.startSmsCodeRetriever().suspendableAwait() }
+      }
       .onFailure { e ->
         if (e is ResolvableApiException) {
           e.startResolutionForResult(this@AutofillSmsActivity, 1)

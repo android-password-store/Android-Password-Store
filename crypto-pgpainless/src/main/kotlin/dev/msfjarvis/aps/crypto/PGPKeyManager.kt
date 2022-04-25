@@ -79,17 +79,17 @@ constructor(
           when (id) {
             is GpgIdentifier.KeyId -> {
               val keyIdMatch =
-                keys.map { key -> key to tryGetId(key) }.firstOrNull { (_, keyId) ->
-                  keyId?.id == id.id
-                }
+                keys
+                  .map { key -> key to tryGetId(key) }
+                  .firstOrNull { (_, keyId) -> keyId?.id == id.id }
               keyIdMatch?.first
             }
             is GpgIdentifier.UserId -> {
               val selector = SelectUserId.byEmail(id.email)
               val userIdMatch =
-                keys.map { key -> key to tryParseKeyring(key) }.firstOrNull { (_, keyRing) ->
-                  selector.firstMatch(keyRing) != null
-                }
+                keys
+                  .map { key -> key to tryParseKeyring(key) }
+                  .firstOrNull { (_, keyRing) -> selector.firstMatch(keyRing) != null }
               userIdMatch?.first
             }
           }

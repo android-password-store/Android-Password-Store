@@ -42,10 +42,11 @@ object PasswordRepository {
   private fun initializeRepository(repositoryDir: File) {
     val builder = FileRepositoryBuilder()
     repository =
-      runCatching { builder.setGitDir(repositoryDir).build() }.getOrElse { e ->
-        e.printStackTrace()
-        null
-      }
+      runCatching { builder.setGitDir(repositoryDir).build() }
+        .getOrElse { e ->
+          e.printStackTrace()
+          null
+        }
   }
 
   fun createRepository(repositoryDir: File) {
@@ -61,40 +62,40 @@ object PasswordRepository {
 
     if (!remotes.contains(name)) {
       runCatching {
-        val uri = URIish(url)
-        val refSpec = RefSpec("+refs/head/*:refs/remotes/$name/*")
+          val uri = URIish(url)
+          val refSpec = RefSpec("+refs/head/*:refs/remotes/$name/*")
 
-        val remoteConfig = RemoteConfig(storedConfig, name)
-        remoteConfig.addFetchRefSpec(refSpec)
-        remoteConfig.addPushRefSpec(refSpec)
-        remoteConfig.addURI(uri)
-        remoteConfig.addPushURI(uri)
+          val remoteConfig = RemoteConfig(storedConfig, name)
+          remoteConfig.addFetchRefSpec(refSpec)
+          remoteConfig.addPushRefSpec(refSpec)
+          remoteConfig.addURI(uri)
+          remoteConfig.addPushURI(uri)
 
-        remoteConfig.update(storedConfig)
+          remoteConfig.update(storedConfig)
 
-        storedConfig.save()
-      }
+          storedConfig.save()
+        }
         .onFailure { e -> e.printStackTrace() }
     } else if (replace) {
       runCatching {
-        val uri = URIish(url)
+          val uri = URIish(url)
 
-        val remoteConfig = RemoteConfig(storedConfig, name)
-        // remove the first and eventually the only uri
-        if (remoteConfig.urIs.size > 0) {
-          remoteConfig.removeURI(remoteConfig.urIs[0])
+          val remoteConfig = RemoteConfig(storedConfig, name)
+          // remove the first and eventually the only uri
+          if (remoteConfig.urIs.size > 0) {
+            remoteConfig.removeURI(remoteConfig.urIs[0])
+          }
+          if (remoteConfig.pushURIs.size > 0) {
+            remoteConfig.removePushURI(remoteConfig.pushURIs[0])
+          }
+
+          remoteConfig.addURI(uri)
+          remoteConfig.addPushURI(uri)
+
+          remoteConfig.update(storedConfig)
+
+          storedConfig.save()
         }
-        if (remoteConfig.pushURIs.size > 0) {
-          remoteConfig.removePushURI(remoteConfig.pushURIs[0])
-        }
-
-        remoteConfig.addURI(uri)
-        remoteConfig.addPushURI(uri)
-
-        remoteConfig.update(storedConfig)
-
-        storedConfig.save()
-      }
         .onFailure { e -> e.printStackTrace() }
     }
   }

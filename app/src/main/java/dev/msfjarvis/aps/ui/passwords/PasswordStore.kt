@@ -292,9 +292,8 @@ class PasswordStore : BaseGitActivity() {
         .setPositiveButton(resources.getString(R.string.dialog_ok), null)
     when (id) {
       R.id.user_pref -> {
-        runCatching { startActivity(Intent(this, SettingsActivity::class.java)) }.onFailure { e ->
-          e.printStackTrace()
-        }
+        runCatching { startActivity(Intent(this, SettingsActivity::class.java)) }
+          .onFailure { e -> e.printStackTrace() }
       }
       R.id.git_push -> {
         if (!PasswordRepository.isInitialized) {
@@ -618,9 +617,7 @@ class PasswordStore : BaseGitActivity() {
 
   fun matchPasswordWithApp(item: PasswordItem) {
     val path =
-      item
-        .file
-        .absolutePath
+      item.file.absolutePath
         .replace(PasswordRepository.getRepositoryDirectory().toString() + "/", "")
         .replace(".gpg", "")
     val data = Intent()

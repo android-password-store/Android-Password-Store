@@ -182,9 +182,10 @@ internal class FormField(
   // Basic type detection for HTML fields
   private val htmlTag = node.htmlInfo?.tag
   private val htmlAttributes: Map<String, String> =
-    node.htmlInfo?.attributes?.filter { it.first != null && it.second != null }?.associate {
-      Pair(it.first.lowercase(Locale.US), it.second.lowercase(Locale.US))
-    }
+    node.htmlInfo
+      ?.attributes
+      ?.filter { it.first != null && it.second != null }
+      ?.associate { Pair(it.first.lowercase(Locale.US), it.second.lowercase(Locale.US)) }
       ?: emptyMap()
   private val htmlAttributesDebug = htmlAttributes.entries.joinToString { "${it.key}=${it.value}" }
   private val htmlInputType = htmlAttributes["type"]

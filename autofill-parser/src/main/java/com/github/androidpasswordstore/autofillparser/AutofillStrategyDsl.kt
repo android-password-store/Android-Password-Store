@@ -105,31 +105,34 @@ internal class SingleFieldMatcher(
   }
 
   override fun match(fields: List<FormField>, alreadyMatched: List<FormField>): List<FormField>? {
-    return fields.minus(alreadyMatched).filter { take(it, alreadyMatched) }.let { contestants ->
-      when (contestants.size) {
-        1 -> return@let listOf(contestants.single())
-        0 -> return@let null
-      }
-      var current = contestants
-      for ((i, tieBreaker) in tieBreakers.withIndex()) {
-        // Successively filter matched fields via tie breakers...
-        val new = current.filter { tieBreaker(it, alreadyMatched) }
-        // skipping those tie breakers that are not satisfied for any remaining field...
-        if (new.isEmpty()) {
-          logcat { "Tie breaker #${i + 1}: Didn't match any field; skipping" }
-          continue
+    return fields
+      .minus(alreadyMatched)
+      .filter { take(it, alreadyMatched) }
+      .let { contestants ->
+        when (contestants.size) {
+          1 -> return@let listOf(contestants.single())
+          0 -> return@let null
         }
-        // and return if the available options have been narrowed to a single field.
-        if (new.size == 1) {
-          logcat { "Tie breaker #${i + 1}: Success" }
+        var current = contestants
+        for ((i, tieBreaker) in tieBreakers.withIndex()) {
+          // Successively filter matched fields via tie breakers...
+          val new = current.filter { tieBreaker(it, alreadyMatched) }
+          // skipping those tie breakers that are not satisfied for any remaining field...
+          if (new.isEmpty()) {
+            logcat { "Tie breaker #${i + 1}: Didn't match any field; skipping" }
+            continue
+          }
+          // and return if the available options have been narrowed to a single field.
+          if (new.size == 1) {
+            logcat { "Tie breaker #${i + 1}: Success" }
+            current = new
+            break
+          }
+          logcat { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
           current = new
-          break
         }
-        logcat { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
-        current = new
+        listOf(current.singleOrNull() ?: return null)
       }
-      listOf(current.singleOrNull() ?: return null)
-    }
   }
 }
 

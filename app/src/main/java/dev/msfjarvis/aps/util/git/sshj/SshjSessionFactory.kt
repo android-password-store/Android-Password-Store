@@ -93,9 +93,8 @@ private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
     return object : HostKeyVerifier {
       override fun verify(hostname: String?, port: Int, key: PublicKey?): Boolean {
         val digest =
-          runCatching { SecurityUtils.getMessageDigest("SHA-256") }.getOrElse { e ->
-            throw SSHRuntimeException(e)
-          }
+          runCatching { SecurityUtils.getMessageDigest("SHA-256") }
+            .getOrElse { e -> throw SSHRuntimeException(e) }
         digest.update(PlainBuffer().putPublicKey(key).compactData)
         val digestData = digest.digest()
         val hostKeyEntry = "SHA256:${Base64.encodeToString(digestData, Base64.NO_WRAP)}"

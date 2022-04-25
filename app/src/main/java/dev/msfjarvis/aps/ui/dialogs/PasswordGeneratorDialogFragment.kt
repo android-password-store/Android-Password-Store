@@ -48,8 +48,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
     val prefs =
       requireActivity()
-        .applicationContext
-        .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
+        .applicationContext.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
     builder.setView(binding.root)
 
@@ -102,21 +101,21 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     val passwordLength = getLength()
     setPrefs(requireContext(), passwordOptions, passwordLength)
     passwordField.text =
-      runCatching { PasswordGenerator.generate(passwordOptions, passwordLength) }.getOrElse {
-        exception ->
-        val errorText =
-          when (exception) {
-            is MaxIterationsExceededException ->
-              requireContext().getString(R.string.pwgen_max_iterations_exceeded)
-            is NoCharactersIncludedException ->
-              requireContext().getString(R.string.pwgen_no_chars_error)
-            is PasswordLengthTooShortException ->
-              requireContext().getString(R.string.pwgen_length_too_short_error)
-            else -> requireContext().getString(R.string.pwgen_some_error_occurred)
-          }
-        Toast.makeText(requireActivity(), errorText, Toast.LENGTH_SHORT).show()
-        ""
-      }
+      runCatching { PasswordGenerator.generate(passwordOptions, passwordLength) }
+        .getOrElse { exception ->
+          val errorText =
+            when (exception) {
+              is MaxIterationsExceededException ->
+                requireContext().getString(R.string.pwgen_max_iterations_exceeded)
+              is NoCharactersIncludedException ->
+                requireContext().getString(R.string.pwgen_no_chars_error)
+              is PasswordLengthTooShortException ->
+                requireContext().getString(R.string.pwgen_length_too_short_error)
+              else -> requireContext().getString(R.string.pwgen_some_error_occurred)
+            }
+          Toast.makeText(requireActivity(), errorText, Toast.LENGTH_SHORT).show()
+          ""
+        }
   }
 
   private fun isChecked(@IdRes id: Int): Boolean {

@@ -178,42 +178,42 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         OpenPgpApi.RESULT_CODE_SUCCESS -> {
           startAutoDismissTimer()
           runCatching {
-            val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
-            val entry = passwordEntryFactory.create(outputStream.toByteArray())
+              val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
+              val entry = passwordEntryFactory.create(outputStream.toByteArray())
 
-            if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
-              copyPasswordToClipboard(entry.password)
+              if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
+                copyPasswordToClipboard(entry.password)
+              }
+
+              passwordEntry = entry
+              invalidateOptionsMenu()
+
+              val items = arrayListOf<FieldItem>()
+              if (!entry.password.isNullOrBlank()) {
+                items.add(FieldItem.createPasswordField(entry.password!!))
+              }
+
+              if (entry.hasTotp()) {
+                items.add(FieldItem.createOtpField(entry.totp.first()))
+              }
+
+              if (!entry.username.isNullOrBlank()) {
+                items.add(FieldItem.createUsernameField(entry.username!!))
+              }
+
+              entry.extraContent.forEach { (key, value) ->
+                items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
+              }
+
+              val adapter =
+                FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
+              binding.recyclerView.adapter = adapter
+              binding.recyclerView.itemAnimator = null
+
+              if (entry.hasTotp()) {
+                entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)
+              }
             }
-
-            passwordEntry = entry
-            invalidateOptionsMenu()
-
-            val items = arrayListOf<FieldItem>()
-            if (!entry.password.isNullOrBlank()) {
-              items.add(FieldItem.createPasswordField(entry.password!!))
-            }
-
-            if (entry.hasTotp()) {
-              items.add(FieldItem.createOtpField(entry.totp.first()))
-            }
-
-            if (!entry.username.isNullOrBlank()) {
-              items.add(FieldItem.createUsernameField(entry.username!!))
-            }
-
-            entry.extraContent.forEach { (key, value) ->
-              items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
-            }
-
-            val adapter =
-              FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
-            binding.recyclerView.adapter = adapter
-            binding.recyclerView.itemAnimator = null
-
-            if (entry.hasTotp()) {
-              entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)
-            }
-          }
             .onFailure { e -> logcat(ERROR) { e.asLog() } }
         }
         OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
