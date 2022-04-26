@@ -32,7 +32,6 @@ gradlePlugin {
 
 dependencies {
   implementation(libs.build.agp)
-  implementation(libs.build.dokka)
   implementation(libs.build.mavenpublish)
   implementation(libs.build.semver)
   implementation(libs.build.sentry)
