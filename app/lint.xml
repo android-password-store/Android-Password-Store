@@ -13,6 +13,12 @@
   <issue id="MissingQuantity">
     <ignore path="src/main/res/values-fr/strings.xml" />
   </issue>
+  <issue id="Overdraw">
+    <ignore path="src/main/res/layout/activity_git_clone.xml" />
+    <ignore path="src/main/res/layout/fragment_clone.xml" />
+    <ignore path="src/main/res/layout/fragment_key_selection.xml" />
+    <ignore path="src/main/res/layout/fragment_welcome.xml" />
+  </issue>
   <issue id="TrustAllX509TrustManager">
     <ignore regexp="bouncycastle" />
     <ignore regexp="eclipse/jgit" />
