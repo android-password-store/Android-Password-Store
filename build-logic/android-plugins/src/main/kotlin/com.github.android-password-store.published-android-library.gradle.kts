@@ -11,10 +11,10 @@ import org.gradle.kotlin.dsl.provideDelegate
 plugins {
   id("com.github.android-password-store.android-library")
   id("com.vanniktech.maven.publish.base")
-  id("org.jetbrains.dokka")
   id("signing")
 }
 
+@Suppress("UnstableApiUsage")
 configure<MavenPublishBaseExtension> {
   group = requireNotNull(project.findProperty("GROUP"))
   version = requireNotNull(project.findProperty("VERSION_NAME"))

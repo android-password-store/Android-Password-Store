@@ -4,7 +4,6 @@ androidx_activity = "1.4.0"
 androidx_test = "1.4.1-alpha05"
 compose = "1.2.0-alpha08"
 coroutines = "1.6.1"
-dokka = "1.6.21"
 flowbinding = "1.2.0"
 hilt = "2.41"
 kotlin = "1.6.21"
@@ -12,7 +11,6 @@ leakcanary = "2.9.1"
 lifecycle = "2.4.1"
 
 [plugins]
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [libraries]
@@ -43,7 +41,6 @@ aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embe
 
 build-agp = "com.android.tools.build:gradle:7.1.3"
 build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.9.0"
-build-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 build-download = "de.undercouch:gradle-download-task:5.0.5"
 build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.19.0"
