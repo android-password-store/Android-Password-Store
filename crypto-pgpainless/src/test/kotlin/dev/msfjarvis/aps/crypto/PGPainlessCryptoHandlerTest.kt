@@ -5,10 +5,14 @@
 
 package dev.msfjarvis.aps.crypto
 
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.getError
+import dev.msfjarvis.aps.crypto.errors.IncorrectPassphraseException
 import java.io.ByteArrayOutputStream
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class PGPainlessCryptoHandlerTest {
@@ -33,6 +37,26 @@ class PGPainlessCryptoHandlerTest {
       plaintextStream,
     )
     assertEquals(CryptoConstants.PLAIN_TEXT, plaintextStream.toString(Charsets.UTF_8))
+  }
+
+  @Test
+  fun decryptWithWrongPassphrase() {
+    val ciphertextStream = ByteArrayOutputStream()
+    cryptoHandler.encrypt(
+      listOf(publicKey),
+      CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+      ciphertextStream,
+    )
+    val plaintextStream = ByteArrayOutputStream()
+    val result =
+      cryptoHandler.decrypt(
+        privateKey,
+        "very incorrect passphrase",
+        ciphertextStream.toByteArray().inputStream(),
+        plaintextStream,
+      )
+    assertIs<Err<Throwable>>(result)
+    assertIs<IncorrectPassphraseException>(result.getError())
   }
 
   @Test
