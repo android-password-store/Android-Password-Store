@@ -1,7 +1,7 @@
 # Centralized versions for dependencies that share versions
 [versions]
 androidx_activity = "1.4.0"
-androidx_test = "1.4.1-alpha05"
+androidx_test = "1.4.1-alpha06"
 compose = "1.2.0-alpha08"
 coroutines = "1.6.1"
 flowbinding = "1.2.0"
