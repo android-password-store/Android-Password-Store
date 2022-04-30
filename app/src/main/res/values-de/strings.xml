@@ -22,6 +22,10 @@
   <string name="move">Verschieben</string>
   <string name="edit">Bearbeiten</string>
   <string name="delete">Löschen</string>
+  <string name="change">Ändern</string>
+  <string name="use">Nutze</string>
+  <string name="directory_selected_title">Ordner bereits ausgewählt</string>
+  <string name="directory_selected_message">Möchtest du \"%1$s\" verwenden?</string>
   <string name="password_exists_title">Passwort existiert bereits!</string>
   <string name="password_exists_message">Dies wird %1$s mit %2$s überschreiben.</string>
   <string name="password_move_error_title">Fehler beim Verschieben von Passwörtern</string>
@@ -51,6 +55,11 @@
   <string name="passphrase_dialog_text">Bitte setze ein Passwort für deinen SSH-Key. Lasse das Feld leer, wenn kein Passwort vergeben werden soll.</string>
   <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
   <!-- Clone fragment -->
+  <string name="location_dialog_create_text">Wählen Sie aus, wo Sie Ihr Passwort-Repository erstellen möchten</string>
+  <string name="location_sdcard">SD-Karte</string>
+  <string name="location_hidden">Versteckt (bevorzugt)</string>
+  <string name="external_repository_dialog_title">Wählen Sie, wo die Passwörter gespeichert werden sollen</string>
+  <string name="external_repository_dialog_text">Sie müssen ein Verzeichnis auswählen, in dem Ihre Passwörter gespeichert werden sollen. Wenn Sie Ihre Passwörter innerhalb des versteckten Speichers der Anwendung speichern möchten, brechen Sie diesen Dialog ab und deaktivieren Sie die Option \"Externe Repository\".</string>
   <string name="server_url">Repository-URL</string>
   <string name="server_branch">Branch</string>
   <string name="connection_mode">Authentifizierungsmethode</string>
@@ -106,6 +115,10 @@
   <string name="pref_clear_clipboard_title">Zwischenablagenverlauf umgehen</string>
   <string name="pref_clear_clipboard_summary">Zwischenablage mit aufeinanderfolgenden Zahlen überschwemmen, um ggf. bestehende Passwörter zu leeren</string>
   <string name="pref_git_delete_repo_summary">Lösche das lokale (versteckte) Repository</string>
+  <string name="pref_external_repository_title">Externes Repository</string>
+  <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
+  <string name="pref_select_external_repository_title">Wähle ein externes Repository</string>
+  <string name="pref_select_external_repository_summary_no_repo_selected">Kein externes Repository ausgewählt</string>
   <string name="prefs_export_passwords_title">Passwörter exportieren</string>
   <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
   <string name="pref_rebase_on_pull_title">Rebase beim Pullen</string>
@@ -210,6 +223,9 @@
   <string name="git_head_on_branch">Auf Branch %1$s</string>
   <string name="git_head_detached">HEAD abgelöst bei %1$s</string>
   <string name="git_head_missing">Kann HEAD nicht lokalisieren</string>
+  <string name="sdcard_root_warning_title">Wurzelverzeichnis der SD-Karte ausgewählt</string>
+  <string name="sdcard_root_warning_message">Sie haben das Wurzelverzeichnis der SD-Karte als Speicherort gewählt. Das ist sehr gefährlich, da der Inhalt letztendlich gelöscht wird</string>
+  <string name="sdcard_root_warning_remove_everything">Alles löschen</string>
   <string name="git_abort_and_push_title">Abbrechen und hochladen</string>
   <string name="biometric_prompt_title">Biometrische Abfrage</string>
   <string name="biometric_auth_error_reason">Authentifizierungsfehler: %s</string>
@@ -217,6 +233,7 @@
   <string name="pref_biometric_auth_summary">Wenn aktiviert, werden Sie beim Starten der App nach Ihrem Fingerabdruck gefragt</string>
   <string name="pref_biometric_auth_summary_error">Fingerabdrucksensor fehlt oder ist nicht ansprechbar</string>
   <string name="pref_title_openkeystore_clear_keyid">Lösche gespeicherte OpenKeystore SSH-Schlüssel-ID</string>
+  <string name="access_sdcard_text">Der Speicherort befindet sich in Ihrer SD-Karte oder im internen Speicher, aber die App hat nicht die Berechtigung, darauf zuzugreifen.</string>
   <string name="your_public_key">Ihr öffentlicher Schlüssel</string>
   <string name="error_generate_ssh_key">Fehler beim Generieren des SSH-Schlüssels</string>
   <string name="pref_show_hidden_title">Dateien und Ordner anzeigen</string>
@@ -248,6 +265,7 @@
   <string name="git_operation_wrong_password">Falsches Passwort</string>
   <string name="bottom_sheet_create_new_folder">Neuen Ordner erstellen</string>
   <string name="bottom_sheet_create_new_password">Neues Passwort erstellen</string>
+  <string name="snackbar_action_grant">Zulassen</string>
   <string name="pref_debug_logging_summary">Debug logging aktivieren (Erfordert Neustart der App)</string>
   <string name="pref_debug_logging_title">Debug logging</string>
   <string name="preference_default_username_summary">Wenn Autofill den Benutzernamen nicht aus der Passwortdatei oder dem Ordner herleiten kann, wird der hier festgelegte Wert verwendet</string>

@@ -26,6 +26,10 @@
   <string name="move">Déplacer</string>
   <string name="edit">Éditer</string>
   <string name="delete">Supprimer</string>
+  <string name="change">Modifier</string>
+  <string name="use">Utiliser</string>
+  <string name="directory_selected_title">Répertoire déjà sélectionné</string>
+  <string name="directory_selected_message">Voulez-vous utiliser \"%1$s\"?</string>
   <string name="password_exists_title">Le mot de passe existe!</string>
   <string name="password_exists_message">Cela écrasera %1$s avec %2$s.</string>
   <string name="password_move_error_title">Erreur lors du déplacement des mots de passe</string>
@@ -55,6 +59,11 @@
   <string name="passphrase_dialog_text">Saisissez le mot de passe associé à votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>
   <string name="password_dialog_text">Renseignez le mot de passe pour ce dépôt</string>
   <!-- Clone fragment -->
+  <string name="location_dialog_create_text">Sélectionnez l\'emplacement où créer votre dépôt de mots de passe</string>
+  <string name="location_sdcard">Carte SD</string>
+  <string name="location_hidden">Caché (Recommandé)</string>
+  <string name="external_repository_dialog_title">Choisissez où sauvegarder les mots de passe</string>
+  <string name="external_repository_dialog_text">Vous devez sélectionner un répertoire où sauvegarder vos mots de passe. Si vous souhaitez sauvegarder vos mots de passe dans la mémoire cachée de l\'application, annulez cette boîte de dialogue et désactivez l\'option \"Répertoire externe\".</string>
   <string name="server_url">URL du dépôt</string>
   <string name="server_branch">Branche</string>
   <string name="connection_mode">Méthode d\'authentification</string>
@@ -110,6 +119,10 @@
   <string name="pref_clear_clipboard_title">Fonctionnalité d\'historique du presse-papiers</string>
   <string name="pref_clear_clipboard_summary">Active l\'écriture répétée dans l\'historique du presse-papiers, sur les appareils qui incluent une telle fonctionnalité, de nombres consécutifs, pour écraser tous les mots de passe</string>
   <string name="pref_git_delete_repo_summary">Supprime le dépot local (caché)</string>
+  <string name="pref_external_repository_title">Dépôt externe</string>
+  <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
+  <string name="pref_select_external_repository_title">Choisir un dépôt externe</string>
+  <string name="pref_select_external_repository_summary_no_repo_selected">Pas de dépôt externe sélectionné</string>
   <string name="prefs_export_passwords_title">Exporter les mots de passe</string>
   <string name="prefs_export_passwords_summary">Exporter les mots de passe (chiffrés) vers un répertoire externe</string>
   <string name="pref_rebase_on_pull_title">Rebaser sur le tirage</string>
@@ -129,6 +142,7 @@
   <string name="pwgen_no_chars_error">Aucun critère sélectionné</string>
   <string name="pwgen_length_too_short_error">Longueur trop faible pour les critères sélectionnés</string>
   <string name="pwgen_max_iterations_exceeded">Impossible de générer un mot de passe satisfaisant les critères. Essayez d\'augmenter la longueur.</string>
+  <string name="pwgen_separator">Séparateur</string>
   <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Type de générateur de mot de passe</string>
   <!-- ssh keygen fragment -->
@@ -213,6 +227,9 @@
   <string name="git_head_on_branch">Sur la branche %1$s</string>
   <string name="git_head_detached">HEAD détaché à %1$s</string>
   <string name="git_head_missing">Impossible de trouver HEAD</string>
+  <string name="sdcard_root_warning_title">Racine de la carte SD sélectionnée</string>
+  <string name="sdcard_root_warning_message">Vous avez sélectionné la racine de votre carte SD pour le dépôt. Ceci est extrêmement dangereux et vous risquez de perdre vos données car son contenu risque d\'être effacé</string>
+  <string name="sdcard_root_warning_remove_everything">Tout supprimer</string>
   <string name="git_abort_and_push_title">Abandonner et pousser</string>
   <string name="biometric_prompt_title">Identification biométrique</string>
   <string name="biometric_auth_error_reason">Échec de l\'authentification : %s</string>
@@ -220,6 +237,7 @@
   <string name="pref_biometric_auth_summary">Lorsque cette option est activée, Password Store vous demandera votre empreinte digitale au lancement</string>
   <string name="pref_biometric_auth_summary_error">Lecteur d\'empreinte digitale non accessible ou manquant</string>
   <string name="pref_title_openkeystore_clear_keyid">Effacer la clé d\'identification SSH d\'OpenKeystore mémorisée</string>
+  <string name="access_sdcard_text">Le dépot se trouve dans votre carte SD ou sur la mémoire de stockage interne, mais l\'application n\'a pas la permission d\'y accéder.</string>
   <string name="your_public_key">Votre clé publique</string>
   <string name="error_generate_ssh_key">Une erreur est survenue pendant la génération de la clé ssh</string>
   <string name="pref_show_hidden_title">Afficher tous les fichiers et dossiers</string>
@@ -251,6 +269,7 @@
   <string name="git_operation_wrong_password">Mot de passe incorrect</string>
   <string name="bottom_sheet_create_new_folder">Créer un dossier</string>
   <string name="bottom_sheet_create_new_password">Créer un mot de passe</string>
+  <string name="snackbar_action_grant">Autoriser</string>
   <string name="pref_debug_logging_summary">Activer la journalisation du débogage (nécessite un redémarrage de l\'application)</string>
   <string name="pref_debug_logging_title">Journal de débogage</string>
   <string name="preference_default_username_summary">Si le remplissage automatique est incapable de déterminer un nom d\'utilisateur à partir de votre fichier de mot de passe ou de la structure de répertoire, il utilisera la valeur spécifiée ici</string>
@@ -300,6 +319,7 @@
   <string name="folder_creation_err_file_exists">Un fichier portant ce nom existe déjà</string>
   <string name="folder_creation_err_folder_exists">Un dossier portant ce nom existe déjà</string>
   <!-- Onboarding flow -->
+  <string name="repository_n_location">Emplacement du dépôt \n</string>
   <string name="let_s_go">Allons-y</string>
   <string name="select_n_repository_type">Sélectionnez le type de dépôt \n</string>
   <string name="select_repo_type_text">Sélectionnez si vous voulez créer un dépôt local ou cloner un dépôt distant.</string>
@@ -322,7 +342,13 @@
   <string name="clear_saved_host_key">Effacer la clé d\'hôte enregistrée</string>
   <string name="clear_saved_host_key_success">La clé d\'hôte a été effacée avec succès!</string>
   <string name="otp_import_qr_code">Scanner le code QR</string>
+  <string name="otp_import_from_file">Choisissez une image</string>
   <string name="otp_import_manual_entry">Saisir manuellement</string>
   <string name="otp_import_manual_hint_secret">Secret</string>
   <string name="otp_import_manual_hint_account">Compte</string>
+  <string name="password_list_fab_content_description">Créer un nouveau mot de passe ou dossier</string>
+  <string name="pgp_key_import_failed">Impossible d\'importer la clé PGP</string>
+  <string name="pgp_key_import_succeeded">Clé PGP importée avec succès</string>
+  <string name="pgp_key_import_succeeded_message">La clé d\'identification de la clé importée est donné ci-dessous, veuillez la vérifier pour qu\'elle soit correcte :\n%1$s</string>
+  <string name="pref_category_pgp_title">Paramètres PGP</string>
 </resources>
