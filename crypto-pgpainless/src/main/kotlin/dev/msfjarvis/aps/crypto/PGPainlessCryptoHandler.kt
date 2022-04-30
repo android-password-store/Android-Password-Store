@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
-import org.bouncycastle.bcpg.ArmoredInputStream
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
 import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.ConsumerOptions
@@ -64,20 +63,24 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
     outputStream: OutputStream,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
+        require(keys.isNotEmpty()) { "No keys provided for encryption" }
         val armoredKeys = keys.map { key -> key.contents.decodeToString() }
         val pubKeysStream = ByteArrayInputStream(armoredKeys.joinToString("\n").toByteArray())
         val publicKeyRingCollection =
-          pubKeysStream.use {
-            ArmoredInputStream(it).use { armoredInputStream ->
-              PGPainless.readKeyRing().publicKeyRingCollection(armoredInputStream)
-            }
+          pubKeysStream.use { PGPainless.readKeyRing().publicKeyRingCollection(pubKeysStream) }
+        val encryptionOptions =
+          EncryptionOptions.encryptCommunications()
+            .addRecipients(publicKeyRingCollection.asIterable())
+        val producerOptions = ProducerOptions.encrypt(encryptionOptions).setAsciiArmor(true)
+        val encryptor =
+          PGPainless.encryptAndOrSign().onOutputStream(outputStream).withOptions(producerOptions)
+        plaintextStream.copyTo(encryptor)
+        encryptor.close()
+        val result = encryptor.result
+        publicKeyRingCollection.keyRings.forEach { keyRing ->
+          require(result.isEncryptedFor(keyRing)) {
+            "Stream should be encrypted for ${keyRing.publicKey.keyID} but wasn't"
           }
-        val encOpt =
-          EncryptionOptions().apply { publicKeyRingCollection.forEach { addRecipient(it) } }
-        val prodOpt = ProducerOptions.encrypt(encOpt).setAsciiArmor(true)
-        PGPainless.encryptAndOrSign().onOutputStream(outputStream).withOptions(prodOpt).use {
-          encryptionStream ->
-          plaintextStream.copyTo(encryptionStream)
         }
         return@runCatching
       }
