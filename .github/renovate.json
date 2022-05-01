@@ -2,5 +2,11 @@
   "extends": [
     "config:base",
     ":dependencyDashboard"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["^androidx.compose"],
+      "groupName": "jetpack-compose"
+    }
   ]
 }
