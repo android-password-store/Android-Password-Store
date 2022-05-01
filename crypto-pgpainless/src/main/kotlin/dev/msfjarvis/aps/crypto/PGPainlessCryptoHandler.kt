@@ -10,6 +10,7 @@ import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.crypto.errors.CryptoHandlerException
 import dev.msfjarvis.aps.crypto.errors.IncorrectPassphraseException
+import dev.msfjarvis.aps.crypto.errors.NoKeysProvided
 import dev.msfjarvis.aps.crypto.errors.UnknownError
 import java.io.ByteArrayInputStream
 import java.io.InputStream
@@ -63,7 +64,7 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
     outputStream: OutputStream,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        require(keys.isNotEmpty()) { "No keys provided for encryption" }
+        if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
         val armoredKeys = keys.map { key -> key.contents.decodeToString() }
         val pubKeysStream = ByteArrayInputStream(armoredKeys.joinToString("\n").toByteArray())
         val publicKeyRingCollection =
@@ -84,7 +85,12 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
         }
         return@runCatching
       }
-      .mapError { error -> UnknownError(error) }
+      .mapError { error ->
+        when (error) {
+          is CryptoHandlerException -> error
+          else -> UnknownError(error)
+        }
+      }
 
   public override fun canHandle(fileName: String): Boolean {
     return fileName.split('.').lastOrNull() == "gpg"
