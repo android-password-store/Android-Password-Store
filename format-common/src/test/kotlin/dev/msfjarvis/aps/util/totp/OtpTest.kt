@@ -24,7 +24,7 @@ class OtpTest {
   }
 
   @Test
-  fun testOtpGeneration6Digits() {
+  fun otpGeneration6Digits() {
     assertEquals(
       "953550",
       generateOtp(
@@ -46,7 +46,7 @@ class OtpTest {
   }
 
   @Test
-  fun testOtpGeneration10Digits() {
+  fun otpGeneration10Digits() {
     assertEquals(
       "0740900914",
       generateOtp(
@@ -71,7 +71,7 @@ class OtpTest {
   }
 
   @Test
-  fun testOtpGenerationIllegalInput() {
+  fun otpGenerationIllegalInput() {
     assertNull(
       generateOtp(
         counter = 10000,
@@ -108,7 +108,7 @@ class OtpTest {
   }
 
   @Test
-  fun testOtpGenerationUnusualSecrets() {
+  fun otpGenerationUnusualSecrets() {
     assertEquals(
       "127764",
       generateOtp(
@@ -126,7 +126,7 @@ class OtpTest {
   }
 
   @Test
-  fun testOtpGenerationUnpaddedSecrets() {
+  fun otpGenerationUnpaddedSecrets() {
     // Secret was generated with `echo 'string with some padding needed' | base32`
     // We don't care for the resultant OTP's actual value, we just want both the padded and
     // unpadded variant to generate the same one.

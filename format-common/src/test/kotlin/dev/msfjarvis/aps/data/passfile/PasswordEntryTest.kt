@@ -34,7 +34,7 @@ class PasswordEntryTest {
     )
 
   @Test
-  fun testGetPassword() {
+  fun getPassword() {
     assertEquals("fooooo", makeEntry("fooooo\nbla\n").password)
     assertEquals("fooooo", makeEntry("fooooo\nbla").password)
     assertEquals("fooooo", makeEntry("fooooo\n").password)
@@ -52,7 +52,7 @@ class PasswordEntryTest {
   }
 
   @Test
-  fun testGetExtraContent() {
+  fun getExtraContent() {
     assertEquals("bla\n", makeEntry("fooooo\nbla\n").extraContentString)
     assertEquals("bla", makeEntry("fooooo\nbla").extraContentString)
     assertEquals("", makeEntry("fooooo\n").extraContentString)
@@ -103,7 +103,7 @@ class PasswordEntryTest {
   }
 
   @Test
-  fun testGetUsername() {
+  fun getUsername() {
     for (field in PasswordEntry.USERNAME_FIELDS) {
       assertEquals("username", makeEntry("\n$field username").username)
       assertEquals(
@@ -123,7 +123,7 @@ class PasswordEntryTest {
   }
 
   @Test
-  fun testHasUsername() {
+  fun hasUsername() {
     assertNotNull(makeEntry("secret\nextra\nlogin: username\ncontent\n").username)
     assertNull(makeEntry("secret\nextra\ncontent\n").username)
     assertNull(makeEntry("secret\nlogin failed\n").username)
@@ -132,7 +132,7 @@ class PasswordEntryTest {
   }
 
   @Test
-  fun testGeneratesOtpFromTotpUri() = runTest {
+  fun generatesOtpFromTotpUri() = runTest {
     val entry = makeEntry("secret\nextra\n$TOTP_URI")
     assertTrue(entry.hasTotp())
     entry.totp.test {
@@ -149,7 +149,7 @@ class PasswordEntryTest {
    * blocked https://msfjarvis.dev/aps/issue/1550.
    */
   @Test
-  fun testGeneratedOtpHasCorrectRemainingTime() = runTest {
+  fun generatedOtpHasCorrectRemainingTime() = runTest {
     val entry = makeEntry("secret\nextra\n$TOTP_URI", TestUserClock.withAddedSeconds(5))
     assertTrue(entry.hasTotp())
     entry.totp.test {
@@ -161,7 +161,7 @@ class PasswordEntryTest {
   }
 
   @Test
-  fun testGeneratesOtpWithOnlyUriInFile() = runTest {
+  fun generatesOtpWithOnlyUriInFile() = runTest {
     val entry = makeEntry(TOTP_URI)
     assertNull(entry.password)
     entry.totp.test {
@@ -173,7 +173,7 @@ class PasswordEntryTest {
   }
 
   @Test
-  fun testOnlyLooksForUriInFirstLine() {
+  fun onlyLooksForUriInFirstLine() {
     val entry = makeEntry("id:\n$TOTP_URI")
     assertNotNull(entry.password)
     assertTrue(entry.hasTotp())
