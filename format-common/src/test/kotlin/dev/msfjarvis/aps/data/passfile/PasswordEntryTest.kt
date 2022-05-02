@@ -5,8 +5,8 @@
 
 package dev.msfjarvis.aps.data.passfile
 
+import app.cash.turbine.test
 import dev.msfjarvis.aps.test.CoroutineTestRule
-import dev.msfjarvis.aps.test.test2
 import dev.msfjarvis.aps.util.time.TestUserClock
 import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.TotpFinder
@@ -135,7 +135,7 @@ class PasswordEntryTest {
   fun testGeneratesOtpFromTotpUri() = runTest {
     val entry = makeEntry("secret\nextra\n$TOTP_URI")
     assertTrue(entry.hasTotp())
-    entry.totp.test2 {
+    entry.totp.test {
       val otp = expectMostRecentItem()
       assertEquals("818800", otp.value)
       assertEquals(30.seconds, otp.remainingTime)
@@ -152,7 +152,7 @@ class PasswordEntryTest {
   fun testGeneratedOtpHasCorrectRemainingTime() = runTest {
     val entry = makeEntry("secret\nextra\n$TOTP_URI", TestUserClock.withAddedSeconds(5))
     assertTrue(entry.hasTotp())
-    entry.totp.test2 {
+    entry.totp.test {
       val otp = expectMostRecentItem()
       assertEquals("818800", otp.value)
       assertEquals(25.seconds, otp.remainingTime)
@@ -164,7 +164,7 @@ class PasswordEntryTest {
   fun testGeneratesOtpWithOnlyUriInFile() = runTest {
     val entry = makeEntry(TOTP_URI)
     assertNull(entry.password)
-    entry.totp.test2 {
+    entry.totp.test {
       val otp = expectMostRecentItem()
       assertEquals("818800", otp.value)
       assertEquals(30.seconds, otp.remainingTime)
