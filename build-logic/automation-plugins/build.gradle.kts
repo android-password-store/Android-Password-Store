@@ -17,7 +17,10 @@ afterEvaluate {
   }
 
   tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions { jvmTarget = JavaVersion.VERSION_11.toString() }
+    kotlinOptions {
+      jvmTarget = JavaVersion.VERSION_11.toString()
+      freeCompilerArgs = freeCompilerArgs + "-Xsam-conversions=class"
+    }
   }
 }
 

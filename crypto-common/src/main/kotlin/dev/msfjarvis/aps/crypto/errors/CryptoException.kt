@@ -22,15 +22,15 @@ public object KeyDeletionFailedException : KeyManagerException("Couldn't delete 
 public object InvalidKeyException :
   KeyManagerException("Given key cannot be parsed as a known key type")
 
-/** No key matching [keyId] could be found. */
+/** No key matching `keyId` could be found. */
 public class KeyNotFoundException(keyId: String) :
   KeyManagerException("No key found with id: $keyId")
 
-/** Attempting to add another key for [keyId] without requesting a replace. */
+/** Attempting to add another key for `keyId` without requesting a replace. */
 public class KeyAlreadyExistsException(keyId: String) :
   KeyManagerException("Pre-existing key was found for $keyId")
 
-/** Sealed exception types for [CryptoHandler]. */
+/** Sealed exception types for [dev.msfjarvis.aps.crypto.CryptoHandler]. */
 public sealed class CryptoHandlerException(message: String? = null, cause: Throwable? = null) :
   CryptoException(message, cause)
 

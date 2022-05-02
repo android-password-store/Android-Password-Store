@@ -51,7 +51,7 @@ class PGPKeyManagerTest {
   }
 
   @Test
-  fun testAddingKey() =
+  fun addKey() =
     scope.runTest {
       // Check if the key id returned is correct
       val keyId = keyManager.getKeyId(keyManager.addKey(key).unwrap())
@@ -66,7 +66,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testAddingKeyWithoutReplaceFlag() =
+  fun addKeyWithoutReplaceFlag() =
     scope.runTest {
       // Check adding the keys twice
       keyManager.addKey(key, false).unwrap()
@@ -76,7 +76,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testAddingKeyWithReplaceFlag() =
+  fun addKeyWithReplaceFlag() =
     scope.runTest {
       // Check adding the keys twice
       keyManager.addKey(key, true).unwrap()
@@ -86,7 +86,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testRemovingKey() =
+  fun removeKey() =
     scope.runTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
@@ -101,7 +101,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testGetExistingKeyById() =
+  fun getKeyById() =
     scope.runTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
@@ -116,7 +116,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testGetExistingKeyByFullUserId() =
+  fun getKeyByFullUserId() =
     scope.runTest {
       keyManager.addKey(key).unwrap()
 
@@ -126,7 +126,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testGetExistingKeyByEmailUserId() =
+  fun getKeyByEmailUserId() =
     scope.runTest {
       keyManager.addKey(key).unwrap()
 
@@ -136,7 +136,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testGetNonExistentKey() =
+  fun getNonExistentKey() =
     scope.runTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
@@ -150,7 +150,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testFindKeysWithoutAdding() =
+  fun findNonExistentKey() =
     scope.runTest {
       // Check returned key
       val error = keyManager.getKeyById(KeyId(0x08edf7567183ce44)).unwrapError()
@@ -159,7 +159,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testGettingAllKeys() =
+  fun getAllKeys() =
     scope.runTest {
       // TODO: Should we check for more than 1 keys?
       // Check if KeyManager returns no key
@@ -175,7 +175,7 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testGettingMultipleIdentityKeyWithBothUserIDs() {
+  fun getMultipleIdentityKeyWithAllIdentities() {
     scope.runTest {
       val key = PGPKey(getArmoredPrivateKeyWithMultipleIdentities())
       keyManager.addKey(key).unwrap()

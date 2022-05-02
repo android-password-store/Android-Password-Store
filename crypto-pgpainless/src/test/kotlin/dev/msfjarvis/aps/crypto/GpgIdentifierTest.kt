@@ -12,28 +12,28 @@ import kotlin.test.assertTrue
 class GpgIdentifierTest {
 
   @Test
-  fun `parses hexadecimal key id without leading 0x`() {
+  fun parseHexKeyIdWithout0xPrefix() {
     val identifier = GpgIdentifier.fromString("79E8208280490C77")
     assertNotNull(identifier)
     assertTrue { identifier is GpgIdentifier.KeyId }
   }
 
   @Test
-  fun `parses hexadecimal key id`() {
+  fun parseHexKeyId() {
     val identifier = GpgIdentifier.fromString("0x79E8208280490C77")
     assertNotNull(identifier)
     assertTrue { identifier is GpgIdentifier.KeyId }
   }
 
   @Test
-  fun `parses email as user id`() {
+  fun parseValidEmail() {
     val identifier = GpgIdentifier.fromString("john.doe@example.org")
     assertNotNull(identifier)
     assertTrue { identifier is GpgIdentifier.UserId }
   }
 
   @Test
-  fun `parses user@host without TLD`() {
+  fun parseEmailWithoutTLD() {
     val identifier = GpgIdentifier.fromString("john.doe@example")
     assertNotNull(identifier)
     assertTrue { identifier is GpgIdentifier.UserId }

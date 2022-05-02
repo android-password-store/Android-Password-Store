@@ -11,7 +11,7 @@ import org.bouncycastle.openpgp.PGPSecretKeyRing
 
 class KeyUtilsTest {
   @Test
-  fun `parse GPG key with multiple identities`() {
+  fun parseKeyWithMultipleIdentities() {
     val key = PGPKey(getArmoredPrivateKeyWithMultipleIdentities())
     val keyring = tryParseKeyring(key)
     assertNotNull(keyring)
