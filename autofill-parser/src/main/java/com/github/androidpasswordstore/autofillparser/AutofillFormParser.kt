@@ -166,7 +166,8 @@ private class AutofillFormParser(
         // reported web origin if no other web origin appears on the page.
         webOriginToFormOrigin(context, webOrigins.singleOrNull() ?: return null)
       }
-      BrowserMultiOriginMethod.WebView, BrowserMultiOriginMethod.Field -> {
+      BrowserMultiOriginMethod.WebView,
+      BrowserMultiOriginMethod.Field -> {
         // Security assumption: For browsers with full autofill support (the `Field` case),
         // every form field is annotated with its origin. For browsers based on WebView,
         // this is true after the web origins of WebViews are passed down to their children.
