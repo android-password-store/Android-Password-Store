@@ -41,7 +41,8 @@ class LaunchActivity : AppCompatActivity() {
             prefs.edit { remove(PreferenceKeys.BIOMETRIC_AUTH) }
             startTargetActivity(false)
           }
-          is Result.Failure, Result.Cancelled -> {
+          is Result.Failure,
+          Result.Cancelled -> {
             finish()
           }
           is Result.Retry -> {}

@@ -183,8 +183,8 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
             "Request ${request::class.simpleName} failed: ${error?.message}"
           )
         when (error?.error) {
-          SshAuthenticationApiError.NO_AUTH_KEY, SshAuthenticationApiError.NO_SUCH_KEY ->
-            ApiResponse.NoSuchKey(exception)
+          SshAuthenticationApiError.NO_AUTH_KEY,
+          SshAuthenticationApiError.NO_SUCH_KEY -> ApiResponse.NoSuchKey(exception)
           else -> ApiResponse.GeneralError(exception)
         }
       }

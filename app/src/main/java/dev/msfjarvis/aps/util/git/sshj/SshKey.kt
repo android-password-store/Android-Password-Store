@@ -306,8 +306,8 @@ object SshKey {
 
   fun provide(client: SSHClient, passphraseFinder: InteractivePasswordFinder): KeyProvider? =
     when (type) {
-      Type.LegacyGenerated, Type.Imported ->
-        client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
+      Type.LegacyGenerated,
+      Type.Imported -> client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
       Type.KeystoreNative -> KeystoreNativeKeyProvider
       Type.KeystoreWrappedEd25519 -> KeystoreWrappedEd25519KeyProvider
       null -> null

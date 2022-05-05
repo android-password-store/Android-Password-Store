@@ -35,7 +35,8 @@ class OpenKeychainWrappedKeyAlgorithm(private val keyAlgorithm: KeyAlgorithm) :
     when (keyAlgorithm.keyAlgorithm) {
       "rsa-sha2-512" -> SshAuthenticationApi.SHA512
       "rsa-sha2-256" -> SshAuthenticationApi.SHA256
-      "ssh-rsa", "ssh-rsa-cert-v01@openssh.com" -> SshAuthenticationApi.SHA1
+      "ssh-rsa",
+      "ssh-rsa-cert-v01@openssh.com" -> SshAuthenticationApi.SHA1
       // Other algorithms don't use this value, but it has to be valid.
       else -> SshAuthenticationApi.SHA512
     }
