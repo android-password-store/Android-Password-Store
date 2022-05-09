@@ -10,24 +10,55 @@ rootProject.name = "APS"
 pluginManagement {
   repositories {
     includeBuild("build-logic")
-    google()
+    exclusiveContent {
+      forRepository(::google)
+      filter {
+        includeGroup("androidx.databinding")
+        includeGroup("com.android")
+        includeGroup("com.android.tools")
+        includeGroup("com.android.tools.analytics-library")
+        includeGroup("com.android.tools.build")
+        includeGroup("com.android.tools.build.jetifier")
+        includeGroup("com.android.databinding")
+        includeGroup("com.android.tools.ddms")
+        includeGroup("com.android.tools.layoutlib")
+        includeGroup("com.android.tools.lint")
+        includeGroup("com.android.tools.utp")
+        includeGroup("com.google.testing.platform")
+      }
+    }
     mavenCentral()
-    gradlePluginPortal()
   }
 }
 
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
-    mavenCentral()
-    google()
-    maven("https://jitpack.io") {
-      name = "JitPack"
-      content {
+    exclusiveContent {
+      forRepository(::google)
+      filter {
+        includeGroup("com.android")
+        includeGroup("com.android.tools")
+        includeGroup("com.android.tools.analytics-library")
+        includeGroup("com.android.tools.build")
+        includeGroup("com.android.tools.ddms")
+        includeGroup("com.android.tools.external.com-intellij")
+        includeGroup("com.android.tools.external.org-jetbrains")
+        includeGroup("com.android.tools.layoutlib")
+        includeGroup("com.android.tools.lint")
+        includeGroup("com.google.android.gms")
+        includeModule("com.google.android.material", "material")
+        includeGroupByRegex("androidx.*")
+      }
+    }
+    exclusiveContent {
+      forRepository { maven("https://jitpack.io") }
+      filter {
         includeModule("com.github.haroldadmin", "WhatTheStack")
         includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
       }
     }
+    mavenCentral()
   }
 }
 
