@@ -4,16 +4,6 @@
  */
 @file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 
-buildscript {
-  repositories {
-    maven("https://storage.googleapis.com/r8-releases/raw") {
-      name = "R8 dev releases"
-      content { includeModule("com.android.tools", "r8") }
-    }
-  }
-  dependencies { classpath(libs.build.r8) }
-}
-
 plugins {
   id("com.github.android-password-store.kotlin-common")
   id("com.github.android-password-store.binary-compatibility")
