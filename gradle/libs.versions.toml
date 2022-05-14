@@ -48,7 +48,7 @@ build-okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 build-r8 = "com.android.tools:r8:3.3.28"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.0.1"
-build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.6.0"
+build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.6.1"
 
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
