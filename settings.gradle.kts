@@ -65,6 +65,8 @@ dependencyResolutionManagement {
 // Experimental features
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+
 // Modules
 include("app")
 
