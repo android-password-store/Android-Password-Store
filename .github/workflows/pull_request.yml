@@ -40,7 +40,7 @@ jobs:
 
     - name: Check codestyle
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.1.5
+      uses: gradle/gradle-build-action@v2.1.6
       with:
         arguments: --no-configuration-cache spotlessCheck
 
@@ -74,7 +74,7 @@ jobs:
 
     - name: Run unit tests
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.1.5
+      uses: gradle/gradle-build-action@v2.1.6
       with:
         arguments: --no-configuration-cache test -PslimTests
 
@@ -115,7 +115,7 @@ jobs:
 
     - name: Build debug APKs
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.1.5
+      uses: gradle/gradle-build-action@v2.1.6
       with:
         arguments: --no-configuration-cache assembleFreeDebug assembleNonFreeDebug
 
@@ -149,7 +149,7 @@ jobs:
 
     - name: Check library API
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.1.5
+      uses: gradle/gradle-build-action@v2.1.6
       with:
         arguments: --no-configuration-cache apiCheck
 
@@ -183,7 +183,7 @@ jobs:
 
     - name: Run Lint on debug variants
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.1.5
+      uses: gradle/gradle-build-action@v2.1.6
       with:
         arguments: --no-configuration-cache lintDebug
 
@@ -217,6 +217,6 @@ jobs:
 
     - name: Assemble non-free release
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.1.5
+      uses: gradle/gradle-build-action@v2.1.6
       with:
         arguments: --no-configuration-cache aNFR
