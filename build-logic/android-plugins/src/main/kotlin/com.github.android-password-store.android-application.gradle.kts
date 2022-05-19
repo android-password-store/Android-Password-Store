@@ -7,6 +7,7 @@
 import flavors.FlavorDimensions
 import flavors.ProductFlavors
 import signing.configureBuildSigning
+import snapshot.SnapshotExtension
 
 plugins {
   id("com.android.application")
@@ -63,4 +64,9 @@ android {
   }
 
   project.configureBuildSigning()
+}
+
+dependencies {
+  extensions.add("snapshot", SnapshotExtension::class.java)
+  the<SnapshotExtension>().snapshot = isSnapshot()
 }

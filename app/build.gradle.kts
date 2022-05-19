@@ -20,14 +20,6 @@ crowdin {
   skipCleanup = false
 }
 
-fun isSnapshot(): Boolean {
-  with(project.providers) {
-    val workflow = environmentVariable("GITHUB_WORKFLOW")
-    val snapshot = environmentVariable("SNAPSHOT")
-    return workflow.isPresent || snapshot.isPresent
-  }
-}
-
 android {
   compileOptions { isCoreLibraryDesugaringEnabled = true }
 
@@ -96,7 +88,7 @@ dependencies {
   implementation(libs.thirdparty.sshauth)
   implementation(libs.thirdparty.sshj)
 
-  if (isSnapshot()) {
+  if (snapshot.snapshot) {
     implementation(libs.thirdparty.whatthestack)
   } else {
     debugImplementation(libs.thirdparty.whatthestack)
