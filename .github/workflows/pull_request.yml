@@ -80,7 +80,7 @@ jobs:
 
     - name: (Fail-only) Upload test report
       if: "${{ failure() }}"
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.0
       with:
           name: Test report
           path: app/build/reports
