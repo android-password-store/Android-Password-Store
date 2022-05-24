@@ -42,6 +42,12 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
         titleRes = R.string.pref_sort_order_title
       }
 
+      checkBox(PreferenceKeys.DISABLE_SYNC_ACTION) {
+        titleRes = R.string.pref_disable_sync_on_pull_title
+        summaryRes = R.string.pref_disable_sync_on_pull_summary
+        defaultValue = false
+      }
+
       checkBox(PreferenceKeys.FILTER_RECURSIVELY) {
         titleRes = R.string.pref_recursive_filter_title
         summaryRes = R.string.pref_recursive_filter_summary
