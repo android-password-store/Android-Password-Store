@@ -29,6 +29,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.databinding.PasswordRecyclerViewBinding
+import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
 import dev.msfjarvis.aps.ui.adapters.PasswordItemRecyclerAdapter
 import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet
 import dev.msfjarvis.aps.ui.dialogs.ItemCreationBottomSheet
@@ -55,6 +56,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
   @Inject lateinit var gitSettings: GitSettings
   @Inject lateinit var shortcutHandler: ShortcutHandler
+  @Inject @SettingsPreferences lateinit var prefs: SharedPreferences
   private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
   private lateinit var listener: OnFragmentInteractionListener
   private lateinit var settings: SharedPreferences
@@ -289,6 +291,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
           startAnimation(animation)
         }
     }
+
+  override fun onResume() {
+    super.onResume()
+    binding.swipeRefresher.isEnabled = !prefs.getBoolean(PreferenceKeys.DISABLE_SYNC_ACTION, false)
+  }
 
   override fun onAttach(context: Context) {
     super.onAttach(context)

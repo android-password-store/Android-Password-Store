@@ -132,6 +132,8 @@
   <string name="pref_rebase_on_pull_title">Rebase on pull</string>
   <string name="pref_rebase_on_pull_summary">When pulling or syncing, create a merge commit with upstream changes</string>
   <string name="pref_rebase_on_pull_summary_on">When pulling or syncing, rebase commits that are not present in the remote repository</string>
+  <string name="pref_disable_sync_on_pull_title">Disable pull to sync action</string>
+  <string name="pref_disable_sync_on_pull_summary">Prevent pulling down on the password list from triggering a Git sync</string>
 
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Generate Password</string>
