@@ -27,7 +27,24 @@ pluginManagement {
         includeGroup("com.google.testing.platform")
       }
     }
+    exclusiveContent {
+      forRepository(::gradlePluginPortal)
+      filter {
+        includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
+        includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
+      }
+    }
     mavenCentral()
+  }
+}
+
+plugins { id("com.gradle.enterprise") version "3.10.1" }
+
+gradleEnterprise {
+  buildScan {
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = if (System.getenv("GITHUB_WORKFLOW").isNullOrEmpty()) "no" else "yes"
+    publishOnFailureIf(!System.getenv("GITHUB_WORKFLOW").isNullOrEmpty())
   }
 }
 
