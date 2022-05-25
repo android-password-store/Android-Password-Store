@@ -1,0 +1,47 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+env:
+  SENTRY_DSN: 'https://public_key@example.com/project_id'
+
+name: Shadow job with latest Gradle and Java
+jobs:
+  shadow-job:
+    strategy:
+      fail-fast: false
+      matrix:
+        agp-version:
+          - 7.2.0
+          - 7.3.0-beta01
+          - 7.4.0-alpha02
+        gradle-version:
+          - wrapper
+          - nightly
+        java-version:
+          - 11
+          - 17
+          - 18
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3.0.2
+      with:
+        fetch-depth: 0
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3.3.0
+      with:
+        distribution: temurin
+        java-version: ${{ matrix.java-version }}
+
+    - name: Copy CI gradle.properties
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Run checks
+      uses: gradle/gradle-build-action@v2.2.0-beta.1
+      env:
+        GRADLE_VERSION_OVERRIDE_com_android_tools_build_gradle: ${{ matrix.agp-version }}
+      with:
+        arguments: --no-configuration-cache check
