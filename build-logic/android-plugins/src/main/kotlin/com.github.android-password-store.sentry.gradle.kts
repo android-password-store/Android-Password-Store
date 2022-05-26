@@ -2,7 +2,7 @@
 
 import flavors.FlavorDimensions
 import flavors.ProductFlavors
-import io.sentry.android.gradle.InstrumentationFeature
+import io.sentry.android.gradle.extensions.InstrumentationFeature
 
 plugins {
   id("com.android.application")
