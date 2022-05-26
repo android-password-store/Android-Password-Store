@@ -33,4 +33,5 @@ sentry {
     enabled.set(true)
     features.set(setOf(InstrumentationFeature.FILE_IO))
   }
+  autoInstallation.enabled.set(false)
 }
