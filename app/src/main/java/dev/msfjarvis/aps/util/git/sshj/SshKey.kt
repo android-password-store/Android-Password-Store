@@ -120,7 +120,7 @@ object SshKey {
       context.sharedPrefs.edit { putString(PreferenceKeys.GIT_REMOTE_KEY_TYPE, value?.value) }
 
   private val isStrongBoxSupported by unsafeLazy {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+    if (Build.VERSION.SDK_INT >= 28)
       context.packageManager.hasSystemFeature(PackageManager.FEATURE_STRONGBOX_KEYSTORE)
     else false
   }
@@ -162,7 +162,7 @@ object SshKey {
         setKeySize(256)
         setAlgorithmParameterSpec(java.security.spec.ECGenParameterSpec("secp256r1"))
         setDigests(KeyProperties.DIGEST_SHA256)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= 28) {
           setIsStrongBoxBacked(isStrongBoxSupported)
         }
       }
@@ -284,7 +284,7 @@ object SshKey {
         apply(algorithm.applyToSpec)
         if (requireAuthentication) {
           setUserAuthenticationRequired(true)
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          if (Build.VERSION.SDK_INT >= 30) {
             setUserAuthenticationParameters(30, KeyProperties.AUTH_DEVICE_CREDENTIAL)
           } else {
             @Suppress("DEPRECATION") setUserAuthenticationValidityDurationSeconds(30)

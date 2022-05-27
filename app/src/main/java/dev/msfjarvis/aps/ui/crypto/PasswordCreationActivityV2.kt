@@ -105,7 +105,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
         return@registerForActivityResult
       }
       val bitmap =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= 28) {
           ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, imageUri))
             .copy(Bitmap.Config.ARGB_8888, true)
         } else {

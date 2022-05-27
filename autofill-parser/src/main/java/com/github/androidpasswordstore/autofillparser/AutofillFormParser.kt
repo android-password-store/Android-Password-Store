@@ -8,7 +8,6 @@ import android.app.assist.AssistStructure
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
@@ -60,7 +59,7 @@ public sealed class FormOrigin(public open val identifier: String) {
 /**
  * Manages the detection of fields to fill in an [AssistStructure] and determines the [FormOrigin].
  */
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 private class AutofillFormParser(
   context: Context,
   structure: AssistStructure,
@@ -191,7 +190,7 @@ public data class Credentials(val username: String?, val password: String?, val 
  * Represents a collection of fields in a specific app that can be filled or saved. This is the
  * entry point to all fill and save features.
  */
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 public class FillableForm
 private constructor(
   public val formOrigin: FormOrigin,

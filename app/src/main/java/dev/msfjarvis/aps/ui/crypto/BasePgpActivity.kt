@@ -239,7 +239,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
           action = ClipboardService.ACTION_START
           putExtra(ClipboardService.EXTRA_NOTIFICATION_TIME, clearAfter)
         }
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      if (Build.VERSION.SDK_INT >= 26) {
         startForegroundService(service)
       } else {
         startService(service)

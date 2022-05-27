@@ -37,7 +37,7 @@ import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 @AndroidEntryPoint
 class OreoAutofillService : AutofillService() {
 
@@ -102,7 +102,7 @@ class OreoAutofillService : AutofillService() {
           callback.onSuccess(null)
           return
         }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= 30) {
       api30ResponseBuilderFactory
         .create(formToFill)
         .fillCredentials(this, request.inlineSuggestionsRequest, callback)

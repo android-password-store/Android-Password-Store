@@ -4,7 +4,6 @@
  */
 package com.github.androidpasswordstore.autofillparser
 
-import android.os.Build
 import androidx.annotation.RequiresApi
 import com.github.androidpasswordstore.autofillparser.CertaintyLevel.Certain
 import com.github.androidpasswordstore.autofillparser.CertaintyLevel.Likely
@@ -22,7 +21,7 @@ private inline fun <T> Pair<T, T>.none(predicate: T.() -> Boolean) =
  * The strategy used to detect [AutofillScenario] s; expressed using the DSL implemented in
  * [AutofillDsl].
  */
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 internal val autofillStrategy = strategy {
 
   // Match two new password fields, an optional current password field right below or above, and

@@ -30,7 +30,7 @@ import dev.msfjarvis.aps.util.extensions.viewBinding
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@TargetApi(Build.VERSION_CODES.O)
+@TargetApi(26)
 class AutofillPublisherChangedActivity : AppCompatActivity() {
 
   companion object {

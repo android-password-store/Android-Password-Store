@@ -44,7 +44,7 @@ import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@TargetApi(Build.VERSION_CODES.O)
+@TargetApi(26)
 @AndroidEntryPoint
 class AutofillFilterView : AppCompatActivity() {
 

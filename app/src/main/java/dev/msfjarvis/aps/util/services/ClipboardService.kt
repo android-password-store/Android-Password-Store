@@ -112,7 +112,7 @@ class ClipboardService : Service() {
     val clearTimeMs = clearTime * 1000L
     val clearIntent = Intent(this, ClipboardService::class.java).apply { action = ACTION_CLEAR }
     val pendingIntent =
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      if (Build.VERSION.SDK_INT >= 26) {
         PendingIntent.getForegroundService(
           this,
           0,
@@ -136,7 +136,7 @@ class ClipboardService : Service() {
         )
       }
     val notification =
-      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+      if (Build.VERSION.SDK_INT <= 23) {
         createNotificationApi23(pendingIntent)
       } else {
         createNotificationApi24(pendingIntent, clearTimeMs)
@@ -157,7 +157,7 @@ class ClipboardService : Service() {
       .build()
   }
 
-  @RequiresApi(Build.VERSION_CODES.N)
+  @RequiresApi(24)
   private fun createNotificationApi24(
     pendingIntent: PendingIntent,
     clearTimeMs: Long
@@ -176,7 +176,7 @@ class ClipboardService : Service() {
   }
 
   private fun createNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (Build.VERSION.SDK_INT >= 26) {
       val serviceChannel =
         NotificationChannel(
           CHANNEL_ID,

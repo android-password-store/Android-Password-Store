@@ -5,7 +5,6 @@
 package dev.msfjarvis.aps.util.autofill
 
 import android.content.Context
-import android.os.Build
 import androidx.annotation.RequiresApi
 import com.github.androidpasswordstore.autofillparser.Credentials
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
@@ -103,7 +102,7 @@ enum class DirectoryStructure(val value: String) {
           ?: file.nameWithoutExtension
     }
 
-  @RequiresApi(Build.VERSION_CODES.O)
+  @RequiresApi(26)
   fun getSaveFolderName(sanitizedIdentifier: String, username: String?) =
     when (this) {
       EncryptedUsername -> "/"

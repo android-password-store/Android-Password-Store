@@ -38,7 +38,7 @@ import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 @AndroidEntryPoint
 class AutofillDecryptActivityV2 : AppCompatActivity() {
 
