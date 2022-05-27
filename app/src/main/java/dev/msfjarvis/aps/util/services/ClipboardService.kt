@@ -113,7 +113,16 @@ class ClipboardService : Service() {
     val clearIntent = Intent(this, ClipboardService::class.java).apply { action = ACTION_CLEAR }
     val pendingIntent =
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        PendingIntent.getForegroundService(this, 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        PendingIntent.getForegroundService(
+          this,
+          0,
+          clearIntent,
+          if (Build.VERSION.SDK_INT >= 31) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+          } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+          }
+        )
       } else {
         PendingIntent.getService(
           this,
