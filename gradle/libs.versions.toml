@@ -3,7 +3,7 @@
 androidx_activity = "1.5.0-rc01"
 androidx_test = "1.5.0-alpha03"
 compose = "1.2.0-alpha08"
-coroutines = "1.6.1"
+coroutines = "1.6.2"
 flowbinding = "1.2.0"
 hilt = "2.42"
 kotlin = "1.6.21"
