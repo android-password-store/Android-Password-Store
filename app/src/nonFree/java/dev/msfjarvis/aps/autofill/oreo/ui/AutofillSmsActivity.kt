@@ -52,7 +52,7 @@ suspend fun <T> Task<T>.suspendableAwait() =
     }
   }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 class AutofillSmsActivity : AppCompatActivity() {
 
   companion object {
@@ -60,7 +60,7 @@ class AutofillSmsActivity : AppCompatActivity() {
     private var fillOtpFromSmsRequestCode = 1
 
     fun shouldOfferFillFromSms(context: Context): Boolean {
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return false
+      if (Build.VERSION.SDK_INT < 28) return false
       val googleApiAvailabilityInstance = GoogleApiAvailability.getInstance()
       val googleApiStatus = googleApiAvailabilityInstance.isGooglePlayServicesAvailable(context)
       if (googleApiStatus != ConnectionResult.SUCCESS) {

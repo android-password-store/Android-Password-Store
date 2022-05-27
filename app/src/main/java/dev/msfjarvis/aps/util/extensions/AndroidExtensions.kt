@@ -11,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Base64
 import android.util.TypedValue
 import android.view.View
@@ -33,7 +32,7 @@ import logcat.logcat
 
 /** Get an instance of [AutofillManager]. Only available on Android Oreo and above */
 val Context.autofillManager: AutofillManager?
-  @RequiresApi(Build.VERSION_CODES.O) get() = getSystemService()
+  @RequiresApi(26) get() = getSystemService()
 
 /** Get an instance of [ClipboardManager] */
 val Context.clipboard

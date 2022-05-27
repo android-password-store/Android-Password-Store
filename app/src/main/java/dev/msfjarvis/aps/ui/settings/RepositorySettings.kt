@@ -166,7 +166,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
                 }
                 .onFailure { it.message?.let { message -> activity.snackbar(message = message) } }
 
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+              if (Build.VERSION.SDK_INT >= 25) {
                 activity.getSystemService<ShortcutManager>()?.apply {
                   removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
                 }

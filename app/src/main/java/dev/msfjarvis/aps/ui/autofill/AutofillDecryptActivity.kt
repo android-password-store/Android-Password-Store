@@ -49,7 +49,7 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 @AndroidEntryPoint
 class AutofillDecryptActivity : AppCompatActivity() {
 

@@ -47,7 +47,7 @@ fun makeInlinePresentation(
   imeSpec: InlinePresentationSpec,
   metadata: DatasetMetadata
 ): InlinePresentation? {
-  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
+  if (Build.VERSION.SDK_INT < 30) return null
 
   if (UiVersions.INLINE_UI_VERSION_1 !in UiVersions.getVersions(imeSpec.style)) return null
 

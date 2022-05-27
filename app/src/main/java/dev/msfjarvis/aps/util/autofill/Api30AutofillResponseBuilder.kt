@@ -7,7 +7,6 @@ package dev.msfjarvis.aps.util.autofill
 
 import android.content.Context
 import android.content.IntentSender
-import android.os.Build
 import android.service.autofill.Dataset
 import android.service.autofill.FillCallback
 import android.service.autofill.FillResponse
@@ -36,7 +35,7 @@ import logcat.asLog
 import logcat.logcat
 
 /** Implements [AutofillResponseBuilder]'s methods for API 30 and above */
-@RequiresApi(Build.VERSION_CODES.R)
+@RequiresApi(30)
 class Api30AutofillResponseBuilder
 @AssistedInject
 constructor(

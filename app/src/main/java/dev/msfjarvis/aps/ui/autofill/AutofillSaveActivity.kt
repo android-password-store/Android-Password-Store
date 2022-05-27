@@ -8,7 +8,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -33,7 +32,7 @@ import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 @AndroidEntryPoint
 class AutofillSaveActivity : AppCompatActivity() {
 
