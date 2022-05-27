@@ -11,7 +11,6 @@ plugins {
   id("com.github.android-password-store.versioning-plugin")
   id("com.github.android-password-store.sentry")
   id("com.github.android-password-store.rename-artifacts")
-  id("com.github.android-password-store.bouncycastle-dependency")
   id("dagger.hilt.android.plugin")
 }
 
@@ -74,7 +73,6 @@ dependencies {
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)
 
-  implementation(libs.thirdparty.bouncycastle)
   implementation(libs.thirdparty.eddsa)
   implementation(libs.thirdparty.fastscroll)
   implementation(libs.thirdparty.flowbinding.android)
@@ -86,7 +84,9 @@ dependencies {
   implementation(libs.thirdparty.modernAndroidPrefs)
   implementation(libs.thirdparty.plumber)
   implementation(libs.thirdparty.sshauth)
-  implementation(libs.thirdparty.sshj)
+  implementation(libs.thirdparty.sshj) { exclude(group = "org.bouncycastle") }
+  implementation(libs.thirdparty.bouncycastle.bcprov)
+  implementation(libs.thirdparty.bouncycastle.bcpkix)
 
   if (snapshot.snapshot) {
     implementation(libs.thirdparty.whatthestack)
