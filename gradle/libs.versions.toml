@@ -1,7 +1,6 @@
 # Centralized versions for dependencies that share versions
 [versions]
 androidx_activity = "1.5.0-rc01"
-androidx_test = "1.5.0-alpha03"
 compose = "1.2.0-alpha08"
 coroutines = "1.6.2"
 flowbinding = "1.2.0"
@@ -91,8 +90,6 @@ thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-a
 thirdparty-sshj = "com.hierynomus:sshj:0.33.0"
 thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.1"
 
-androidx-testing-rules = { module = "androidx.test:rules", version.ref = "androidx_test" }
-androidx-testing-runner = { module = "androidx.test:runner", version.ref = "androidx_test" }
 testing-junit = "junit:junit:4.13.2"
 testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 testing-robolectric = "org.robolectric:robolectric:4.8.1"
@@ -102,4 +99,3 @@ testing-turbine = "app.cash.turbine:turbine:0.8.0"
 [bundles]
 androidxLifecycle = ["androidx-lifecycle-common", "androidx-lifecycle-livedataKtx", "androidx-lifecycle-viewmodelKtx"]
 testDependencies = ["testing-junit", "testing-kotlintest-junit"]
-androidTestDependencies = ["androidx-testing-rules", "androidx-testing-runner"]
