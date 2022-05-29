@@ -99,8 +99,6 @@ dependencies {
   add("nonFreeImplementation", libs.thirdparty.nonfree.sentry)
   add("freeImplementation", projects.sentryStub)
 
-  androidTestImplementation(libs.bundles.testDependencies)
-  androidTestImplementation(libs.bundles.androidTestDependencies)
   testImplementation(libs.testing.robolectric)
   testImplementation(libs.testing.sharedPrefsMock)
   testImplementation(libs.bundles.testDependencies)
