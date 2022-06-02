@@ -18,7 +18,7 @@ import org.gradle.kotlin.dsl.register
  * the [Project.getBuildDir] directory. It also adds Gradle tasks to bump the major, minor, and
  * patch versions along with one to prepare the next snapshot.
  */
-@Suppress("UnstableApiUsage", "NAME_SHADOWING", "Unused")
+@Suppress("Unused")
 class VersioningPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {

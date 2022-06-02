@@ -5,7 +5,7 @@
 
 package crowdin
 
-/** Extension for configuring [CrowdinPlugin] */
+/** Extension for configuring [CrowdinDownloadPlugin] */
 interface CrowdinExtension {
 
   /** Configure the project name on Crowdin */
