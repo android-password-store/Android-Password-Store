@@ -12,11 +12,11 @@ import kotlin.contracts.contract
 import kotlinx.coroutines.CancellationException
 
 /**
- * Calls the specified function [block] with [this] value as its receiver and returns its
- * encapsulated result if invocation was successful, catching any [Throwable] except
- * [CancellationException] that was thrown from the [block] function execution and encapsulating it
- * as a failure.
+ * Calls the specified function [block] and returns its encapsulated result if invocation was
+ * successful, catching any [Throwable] except [CancellationException] that was thrown from the
+ * [block] function execution and encapsulating it as a failure.
  */
+@OptIn(ExperimentalContracts::class)
 public suspend inline fun <V> runSuspendCatching(block: () -> V): Result<V, Throwable> {
   contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
 
@@ -34,6 +34,7 @@ public suspend inline fun <V> runSuspendCatching(block: () -> V): Result<V, Thro
  * [CancellationException] that was thrown from the [block] function execution and encapsulating it
  * as a failure.
  */
+@OptIn(ExperimentalContracts::class)
 public suspend inline infix fun <T, V> T.runSuspendCatching(
   block: T.() -> V
 ): Result<V, Throwable> {
