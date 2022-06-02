@@ -161,17 +161,17 @@ class PGPKeyManagerTest {
   @Test
   fun getAllKeys() =
     scope.runTest {
-      // TODO: Should we check for more than 1 keys?
       // Check if KeyManager returns no key
       val noKeyList = keyManager.getAllKeys().unwrap()
       assertEquals(0, noKeyList.size)
 
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
+      keyManager.addKey(PGPKey(getArmoredPrivateKeyWithMultipleIdentities())).unwrap()
 
       // Check if KeyManager returns one key
       val singleKeyList = keyManager.getAllKeys().unwrap()
-      assertEquals(1, singleKeyList.size)
+      assertEquals(2, singleKeyList.size)
     }
 
   @Test
