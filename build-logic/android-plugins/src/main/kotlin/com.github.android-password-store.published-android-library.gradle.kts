@@ -4,7 +4,6 @@
  */
 
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
 import org.gradle.kotlin.dsl.provideDelegate
 
@@ -14,15 +13,15 @@ plugins {
   id("signing")
 }
 
+group = requireNotNull(project.findProperty("GROUP"))
+
+version = requireNotNull(project.findProperty("VERSION_NAME"))
+
 @Suppress("UnstableApiUsage")
-configure<MavenPublishBaseExtension> {
-  group = requireNotNull(project.findProperty("GROUP"))
-  version = requireNotNull(project.findProperty("VERSION_NAME"))
-  mavenPublishing {
-    publishToMavenCentral(SonatypeHost.DEFAULT)
-    signAllPublications()
-    configure(AndroidSingleVariantLibrary())
-  }
+mavenPublishing {
+  publishToMavenCentral(SonatypeHost.DEFAULT)
+  signAllPublications()
+  configure(AndroidSingleVariantLibrary())
   pomFromGradleProperties()
 }
 
