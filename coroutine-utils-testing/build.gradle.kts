@@ -11,5 +11,4 @@ dependencies {
   implementation(projects.coroutineUtils)
   implementation(libs.testing.junit)
   implementation(libs.kotlin.coroutines.test)
-  api(libs.testing.turbine)
 }
