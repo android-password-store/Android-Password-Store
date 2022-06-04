@@ -28,11 +28,15 @@ gradlePlugin {
   plugins {
     register("crowdin") {
       id = "com.github.android-password-store.crowdin-plugin"
-      implementationClass = "crowdin.CrowdinDownloadPlugin"
+      implementationClass = "dev.msfjarvis.aps.gradle.crowdin.CrowdinDownloadPlugin"
     }
     register("psl") {
       id = "com.github.android-password-store.psl-plugin"
-      implementationClass = "psl.PublicSuffixListPlugin"
+      implementationClass = "dev.msfjarvis.aps.gradle.psl.PublicSuffixListPlugin"
+    }
+    register("git-hooks") {
+      id = "com.github.android-password-store.git-hooks"
+      implementationClass = "dev.msfjarvis.aps.gradle.GitHooksPlugin"
     }
   }
 }

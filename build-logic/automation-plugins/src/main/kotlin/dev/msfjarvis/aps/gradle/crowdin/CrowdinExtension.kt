@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package crowdin
+package dev.msfjarvis.aps.gradle.crowdin
 
 /** Extension for configuring [CrowdinDownloadPlugin] */
 interface CrowdinExtension {

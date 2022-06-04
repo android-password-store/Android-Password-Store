@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package tasks
+package dev.msfjarvis.aps.gradle.tasks
 
 import java.io.File
 import java.nio.file.Files
