@@ -18,4 +18,5 @@ dependencies {
   testImplementation(projects.coroutineUtilsTesting)
   testImplementation(libs.bundles.testDependencies)
   testImplementation(libs.kotlin.coroutines.test)
+  testImplementation(libs.testing.turbine)
 }
