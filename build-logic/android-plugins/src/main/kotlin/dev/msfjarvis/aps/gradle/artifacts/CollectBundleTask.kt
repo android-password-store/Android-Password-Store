@@ -1,4 +1,4 @@
-package artifacts
+package dev.msfjarvis.aps.gradle.artifacts
 
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption

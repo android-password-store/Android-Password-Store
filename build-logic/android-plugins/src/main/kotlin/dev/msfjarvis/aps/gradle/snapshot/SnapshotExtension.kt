@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package snapshot
+package dev.msfjarvis.aps.gradle.snapshot
 
 abstract class SnapshotExtension {
   abstract var snapshot: Boolean

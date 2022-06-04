@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package versioning
+package dev.msfjarvis.aps.gradle.versioning
 
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.vdurmont.semver4j.Semver

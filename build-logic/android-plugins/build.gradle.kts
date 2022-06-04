@@ -28,7 +28,27 @@ gradlePlugin {
   plugins {
     register("versioning") {
       id = "com.github.android-password-store.versioning-plugin"
-      implementationClass = "versioning.VersioningPlugin"
+      implementationClass = "dev.msfjarvis.aps.gradle.versioning.VersioningPlugin"
+    }
+    register("android-application") {
+      id = "com.github.android-password-store.android-application"
+      implementationClass = "dev.msfjarvis.aps.gradle.ApplicationPlugin"
+    }
+    register("android-library") {
+      id = "com.github.android-password-store.android-library"
+      implementationClass = "dev.msfjarvis.aps.gradle.LibraryPlugin"
+    }
+    register("published-android-library") {
+      id = "com.github.android-password-store.published-android-library"
+      implementationClass = "dev.msfjarvis.aps.gradle.PublishedAndroidLibraryPlugin"
+    }
+    register("rename-artifacts") {
+      id = "com.github.android-password-store.rename-artifacts"
+      implementationClass = "dev.msfjarvis.aps.gradle.RenameArtifactsPlugin"
+    }
+    register("sentry") {
+      id = "com.github.android-password-store.sentry"
+      implementationClass = "dev.msfjarvis.aps.gradle.SentryPlugin"
     }
   }
 }
@@ -47,7 +67,7 @@ configurations.all {
     val overridenVersion = System.getenv(overrideName)
     if (!overridenVersion.isNullOrEmpty()) {
       project.logger.lifecycle(
-        "Overriding dependency ${requested.group}:${requested.name} to version ${overridenVersion}"
+        "Overriding dependency ${requested.group}:${requested.name} to version $overridenVersion"
       )
       useVersion(overridenVersion)
     }

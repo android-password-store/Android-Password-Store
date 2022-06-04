@@ -1,4 +1,4 @@
-package artifacts
+package dev.msfjarvis.aps.gradle.artifacts
 
 import com.android.build.api.variant.BuiltArtifactsLoader
 import java.nio.file.Files

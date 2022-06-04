@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package signing
+package dev.msfjarvis.aps.gradle.signing
 
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import java.util.Properties

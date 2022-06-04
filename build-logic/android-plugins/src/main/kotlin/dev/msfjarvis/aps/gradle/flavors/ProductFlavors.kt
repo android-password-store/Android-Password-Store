@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package flavors
+package dev.msfjarvis.aps.gradle.flavors
 
 object FlavorDimensions {
   const val FREE = "free"

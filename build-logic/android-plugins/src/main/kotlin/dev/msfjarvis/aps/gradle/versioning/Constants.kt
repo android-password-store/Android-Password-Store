@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package versioning
+package dev.msfjarvis.aps.gradle.versioning
 
 const val VERSIONING_PROP_FILE = "version.properties"
 const val VERSIONING_PROP_VERSION_NAME = "versioning-plugin.versionName"
