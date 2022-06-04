@@ -20,7 +20,7 @@ jobs:
       - name: Download new translations from Crowdin
         uses: gradle/gradle-build-action@v2.2.0-beta.1
         with:
-          arguments: --no-configuration-cache crowdin
+          arguments: crowdin
         env:
           CROWDIN_LOGIN: ${{ secrets.CROWDIN_LOGIN }}
           CROWDIN_PROJECT_KEY: ${{ secrets.CROWDIN_PROJECT_KEY }}

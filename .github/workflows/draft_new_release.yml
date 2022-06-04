@@ -69,9 +69,9 @@ jobs:
           # that the version number is already correct, and we only need to drop the
           # -SNAPSHOT suffix.
           if [[ "${CHECKOUT_REF}" == "develop" ]]; then
-            ./gradlew --no-configuration-cache --no-daemon clearPreRelease
+            ./gradlew --no-daemon clearPreRelease
           else
-            ./gradlew --no-configuration-cache --no-daemon bumpPatch
+            ./gradlew --no-daemon bumpPatch
           fi
 
           # Commit changes to the versioning

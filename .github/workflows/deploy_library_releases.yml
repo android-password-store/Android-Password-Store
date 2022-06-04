@@ -32,7 +32,7 @@ jobs:
     - name: Upload binaries
       uses: gradle/gradle-build-action@v2.2.0-beta.1
       with:
-        arguments: --no-configuration-cache :${{ steps.task-select.outputs.PROJECT }}:publishAllPublicationsToMavenCentralRepository
+        arguments: :${{ steps.task-select.outputs.PROJECT }}:publishAllPublicationsToMavenCentralRepository
       env:
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
@@ -42,7 +42,7 @@ jobs:
     - name: Close and release repository
       uses: gradle/gradle-build-action@v2.2.0-beta.1
       with:
-        arguments: --no-configuration-cache closeAndReleaseRepository
+        arguments: closeAndReleaseRepository
       env:
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
