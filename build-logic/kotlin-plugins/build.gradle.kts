@@ -24,6 +24,35 @@ afterEvaluate {
   }
 }
 
+gradlePlugin {
+  plugins {
+    register("binary-compatibility") {
+      id = "com.github.android-password-store.binary-compatibility"
+      implementationClass = "dev.msfjarvis.aps.gradle.BinaryCompatibilityPlugin"
+    }
+    register("kotlin-android") {
+      id = "com.github.android-password-store.kotlin-android"
+      implementationClass = "dev.msfjarvis.aps.gradle.KotlinAndroidPlugin"
+    }
+    register("kotlin-common") {
+      id = "com.github.android-password-store.kotlin-common"
+      implementationClass = "dev.msfjarvis.aps.gradle.KotlinCommonPlugin"
+    }
+    register("kotlin-kapt") {
+      id = "com.github.android-password-store.kotlin-kapt"
+      implementationClass = "dev.msfjarvis.aps.gradle.KotlinKaptPlugin"
+    }
+    register("kotlin-library") {
+      id = "com.github.android-password-store.kotlin-library"
+      implementationClass = "dev.msfjarvis.aps.gradle.KotlinLibraryPlugin"
+    }
+    register("spotless") {
+      id = "com.github.android-password-store.spotless"
+      implementationClass = "dev.msfjarvis.aps.gradle.SpotlessPlugin"
+    }
+  }
+}
+
 dependencies {
   implementation(libs.build.agp)
   implementation(libs.build.binarycompat)
@@ -38,7 +67,7 @@ configurations.all {
     val overridenVersion = System.getenv(overrideName)
     if (!overridenVersion.isNullOrEmpty()) {
       project.logger.lifecycle(
-        "Overriding dependency ${requested.group}:${requested.name} to version ${overridenVersion}"
+        "Overriding dependency ${requested.group}:${requested.name} to version $overridenVersion"
       )
       useVersion(overridenVersion)
     }
