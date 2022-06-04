@@ -16,7 +16,7 @@ public interface KeyManager<Key, KeyIdentifier> {
 
   /**
    * Inserts a [key] into the store. If the key already exists, this method will return
-   * [KeyAlreadyExistsException] unless [replace] is `true`.
+   * [dev.msfjarvis.aps.crypto.errors.KeyAlreadyExistsException] unless [replace] is `true`.
    */
   public suspend fun addKey(key: Key, replace: Boolean = false): Result<Key, Throwable>
 
