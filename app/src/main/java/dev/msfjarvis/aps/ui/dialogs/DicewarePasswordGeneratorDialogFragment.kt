@@ -39,12 +39,14 @@ class DicewarePasswordGeneratorDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val builder = MaterialAlertDialogBuilder(requireContext())
+
     val binding = FragmentPwgenDicewareBinding.inflate(layoutInflater)
-    val monoTypeface = Typeface.createFromAsset(requireContext().assets, "fonts/sourcecodepro.ttf")
+    builder.setView(binding.root)
+
     binding.passwordSeparatorText.setText(prefs.getString(DICEWARE_SEPARATOR) ?: "-")
     binding.passwordLengthText.setText(prefs.getInt(DICEWARE_LENGTH, 5).toString())
-    binding.passwordText.typeface = monoTypeface
-    builder.setView(binding.root)
+    binding.passwordText.typeface = Typeface.MONOSPACE
+
     merge(
         binding.passwordLengthText.afterTextChanges(),
         binding.passwordSeparatorText.afterTextChanges(),

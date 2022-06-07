@@ -31,25 +31,19 @@ import dev.msfjarvis.aps.passgen.random.PasswordLengthTooShortException
 import dev.msfjarvis.aps.passgen.random.PasswordOption
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.afterTextChanges
 import reactivecircus.flowbinding.android.widget.checkedChanges
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    val prefs = requireContext().getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
     val builder = MaterialAlertDialogBuilder(requireContext())
-    val callingActivity = requireActivity()
-    val binding = FragmentPwgenBinding.inflate(layoutInflater)
-    val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
-    val prefs =
-      requireActivity()
-        .applicationContext.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
+    val binding = FragmentPwgenBinding.inflate(layoutInflater)
     builder.setView(binding.root)
 
     binding.numerals.isChecked = !prefs.getBoolean(PasswordOption.NoDigits.key, false)
@@ -59,7 +53,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     binding.ambiguous.isChecked = !prefs.getBoolean(PasswordOption.NoAmbiguousCharacters.key, false)
     binding.pronounceable.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
     binding.lengthNumber.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
-    binding.passwordText.typeface = monoTypeface
+    binding.passwordText.typeface = Typeface.MONOSPACE
 
     merge(
         binding.numerals.checkedChanges().skipInitialValue(),
