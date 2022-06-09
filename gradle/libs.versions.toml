@@ -45,7 +45,7 @@ build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.r
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.20.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 build-semver = "com.vdurmont:semver4j:3.1.0"
-build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.1.0-beta.2"
+build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.1.0"
 build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.7.0"
 
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
