@@ -7,6 +7,10 @@
     {
       "matchPackagePatterns": ["^androidx.compose"],
       "groupName": "jetpack-compose"
+    },
+    {
+      "matchPackagePatterns": ["^kotlin", "^org.jetbrains.kotlin"],
+      "groupName": "kotlin"
     }
   ]
 }
