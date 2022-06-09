@@ -87,7 +87,8 @@ object BiometricAuthenticator {
               BiometricPrompt.ERROR_UNABLE_TO_PROCESS -> {
                 Result.Retry
               }
-              // We cover all guaranteed values above, but [errorCode] is still an Int at the end of
+              // We cover all guaranteed values above, but [errorCode] is still an Int
+              // at the end of
               // the day so a
               // catch-all else will always be required.
               else -> {

@@ -195,7 +195,8 @@ class AutofillDecryptActivity : AppCompatActivity() {
             return null
           }
           .onSuccess { result ->
-            return when (val resultCode =
+            return when (
+              val resultCode =
                 result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)
             ) {
               OpenPgpApi.RESULT_CODE_SUCCESS -> {

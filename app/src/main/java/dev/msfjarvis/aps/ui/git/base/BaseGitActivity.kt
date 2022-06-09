@@ -152,7 +152,8 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
   private fun isExplicitlyUserInitiatedError(throwable: Throwable): Boolean {
     var cause: Throwable? = throwable
     while (cause != null) {
-      if (cause is SSHException && cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER
+      if (
+        cause is SSHException && cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER
       )
         return true
       cause = cause.cause
@@ -170,11 +171,13 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
     // exceptions.
     // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
     // more useful exceptions.
-    while ((rootCause is org.eclipse.jgit.errors.TransportException ||
-      rootCause is org.eclipse.jgit.api.errors.TransportException ||
-      rootCause is org.eclipse.jgit.api.errors.InvalidRemoteException ||
-      (rootCause is UserAuthException &&
-        rootCause.message == "Exhausted available authentication methods"))) {
+    while (
+      (rootCause is org.eclipse.jgit.errors.TransportException ||
+        rootCause is org.eclipse.jgit.api.errors.TransportException ||
+        rootCause is org.eclipse.jgit.api.errors.InvalidRemoteException ||
+        (rootCause is UserAuthException &&
+          rootCause.message == "Exhausted available authentication methods"))
+    ) {
       rootCause = rootCause.cause ?: break
     }
     return rootCause

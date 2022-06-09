@@ -204,7 +204,8 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
       // Allow the user to quickly switch between storing the username as the filename or
       // in the encrypted extras. This only makes sense if the directory structure is
       // FileBased.
-      if (suggestedName == null &&
+      if (
+        suggestedName == null &&
           AutofillPreferences.directoryStructure(this@PasswordCreationActivityV2) ==
             DirectoryStructure.FileBased
       ) {
@@ -368,8 +369,8 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
             // Additionally, if we were editing and the incoming and outgoing
             // filenames differ, it means we renamed. Ensure that the target
             // doesn't already exist to prevent an accidental overwrite.
-            if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) &&
-                file.exists()
+            if (
+              (!editing || (editing && suggestedName != file.nameWithoutExtension)) && file.exists()
             ) {
               snackbar(message = getString(R.string.password_creation_duplicate_error))
               return@runCatching
@@ -407,7 +408,8 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
               returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
             }
 
-            if (directoryInputLayout.isVisible &&
+            if (
+              directoryInputLayout.isVisible &&
                 directoryInputLayout.isEnabled &&
                 oldFileName != null
             ) {

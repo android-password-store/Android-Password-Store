@@ -36,7 +36,8 @@ internal object RandomPasswordGenerator {
     var password = ""
     while (password.length < targetLength) {
       val candidate = bank.secureRandomCharacter()
-      if (pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS &&
+      if (
+        pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS &&
           candidate in PasswordGenerator.AMBIGUOUS_STR
       ) {
         continue

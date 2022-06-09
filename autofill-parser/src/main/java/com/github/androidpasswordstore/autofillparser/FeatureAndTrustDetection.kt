@@ -230,8 +230,10 @@ private fun getBrowserAutofillSupportLevel(
     browserInfo.saveFlags == null -> BrowserAutofillSupportLevel.GeneralFill
     else -> BrowserAutofillSupportLevel.GeneralFillAndSave
   }.takeUnless { supportLevel ->
-    // On Android Oreo, only browsers with native Autofill support can be used with Password Store
-    // (compatibility mode is only available on Android Pie and higher). Since all known browsers
+    // On Android Oreo, only browsers with native Autofill support can be used with Password
+    // Store
+    // (compatibility mode is only available on Android Pie and higher). Since all known
+    // browsers
     // with native Autofill support offer full save support as well, we reuse the list of those
     // browsers here.
     supportLevel != BrowserAutofillSupportLevel.GeneralFillAndSave && Build.VERSION.SDK_INT < 28

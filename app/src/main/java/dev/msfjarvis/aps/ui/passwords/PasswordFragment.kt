@@ -303,7 +303,8 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         listener =
           object : OnFragmentInteractionListener {
             override fun onFragmentInteraction(item: PasswordItem) {
-              if (settings.getString(PreferenceKeys.SORT_ORDER) ==
+              if (
+                settings.getString(PreferenceKeys.SORT_ORDER) ==
                   PasswordSortOrder.RECENTLY_USED.name
               ) {
                 // save the time when password was used
