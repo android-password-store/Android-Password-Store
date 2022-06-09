@@ -274,7 +274,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
       // Allow the user to quickly switch between storing the username as the filename or
       // in the encrypted extras. This only makes sense if the directory structure is
       // FileBased.
-      if (suggestedName == null &&
+      if (
+        suggestedName == null &&
           AutofillPreferences.directoryStructure(this@PasswordCreationActivity) ==
             DirectoryStructure.FileBased
       ) {
@@ -418,9 +419,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             GpgIdentifier.fromString(line)
               ?: run {
                 // The line being empty means this is most likely an empty `.gpg-id`
-                // file
-                // we created. Skip the validation so we can make the user add a real
-                // ID.
+                // file we created. Skip the validation so we can make the user add a
+                // real ID.
                 if (line.isEmpty()) return@run
                 if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex())) {
                   snackbar(message = resources.getString(R.string.short_key_ids_unsupported))
@@ -488,7 +488,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 // Additionally, if we were editing and the incoming and outgoing
                 // filenames differ, it means we renamed. Ensure that the target
                 // doesn't already exist to prevent an accidental overwrite.
-                if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) &&
+                if (
+                  (!editing || (editing && suggestedName != file.nameWithoutExtension)) &&
                     file.exists()
                 ) {
                   snackbar(message = getString(R.string.password_creation_duplicate_error))
@@ -535,7 +536,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                   returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                 }
 
-                if (directoryInputLayout.isVisible &&
+                if (
+                  directoryInputLayout.isVisible &&
                     directoryInputLayout.isEnabled &&
                     oldFileName != null
                 ) {

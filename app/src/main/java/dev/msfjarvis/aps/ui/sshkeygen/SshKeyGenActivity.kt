@@ -127,7 +127,8 @@ class SshKeyGenActivity : AppCompatActivity() {
                   this@SshKeyGenActivity,
                   R.string.biometric_prompt_title_ssh_keygen
                 ) { result ->
-                  // Do not cancel on failed attempts as these are handled by the authenticator UI.
+                  // Do not cancel on failed attempts as these are handled by the
+                  // authenticator UI.
                   if (result !is Result.Retry) cont.resume(result)
                 }
               }

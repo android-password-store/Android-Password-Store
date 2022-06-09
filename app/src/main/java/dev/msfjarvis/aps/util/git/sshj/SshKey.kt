@@ -209,7 +209,8 @@ object SshKey {
 
     // The file must have more than 2 lines, and the first and last line must have private key
     // markers.
-    if (lines.size < 2 ||
+    if (
+      lines.size < 2 ||
         !Regex("BEGIN .* PRIVATE KEY").containsMatchIn(lines.first()) ||
         !Regex("END .* PRIVATE KEY").containsMatchIn(lines.last())
     )
@@ -349,9 +350,12 @@ object SshKey {
 
     override fun getPrivate(): PrivateKey =
       runCatching {
-          // The current MasterKey API does not allow getting a reference to an existing one
-          // without specifying the KeySpec for a new one. However, the value for passed here
-          // for `requireAuthentication` is not used as the key already exists at this point.
+          // The current MasterKey API does not allow getting a reference to an existing
+          // one
+          // without specifying the KeySpec for a new one. However, the value for passed
+          // here
+          // for `requireAuthentication` is not used as the key already exists at this
+          // point.
           val encryptedPrivateKeyFile = runBlocking { getOrCreateWrappedPrivateKeyFile(false) }
           val rawPrivateKey = encryptedPrivateKeyFile.openFileInput().use { it.readBytes() }
           EdDSAPrivateKey(

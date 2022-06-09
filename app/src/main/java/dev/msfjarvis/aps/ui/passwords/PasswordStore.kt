@@ -182,7 +182,8 @@ class PasswordStore : BaseGitActivity() {
 
   override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
     // open search view on search key, or Ctr+F
-    if ((keyCode == KeyEvent.KEYCODE_SEARCH ||
+    if (
+      (keyCode == KeyEvent.KEYCODE_SEARCH ||
         keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed) && !searchItem.isActionViewExpanded
     ) {
       searchItem.expandActionView()
@@ -353,7 +354,8 @@ class PasswordStore : BaseGitActivity() {
     if (localDir != null && settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)) {
       logcat { "Check, dir: ${localDir.absolutePath}" }
       // do not push the fragment if we already have it
-      if (getPasswordFragment() == null || settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)
+      if (
+        getPasswordFragment() == null || settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)
       ) {
         settings.edit { putBoolean(PreferenceKeys.REPO_CHANGED, false) }
         val args = Bundle()

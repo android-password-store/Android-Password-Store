@@ -77,7 +77,8 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettin
     remove(PreferenceKeys.GIT_REMOTE_USERNAME)
     remove(PreferenceKeys.GIT_REMOTE_PROTOCOL)
   }
-  if (url == null ||
+  if (
+    url == null ||
       gitSettings.updateConnectionSettingsIfValid(
         newAuthMode = gitSettings.authMode,
         newUrl = url,
@@ -99,7 +100,8 @@ private fun migrateToHideAll(sharedPrefs: SharedPreferences) {
 
 private fun migrateToSshKey(filesDirPath: String, sharedPrefs: SharedPreferences) {
   val privateKeyFile = File(filesDirPath, ".ssh_key")
-  if (sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
+  if (
+    sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
       !SshKey.exists &&
       privateKeyFile.exists()
   ) {

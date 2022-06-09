@@ -140,7 +140,8 @@ class GitServerConfigActivity : BaseGitActivity() {
           .show(supportFragmentManager, "SSH_SCHEME_WARNING")
         return@setOnClickListener
       }
-      when (val updateResult =
+      when (
+        val updateResult =
           gitSettings.updateConnectionSettingsIfValid(
             newAuthMode = newAuthMode,
             newUrl = binding.serverUrl.text.toString().trim(),
@@ -230,7 +231,8 @@ class GitServerConfigActivity : BaseGitActivity() {
     val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
     val localDirFiles = localDir.listFiles() ?: emptyArray()
     // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
-    if (localDir.exists() &&
+    if (
+      localDir.exists() &&
         localDirFiles.isNotEmpty() &&
         !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")
     ) {

@@ -150,7 +150,8 @@ constructor(
         in listOf("ssh", null) -> Protocol.Ssh
         else -> return UpdateConnectionSettingsResult.FailedToParseUrl
       }
-    if ((newAuthMode != AuthMode.None && newProtocol != Protocol.Https) &&
+    if (
+      (newAuthMode != AuthMode.None && newProtocol != Protocol.Https) &&
         parsedUrl.user.isNullOrBlank()
     )
       return UpdateConnectionSettingsResult.MissingUsername(newProtocol)

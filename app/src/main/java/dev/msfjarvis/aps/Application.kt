@@ -42,7 +42,8 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
   override fun onCreate() {
     super.onCreate()
     instance = this
-    if (BuildConfig.ENABLE_DEBUG_FEATURES ||
+    if (
+      BuildConfig.ENABLE_DEBUG_FEATURES ||
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
       LogcatLogger.install(AndroidLogcatLogger(DEBUG))

@@ -41,7 +41,8 @@ internal object Otp {
     code[0] = (0x7f and code[0].toInt()).toByte()
     val codeInt = ByteBuffer.wrap(code).int
     check(codeInt > 0)
-    // SteamGuard is a horrible OTP implementation that generates non-standard 5 digit OTPs as well
+    // SteamGuard is a horrible OTP implementation that generates non-standard 5 digit OTPs as
+    // well
     // as uses a custom character set.
     if (digits == "s" || issuer == "Steam") {
       var remainingCodeInt = codeInt

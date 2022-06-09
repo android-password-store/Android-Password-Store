@@ -145,7 +145,8 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
   }
 
   private suspend fun parseResult(request: Request, result: Intent): ApiResponse {
-    return when (result.getIntExtra(
+    return when (
+      result.getIntExtra(
         SshAuthenticationApi.EXTRA_RESULT_CODE,
         SshAuthenticationApi.RESULT_CODE_ERROR
       )
@@ -196,8 +197,8 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
     privateKey =
       object : OpenKeychainPrivateKey {
         override suspend fun sign(challenge: ByteArray, hashAlgorithm: Int) =
-          when (val signingResponse =
-              executeApiRequest(SigningRequest(challenge, keyId, hashAlgorithm))
+          when (
+            val signingResponse = executeApiRequest(SigningRequest(challenge, keyId, hashAlgorithm))
           ) {
             is ApiResponse.Success -> (signingResponse.response as SigningResponse).signature
             is ApiResponse.GeneralError -> throw signingResponse.exception

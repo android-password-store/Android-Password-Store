@@ -42,7 +42,8 @@ class UriTotpFinder @Inject constructor() : TotpFinder {
   private fun getQueryParameter(content: String, parameterName: String): String? {
     content.split("\n".toRegex()).forEach { line ->
       val uri = Uri.parse(line)
-      if (line.startsWith(TotpFinder.TOTP_FIELDS[0]) && uri.getQueryParameter(parameterName) != null
+      if (
+        line.startsWith(TotpFinder.TOTP_FIELDS[0]) && uri.getQueryParameter(parameterName) != null
       ) {
         return uri.getQueryParameter(parameterName)
       }

@@ -65,7 +65,8 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
               if (item.type == PasswordItem.TYPE_CATEGORY) {
                 model.navigateTo(item.file, listMode = ListMode.DirectoriesOnly)
                 (requireActivity() as AppCompatActivity)
-                  .supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                  .supportActionBar
+                  ?.setDisplayHomeAsUpEnabled(true)
               }
             }
           }
