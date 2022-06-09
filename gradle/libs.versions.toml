@@ -5,7 +5,7 @@ compose = "1.2.0-alpha08"
 coroutines = "1.6.2"
 flowbinding = "1.2.0"
 hilt = "2.42"
-kotlin = "1.6.21"
+kotlin = "1.7.0"
 leakcanary = "2.9.1"
 lifecycle = "2.5.0-rc01"
 
@@ -41,7 +41,7 @@ aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embe
 build-agp = "com.android.tools.build:gradle:7.2.1"
 build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.10.0"
 build-download = "de.undercouch:gradle-download-task:5.1.0"
-build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
+build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.20.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 build-semver = "com.vdurmont:semver4j:3.1.0"

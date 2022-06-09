@@ -42,7 +42,7 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: spotlessCheck
+        arguments: --no-configuration-cache spotlessCheck
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: test -PslimTests
+        arguments: --no-configuration-cache test -PslimTests
 
     - name: (Fail-only) Upload test report
       if: "${{ failure() }}"
@@ -117,7 +117,7 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: assembleFreeDebug assembleNonFreeDebug
+        arguments: --no-configuration-cache assembleFreeDebug assembleNonFreeDebug
 
   check-api:
     runs-on: ubuntu-latest
@@ -151,7 +151,7 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: apiCheck
+        arguments: --no-configuration-cache apiCheck
 
   lint-debug:
     runs-on: ubuntu-latest
@@ -185,7 +185,7 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: lintDebug
+        arguments: --no-configuration-cache lintDebug
 
   assemble-release-apks:
     runs-on: ubuntu-latest
@@ -219,4 +219,4 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: aNFR
+        arguments: --no-configuration-cache aNFR
