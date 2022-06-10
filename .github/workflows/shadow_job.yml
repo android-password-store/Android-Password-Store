@@ -44,4 +44,4 @@ jobs:
       env:
         GRADLE_VERSION_OVERRIDE_com_android_tools_build_gradle: ${{ matrix.agp-version }}
       with:
-        arguments: --no-configuration-cache check
+        arguments: check
