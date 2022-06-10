@@ -42,7 +42,14 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: --no-configuration-cache spotlessCheck
+        arguments: spotlessCheck
+
+    - name: Upload Kotlin build report
+      if: "${{ always() }}"
+      uses: actions/upload-artifact@v3.1.0
+      with:
+          name: Build report
+          path: build/reports/kotlin-build/
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -76,7 +83,7 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: --no-configuration-cache test -PslimTests
+        arguments: test -PslimTests
 
     - name: (Fail-only) Upload test report
       if: "${{ failure() }}"
@@ -84,6 +91,13 @@ jobs:
       with:
           name: Test report
           path: app/build/reports
+
+    - name: Upload Kotlin build report
+      if: "${{ always() }}"
+      uses: actions/upload-artifact@v3.1.0
+      with:
+          name: Build report
+          path: build/reports/kotlin-build/
 
   build-apks:
     runs-on: ubuntu-latest
@@ -117,7 +131,14 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: --no-configuration-cache assembleFreeDebug assembleNonFreeDebug
+        arguments: assembleFreeDebug assembleNonFreeDebug
+
+    - name: Upload Kotlin build report
+      if: "${{ always() }}"
+      uses: actions/upload-artifact@v3.1.0
+      with:
+          name: Build report
+          path: build/reports/kotlin-build/
 
   check-api:
     runs-on: ubuntu-latest
@@ -151,7 +172,14 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: --no-configuration-cache apiCheck
+        arguments: apiCheck
+
+    - name: Upload Kotlin build report
+      if: "${{ always() }}"
+      uses: actions/upload-artifact@v3.1.0
+      with:
+          name: Build report
+          path: build/reports/kotlin-build/
 
   lint-debug:
     runs-on: ubuntu-latest
@@ -185,7 +213,14 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: --no-configuration-cache lintDebug
+        arguments: lintDebug
+
+    - name: Upload Kotlin build report
+      if: "${{ always() }}"
+      uses: actions/upload-artifact@v3.1.0
+      with:
+          name: Build report
+          path: build/reports/kotlin-build/
 
   assemble-release-apks:
     runs-on: ubuntu-latest
@@ -219,4 +254,11 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.2.0
       with:
-        arguments: --no-configuration-cache aNFR
+        arguments: aNFR
+
+    - name: Upload Kotlin build report
+      if: "${{ always() }}"
+      uses: actions/upload-artifact@v3.1.0
+      with:
+          name: Build report
+          path: build/reports/kotlin-build/
