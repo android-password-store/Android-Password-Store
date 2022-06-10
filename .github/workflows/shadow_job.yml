@@ -13,9 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         agp-version:
-          - 7.2.0
-          - 7.3.0-beta01
-          - 7.4.0-alpha02
+          - 7.2.1
+          - 7.3.0-beta02
+          - 7.4.0-alpha03
         gradle-version:
           - wrapper
           - nightly
