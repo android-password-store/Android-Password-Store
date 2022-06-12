@@ -39,6 +39,10 @@ abstract class VersioningTask : DefaultTask() {
     }
   }
 
+  override fun getGroup(): String {
+    return "versioning"
+  }
+
   @TaskAction
   fun execute() {
     propertyFile.get().asFile.writeText(Semver(semverString.get()).toPropFileText())
