@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - [Mull](https://f-droid.org/packages/us.spotco.fennec_dos/) is now supported as an Autofill-capable browser.
+- Raise target SDK to 31 
 
 ## [1.1.0]
 
