@@ -27,7 +27,19 @@ dependencyResolutionManagement {
     }
     mavenCentral()
   }
-  versionCatalogs { create("libs") { from(files("../gradle/libs.versions.toml")) } }
+  versionCatalogs {
+    maybeCreate("libs").apply {
+      from(files("../gradle/libs.versions.toml"))
+      if (System.getenv("DEP_OVERRIDE") == "true") {
+        val overrides = System.getenv().filterKeys { it.startsWith("DEP_OVERRIDE_") }
+        for ((key, value) in overrides) {
+          val catalogKey = key.removePrefix("DEP_OVERRIDE_").toLowerCase()
+          println("Overriding $catalogKey with $value")
+          version(catalogKey, value)
+        }
+      }
+    }
+  }
 }
 
 include("android-plugins")

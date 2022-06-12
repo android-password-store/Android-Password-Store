@@ -59,17 +59,3 @@ dependencies {
   implementation(libs.build.kotlin)
   implementation(libs.build.spotless)
 }
-
-configurations.all {
-  resolutionStrategy.eachDependency {
-    val overrideName =
-      "GRADLE_VERSION_OVERRIDE_${requested.group.replace('.', '_')}_${requested.name}"
-    val overridenVersion = System.getenv(overrideName)
-    if (!overridenVersion.isNullOrEmpty()) {
-      project.logger.lifecycle(
-        "Overriding dependency ${requested.group}:${requested.name} to version $overridenVersion"
-      )
-      useVersion(overridenVersion)
-    }
-  }
-}

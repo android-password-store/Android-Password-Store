@@ -1,5 +1,5 @@
-# Centralized versions for dependencies that share versions
 [versions]
+agp = "7.2.1"
 androidx_activity = "1.5.0-rc01"
 compose = "1.2.0-alpha08"
 coroutines = "1.6.2"
@@ -38,7 +38,7 @@ androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:2.2.0"
 aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
 
-build-agp = "com.android.tools.build:gradle:7.2.1"
+build-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.10.0"
 build-download = "de.undercouch:gradle-download-task:5.1.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

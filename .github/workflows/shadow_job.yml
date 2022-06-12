@@ -42,6 +42,7 @@ jobs:
     - name: Run checks
       uses: gradle/gradle-build-action@v2.2.0
       env:
-        GRADLE_VERSION_OVERRIDE_com_android_tools_build_gradle: ${{ matrix.agp-version }}
+        DEP_OVERRIDE: true
+        DEP_OVERRIDE_agp: ${{ matrix.agp-version }}
       with:
         arguments: check
