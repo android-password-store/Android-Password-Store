@@ -81,7 +81,7 @@ thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.16"
 thirdparty-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref="leakcanary" }
 thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref="leakcanary" }
 thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
-thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.0"
+thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.1"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.1"
 thirdparty-nonfree-sentry = "io.sentry:sentry-android:6.0.0"
 thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.2.2"
