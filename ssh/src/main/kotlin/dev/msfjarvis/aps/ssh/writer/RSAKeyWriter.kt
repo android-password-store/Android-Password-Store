@@ -5,7 +5,7 @@ import java.io.File
 import java.security.PrivateKey
 import java.security.PublicKey
 
-class RSAKeyWriter : SSHKeyWriter {
+public class RSAKeyWriter : SSHKeyWriter {
 
   override suspend fun writePrivateKey(privateKey: PrivateKey, privateKeyFile: File) {
     // Android Keystore manages this key for us

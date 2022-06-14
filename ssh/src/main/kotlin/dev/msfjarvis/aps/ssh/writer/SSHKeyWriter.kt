@@ -4,8 +4,8 @@ import java.io.File
 import java.security.PrivateKey
 import java.security.PublicKey
 
-interface SSHKeyWriter {
+public interface SSHKeyWriter {
 
-  suspend fun writePrivateKey(privateKey: PrivateKey, privateKeyFile: File)
-  suspend fun writePublicKey(publicKey: PublicKey, publicKeyFile: File)
+  public suspend fun writePrivateKey(privateKey: PrivateKey, privateKeyFile: File)
+  public suspend fun writePublicKey(publicKey: PublicKey, publicKeyFile: File)
 }

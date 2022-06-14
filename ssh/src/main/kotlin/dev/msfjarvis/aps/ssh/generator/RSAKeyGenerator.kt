@@ -8,7 +8,7 @@ import dev.msfjarvis.aps.ssh.utils.Constants.PROVIDER_ANDROID_KEY_STORE
 import java.security.KeyPair
 import java.security.KeyPairGenerator
 
-class RSAKeyGenerator : SSHKeyGenerator {
+public class RSAKeyGenerator : SSHKeyGenerator {
 
   override suspend fun generateKey(requiresAuthentication: Boolean): KeyPair {
     val algorithm = KeyProperties.KEY_ALGORITHM_RSA

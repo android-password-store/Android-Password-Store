@@ -1,6 +1,6 @@
 package dev.msfjarvis.aps.ssh
 
-enum class SSHKeyType(val value: String) {
+public enum class SSHKeyType(internal val value: String) {
   Imported("imported"),
   KeystoreNative("keystore_native"),
   KeystoreWrappedEd25519("keystore_wrapped_ed25519"),
@@ -9,8 +9,8 @@ enum class SSHKeyType(val value: String) {
   LegacyGenerated("legacy_generated"),
   ;
 
-  companion object {
+  public companion object {
 
-    fun fromValue(type: String?): SSHKeyType? = values().associateBy { it.value }[type]
+    public fun fromValue(type: String?): SSHKeyType? = values().associateBy { it.value }[type]
   }
 }

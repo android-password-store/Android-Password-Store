@@ -12,10 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.i2p.crypto.eddsa.EdDSAPrivateKey
 
-class ED25519KeyWriter(private val context: Context, private val requiresAuthentication: Boolean) :
-  SSHKeyWriter {
+public class ED25519KeyWriter(
+  private val context: Context,
+  private val requiresAuthentication: Boolean,
+) : SSHKeyWriter {
 
-  override suspend fun writePrivateKey(privateKey: PrivateKey, privateKeyFile: File) =
+  override suspend fun writePrivateKey(privateKey: PrivateKey, privateKeyFile: File) {
     withContext(Dispatchers.IO) {
       val encryptedPrivateKeyFile =
         getOrCreateWrappedPrivateKeyFile(requiresAuthentication, privateKeyFile)
@@ -23,6 +25,7 @@ class ED25519KeyWriter(private val context: Context, private val requiresAuthent
         os.write((privateKey as EdDSAPrivateKey).seed)
       }
     }
+  }
 
   override suspend fun writePublicKey(publicKey: PublicKey, publicKeyFile: File) {
     TODO("Not yet implemented")

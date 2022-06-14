@@ -1,6 +1,6 @@
 package dev.msfjarvis.aps.ssh
 
-enum class SSHKeyAlgorithm {
+public enum class SSHKeyAlgorithm {
   RSA,
   ECDSA,
   ED25519,
