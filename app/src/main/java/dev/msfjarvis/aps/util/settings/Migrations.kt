@@ -48,11 +48,13 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettin
           "$userPart$hostnamePart:$serverPath"
         } else {
           // Only absolute paths are supported with custom ports.
-          if (!serverPath.startsWith('/')) null
-          else
-          // We have to specify the ssh scheme as this is the only way to pass a custom
-          // port.
-          "ssh://$userPart$hostnamePart$portPart$serverPath"
+          if (!serverPath.startsWith('/')) {
+            null
+          } else {
+            // We have to specify the ssh scheme as this is the only way to pass a custom
+            // port.
+            "ssh://$userPart$hostnamePart$portPart$serverPath"
+          }
         }
       }
       Protocol.Https -> {
