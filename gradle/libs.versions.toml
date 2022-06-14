@@ -39,7 +39,7 @@ aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:2.2.0"
 aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
 
 build-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.10.0"
+build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.10.1"
 build-download = "de.undercouch:gradle-download-task:5.1.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.20.0"
