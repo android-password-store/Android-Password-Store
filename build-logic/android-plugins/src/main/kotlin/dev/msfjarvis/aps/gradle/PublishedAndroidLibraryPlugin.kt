@@ -2,9 +2,8 @@
 
 package dev.msfjarvis.aps.gradle
 
-import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
-import com.vanniktech.maven.publish.MavenPublishBasePlugin
+import com.vanniktech.maven.publish.MavenPublishPlugin
 import com.vanniktech.maven.publish.SonatypeHost
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -20,14 +19,12 @@ class PublishedAndroidLibraryPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     project.plugins.run {
       apply(LibraryPlugin::class)
-      apply(MavenPublishBasePlugin::class)
+      apply(MavenPublishPlugin::class)
       apply(SigningPlugin::class)
     }
     project.extensions.getByType<MavenPublishBaseExtension>().run {
       publishToMavenCentral(SonatypeHost.DEFAULT)
       signAllPublications()
-      configure(AndroidSingleVariantLibrary())
-      pomFromGradleProperties()
     }
     project.afterEvaluate {
       project.extensions.getByType<SigningExtension>().run {
