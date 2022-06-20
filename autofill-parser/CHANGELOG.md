@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [1.1.1]
+
 ### Added
 
 - [Mull](https://f-droid.org/packages/us.spotco.fennec_dos/) is now supported as an Autofill-capable browser.
@@ -44,3 +46,5 @@ All notable changes to this project will be documented in this file.
 [1.0.0]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.0.0/autofill-parser
 
 [1.1.0]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.1.0/autofill-parser
+
+[1.1.1]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.1.1/autofill-parser
