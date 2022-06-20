@@ -2,7 +2,7 @@
 agp = "7.2.1"
 androidx_activity = "1.5.0-rc01"
 compose = "1.2.0-alpha08"
-coroutines = "1.6.2"
+coroutines = "1.6.3"
 flowbinding = "1.2.0"
 hilt = "2.42"
 kotlin = "1.7.0"
