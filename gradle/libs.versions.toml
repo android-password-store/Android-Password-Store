@@ -84,7 +84,7 @@ thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.1"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.1"
 thirdparty-nonfree-sentry = "io.sentry:sentry-android:6.1.2"
-thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.3.0"
+thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.3.1"
 thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5"
 # TODO: Remove the explicit bcpkix dependency when upgrading this to a BC 1.71 compatible version
 thirdparty-sshj = "com.hierynomus:sshj:0.33.0"
