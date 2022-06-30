@@ -50,6 +50,10 @@ gradlePlugin {
       id = "com.github.android-password-store.spotless"
       implementationClass = "dev.msfjarvis.aps.gradle.SpotlessPlugin"
     }
+    register("versions") {
+      id = "com.github.android-password-store.versions"
+      implementationClass = "dev.msfjarvis.aps.gradle.DependencyUpdatesPlugin"
+    }
   }
 }
 
@@ -58,4 +62,6 @@ dependencies {
   implementation(libs.build.binarycompat)
   implementation(libs.build.kotlin)
   implementation(libs.build.spotless)
+  implementation(libs.build.vcu)
+  implementation(libs.build.versions)
 }

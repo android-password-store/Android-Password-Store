@@ -30,6 +30,7 @@ pluginManagement {
     exclusiveContent {
       forRepository(::gradlePluginPortal)
       filter {
+        includeModule("com.github.ben-manes", "gradle-versions-plugin")
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
         includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
       }

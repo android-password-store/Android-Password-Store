@@ -25,6 +25,10 @@ dependencyResolutionManagement {
         includeGroup("com.google.testing.platform")
       }
     }
+    exclusiveContent {
+      forRepository(::gradlePluginPortal)
+      filter { includeModule("com.github.ben-manes", "gradle-versions-plugin") }
+    }
     mavenCentral()
   }
   versionCatalogs {
