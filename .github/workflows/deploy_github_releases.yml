@@ -83,7 +83,7 @@ jobs:
 
       - name: Get Changelog Entry
         id: changelog_reader
-        uses: mindsers/changelog-reader-action@v2.1.0
+        uses: mindsers/changelog-reader-action@v2.1.1
         with:
           version: ${{ github.ref }}
           path: ./CHANGELOG.md
