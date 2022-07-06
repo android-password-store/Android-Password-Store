@@ -50,6 +50,7 @@ dependencies {
   implementation(projects.openpgpKtx)
   implementation(projects.passgen.diceware)
   implementation(projects.passgen.random)
+  implementation(projects.uiCompose)
   implementation(libs.androidx.activity.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.autofill)
