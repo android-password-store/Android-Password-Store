@@ -9,7 +9,7 @@ android {
     compose = true
     composeOptions {
       useLiveLiterals = false
-      kotlinCompilerExtensionVersion = libs.versions.compose.get()
+      kotlinCompilerExtensionVersion = libs.compose.compiler.get().versionConstraint.requiredVersion
     }
   }
   namespace = "dev.msfjarvis.aps.ui.compose"
