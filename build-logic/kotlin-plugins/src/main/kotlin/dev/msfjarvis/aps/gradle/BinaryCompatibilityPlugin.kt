@@ -28,6 +28,7 @@ class BinaryCompatibilityPlugin : Plugin<Project> {
         "diceware",
         "random",
         "sentry-stub",
+        "ui-compose",
       )
   }
 }
