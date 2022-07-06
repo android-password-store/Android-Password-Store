@@ -14,8 +14,8 @@ jobs:
       matrix:
         agp-version:
           - 7.2.1
-          - 7.3.0-beta02
-          - 7.4.0-alpha03
+          - 7.3.0-beta04
+          - 7.4.0-alpha07
         gradle-version:
           - wrapper
           - nightly
