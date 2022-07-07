@@ -61,6 +61,7 @@ dependencies {
   implementation(libs.build.agp)
   implementation(libs.build.binarycompat)
   implementation(libs.build.kotlin)
+  implementation(libs.build.r8)
   implementation(libs.build.spotless)
   implementation(libs.build.vcu)
   implementation(libs.build.versions)
