@@ -12,7 +12,7 @@ leakcanary = "2.9.1"
 lifecycle = "2.6.0-alpha01"
 
 [libraries]
-android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
+android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx_activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx_activity" }
 androidx-annotation = "androidx.annotation:annotation:1.4.0-beta01"
@@ -41,6 +41,7 @@ build-download = "de.undercouch:gradle-download-task:5.1.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.20.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.10.0"
+build-r8 = "com.android.tools:r8:4.0.17-dev"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.1.2"
 build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.8.0"

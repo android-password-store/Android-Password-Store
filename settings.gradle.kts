@@ -15,7 +15,6 @@ pluginManagement {
       filter {
         includeGroup("androidx.databinding")
         includeGroup("com.android")
-        includeGroup("com.android.tools")
         includeGroup("com.android.tools.analytics-library")
         includeGroup("com.android.tools.build")
         includeGroup("com.android.tools.build.jetifier")
@@ -25,6 +24,14 @@ pluginManagement {
         includeGroup("com.android.tools.lint")
         includeGroup("com.android.tools.utp")
         includeGroup("com.google.testing.platform")
+        includeModule("com.android.tools", "annotations")
+        includeModule("com.android.tools", "common")
+        includeModule("com.android.tools", "desugar_jdk_libs")
+        includeModule("com.android.tools", "desugar_jdk_libs_configuration")
+        includeModule("com.android.tools", "dvlib")
+        includeModule("com.android.tools", "repository")
+        includeModule("com.android.tools", "sdklib")
+        includeModule("com.android.tools", "sdk-common")
       }
     }
     exclusiveContent {
@@ -34,6 +41,10 @@ pluginManagement {
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
         includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
       }
+    }
+    exclusiveContent {
+      forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }
+      filter { includeModule("com.android.tools", "r8") }
     }
     mavenCentral()
   }
@@ -56,7 +67,6 @@ dependencyResolutionManagement {
       forRepository(::google)
       filter {
         includeGroup("com.android")
-        includeGroup("com.android.tools")
         includeGroup("com.android.tools.analytics-library")
         includeGroup("com.android.tools.build")
         includeGroup("com.android.tools.ddms")
@@ -65,6 +75,14 @@ dependencyResolutionManagement {
         includeGroup("com.android.tools.layoutlib")
         includeGroup("com.android.tools.lint")
         includeGroup("com.google.android.gms")
+        includeModule("com.android.tools", "annotations")
+        includeModule("com.android.tools", "common")
+        includeModule("com.android.tools", "desugar_jdk_libs")
+        includeModule("com.android.tools", "desugar_jdk_libs_configuration")
+        includeModule("com.android.tools", "dvlib")
+        includeModule("com.android.tools", "repository")
+        includeModule("com.android.tools", "sdklib")
+        includeModule("com.android.tools", "sdk-common")
         includeModule("com.google.android.material", "material")
         includeGroupByRegex("androidx.*")
       }
@@ -75,6 +93,10 @@ dependencyResolutionManagement {
         includeModule("com.github.haroldadmin", "WhatTheStack")
         includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
       }
+    }
+    exclusiveContent {
+      forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }
+      filter { includeModule("com.android.tools", "r8") }
     }
     mavenCentral()
   }
