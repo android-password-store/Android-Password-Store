@@ -7,7 +7,7 @@ composeUi = "1.2.0-alpha08"
 coroutines = "1.6.3"
 flowbinding = "1.2.0"
 hilt = "2.42"
-kotlin = "1.7.0"
+kotlin = "1.7.10"
 leakcanary = "2.9.1"
 lifecycle = "2.6.0-alpha01"
 
