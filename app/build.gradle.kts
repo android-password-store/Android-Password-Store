@@ -35,6 +35,7 @@ android {
     disable.add("MissingTranslation")
     disable.add("PluralsCandidate")
     disable.add("ImpliedQuantity")
+    disable.add("DialogFragmentCallbacksDetector")
     baseline = file("lint-baseline.xml")
   }
 }
