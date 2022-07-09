@@ -27,6 +27,7 @@ dependencyResolutionManagement {
         includeModule("com.android.tools", "desugar_jdk_libs")
         includeModule("com.android.tools", "desugar_jdk_libs_configuration")
         includeModule("com.android.tools", "dvlib")
+        includeModule("com.android.tools", "play-sdk-proto")
         includeModule("com.android.tools", "repository")
         includeModule("com.android.tools", "sdklib")
         includeModule("com.android.tools", "sdk-common")
