@@ -83,7 +83,7 @@ thirdparty-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android-s
 thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.1"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.1"
-thirdparty-nonfree-sentry = "io.sentry:sentry-android:6.1.4"
+thirdparty-nonfree-sentry = "io.sentry:sentry-android:6.2.0"
 thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.3.1"
 thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5"
