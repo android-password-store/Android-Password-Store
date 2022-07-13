@@ -67,13 +67,20 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
         if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
-        val armoredKeys = keys.map { key -> key.contents.decodeToString() }
-        val secKeysStream = ByteArrayInputStream(armoredKeys.joinToString("\n").toByteArray())
+        val publicKeyRings = arrayListOf<PGPPublicKeyRing>()
+        val armoredKeys =
+          keys.joinToString("\n") { key -> key.contents.decodeToString() }.toByteArray()
+        val secKeysStream = ByteArrayInputStream(armoredKeys)
         val secretKeyRingCollection =
           PGPainless.readKeyRing().secretKeyRingCollection(secKeysStream)
-        val publicKeyRings = arrayListOf<PGPPublicKeyRing>()
         secretKeyRingCollection.forEach { secretKeyRing ->
           publicKeyRings.add(PGPainless.extractCertificate(secretKeyRing))
+        }
+        if (publicKeyRings.isEmpty()) {
+          val pubKeysStream = ByteArrayInputStream(armoredKeys)
+          val publicKeyRingCollection =
+            PGPainless.readKeyRing().publicKeyRingCollection(pubKeysStream)
+          publicKeyRings.addAll(publicKeyRingCollection)
         }
         require(publicKeyRings.isNotEmpty()) { "No public keys to encrypt message to" }
         val publicKeyRingCollection = PGPPublicKeyRingCollection(publicKeyRings)
