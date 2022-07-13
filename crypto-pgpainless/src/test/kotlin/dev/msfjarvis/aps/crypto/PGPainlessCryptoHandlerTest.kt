@@ -7,6 +7,8 @@ package dev.msfjarvis.aps.crypto
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.getError
+import com.google.testing.junit.testparameterinjector.TestParameter
+import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import dev.msfjarvis.aps.crypto.errors.IncorrectPassphraseException
 import java.io.ByteArrayOutputStream
 import kotlin.test.Test
@@ -14,18 +16,26 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import org.junit.runner.RunWith
 
+@Suppress("Unused") // Test runner handles it internally
+enum class EncryptionKey(val key: PGPKey) {
+  PUBLIC(PGPKey(TestUtils.getArmoredPublicKey())),
+  SECRET(PGPKey(TestUtils.getArmoredPrivateKey())),
+}
+
+@RunWith(TestParameterInjector::class)
 class PGPainlessCryptoHandlerTest {
 
+  @TestParameter private lateinit var encryptionKey: EncryptionKey
   private val cryptoHandler = PGPainlessCryptoHandler()
   private val privateKey = PGPKey(TestUtils.getArmoredPrivateKey())
-  private val publicKey = PGPKey(TestUtils.getArmoredPublicKey())
 
   @Test
   fun encryptAndDecrypt() {
     val ciphertextStream = ByteArrayOutputStream()
     cryptoHandler.encrypt(
-      listOf(publicKey),
+      listOf(encryptionKey.key),
       CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
       ciphertextStream,
     )
@@ -43,7 +53,7 @@ class PGPainlessCryptoHandlerTest {
   fun decryptWithWrongPassphrase() {
     val ciphertextStream = ByteArrayOutputStream()
     cryptoHandler.encrypt(
-      listOf(publicKey),
+      listOf(encryptionKey.key),
       CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
       ciphertextStream,
     )
