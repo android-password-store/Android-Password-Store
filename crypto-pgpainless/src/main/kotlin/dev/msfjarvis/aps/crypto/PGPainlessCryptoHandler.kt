@@ -16,6 +16,8 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
+import org.bouncycastle.openpgp.PGPPublicKeyRing
+import org.bouncycastle.openpgp.PGPPublicKeyRingCollection
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
 import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.ConsumerOptions
@@ -66,13 +68,17 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
     runCatching {
         if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
         val armoredKeys = keys.map { key -> key.contents.decodeToString() }
-        val pubKeysStream = ByteArrayInputStream(armoredKeys.joinToString("\n").toByteArray())
-        val publicKeyRingCollection =
-          pubKeysStream.use { PGPainless.readKeyRing().publicKeyRingCollection(pubKeysStream) }
-        val encryptionOptions =
-          EncryptionOptions.encryptCommunications()
-            .addRecipients(publicKeyRingCollection.asIterable())
-        val producerOptions = ProducerOptions.encrypt(encryptionOptions).setAsciiArmor(true)
+        val secKeysStream = ByteArrayInputStream(armoredKeys.joinToString("\n").toByteArray())
+        val secretKeyRingCollection =
+          PGPainless.readKeyRing().secretKeyRingCollection(secKeysStream)
+        val publicKeyRings = arrayListOf<PGPPublicKeyRing>()
+        secretKeyRingCollection.forEach { secretKeyRing ->
+          publicKeyRings.add(PGPainless.extractCertificate(secretKeyRing))
+        }
+        require(publicKeyRings.isNotEmpty()) { "No public keys to encrypt message to" }
+        val publicKeyRingCollection = PGPPublicKeyRingCollection(publicKeyRings)
+        val encryptionOptions = EncryptionOptions().addRecipients(publicKeyRingCollection)
+        val producerOptions = ProducerOptions.encrypt(encryptionOptions).setAsciiArmor(false)
         val encryptor =
           PGPainless.encryptAndOrSign().onOutputStream(outputStream).withOptions(producerOptions)
         plaintextStream.copyTo(encryptor)
@@ -83,7 +89,6 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
             "Stream should be encrypted for ${keyRing.publicKey.keyID} but wasn't"
           }
         }
-        return@runCatching
       }
       .mapError { error ->
         when (error) {
