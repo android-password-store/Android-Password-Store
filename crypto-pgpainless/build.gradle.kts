@@ -18,4 +18,5 @@ dependencies {
   implementation(libs.thirdparty.pgpainless)
   testImplementation(libs.bundles.testDependencies)
   testImplementation(libs.kotlin.coroutines.test)
+  testImplementation(libs.testing.testparameterinjector)
 }
