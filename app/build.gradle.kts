@@ -23,7 +23,7 @@ android {
   compileOptions { isCoreLibraryDesugaringEnabled = true }
 
   defaultConfig {
-    applicationId = "dev.msfjarvis.aps"
+    applicationId = "app.passwordstore"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
