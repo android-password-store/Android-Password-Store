@@ -1,0 +1,19 @@
+/*
+ * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
+package app.passwordstore.injection.totp
+
+import app.passwordstore.util.totp.TotpFinder
+import app.passwordstore.util.totp.UriTotpFinder
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+
+@Module
+@InstallIn(ActivityComponent::class)
+interface TotpModule {
+  @Binds fun UriTotpFinder.bind(): TotpFinder
+}

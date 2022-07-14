@@ -12,7 +12,7 @@ android {
       kotlinCompilerExtensionVersion = libs.compose.compiler.get().versionConstraint.requiredVersion
     }
   }
-  namespace = "dev.msfjarvis.aps.ui.compose"
+  namespace = "app.passwordstore.ui.compose"
 }
 
 dependencies {

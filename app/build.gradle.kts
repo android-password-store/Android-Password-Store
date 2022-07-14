@@ -27,7 +27,7 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
-  namespace = "dev.msfjarvis.aps"
+  namespace = "app.passwordstore"
 
   lint {
     abortOnError = true

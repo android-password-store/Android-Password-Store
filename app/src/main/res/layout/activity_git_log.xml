@@ -16,7 +16,7 @@
     android:orientation="vertical"
     android:scrollbars="vertical"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context=".ui.git.log.GitLogActivity"
+    tools:context="app.passwordstore.ui.git.log.GitLogActivity"
     tools:listitem="@layout/git_log_row_layout" />
 
 </LinearLayout>

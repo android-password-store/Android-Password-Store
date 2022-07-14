@@ -28,31 +28,31 @@ gradlePlugin {
   plugins {
     register("binary-compatibility") {
       id = "com.github.android-password-store.binary-compatibility"
-      implementationClass = "dev.msfjarvis.aps.gradle.BinaryCompatibilityPlugin"
+      implementationClass = "app.passwordstore.gradle.BinaryCompatibilityPlugin"
     }
     register("kotlin-android") {
       id = "com.github.android-password-store.kotlin-android"
-      implementationClass = "dev.msfjarvis.aps.gradle.KotlinAndroidPlugin"
+      implementationClass = "app.passwordstore.gradle.KotlinAndroidPlugin"
     }
     register("kotlin-common") {
       id = "com.github.android-password-store.kotlin-common"
-      implementationClass = "dev.msfjarvis.aps.gradle.KotlinCommonPlugin"
+      implementationClass = "app.passwordstore.gradle.KotlinCommonPlugin"
     }
     register("kotlin-kapt") {
       id = "com.github.android-password-store.kotlin-kapt"
-      implementationClass = "dev.msfjarvis.aps.gradle.KotlinKaptPlugin"
+      implementationClass = "app.passwordstore.gradle.KotlinKaptPlugin"
     }
     register("kotlin-library") {
       id = "com.github.android-password-store.kotlin-library"
-      implementationClass = "dev.msfjarvis.aps.gradle.KotlinLibraryPlugin"
+      implementationClass = "app.passwordstore.gradle.KotlinLibraryPlugin"
     }
     register("spotless") {
       id = "com.github.android-password-store.spotless"
-      implementationClass = "dev.msfjarvis.aps.gradle.SpotlessPlugin"
+      implementationClass = "app.passwordstore.gradle.SpotlessPlugin"
     }
     register("versions") {
       id = "com.github.android-password-store.versions"
-      implementationClass = "dev.msfjarvis.aps.gradle.DependencyUpdatesPlugin"
+      implementationClass = "app.passwordstore.gradle.DependencyUpdatesPlugin"
     }
   }
 }

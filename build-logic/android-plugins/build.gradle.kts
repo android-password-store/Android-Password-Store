@@ -28,27 +28,27 @@ gradlePlugin {
   plugins {
     register("versioning") {
       id = "com.github.android-password-store.versioning-plugin"
-      implementationClass = "dev.msfjarvis.aps.gradle.versioning.VersioningPlugin"
+      implementationClass = "app.passwordstore.gradle.versioning.VersioningPlugin"
     }
     register("android-application") {
       id = "com.github.android-password-store.android-application"
-      implementationClass = "dev.msfjarvis.aps.gradle.ApplicationPlugin"
+      implementationClass = "app.passwordstore.gradle.ApplicationPlugin"
     }
     register("android-library") {
       id = "com.github.android-password-store.android-library"
-      implementationClass = "dev.msfjarvis.aps.gradle.LibraryPlugin"
+      implementationClass = "app.passwordstore.gradle.LibraryPlugin"
     }
     register("published-android-library") {
       id = "com.github.android-password-store.published-android-library"
-      implementationClass = "dev.msfjarvis.aps.gradle.PublishedAndroidLibraryPlugin"
+      implementationClass = "app.passwordstore.gradle.PublishedAndroidLibraryPlugin"
     }
     register("rename-artifacts") {
       id = "com.github.android-password-store.rename-artifacts"
-      implementationClass = "dev.msfjarvis.aps.gradle.RenameArtifactsPlugin"
+      implementationClass = "app.passwordstore.gradle.RenameArtifactsPlugin"
     }
     register("sentry") {
       id = "com.github.android-password-store.sentry"
-      implementationClass = "dev.msfjarvis.aps.gradle.SentryPlugin"
+      implementationClass = "app.passwordstore.gradle.SentryPlugin"
     }
   }
 }

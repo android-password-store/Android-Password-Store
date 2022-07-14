@@ -22,7 +22,7 @@
     android:required="false" />
 
   <application
-    android:name="dev.msfjarvis.aps.Application"
+    android:name=".Application"
     android:allowBackup="false"
     android:dataExtractionRules="@xml/data_extraction_rules"
     android:fullBackupContent="@xml/backup_content"
@@ -34,26 +34,26 @@
     tools:targetApi="s">
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.passwords.PasswordStore"
+      android:name=".ui.passwords.PasswordStore"
       android:configChanges="orientation|screenSize"
       android:exported="false" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity"
+      android:name=".ui.onboarding.activity.OnboardingActivity"
       android:configChanges="orientation|screenSize"
       android:exported="false" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.proxy.ProxySelectorActivity"
+      android:name=".ui.proxy.ProxySelectorActivity"
       android:exported="false"
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.crypto.DecryptActivityV2"
+      android:name=".ui.crypto.DecryptActivityV2"
       android:exported="true" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.main.LaunchActivity"
+      android:name=".ui.main.LaunchActivity"
       android:configChanges="orientation|screenSize"
       android:exported="true"
       android:theme="@style/NoBackgroundThemeM3">
@@ -73,60 +73,60 @@
       tools:node="replace" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.git.config.GitServerConfigActivity"
+      android:name=".ui.git.config.GitServerConfigActivity"
       android:exported="false"
       android:label="@string/title_activity_git_clone"
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.git.config.GitConfigActivity"
+      android:name=".ui.git.config.GitConfigActivity"
       android:exported="false"
       android:label="@string/title_activity_git_config"
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.git.log.GitLogActivity"
+      android:name=".ui.git.log.GitLogActivity"
       android:exported="false"
       android:label="@string/title_activity_git_log" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.settings.SettingsActivity"
+      android:name=".ui.settings.SettingsActivity"
       android:exported="false"
       android:label="@string/action_settings"
       android:parentActivityName=".ui.passwords.PasswordStore" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity"
+      android:name=".ui.crypto.PasswordCreationActivity"
       android:exported="false"
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.crypto.PasswordCreationActivityV2"
+      android:name=".ui.crypto.PasswordCreationActivityV2"
       android:exported="false"
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.crypto.DecryptActivity"
+      android:name=".ui.crypto.DecryptActivity"
       android:exported="false"
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.crypto.GetKeyIdsActivity"
+      android:name=".ui.crypto.GetKeyIdsActivity"
       android:exported="false"
       android:theme="@style/NoBackgroundThemeM3" />
 
     <service
-      android:name="dev.msfjarvis.aps.util.services.ClipboardService"
+      android:name=".util.services.ClipboardService"
       android:exported="false"
       android:process=":clipboard_service_process" />
     <service
-      android:name="dev.msfjarvis.aps.util.services.PasswordExportService"
+      android:name=".util.services.PasswordExportService"
       android:exported="false"
       android:process=":password_export_service_process" />
     <service
-      android:name="dev.msfjarvis.aps.util.services.OreoAutofillService"
+      android:name=".util.services.OreoAutofillService"
       android:exported="true"
       android:permission="android.permission.BIND_AUTOFILL_SERVICE">
       <intent-filter>
@@ -138,50 +138,50 @@
     </service>
 
     <activity
-      android:name="dev.msfjarvis.aps.ui.folderselect.SelectFolderActivity"
+      android:name=".ui.folderselect.SelectFolderActivity"
       android:exported="false" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.sshkeygen.SshKeyImportActivity"
+      android:name=".ui.sshkeygen.SshKeyImportActivity"
       android:exported="false"
       android:theme="@style/NoBackgroundThemeM3"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.sshkeygen.SshKeyGenActivity"
+      android:name=".ui.sshkeygen.SshKeyGenActivity"
       android:exported="false"
       android:label="@string/pref_ssh_keygen_title"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivity"
+      android:name=".ui.autofill.AutofillDecryptActivity"
       android:exported="false"
       android:theme="@style/NoBackgroundThemeM3" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivityV2"
+      android:name=".ui.autofill.AutofillDecryptActivityV2"
       android:exported="false"
       android:theme="@style/NoBackgroundThemeM3" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.autofill.AutofillFilterView"
+      android:name=".ui.autofill.AutofillFilterView"
       android:configChanges="orientation|keyboardHidden"
       android:exported="false"
       android:theme="@style/DialogLikeThemeM3"
       android:windowSoftInputMode="adjustNothing" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity"
+      android:name=".ui.autofill.AutofillSaveActivity"
       android:exported="false"
       android:theme="@style/NoBackgroundThemeM3" />
     <activity
-      android:name="dev.msfjarvis.aps.autofill.oreo.ui.AutofillSmsActivity"
+      android:name=".autofill.oreo.ui.AutofillSmsActivity"
       android:configChanges="orientation"
       android:exported="false"
       android:theme="@style/DialogLikeThemeM3"
       android:windowSoftInputMode="adjustNothing" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity"
+      android:name=".ui.autofill.AutofillPublisherChangedActivity"
       android:configChanges="orientation|keyboardHidden"
       android:exported="false"
       android:theme="@style/DialogLikeThemeM3"
       android:windowSoftInputMode="adjustNothing" />
     <activity
-      android:name="dev.msfjarvis.aps.ui.pgp.PGPKeyImportActivity"
+      android:name=".ui.pgp.PGPKeyImportActivity"
       android:theme="@style/NoBackgroundThemeM3" />
   </application>
 

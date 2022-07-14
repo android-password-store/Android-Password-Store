@@ -11,7 +11,7 @@ plugins {
 
 android {
   sourceSets { getByName("test") { resources.srcDir("src/main/res/raw") } }
-  namespace = "dev.msfjarvis.aps.passgen.diceware"
+  namespace = "app.passwordstore.passgen.diceware"
 }
 
 dependencies {
