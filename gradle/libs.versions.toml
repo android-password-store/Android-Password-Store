@@ -1,9 +1,9 @@
 [versions]
 agp = "7.2.1"
-androidx_activity = "1.6.0-alpha05"
+androidxActivity = "1.6.0-alpha05"
 bouncycastle = "1.71"
-composeFoundation = "1.2.0-alpha08"
-composeUi = "1.2.0-alpha08"
+composeFoundation = "1.3.0-alpha01"
+composeUi = "1.3.0-alpha01"
 coroutines = "1.6.4"
 flowbinding = "1.2.0"
 hilt = "2.42"
@@ -13,8 +13,8 @@ lifecycle = "2.6.0-alpha01"
 
 [libraries]
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.0"
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx_activity" }
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx_activity" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidx-annotation = "androidx.annotation:annotation:1.4.0-beta01"
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.0-alpha05"
 androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
@@ -52,13 +52,13 @@ compose-compiler = "androidx.compose.compiler:compiler:1.2.0"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "composeFoundation" }
 compose-hilt = "androidx.hilt:hilt-navigation-compose:1.0.0"
-compose-material = "androidx.compose.material:material:1.2.0-alpha08"
+compose-material = "androidx.compose.material:material:1.3.0-alpha01"
 compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha14"
-compose-runtime = "androidx.compose.runtime:runtime:1.2.0-alpha08"
+compose-runtime = "androidx.compose.runtime:runtime:1.2.0-rc01"
 compose-ui-core = { module = "androidx.compose.ui:ui", version.ref = "composeUi" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeUi" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeUi" }
-compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "composeUi" }
+compose-ui-tooling = "androidx.compose.ui:ui-tooling:1.0.5"
+compose-ui-util = "androidx.compose.ui:ui-util:1.2.0-rc01"
 compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding", version.ref = "composeUi" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
