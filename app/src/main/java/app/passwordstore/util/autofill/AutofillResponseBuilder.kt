@@ -14,7 +14,7 @@ import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
 import androidx.annotation.RequiresApi
 import app.passwordstore.autofill.oreo.ui.AutofillSmsActivity
-import app.passwordstore.ui.autofill.AutofillDecryptActivityV2
+import app.passwordstore.ui.autofill.AutofillDecryptActivity
 import app.passwordstore.ui.autofill.AutofillFilterView
 import app.passwordstore.ui.autofill.AutofillPublisherChangedActivity
 import app.passwordstore.ui.autofill.AutofillSaveActivity
@@ -70,7 +70,7 @@ constructor(
   private fun makeMatchDataset(context: Context, file: File): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
-    val intentSender = AutofillDecryptActivityV2.makeDecryptFileIntentSender(file, context)
+    val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
     return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata)
   }
 

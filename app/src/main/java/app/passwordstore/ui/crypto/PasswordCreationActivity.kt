@@ -65,7 +65,7 @@ import logcat.asLog
 import logcat.logcat
 
 @AndroidEntryPoint
-class PasswordCreationActivityV2 : BasePgpActivity() {
+class PasswordCreationActivity : BasePgpActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
@@ -142,7 +142,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
       otpImportButton.setOnClickListener {
         supportFragmentManager.setFragmentResultListener(
           OTP_RESULT_REQUEST_KEY,
-          this@PasswordCreationActivityV2
+          this@PasswordCreationActivity
         ) { requestKey, bundle ->
           if (requestKey == OTP_RESULT_REQUEST_KEY) {
             val contents = bundle.getString(RESULT)
@@ -160,12 +160,12 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
               getString(R.string.otp_import_from_file),
               getString(R.string.otp_import_manual_entry),
             )
-          MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
+          MaterialAlertDialogBuilder(this@PasswordCreationActivity)
             .setItems(items) { _, index ->
               when (index) {
                 0 ->
                   otpImportAction.launch(
-                    IntentIntegrator(this@PasswordCreationActivityV2)
+                    IntentIntegrator(this@PasswordCreationActivity)
                       .setOrientationLocked(false)
                       .setBeepEnabled(false)
                       .setDesiredBarcodeFormats(QR_CODE)
@@ -205,7 +205,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
       // FileBased.
       if (
         suggestedName == null &&
-          AutofillPreferences.directoryStructure(this@PasswordCreationActivityV2) ==
+          AutofillPreferences.directoryStructure(this@PasswordCreationActivity) ==
             DirectoryStructure.FileBased
       ) {
         encryptUsername.apply {
@@ -415,7 +415,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
               val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
               if (oldFile.path != file.path && !oldFile.delete()) {
                 setResult(RESULT_CANCELED)
-                MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
+                MaterialAlertDialogBuilder(this@PasswordCreationActivity)
                   .setTitle(R.string.password_creation_file_fail_title)
                   .setMessage(
                     getString(R.string.password_creation_file_delete_fail_message, oldFileName)
@@ -443,7 +443,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
             if (e is IOException) {
               logcat(ERROR) { e.asLog("Failed to write password file") }
               setResult(RESULT_CANCELED)
-              MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
+              MaterialAlertDialogBuilder(this@PasswordCreationActivity)
                 .setTitle(getString(R.string.password_creation_file_fail_title))
                 .setMessage(getString(R.string.password_creation_file_write_fail_message))
                 .setCancelable(false)

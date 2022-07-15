@@ -29,8 +29,8 @@ import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.crypto.BasePgpActivity
 import app.passwordstore.ui.crypto.BasePgpActivity.Companion.getLongName
-import app.passwordstore.ui.crypto.DecryptActivityV2
-import app.passwordstore.ui.crypto.PasswordCreationActivityV2
+import app.passwordstore.ui.crypto.DecryptActivity
+import app.passwordstore.ui.crypto.PasswordCreationActivity
 import app.passwordstore.ui.dialogs.FolderCreationDialogFragment
 import app.passwordstore.ui.folderselect.SelectFolderActivity
 import app.passwordstore.ui.git.base.BaseGitActivity
@@ -383,7 +383,7 @@ class PasswordStore : BaseGitActivity() {
     val authDecryptIntent = item.createAuthEnabledIntent(this)
     val decryptIntent =
       (authDecryptIntent.clone() as Intent).setComponent(
-        ComponentName(this, DecryptActivityV2::class.java)
+        ComponentName(this, DecryptActivity::class.java)
       )
 
     startActivity(decryptIntent)
@@ -407,7 +407,7 @@ class PasswordStore : BaseGitActivity() {
     if (!validateState()) return
     val currentDir = currentDir
     logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
-    val intent = Intent(this, PasswordCreationActivityV2::class.java)
+    val intent = Intent(this, PasswordCreationActivity::class.java)
     intent.putExtra(BasePgpActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
     intent.putExtra(
       BasePgpActivity.EXTRA_REPO_PATH,

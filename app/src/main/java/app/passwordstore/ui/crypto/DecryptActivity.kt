@@ -38,12 +38,12 @@ import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalTime::class)
 @AndroidEntryPoint
-class DecryptActivityV2 : BasePgpActivity() {
+class DecryptActivity : BasePgpActivity() {
 
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
+  private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var repository: CryptoRepository
-  private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
 
   private var passwordEntry: PasswordEntry? = null
   private var retries = 0
@@ -103,16 +103,13 @@ class DecryptActivityV2 : BasePgpActivity() {
    * result triggers they can be repopulated with new data.
    */
   private fun editPassword() {
-    val intent = Intent(this, PasswordCreationActivityV2::class.java)
+    val intent = Intent(this, PasswordCreationActivity::class.java)
     intent.putExtra("FILE_PATH", relativeParentPath)
     intent.putExtra("REPO_PATH", repoPath)
-    intent.putExtra(PasswordCreationActivityV2.EXTRA_FILE_NAME, name)
-    intent.putExtra(PasswordCreationActivityV2.EXTRA_PASSWORD, passwordEntry?.password)
-    intent.putExtra(
-      PasswordCreationActivityV2.EXTRA_EXTRA_CONTENT,
-      passwordEntry?.extraContentString
-    )
-    intent.putExtra(PasswordCreationActivityV2.EXTRA_EDITING, true)
+    intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
+    intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
+    intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContentString)
+    intent.putExtra(PasswordCreationActivity.EXTRA_EDITING, true)
     startActivity(intent)
     finish()
   }

@@ -15,7 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import app.passwordstore.data.repo.PasswordRepository
-import app.passwordstore.ui.crypto.PasswordCreationActivityV2
+import app.passwordstore.ui.crypto.PasswordCreationActivity
 import app.passwordstore.util.autofill.AutofillMatcher
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
@@ -108,14 +108,14 @@ class AutofillSaveActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     val repo = PasswordRepository.getRepositoryDirectory()
     val saveIntent =
-      Intent(this, PasswordCreationActivityV2::class.java).apply {
+      Intent(this, PasswordCreationActivity::class.java).apply {
         putExtras(
           bundleOf(
             "REPO_PATH" to repo.absolutePath,
             "FILE_PATH" to repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)!!).absolutePath,
-            PasswordCreationActivityV2.EXTRA_FILE_NAME to intent.getStringExtra(EXTRA_NAME),
-            PasswordCreationActivityV2.EXTRA_PASSWORD to intent.getStringExtra(EXTRA_PASSWORD),
-            PasswordCreationActivityV2.EXTRA_GENERATE_PASSWORD to
+            PasswordCreationActivity.EXTRA_FILE_NAME to intent.getStringExtra(EXTRA_NAME),
+            PasswordCreationActivity.EXTRA_PASSWORD to intent.getStringExtra(EXTRA_PASSWORD),
+            PasswordCreationActivity.EXTRA_GENERATE_PASSWORD to
               intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
           )
         )

@@ -49,7 +49,7 @@
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name=".ui.crypto.DecryptActivityV2"
+      android:name=".ui.crypto.DecryptActivity"
       android:exported="true" />
 
     <activity
@@ -96,7 +96,7 @@
       android:parentActivityName=".ui.passwords.PasswordStore" />
 
     <activity
-      android:name=".ui.crypto.PasswordCreationActivityV2"
+      android:name=".ui.crypto.PasswordCreationActivity"
       android:exported="false"
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
@@ -135,7 +135,7 @@
       android:label="@string/pref_ssh_keygen_title"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.autofill.AutofillDecryptActivityV2"
+      android:name=".ui.autofill.AutofillDecryptActivity"
       android:exported="false"
       android:theme="@style/NoBackgroundThemeM3" />
     <activity

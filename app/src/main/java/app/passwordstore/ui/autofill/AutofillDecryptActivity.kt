@@ -40,7 +40,7 @@ import logcat.logcat
 
 @RequiresApi(26)
 @AndroidEntryPoint
-class AutofillDecryptActivityV2 : AppCompatActivity() {
+class AutofillDecryptActivity : AppCompatActivity() {
 
   companion object {
 
@@ -50,7 +50,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
     private var decryptFileRequestCode = 1
 
     fun makeDecryptFileIntent(file: File, forwardedExtras: Bundle, context: Context): Intent {
-      return Intent(context, AutofillDecryptActivityV2::class.java).apply {
+      return Intent(context, AutofillDecryptActivity::class.java).apply {
         putExtras(forwardedExtras)
         putExtra(EXTRA_SEARCH_ACTION, true)
         putExtra(EXTRA_FILE_PATH, file.absolutePath)
@@ -59,7 +59,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
 
     fun makeDecryptFileIntentSender(file: File, context: Context): IntentSender {
       val intent =
-        Intent(context, AutofillDecryptActivityV2::class.java).apply {
+        Intent(context, AutofillDecryptActivity::class.java).apply {
           putExtra(EXTRA_SEARCH_ACTION, false)
           putExtra(EXTRA_FILE_PATH, file.absolutePath)
         }
@@ -87,14 +87,14 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
     val filePath =
       intent?.getStringExtra(EXTRA_FILE_PATH)
         ?: run {
-          logcat(ERROR) { "AutofillDecryptActivityV2 started without EXTRA_FILE_PATH" }
+          logcat(ERROR) { "AutofillDecryptActivity started without EXTRA_FILE_PATH" }
           finish()
           return
         }
     val clientState =
       intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE)
         ?: run {
-          logcat(ERROR) { "AutofillDecryptActivityV2 started without EXTRA_CLIENT_STATE" }
+          logcat(ERROR) { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
           finish()
           return
         }
@@ -127,7 +127,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
     } else {
       val fillInDataset =
         AutofillResponseBuilder.makeFillInDataset(
-          this@AutofillDecryptActivityV2,
+          this@AutofillDecryptActivity,
           credentials,
           clientState,
           action

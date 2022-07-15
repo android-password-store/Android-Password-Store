@@ -11,7 +11,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import app.passwordstore.ui.crypto.BasePgpActivity
-import app.passwordstore.ui.crypto.DecryptActivityV2
+import app.passwordstore.ui.crypto.DecryptActivity
 import app.passwordstore.ui.passwords.PasswordStore
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
@@ -52,7 +52,7 @@ class LaunchActivity : AppCompatActivity() {
   }
 
   private fun getDecryptIntent(): Intent {
-    return Intent(this, DecryptActivityV2::class.java)
+    return Intent(this, DecryptActivity::class.java)
   }
 
   private fun startTargetActivity(noAuth: Boolean) {

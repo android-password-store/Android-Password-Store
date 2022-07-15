@@ -19,7 +19,7 @@ import app.passwordstore.R
 import app.passwordstore.databinding.FragmentPwgenDicewareBinding
 import app.passwordstore.injection.prefs.PasswordGeneratorPreferences
 import app.passwordstore.passgen.diceware.DicewarePassphraseGenerator
-import app.passwordstore.ui.crypto.PasswordCreationActivityV2
+import app.passwordstore.ui.crypto.PasswordCreationActivity
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.settings.PreferenceKeys.DICEWARE_LENGTH
 import app.passwordstore.util.settings.PreferenceKeys.DICEWARE_SEPARATOR
@@ -58,8 +58,8 @@ class DicewarePasswordGeneratorDialogFragment : DialogFragment() {
         setTitle(R.string.pwgen_title)
         setPositiveButton(R.string.dialog_ok) { _, _ ->
           setFragmentResult(
-            PasswordCreationActivityV2.PASSWORD_RESULT_REQUEST_KEY,
-            bundleOf(PasswordCreationActivityV2.RESULT to "${binding.passwordText.text}")
+            PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
+            bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
           )
         }
         setNeutralButton(R.string.dialog_cancel) { _, _ -> }
