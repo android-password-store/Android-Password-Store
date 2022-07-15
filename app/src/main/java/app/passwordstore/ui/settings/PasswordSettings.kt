@@ -10,10 +10,10 @@ import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
-import de.Maxr1998.modernpreferences.helpers.checkBox
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.onSelectionChange
 import de.Maxr1998.modernpreferences.helpers.singleChoice
+import de.Maxr1998.modernpreferences.helpers.switch
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 
 class PasswordSettings(private val activity: FragmentActivity) : SettingsProvider {
@@ -38,12 +38,12 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
         }
         textInputType = InputType.TYPE_CLASS_NUMBER
       }
-      checkBox(PreferenceKeys.SHOW_PASSWORD) {
+      switch(PreferenceKeys.SHOW_PASSWORD) {
         titleRes = R.string.show_password_pref_title
         summaryRes = R.string.show_password_pref_summary
         defaultValue = true
       }
-      checkBox(PreferenceKeys.COPY_ON_DECRYPT) {
+      switch(PreferenceKeys.COPY_ON_DECRYPT) {
         titleRes = R.string.pref_copy_title
         summaryRes = R.string.pref_copy_summary
         defaultValue = false

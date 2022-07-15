@@ -37,31 +37,37 @@ class SettingsActivity : AppCompatActivity() {
     val screen =
       screen(this) {
         subScreen {
+          collapseIcon = true
           titleRes = R.string.pref_category_general_title
           iconRes = R.drawable.app_settings_alt_24px
           generalSettings.provideSettings(this)
         }
         subScreen {
+          collapseIcon = true
           titleRes = R.string.pref_category_autofill_title
           iconRes = R.drawable.ic_wysiwyg_24px
           autofillSettings.provideSettings(this)
         }
         subScreen {
+          collapseIcon = true
           titleRes = R.string.pref_category_passwords_title
           iconRes = R.drawable.ic_password_24px
           passwordSettings.provideSettings(this)
         }
         subScreen {
+          collapseIcon = true
           titleRes = R.string.pref_category_repository_title
           iconRes = R.drawable.ic_call_merge_24px
           repositorySettings.provideSettings(this)
         }
         subScreen {
+          collapseIcon = true
           titleRes = R.string.pref_category_misc_title
           iconRes = R.drawable.ic_miscellaneous_services_24px
           miscSettings.provideSettings(this)
         }
         subScreen {
+          collapseIcon = true
           titleRes = R.string.pref_category_pgp_title
           iconRes = R.drawable.ic_lock_open_24px
           pgpSettings.provideSettings(this)
