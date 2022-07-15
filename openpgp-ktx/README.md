@@ -1,4 +1,6 @@
-# openpgp-ktx [![Maven Central](https://img.shields.io/maven-central/v/com.github.android-password-store/openpgp-ktx.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.android-password-store%22%20AND%20a:%22openpgp-ktx%22)
+# [DEPRECATED] openpgp-ktx [![Maven Central](https://img.shields.io/maven-central/v/com.github.android-password-store/openpgp-ktx.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.android-password-store%22%20AND%20a:%22openpgp-ktx%22)
+
+> Android Password Store no longer uses this library and thus is not maintaining it actively.
 
 Reimplementation of [OpenKeychain]'s integration library [openpgp-api]. Written entirely in Kotlin, it leverages Jetpack to be compatible with modern apps, unlike the original library.
 

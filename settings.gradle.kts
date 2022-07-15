@@ -121,8 +121,6 @@ include("crypto-pgpainless")
 
 include("format-common")
 
-include("openpgp-ktx")
-
 include("passgen:diceware")
 
 include("passgen:random")

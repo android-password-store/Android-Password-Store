@@ -2,7 +2,6 @@ name: Release library subprojects
 on:
   push:
     tags:
-      - openpgp-ktx-v*
       - autofill-parser-v*
 
 jobs:
@@ -18,21 +17,10 @@ jobs:
         distribution: temurin
         java-version: 17
 
-    - name: Determine publishing task
-      id: task-select
-      run: |
-        set -x
-        TAG=${GITHUB_REF/refs\/tags\//}
-        if [[ "${TAG}" =~ "openpgp-ktx" ]]; then
-          echo '::set-output name=PROJECT::openpgp-ktx'
-        elif [[ "${TAG}" =~ "autofill-parser" ]]; then
-          echo '::set-output name=PROJECT::autofill-parser'
-        fi
-
     - name: Upload binaries
       uses: gradle/gradle-build-action@v2.2.1
       with:
-        arguments: --no-configuration-cache :${{ steps.task-select.outputs.PROJECT }}:publishAllPublicationsToMavenCentralRepository
+        arguments: --no-configuration-cache :autofill-parser:publishAllPublicationsToMavenCentralRepository
       env:
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
