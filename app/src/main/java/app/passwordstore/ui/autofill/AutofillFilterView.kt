@@ -31,8 +31,6 @@ import app.passwordstore.util.autofill.AutofillMatcher
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.viewBinding
-import app.passwordstore.util.features.Feature
-import app.passwordstore.util.features.Features
 import app.passwordstore.util.viewmodel.FilterMode
 import app.passwordstore.util.viewmodel.ListMode
 import app.passwordstore.util.viewmodel.SearchMode
@@ -40,7 +38,6 @@ import app.passwordstore.util.viewmodel.SearchableRepositoryAdapter
 import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
@@ -84,7 +81,6 @@ class AutofillFilterView : AppCompatActivity() {
     }
   }
 
-  @Inject lateinit var features: Features
   private lateinit var formOrigin: FormOrigin
   private lateinit var directoryStructure: DirectoryStructure
   private val binding by viewBinding(ActivityOreoAutofillFilterBinding::inflate)
@@ -231,11 +227,7 @@ class AutofillFilterView : AppCompatActivity() {
       AutofillMatcher.addMatchFor(applicationContext, formOrigin, item.file)
     // intent?.extras? is checked to be non-null in onCreate
     decryptAction.launch(
-      if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
-        AutofillDecryptActivityV2.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
-      } else {
-        AutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
-      }
+      AutofillDecryptActivityV2.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
     )
   }
 }

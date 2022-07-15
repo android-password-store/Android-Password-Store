@@ -21,14 +21,11 @@ import app.passwordstore.util.autofill.AutofillMatcher
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
 import app.passwordstore.util.extensions.unsafeLazy
-import app.passwordstore.util.features.Feature
-import app.passwordstore.util.features.Features
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
@@ -108,17 +105,11 @@ class AutofillSaveActivity : AppCompatActivity() {
     }
   }
 
-  @Inject lateinit var features: Features
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val repo = PasswordRepository.getRepositoryDirectory()
-    val creationActivity =
-      if (features.isEnabled(Feature.EnablePGPainlessBackend))
-        PasswordCreationActivityV2::class.java
-      else PasswordCreationActivity::class.java
     val saveIntent =
-      Intent(this, creationActivity).apply {
+      Intent(this, PasswordCreationActivityV2::class.java).apply {
         putExtras(
           bundleOf(
             "REPO_PATH" to repo.absolutePath,

@@ -14,6 +14,10 @@ enum class Feature(
 ) {
 
   /** Opt into the new PGP backend powered by the PGPainless library. */
+  @Deprecated(
+    "The PGPainless backend is now the only available one",
+    level = DeprecationLevel.ERROR
+  )
   EnablePGPainlessBackend(false, "enable_pgp_v2_backend"),
   ;
 

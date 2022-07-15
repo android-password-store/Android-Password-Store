@@ -25,7 +25,6 @@ import app.passwordstore.util.extensions.clipboard
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.snackbar
 import app.passwordstore.util.extensions.unsafeLazy
-import app.passwordstore.util.features.Feature
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.services.ClipboardService
 import app.passwordstore.util.settings.PreferenceKeys
@@ -130,7 +129,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
   /** Method for subclasses to initiate binding with [OpenPgpServiceConnection]. */
   fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound) {
-    if (features.isEnabled(Feature.EnablePGPainlessBackend)) return
+    if (true) return
     val installed =
       runCatching {
           packageManager.getPackageInfo(OPENPGP_PROVIDER, 0)

@@ -29,9 +29,7 @@ import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.crypto.BasePgpActivity
 import app.passwordstore.ui.crypto.BasePgpActivity.Companion.getLongName
-import app.passwordstore.ui.crypto.DecryptActivity
 import app.passwordstore.ui.crypto.DecryptActivityV2
-import app.passwordstore.ui.crypto.PasswordCreationActivity
 import app.passwordstore.ui.crypto.PasswordCreationActivityV2
 import app.passwordstore.ui.dialogs.FolderCreationDialogFragment
 import app.passwordstore.ui.folderselect.SelectFolderActivity
@@ -46,8 +44,6 @@ import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.isInsideRepository
 import app.passwordstore.util.extensions.listFilesRecursively
 import app.passwordstore.util.extensions.sharedPrefs
-import app.passwordstore.util.features.Feature
-import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.AuthMode
 import app.passwordstore.util.settings.PreferenceKeys
 import app.passwordstore.util.shortcuts.ShortcutHandler
@@ -73,7 +69,6 @@ const val PASSWORD_FRAGMENT_TAG = "PasswordsList"
 @AndroidEntryPoint
 class PasswordStore : BaseGitActivity() {
 
-  @Inject lateinit var features: Features
   @Inject lateinit var shortcutHandler: ShortcutHandler
   private lateinit var searchItem: MenuItem
   private val settings by lazy { sharedPrefs }
@@ -388,14 +383,7 @@ class PasswordStore : BaseGitActivity() {
     val authDecryptIntent = item.createAuthEnabledIntent(this)
     val decryptIntent =
       (authDecryptIntent.clone() as Intent).setComponent(
-        ComponentName(
-          this,
-          if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
-            DecryptActivityV2::class.java
-          } else {
-            DecryptActivity::class.java
-          }
-        )
+        ComponentName(this, DecryptActivityV2::class.java)
       )
 
     startActivity(decryptIntent)
@@ -419,11 +407,7 @@ class PasswordStore : BaseGitActivity() {
     if (!validateState()) return
     val currentDir = currentDir
     logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
-    val creationActivity =
-      if (features.isEnabled(Feature.EnablePGPainlessBackend))
-        PasswordCreationActivityV2::class.java
-      else PasswordCreationActivity::class.java
-    val intent = Intent(this, creationActivity)
+    val intent = Intent(this, PasswordCreationActivityV2::class.java)
     intent.putExtra(BasePgpActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
     intent.putExtra(
       BasePgpActivity.EXTRA_REPO_PATH,

@@ -14,13 +14,10 @@ import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
 import androidx.annotation.RequiresApi
 import app.passwordstore.autofill.oreo.ui.AutofillSmsActivity
-import app.passwordstore.ui.autofill.AutofillDecryptActivity
 import app.passwordstore.ui.autofill.AutofillDecryptActivityV2
 import app.passwordstore.ui.autofill.AutofillFilterView
 import app.passwordstore.ui.autofill.AutofillPublisherChangedActivity
 import app.passwordstore.ui.autofill.AutofillSaveActivity
-import app.passwordstore.util.features.Feature
-import app.passwordstore.util.features.Features
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.AutofillScenario
 import com.github.androidpasswordstore.autofillparser.Credentials
@@ -40,7 +37,6 @@ class AutofillResponseBuilder
 @AssistedInject
 constructor(
   @Assisted form: FillableForm,
-  private val features: Features,
 ) {
 
   @AssistedFactory
@@ -74,12 +70,7 @@ constructor(
   private fun makeMatchDataset(context: Context, file: File): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
-    val intentSender =
-      if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
-        AutofillDecryptActivityV2.makeDecryptFileIntentSender(file, context)
-      } else {
-        AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
-      }
+    val intentSender = AutofillDecryptActivityV2.makeDecryptFileIntentSender(file, context)
     return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata)
   }
 

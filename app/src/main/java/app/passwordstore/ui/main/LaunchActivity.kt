@@ -54,11 +54,7 @@ class LaunchActivity : AppCompatActivity() {
   }
 
   private fun getDecryptIntent(): Intent {
-    return if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
-      Intent(this, DecryptActivityV2::class.java)
-    } else {
-      Intent(this, DecryptActivity::class.java)
-    }
+    return Intent(this, DecryptActivityV2::class.java)
   }
 
   private fun startTargetActivity(noAuth: Boolean) {
