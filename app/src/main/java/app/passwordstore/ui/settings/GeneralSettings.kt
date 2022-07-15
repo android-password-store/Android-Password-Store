@@ -16,9 +16,9 @@ import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.extensions.sharedPrefs
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
-import de.Maxr1998.modernpreferences.helpers.checkBox
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.singleChoice
+import de.Maxr1998.modernpreferences.helpers.switch
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 
 class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider {
@@ -42,32 +42,32 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
         titleRes = R.string.pref_sort_order_title
       }
 
-      checkBox(PreferenceKeys.DISABLE_SYNC_ACTION) {
+      switch(PreferenceKeys.DISABLE_SYNC_ACTION) {
         titleRes = R.string.pref_disable_sync_on_pull_title
         summaryRes = R.string.pref_disable_sync_on_pull_summary
         defaultValue = false
       }
 
-      checkBox(PreferenceKeys.FILTER_RECURSIVELY) {
+      switch(PreferenceKeys.FILTER_RECURSIVELY) {
         titleRes = R.string.pref_recursive_filter_title
         summaryRes = R.string.pref_recursive_filter_summary
         defaultValue = true
       }
 
-      checkBox(PreferenceKeys.SEARCH_ON_START) {
+      switch(PreferenceKeys.SEARCH_ON_START) {
         titleRes = R.string.pref_search_on_start_title
         summaryRes = R.string.pref_search_on_start_summary
         defaultValue = false
       }
 
-      checkBox(PreferenceKeys.SHOW_HIDDEN_CONTENTS) {
+      switch(PreferenceKeys.SHOW_HIDDEN_CONTENTS) {
         titleRes = R.string.pref_show_hidden_title
         summaryRes = R.string.pref_show_hidden_summary
         defaultValue = false
       }
 
       val canAuthenticate = BiometricAuthenticator.canAuthenticate(activity)
-      checkBox(PreferenceKeys.BIOMETRIC_AUTH) {
+      switch(PreferenceKeys.BIOMETRIC_AUTH) {
         titleRes = R.string.pref_biometric_auth_title
         defaultValue = false
         enabled = canAuthenticate

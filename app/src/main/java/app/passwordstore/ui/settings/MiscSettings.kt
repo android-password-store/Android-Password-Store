@@ -17,9 +17,9 @@ import app.passwordstore.R
 import app.passwordstore.util.services.PasswordExportService
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
-import de.Maxr1998.modernpreferences.helpers.checkBox
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
+import de.Maxr1998.modernpreferences.helpers.switch
 
 class MiscSettings(activity: FragmentActivity) : SettingsProvider {
 
@@ -65,12 +65,12 @@ class MiscSettings(activity: FragmentActivity) : SettingsProvider {
           true
         }
       }
-      checkBox(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY) {
+      switch(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY) {
         defaultValue = false
         titleRes = R.string.pref_clear_clipboard_title
         summaryRes = R.string.pref_clear_clipboard_summary
       }
-      checkBox(PreferenceKeys.ENABLE_DEBUG_LOGGING) {
+      switch(PreferenceKeys.ENABLE_DEBUG_LOGGING) {
         defaultValue = false
         titleRes = R.string.pref_debug_logging_title
         summaryRes = R.string.pref_debug_logging_summary

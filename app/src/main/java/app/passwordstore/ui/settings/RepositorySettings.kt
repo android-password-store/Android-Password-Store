@@ -39,9 +39,9 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferenceScreen
-import de.Maxr1998.modernpreferences.helpers.checkBox
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
+import de.Maxr1998.modernpreferences.helpers.switch
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 
@@ -64,7 +64,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
     val gitSettings = hiltEntryPoint.gitSettings()
 
     builder.apply {
-      checkBox(PreferenceKeys.REBASE_ON_PULL) {
+      switch(PreferenceKeys.REBASE_ON_PULL) {
         titleRes = R.string.pref_rebase_on_pull_title
         summaryRes = R.string.pref_rebase_on_pull_summary
         summaryOnRes = R.string.pref_rebase_on_pull_summary_on
