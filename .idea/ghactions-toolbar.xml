@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GhActionsToolbarSettings">
+    <option name="customRepos">
+      <map>
+        <entry key="https://github.com/android-password-store/Android-Password-Store.git">
+          <value>
+            <RepoSettings />
+          </value>
+        </entry>
+        <entry key="https://github.com/msfjarvis/Android-Password-Store">
+          <value>
+            <RepoSettings />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
