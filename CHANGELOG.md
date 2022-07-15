@@ -14,7 +14,6 @@ All notable changes to this project will be documented in this file.
 -   Allow pinning shortcuts directly to the launcher home screen
 -   Another workaround for SteamGuard's non-standard OTP format
 -   Allow importing QR code from images
--   Introduce a new opt-in PGP backend powered by [PGPainless](https://github.com/pgpainless/pgpainless) that does not require OpenKeychain
 -   Add the ability to run garbage collection on the internal Git repository
 -   Introduce crash reporting backed by Sentry
 -   TOTP field now shows the remaining time for which it is valid
@@ -31,7 +30,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
--   Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
+-   **BREAKING**: The app's package name has been changed to `app.passwordstore` so users are aware that this is a new project with no compatibility guarantees with Password Store 1.x.y.
+-   **BREAKING**: Introduce a new PGP backend powered by [PGPainless](https://github.com/pgpainless/pgpainless) which completely replaces OpenKeychain
+-   **BREAKING**: Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
 -   The settings UI has been completely re-done to dramatically improve discoverability and navigation for users
 -   Using the `git://` protocol in the server URL now presents an explicit discouragement rather than a generic error
 -   Encrypted data is no longer ASCII armored, bringing it in line with `pass`
