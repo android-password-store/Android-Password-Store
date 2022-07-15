@@ -232,16 +232,15 @@ class SshjConfig : ConfigImpl() {
   private fun initKeyAlgorithms() {
     keyAlgorithms =
       listOf(
-          KeyAlgorithms.SSHRSACertV01(),
-          KeyAlgorithms.EdDSA25519(),
-          KeyAlgorithms.ECDSASHANistp521(),
-          KeyAlgorithms.ECDSASHANistp384(),
-          KeyAlgorithms.ECDSASHANistp256(),
-          KeyAlgorithms.RSASHA512(),
-          KeyAlgorithms.RSASHA256(),
-          KeyAlgorithms.SSHRSA(),
-        )
-        .map { OpenKeychainWrappedKeyAlgorithmFactory(it) }
+        KeyAlgorithms.SSHRSACertV01(),
+        KeyAlgorithms.EdDSA25519(),
+        KeyAlgorithms.ECDSASHANistp521(),
+        KeyAlgorithms.ECDSASHANistp384(),
+        KeyAlgorithms.ECDSASHANistp256(),
+        KeyAlgorithms.RSASHA512(),
+        KeyAlgorithms.RSASHA256(),
+        KeyAlgorithms.SSHRSA(),
+      )
   }
 
   private fun initRandomFactory() {

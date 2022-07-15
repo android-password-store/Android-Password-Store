@@ -4,7 +4,7 @@
  */
 package app.passwordstore.util.git.operation
 
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
+import androidx.appcompat.app.AppCompatActivity
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
 
@@ -14,7 +14,7 @@ import org.eclipse.jgit.api.GitCommand
  * @param uri URL to clone the repository from
  * @param callingActivity the calling activity
  */
-class CloneOperation(callingActivity: ContinuationContainerActivity, uri: String) :
+class CloneOperation(callingActivity: AppCompatActivity, uri: String) :
   GitOperation(callingActivity) {
 
   override val commands: Array<GitCommand<out Any>> =

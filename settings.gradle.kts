@@ -91,10 +91,7 @@ dependencyResolutionManagement {
     }
     exclusiveContent {
       forRepository { maven("https://jitpack.io") }
-      filter {
-        includeModule("com.github.haroldadmin", "WhatTheStack")
-        includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
-      }
+      filter { includeModule("com.github.haroldadmin", "WhatTheStack") }
     }
     exclusiveContent {
       forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }

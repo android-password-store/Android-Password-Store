@@ -6,6 +6,7 @@ package app.passwordstore.util.git.operation
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
@@ -14,7 +15,6 @@ import app.passwordstore.ui.sshkeygen.SshKeyImportActivity
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.*
 import app.passwordstore.util.git.GitCommandExecutor
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
 import app.passwordstore.util.git.sshj.SshAuthMethod
 import app.passwordstore.util.git.sshj.SshKey
 import app.passwordstore.util.git.sshj.SshjSessionFactory
@@ -74,7 +74,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   protected val git = Git(repository)
   protected val remoteBranch = hiltEntryPoint.gitSettings().branch
   private val authActivity
-    get() = callingActivity as ContinuationContainerActivity
+    get() = callingActivity as AppCompatActivity
 
   private class HttpsCredentialsProvider(private val passwordFinder: PasswordFinder) :
     CredentialsProvider() {
@@ -213,7 +213,6 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
           // error, allowing users to make the SSH key selection.
           return Err(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
         }
-      AuthMode.OpenKeychain -> registerAuthProviders(SshAuthMethod.OpenKeychain(authActivity))
       AuthMode.Password -> {
         val httpsCredentialProvider =
           HttpsCredentialsProvider(CredentialFinder(callingActivity, AuthMode.Password))

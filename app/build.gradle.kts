@@ -48,7 +48,6 @@ dependencies {
   implementation(projects.coroutineUtils)
   implementation(projects.cryptoPgpainless)
   implementation(projects.formatCommon)
-  implementation(projects.openpgpKtx)
   implementation(projects.passgen.diceware)
   implementation(projects.passgen.random)
   implementation(projects.uiCompose)
@@ -85,7 +84,6 @@ dependencies {
   implementation(libs.thirdparty.logcat)
   implementation(libs.thirdparty.modernAndroidPrefs)
   implementation(libs.thirdparty.plumber)
-  implementation(libs.thirdparty.sshauth)
   implementation(libs.thirdparty.sshj) { exclude(group = "org.bouncycastle") }
   implementation(libs.thirdparty.bouncycastle.bcprov)
   implementation(libs.thirdparty.bouncycastle.bcpkix)

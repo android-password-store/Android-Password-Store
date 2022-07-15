@@ -18,7 +18,6 @@ import app.passwordstore.util.git.operation.PullOperation
 import app.passwordstore.util.git.operation.PushOperation
 import app.passwordstore.util.git.operation.ResetToRemoteOperation
 import app.passwordstore.util.git.operation.SyncOperation
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
 import app.passwordstore.util.settings.GitSettings
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Err
@@ -42,7 +41,7 @@ import net.schmizz.sshj.userauth.UserAuthException
  * git-related tasks and makes sense to be held here.
  */
 @AndroidEntryPoint
-abstract class BaseGitActivity : ContinuationContainerActivity() {
+abstract class BaseGitActivity : AppCompatActivity() {
 
   /** Enum of possible Git operations than can be run through [launchGitOperation]. */
   enum class GitOp {

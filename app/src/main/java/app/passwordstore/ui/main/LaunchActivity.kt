@@ -11,13 +11,11 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import app.passwordstore.ui.crypto.BasePgpActivity
-import app.passwordstore.ui.crypto.DecryptActivity
 import app.passwordstore.ui.crypto.DecryptActivityV2
 import app.passwordstore.ui.passwords.PasswordStore
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.extensions.sharedPrefs
-import app.passwordstore.util.features.Feature
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.PreferenceKeys
 import dagger.hilt.android.AndroidEntryPoint

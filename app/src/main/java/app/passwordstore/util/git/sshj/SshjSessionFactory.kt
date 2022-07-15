@@ -5,6 +5,7 @@
 package app.passwordstore.util.git.sshj
 
 import android.util.Base64
+import androidx.appcompat.app.AppCompatActivity
 import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.settings.AuthMode
 import com.github.michaelbull.result.getOrElse
@@ -41,10 +42,9 @@ import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
 
-sealed class SshAuthMethod(val activity: ContinuationContainerActivity) {
-  class Password(activity: ContinuationContainerActivity) : SshAuthMethod(activity)
-  class SshKey(activity: ContinuationContainerActivity) : SshAuthMethod(activity)
-  class OpenKeychain(activity: ContinuationContainerActivity) : SshAuthMethod(activity)
+sealed class SshAuthMethod(val activity: AppCompatActivity) {
+  class Password(activity: AppCompatActivity) : SshAuthMethod(activity)
+  class SshKey(activity: AppCompatActivity) : SshAuthMethod(activity)
 }
 
 abstract class InteractivePasswordFinder : PasswordFinder {
@@ -156,14 +156,6 @@ private class SshjSession(
         val pubkeyAuth =
           AuthPublickey(SshKey.provide(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey)))
         ssh.auth(username, pubkeyAuth, passwordAuth)
-      }
-      is SshAuthMethod.OpenKeychain -> {
-        runBlocking {
-          OpenKeychainKeyProvider.prepareAndUse(authMethod.activity) { provider ->
-            val openKeychainAuth = AuthPublickey(provider)
-            ssh.auth(username, openKeychainAuth, passwordAuth)
-          }
-        }
       }
     }
     return this

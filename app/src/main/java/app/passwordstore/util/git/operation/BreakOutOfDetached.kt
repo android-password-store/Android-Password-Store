@@ -4,16 +4,15 @@
  */
 package app.passwordstore.util.git.operation
 
+import androidx.appcompat.app.AppCompatActivity
 import app.passwordstore.R
 import app.passwordstore.util.extensions.unsafeLazy
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.eclipse.jgit.api.RebaseCommand
 import org.eclipse.jgit.api.ResetCommand
 import org.eclipse.jgit.lib.RepositoryState
 
-class BreakOutOfDetached(callingActivity: ContinuationContainerActivity) :
-  GitOperation(callingActivity) {
+class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
   private val merging = repository.repositoryState == RepositoryState.MERGING
   private val resetCommands =

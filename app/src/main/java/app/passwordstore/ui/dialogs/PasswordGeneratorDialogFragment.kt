@@ -26,7 +26,7 @@ import app.passwordstore.passgen.random.NoCharactersIncludedException
 import app.passwordstore.passgen.random.PasswordGenerator
 import app.passwordstore.passgen.random.PasswordLengthTooShortException
 import app.passwordstore.passgen.random.PasswordOption
-import app.passwordstore.ui.crypto.PasswordCreationActivity
+import app.passwordstore.ui.crypto.PasswordCreationActivityV2
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
@@ -72,8 +72,8 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         setTitle(R.string.pwgen_title)
         setPositiveButton(R.string.dialog_ok) { _, _ ->
           setFragmentResult(
-            PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
-            bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
+            PasswordCreationActivityV2.PASSWORD_RESULT_REQUEST_KEY,
+            bundleOf(PasswordCreationActivityV2.RESULT to "${binding.passwordText.text}")
           )
         }
         setNeutralButton(R.string.dialog_cancel) { _, _ -> }

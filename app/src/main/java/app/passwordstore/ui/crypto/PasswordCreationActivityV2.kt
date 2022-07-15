@@ -134,7 +134,6 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    bindToOpenKeychain(this)
     title =
       if (editing) getString(R.string.edit_password) else getString(R.string.new_password_title)
     with(binding) {

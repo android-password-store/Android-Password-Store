@@ -5,7 +5,7 @@
 
 package app.passwordstore.util.git.operation
 
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
+import androidx.appcompat.app.AppCompatActivity
 import org.eclipse.jgit.api.GitCommand
 
 /**
@@ -13,7 +13,7 @@ import org.eclipse.jgit.api.GitCommand
  * achieve the best compression.
  */
 class GcOperation(
-  callingActivity: ContinuationContainerActivity,
+  callingActivity: AppCompatActivity,
 ) : GitOperation(callingActivity) {
 
   override val requiresAuth: Boolean = false

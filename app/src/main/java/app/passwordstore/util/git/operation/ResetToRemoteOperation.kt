@@ -4,11 +4,10 @@
  */
 package app.passwordstore.util.git.operation
 
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
+import androidx.appcompat.app.AppCompatActivity
 import org.eclipse.jgit.api.ResetCommand
 
-class ResetToRemoteOperation(callingActivity: ContinuationContainerActivity) :
-  GitOperation(callingActivity) {
+class ResetToRemoteOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
   override val commands =
     arrayOf(

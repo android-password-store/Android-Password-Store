@@ -26,9 +26,11 @@
     <requestFocus />
   </com.google.android.material.textfield.TextInputLayout>
 
+  <!-- TODO(msfjarvis): Restore this functionality -->
   <com.google.android.material.checkbox.MaterialCheckBox
     android:id="@+id/set_gpg_key"
     android:layout_width="0dp"
+    android:visibility="gone"
     android:layout_height="wrap_content"
     android:text="@string/new_folder_set_gpg_key"
     app:layout_constraintEnd_toEndOf="parent"

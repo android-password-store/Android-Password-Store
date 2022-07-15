@@ -4,10 +4,10 @@
  */
 package app.passwordstore.util.git.operation
 
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
+import androidx.appcompat.app.AppCompatActivity
 
 class SyncOperation(
-  callingActivity: ContinuationContainerActivity,
+  callingActivity: AppCompatActivity,
   rebase: Boolean,
 ) : GitOperation(callingActivity) {
 

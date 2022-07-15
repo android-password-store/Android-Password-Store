@@ -4,11 +4,11 @@
  */
 package app.passwordstore.util.git.operation
 
-import app.passwordstore.util.git.sshj.ContinuationContainerActivity
+import androidx.appcompat.app.AppCompatActivity
 import org.eclipse.jgit.api.GitCommand
 
 class PullOperation(
-  callingActivity: ContinuationContainerActivity,
+  callingActivity: AppCompatActivity,
   rebase: Boolean,
 ) : GitOperation(callingActivity) {
 

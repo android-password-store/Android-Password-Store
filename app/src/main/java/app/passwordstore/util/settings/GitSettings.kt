@@ -37,7 +37,6 @@ enum class Protocol(val pref: String) {
 enum class AuthMode(val pref: String) {
   SshKey("ssh-key"),
   Password("username/password"),
-  OpenKeychain("OpenKeychain"),
   None("None"),
   ;
 
@@ -156,7 +155,7 @@ constructor(
     )
       return UpdateConnectionSettingsResult.MissingUsername(newProtocol)
     val validHttpsAuth = listOf(AuthMode.None, AuthMode.Password)
-    val validSshAuth = listOf(AuthMode.OpenKeychain, AuthMode.Password, AuthMode.SshKey)
+    val validSshAuth = listOf(AuthMode.Password, AuthMode.SshKey)
     when {
       newProtocol == Protocol.Https && newAuthMode !in validHttpsAuth -> {
         return UpdateConnectionSettingsResult.AuthModeMismatch(newProtocol, validHttpsAuth)

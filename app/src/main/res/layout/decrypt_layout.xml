@@ -10,7 +10,7 @@
   android:layout_height="match_parent"
   android:orientation="vertical"
   android:paddingTop="16dp"
-  tools:context="app.passwordstore.ui.crypto.DecryptActivity">
+  tools:context="app.passwordstore.ui.crypto.DecryptActivityV2">
 
   <androidx.appcompat.widget.AppCompatTextView
     android:id="@+id/password_category"
