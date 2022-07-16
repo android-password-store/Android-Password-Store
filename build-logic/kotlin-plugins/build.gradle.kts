@@ -60,6 +60,7 @@ gradlePlugin {
 dependencies {
   implementation(libs.build.agp)
   implementation(libs.build.binarycompat)
+  implementation(libs.build.detekt)
   implementation(libs.build.kotlin)
   implementation(libs.build.r8)
   implementation(libs.build.spotless)
