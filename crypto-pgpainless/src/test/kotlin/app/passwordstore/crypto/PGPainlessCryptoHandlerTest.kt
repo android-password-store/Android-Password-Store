@@ -19,9 +19,10 @@ import kotlin.test.assertTrue
 import org.junit.runner.RunWith
 
 @Suppress("Unused") // Test runner handles it internally
-enum class EncryptionKey(val key: PGPKey) {
-  PUBLIC(PGPKey(TestUtils.getArmoredPublicKey())),
-  SECRET(PGPKey(TestUtils.getArmoredPrivateKey())),
+enum class EncryptionKey(val keySet: List<PGPKey>) {
+  PUBLIC(listOf(PGPKey(TestUtils.getArmoredPublicKey()))),
+  SECRET(listOf(PGPKey(TestUtils.getArmoredPrivateKey()))),
+  ALL(listOf(PGPKey(TestUtils.getArmoredPublicKey()), PGPKey(TestUtils.getArmoredPrivateKey()))),
 }
 
 @RunWith(TestParameterInjector::class)
@@ -35,7 +36,7 @@ class PGPainlessCryptoHandlerTest {
   fun encryptAndDecrypt() {
     val ciphertextStream = ByteArrayOutputStream()
     cryptoHandler.encrypt(
-      listOf(encryptionKey.key),
+      encryptionKey.keySet,
       CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
       ciphertextStream,
     )
@@ -53,7 +54,7 @@ class PGPainlessCryptoHandlerTest {
   fun decryptWithWrongPassphrase() {
     val ciphertextStream = ByteArrayOutputStream()
     cryptoHandler.encrypt(
-      listOf(encryptionKey.key),
+      encryptionKey.keySet,
       CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
       ciphertextStream,
     )
