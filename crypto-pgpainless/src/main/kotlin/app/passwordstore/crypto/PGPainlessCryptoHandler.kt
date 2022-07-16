@@ -79,6 +79,9 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
         )
         val pubKeysStream = ByteArrayInputStream(armoredKeys)
         publicKeyRings.addAll(PGPainless.readKeyRing().publicKeyRingCollection(pubKeysStream))
+        require(keys.size == publicKeyRings.size) {
+          "Failed to parse all keys: keys=${keys.size},parsed=${publicKeyRings.size}"
+        }
         require(publicKeyRings.isNotEmpty()) { "No public keys to encrypt message to" }
         val publicKeyRingCollection = PGPPublicKeyRingCollection(publicKeyRings)
         val encryptionOptions = EncryptionOptions().addRecipients(publicKeyRingCollection)
