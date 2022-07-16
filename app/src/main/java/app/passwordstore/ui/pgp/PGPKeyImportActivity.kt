@@ -34,7 +34,7 @@ class PGPKeyImportActivity : AppCompatActivity() {
           val keyInputStream =
             contentResolver.openInputStream(uri)
               ?: throw IllegalStateException("Failed to open selected file")
-          val bytes = keyInputStream.readBytes()
+          val bytes = keyInputStream.use { `is` -> `is`.readBytes() }
           val (key, error) = runBlocking { keyManager.addKey(PGPKey(bytes)) }
           if (error != null) throw error
           key
