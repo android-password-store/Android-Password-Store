@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNaming:Theme.kt$@Composable public fun APSTheme( useDarkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit, )</ID>
+    <ID>MagicNumber:Color.kt$0xFF001e30</ID>
+    <ID>MagicNumber:Color.kt$0xFF001e31</ID>
+    <ID>MagicNumber:Color.kt$0xFF00344e</ID>
+    <ID>MagicNumber:Color.kt$0xFF003450</ID>
+    <ID>MagicNumber:Color.kt$0xFF003e5b</ID>
+    <ID>MagicNumber:Color.kt$0xFF004b70</ID>
+    <ID>MagicNumber:Color.kt$0xFF004c6f</ID>
+    <ID>MagicNumber:Color.kt$0xFF006494</ID>
+    <ID>MagicNumber:Color.kt$0xFF006591</ID>
+    <ID>MagicNumber:Color.kt$0xFF0b1d29</ID>
+    <ID>MagicNumber:Color.kt$0xFF1a1c1e</ID>
+    <ID>MagicNumber:Color.kt$0xFF21323e</ID>
+    <ID>MagicNumber:Color.kt$0xFF2e3133</ID>
+    <ID>MagicNumber:Color.kt$0xFF384956</ID>
+    <ID>MagicNumber:Color.kt$0xFF410001</ID>
+    <ID>MagicNumber:Color.kt$0xFF41474d</ID>
+    <ID>MagicNumber:Color.kt$0xFF4f606e</ID>
+    <ID>MagicNumber:Color.kt$0xFF680003</ID>
+    <ID>MagicNumber:Color.kt$0xFF72787e</ID>
+    <ID>MagicNumber:Color.kt$0xFF85ceff</ID>
+    <ID>MagicNumber:Color.kt$0xFF8aceff</ID>
+    <ID>MagicNumber:Color.kt$0xFF8b9197</ID>
+    <ID>MagicNumber:Color.kt$0xFF930006</ID>
+    <ID>MagicNumber:Color.kt$0xFFb7c9d9</ID>
+    <ID>MagicNumber:Color.kt$0xFFba1b1b</ID>
+    <ID>MagicNumber:Color.kt$0xFFc1c7ce</ID>
+    <ID>MagicNumber:Color.kt$0xFFc7e6ff</ID>
+    <ID>MagicNumber:Color.kt$0xFFc8e6ff</ID>
+    <ID>MagicNumber:Color.kt$0xFFd3e5f5</ID>
+    <ID>MagicNumber:Color.kt$0xFFdde3ea</ID>
+    <ID>MagicNumber:Color.kt$0xFFe1e2e5</ID>
+    <ID>MagicNumber:Color.kt$0xFFf0f0f3</ID>
+    <ID>MagicNumber:Color.kt$0xFFfcfcff</ID>
+    <ID>MagicNumber:Color.kt$0xFFffb4a9</ID>
+    <ID>MagicNumber:Color.kt$0xFFffdad4</ID>
+    <ID>MagicNumber:Color.kt$0xFFffffff</ID>
+    <ID>MagicNumber:Type.kt$0.25</ID>
+  </CurrentIssues>
+</SmellBaseline>

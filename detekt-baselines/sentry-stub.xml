@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>EmptyFunctionBlock:Scope.kt$Scope${}</ID>
+    <ID>EmptyFunctionBlock:Sentry.kt$Sentry${}</ID>
+  </CurrentIssues>
+</SmellBaseline>

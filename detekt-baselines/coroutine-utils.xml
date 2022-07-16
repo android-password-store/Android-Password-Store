@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>InstanceOfCheckForException:RunSuspendCatching.kt$e is CancellationException</ID>
+    <ID>TooGenericExceptionCaught:RunSuspendCatching.kt$e: Throwable</ID>
+  </CurrentIssues>
+</SmellBaseline>

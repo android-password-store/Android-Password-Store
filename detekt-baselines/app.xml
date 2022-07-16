@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:AutofillFilterView.kt$AutofillFilterView$(list.isEmpty() &amp;&amp; rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) || (list.isNotEmpty() &amp;&amp; rvPasswordSwitcher.nextView.id == rvPassword.id)</ID>
+    <ID>ComplexCondition:BaseGitActivity.kt$BaseGitActivity$(rootCause is org.eclipse.jgit.errors.TransportException || rootCause is org.eclipse.jgit.api.errors.TransportException || rootCause is org.eclipse.jgit.api.errors.InvalidRemoteException || (rootCause is UserAuthException &amp;&amp; rootCause.message == "Exhausted available authentication methods"))</ID>
+    <ID>ComplexCondition:GitServerConfigActivity.kt$GitServerConfigActivity$localDir.exists() &amp;&amp; localDirFiles.isNotEmpty() &amp;&amp; !(localDirFiles.size == 1 &amp;&amp; localDirFiles[0].name == ".git")</ID>
+    <ID>ComplexCondition:PasswordCreationActivity.kt$PasswordCreationActivity$(!editing || (editing &amp;&amp; suggestedName != file.nameWithoutExtension)) &amp;&amp; file.exists()</ID>
+    <ID>ComplexCondition:PasswordStore.kt$PasswordStore$(keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_F &amp;&amp; event.isCtrlPressed) &amp;&amp; !searchItem.isActionViewExpanded</ID>
+    <ID>ComplexMethod:AutofillFilterView.kt$AutofillFilterView$private fun bindUI()</ID>
+    <ID>ComplexMethod:GitCommandExecutor.kt$GitCommandExecutor$suspend fun execute(): Result&lt;Unit, Throwable></ID>
+    <ID>ComplexMethod:GitServerConfigActivity.kt$GitServerConfigActivity$override fun onCreate(savedInstanceState: Bundle?)</ID>
+    <ID>ComplexMethod:Migrations.kt$private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettings: GitSettings)</ID>
+    <ID>ComplexMethod:PasswordCreationActivity.kt$PasswordCreationActivity$override fun onCreate(savedInstanceState: Bundle?)</ID>
+    <ID>ComplexMethod:PasswordCreationActivity.kt$PasswordCreationActivity$private fun encrypt()</ID>
+    <ID>ComplexMethod:PasswordFragment.kt$PasswordFragment$private fun initializePasswordList()</ID>
+    <ID>EmptyDoWhileBlock:PasswordDialog.kt$PasswordDialog${}</ID>
+    <ID>EmptyFunctionBlock:BasicBottomSheet.kt$BasicBottomSheet.&lt;no name provided>${}</ID>
+    <ID>EmptyFunctionBlock:ItemCreationBottomSheet.kt$ItemCreationBottomSheet.&lt;no name provided>${}</ID>
+    <ID>EmptyFunctionBlock:PasswordFragment.kt$PasswordFragment.&lt;no name provided>.&lt;no name provided>${}</ID>
+    <ID>ForbiddenComment:Api30AutofillResponseBuilder.kt$Api30AutofillResponseBuilder$// TODO: Support multi-step authentication flows in apps via FLAG_DELAY_SAVE</ID>
+    <ID>ForbiddenComment:AutofillResponseBuilder.kt$AutofillResponseBuilder$// TODO: Support multi-step authentication flows in apps via FLAG_DELAY_SAVE</ID>
+    <ID>ForbiddenComment:AutofillResponseBuilder.kt$AutofillResponseBuilder.Companion$// FIXME: We should clone the original dataset here and add the credentials to be filled</ID>
+    <ID>ForbiddenComment:OreoAutofillService.kt$OreoAutofillService.Companion$// TODO: Provide a user-configurable denylist</ID>
+    <ID>ImplicitDefaultLocale:PasswordExportService.kt$PasswordExportService$String.format("%tFT%&lt;tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")))</ID>
+    <ID>LongMethod:AutofillFilterView.kt$AutofillFilterView$private fun bindUI()</ID>
+    <ID>LongMethod:CredentialFinder.kt$CredentialFinder$override fun askForPassword(cont: Continuation&lt;String?>, isRetry: Boolean)</ID>
+    <ID>LongMethod:GeneralSettings.kt$GeneralSettings$override fun provideSettings(builder: PreferenceScreen.Builder)</ID>
+    <ID>LongMethod:GitCommandExecutor.kt$GitCommandExecutor$suspend fun execute(): Result&lt;Unit, Throwable></ID>
+    <ID>LongMethod:GitServerConfigActivity.kt$GitServerConfigActivity$override fun onCreate(savedInstanceState: Bundle?)</ID>
+    <ID>LongMethod:GitServerConfigActivity.kt$GitServerConfigActivity$private fun cloneRepository()</ID>
+    <ID>LongMethod:PasswordCreationActivity.kt$PasswordCreationActivity$override fun onCreate(savedInstanceState: Bundle?)</ID>
+    <ID>LongMethod:PasswordCreationActivity.kt$PasswordCreationActivity$private fun encrypt()</ID>
+    <ID>LongMethod:PasswordFragment.kt$PasswordFragment$private fun initializePasswordList()</ID>
+    <ID>LongMethod:RepositorySettings.kt$RepositorySettings$override fun provideSettings(builder: PreferenceScreen.Builder)</ID>
+    <ID>LoopWithTooManyJumpStatements:AutofillMatcher.kt$AutofillMatcher.Companion$for ((key, value) in prefs.all) { if (!key.startsWith(PREFERENCE_PREFIX_MATCHES)) continue // We know that preferences starting with `PREFERENCE_PREFIX_MATCHES` were // created with `putStringSet`. @Suppress("UNCHECKED_CAST") val oldMatches = value as? Set&lt;String> if (oldMatches == null) { logcat(WARN) { "Failed to read matches for $key" } continue } // Delete all matches for file locations that are going to be overwritten, then // transfer matches over to the files at their new locations. val newMatches = oldMatches .asSequence() .minus(deletePathList) .minus(oldNewPathMap.values) .map { match -> val newPath = oldNewPathMap[match] ?: return@map match logcat { "Updating match for $key: $match --> $newPath" } newPath } .toSet() if (newMatches != oldMatches) prefs.edit { putStringSet(key, newMatches) } }</ID>
+    <ID>LoopWithTooManyJumpStatements:ErrorMessages.kt$ErrorMessages$while (cause.cause != null) { if (cause is GitException) break val nextCause = cause.cause!! if (nextCause is RemoteException) break cause = nextCause }</ID>
+    <ID>MagicNumber:AndroidExtensions.kt$26</ID>
+    <ID>MagicNumber:Api30AutofillResponseBuilder.kt$Api30AutofillResponseBuilder$30</ID>
+    <ID>MagicNumber:AutofillDecryptActivity.kt$AutofillDecryptActivity$26</ID>
+    <ID>MagicNumber:AutofillDecryptActivity.kt$AutofillDecryptActivity.Companion$31</ID>
+    <ID>MagicNumber:AutofillFilterView.kt$AutofillFilterView$26</ID>
+    <ID>MagicNumber:AutofillFilterView.kt$AutofillFilterView.Companion$31</ID>
+    <ID>MagicNumber:AutofillPreferences.kt$DirectoryStructure$26</ID>
+    <ID>MagicNumber:AutofillPublisherChangedActivity.kt$AutofillPublisherChangedActivity$26</ID>
+    <ID>MagicNumber:AutofillPublisherChangedActivity.kt$AutofillPublisherChangedActivity.Companion$31</ID>
+    <ID>MagicNumber:AutofillResponseBuilder.kt$AutofillResponseBuilder$26</ID>
+    <ID>MagicNumber:AutofillResponseBuilder.kt$AutofillResponseBuilder$28</ID>
+    <ID>MagicNumber:AutofillResponseBuilder.kt$AutofillResponseBuilder.Companion$28</ID>
+    <ID>MagicNumber:AutofillSaveActivity.kt$AutofillSaveActivity$26</ID>
+    <ID>MagicNumber:AutofillSettings.kt$AutofillSettings$26</ID>
+    <ID>MagicNumber:AutofillViewUtils.kt$30</ID>
+    <ID>MagicNumber:AutofillViewUtils.kt$31</ID>
+    <ID>MagicNumber:BasePgpActivity.kt$BasePgpActivity$26</ID>
+    <ID>MagicNumber:BasePgpActivity.kt$BasePgpActivity$45</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$1000</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$1000L</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$23</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$24</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$26</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$31</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$45</ID>
+    <ID>MagicNumber:ClipboardService.kt$ClipboardService$500</ID>
+    <ID>MagicNumber:DicewareModule.kt$DicewareModule$6</ID>
+    <ID>MagicNumber:DicewarePasswordGeneratorDialogFragment.kt$DicewarePasswordGeneratorDialogFragment$5</ID>
+    <ID>MagicNumber:Extensions.kt$1000</ID>
+    <ID>MagicNumber:GeneralSettings.kt$GeneralSettings$25</ID>
+    <ID>MagicNumber:GitConfigActivity.kt$GitConfigActivity$0.5f</ID>
+    <ID>MagicNumber:GitConfigActivity.kt$GitConfigActivity$500</ID>
+    <ID>MagicNumber:GitConfigActivity.kt$GitConfigActivity$8</ID>
+    <ID>MagicNumber:GitLogAdapter.kt$8</ID>
+    <ID>MagicNumber:GitServerConfigActivity.kt$GitServerConfigActivity$500</ID>
+    <ID>MagicNumber:LaunchActivity.kt$LaunchActivity$500L</ID>
+    <ID>MagicNumber:MiscSettings.kt$MiscSettings$26</ID>
+    <ID>MagicNumber:OreoAutofillService.kt$OreoAutofillService$26</ID>
+    <ID>MagicNumber:OreoAutofillService.kt$OreoAutofillService$28</ID>
+    <ID>MagicNumber:OreoAutofillService.kt$OreoAutofillService$30</ID>
+    <ID>MagicNumber:PasswordCreationActivity.kt$PasswordCreationActivity$28</ID>
+    <ID>MagicNumber:PasswordExportService.kt$PasswordExportService$1024</ID>
+    <ID>MagicNumber:PasswordExportService.kt$PasswordExportService$26</ID>
+    <ID>MagicNumber:PasswordFragment.kt$PasswordFragment.&lt;no name provided>$100</ID>
+    <ID>MagicNumber:PasswordFragment.kt$PasswordFragment.&lt;no name provided>$90f</ID>
+    <ID>MagicNumber:PasswordGeneratorDialogFragment.kt$PasswordGeneratorDialogFragment$20</ID>
+    <ID>MagicNumber:PasswordItemRecyclerAdapter.kt$PasswordItemRecyclerAdapter.PasswordItemViewHolder$0.7f</ID>
+    <ID>MagicNumber:ProxySelectorActivity.kt$ProxySelectorActivity$29</ID>
+    <ID>MagicNumber:ProxySelectorActivity.kt$ProxySelectorActivity$500</ID>
+    <ID>MagicNumber:RepositorySettings.kt$RepositorySettings$25</ID>
+    <ID>MagicNumber:ShortcutHandler.kt$ShortcutHandler$25</ID>
+    <ID>MagicNumber:ShortcutHandler.kt$ShortcutHandler$26</ID>
+    <ID>MagicNumber:SshKey.kt$SshKey$100_000</ID>
+    <ID>MagicNumber:SshKey.kt$SshKey$15</ID>
+    <ID>MagicNumber:SshKey.kt$SshKey$28</ID>
+    <ID>MagicNumber:SshKey.kt$SshKey$30</ID>
+    <ID>MagicNumber:SshKey.kt$SshKey.Algorithm.Ecdsa$256</ID>
+    <ID>MagicNumber:SshKey.kt$SshKey.Algorithm.Ecdsa$28</ID>
+    <ID>MagicNumber:SshKey.kt$SshKey.Algorithm.Rsa$3072</ID>
+    <ID>MagicNumber:SshjSessionFactory.kt$SshjSession$22</ID>
+    <ID>MagicNumber:UriTotpFinder.kt$UriTotpFinder$30</ID>
+    <ID>MatchingDeclarationName:AutofillViewUtils.kt$DatasetMetadata</ID>
+    <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used."</ID>
+    <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."</ID>
+    <ID>MaxLineLength:UriTotpFinderTest.kt$UriTotpFinderTest.Companion$"otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&amp;issuer=ACME%20Co&amp;algorithm=SHA256&amp;digits=12&amp;period=25"</ID>
+    <ID>NestedBlockDepth:FieldItemAdapter.kt$FieldItemAdapter.FieldItemViewHolder$fun bind(fieldItem: FieldItem, showPassword: Boolean, copyTextToClipboard: (String?) -> Unit)</ID>
+    <ID>NestedBlockDepth:GitOperation.kt$GitOperation$suspend fun executeAfterAuthentication(authMode: AuthMode): Result&lt;Unit, Throwable></ID>
+    <ID>NestedBlockDepth:PasswordExportService.kt$PasswordExportService$override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int</ID>
+    <ID>ReturnCount:Api30AutofillResponseBuilder.kt$Api30AutofillResponseBuilder$private fun makeFillOtpFromSmsDataset( context: Context, imeSpec: InlinePresentationSpec? ): Dataset?</ID>
+    <ID>ReturnCount:Api30AutofillResponseBuilder.kt$Api30AutofillResponseBuilder$private fun makeSaveInfo(): SaveInfo?</ID>
+    <ID>ReturnCount:AutofillDecryptActivity.kt$AutofillDecryptActivity$private suspend fun decryptCredential(file: File, password: String): Credentials?</ID>
+    <ID>ReturnCount:AutofillResponseBuilder.kt$AutofillResponseBuilder$private fun makeFillOtpFromSmsDataset(context: Context): Dataset?</ID>
+    <ID>ReturnCount:AutofillResponseBuilder.kt$AutofillResponseBuilder$private fun makeSaveInfo(): SaveInfo?</ID>
+    <ID>ReturnCount:AutofillViewUtils.kt$@SuppressLint("RestrictedApi") fun makeInlinePresentation( context: Context, imeSpec: InlinePresentationSpec, metadata: DatasetMetadata ): InlinePresentation?</ID>
+    <ID>ReturnCount:BaseGitActivity.kt$BaseGitActivity$suspend fun launchGitOperation(operation: GitOp): Result&lt;Unit, Throwable></ID>
+    <ID>ReturnCount:ClipboardService.kt$ClipboardService$override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int</ID>
+    <ID>ReturnCount:Extensions.kt$fun File.contains(other: File): Boolean</ID>
+    <ID>ReturnCount:GitOperation.kt$GitOperation$suspend fun executeAfterAuthentication(authMode: AuthMode): Result&lt;Unit, Throwable></ID>
+    <ID>ReturnCount:GitSettings.kt$GitSettings$fun updateConnectionSettingsIfValid( newAuthMode: AuthMode, newUrl: String, newBranch: String ): UpdateConnectionSettingsResult</ID>
+    <ID>ReturnCount:OreoAutofillService.kt$OreoAutofillService$override fun onFillRequest( request: FillRequest, cancellationSignal: CancellationSignal, callback: FillCallback )</ID>
+    <ID>ReturnCount:OreoAutofillService.kt$OreoAutofillService$override fun onSaveRequest(request: SaveRequest, callback: SaveCallback)</ID>
+    <ID>ReturnCount:PasswordStore.kt$PasswordStore$override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean</ID>
+    <ID>ReturnCount:ShortcutHandler.kt$ShortcutHandler$fun addPinnedShortcut(item: PasswordItem, intent: Intent)</ID>
+    <ID>ReturnCount:UriTotpFinder.kt$UriTotpFinder$override fun findSecret(content: String): String?</ID>
+    <ID>SpreadOperator:Api30AutofillResponseBuilder.kt$Api30AutofillResponseBuilder$(*ignoredIds.toTypedArray())</ID>
+    <ID>SpreadOperator:AutofillResponseBuilder.kt$AutofillResponseBuilder$(*ignoredIds.toTypedArray())</ID>
+    <ID>SpreadOperator:BreakOutOfDetached.kt$BreakOutOfDetached$( // abort the rebase git.rebase().setOperation(RebaseCommand.Operation.ABORT), *resetCommands, )</ID>
+    <ID>SpreadOperator:BreakOutOfDetached.kt$BreakOutOfDetached$( // reset hard back to our local HEAD git.reset().setMode(ResetCommand.ResetType.HARD), *resetCommands, )</ID>
+    <ID>SpreadOperator:ErrorMessages.kt$GitException$(res, *fmt)</ID>
+    <ID>SpreadOperator:ErrorMessages.kt$GitException.PullException$(res, *fmt)</ID>
+    <ID>SpreadOperator:ErrorMessages.kt$GitException.PushException$(res, *fmt)</ID>
+    <ID>ThrowsCount:GitCommandExecutor.kt$GitCommandExecutor$suspend fun execute(): Result&lt;Unit, Throwable></ID>
+    <ID>ThrowsCount:SshKey.kt$SshKey$fun import(uri: Uri)</ID>
+    <ID>TooManyFunctions:PasswordStore.kt$PasswordStore : BaseGitActivity</ID>
+    <ID>TooManyFunctions:SearchableRepositoryViewModel.kt$SearchableRepositoryViewModel : AndroidViewModel</ID>
+    <ID>TooManyFunctions:SshjConfig.kt$AbstractLogger : Logger</ID>
+    <ID>TooManyFunctions:SshjConfig.kt$LogcatLoggerFactory$LogcatLogger : AbstractLogger</ID>
+    <ID>UnusedPrivateMember:PasswordStore.kt$PasswordStore$private val directorySelectAction = registerForActivityResult(StartActivityForResult()) { result -> if (result.resultCode == RESULT_OK) { checkLocalRepository() } }</ID>
+    <ID>UnusedPrivateMember:PasswordStore.kt$PasswordStore$private val storagePermissionRequest = registerForActivityResult(RequestPermission()) { granted -> if (granted) checkLocalRepository() }</ID>
+    <ID>UseCheckOrError:CredentialFinder.kt$CredentialFinder$throw IllegalStateException("Only SshKey and Password connection mode ask for passwords")</ID>
+    <ID>UseCheckOrError:FragmentViewBindingDelegate.kt$FragmentViewBindingDelegate$throw IllegalStateException( "Should not attempt to get bindings when Fragment views are destroyed." )</ID>
+    <ID>UseCheckOrError:GitOperation.kt$GitOperation$throw IllegalStateException("Biometric authentication failures should be ignored")</ID>
+    <ID>UseCheckOrError:PGPKeyImportActivity.kt$PGPKeyImportActivity$throw IllegalStateException("Failed to open selected file")</ID>
+    <ID>UseCheckOrError:SshKey.kt$SshKey$throw IllegalStateException("SSH key does not exist in Keystore")</ID>
+    <ID>UseCheckOrError:SshKeyGenActivity.kt$SshKeyGenActivity$throw IllegalStateException("Impossible key type selection")</ID>
+    <ID>UtilityClassWithPublicConstructor:AutofillMatcher.kt$AutofillMatcher</ID>
+    <ID>WildcardImport:GitOperation.kt$import app.passwordstore.util.auth.BiometricAuthenticator.Result.*</ID>
+  </CurrentIssues>
+</SmellBaseline>
