@@ -7,6 +7,7 @@ package app.passwordstore.crypto
 
 import app.passwordstore.crypto.errors.IncorrectPassphraseException
 import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.getError
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
@@ -35,29 +36,35 @@ class PGPainlessCryptoHandlerTest {
   @Test
   fun encryptAndDecrypt() {
     val ciphertextStream = ByteArrayOutputStream()
-    cryptoHandler.encrypt(
-      encryptionKey.keySet,
-      CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
-      ciphertextStream,
-    )
+    val encryptRes =
+      cryptoHandler.encrypt(
+        encryptionKey.keySet,
+        CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        ciphertextStream,
+      )
+    assertIs<Ok<Unit>>(encryptRes)
     val plaintextStream = ByteArrayOutputStream()
-    cryptoHandler.decrypt(
-      privateKey,
-      CryptoConstants.KEY_PASSPHRASE,
-      ciphertextStream.toByteArray().inputStream(),
-      plaintextStream,
-    )
+    val decryptRes =
+      cryptoHandler.decrypt(
+        privateKey,
+        CryptoConstants.KEY_PASSPHRASE,
+        ciphertextStream.toByteArray().inputStream(),
+        plaintextStream,
+      )
+    assertIs<Ok<Unit>>(decryptRes)
     assertEquals(CryptoConstants.PLAIN_TEXT, plaintextStream.toString(Charsets.UTF_8))
   }
 
   @Test
   fun decryptWithWrongPassphrase() {
     val ciphertextStream = ByteArrayOutputStream()
-    cryptoHandler.encrypt(
-      encryptionKey.keySet,
-      CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
-      ciphertextStream,
-    )
+    val encryptRes =
+      cryptoHandler.encrypt(
+        encryptionKey.keySet,
+        CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        ciphertextStream,
+      )
+    assertIs<Ok<Unit>>(encryptRes)
     val plaintextStream = ByteArrayOutputStream()
     val result =
       cryptoHandler.decrypt(
