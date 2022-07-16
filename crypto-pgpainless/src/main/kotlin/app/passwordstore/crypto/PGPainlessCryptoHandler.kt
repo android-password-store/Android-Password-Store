@@ -25,6 +25,7 @@ import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.ProducerOptions
 import org.pgpainless.exception.WrongPassphraseException
 import org.pgpainless.key.protection.PasswordBasedSecretKeyRingProtector
+import org.pgpainless.key.util.KeyRingUtils
 import org.pgpainless.util.Passphrase
 
 public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
@@ -71,17 +72,13 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
         val armoredKeys =
           keys.joinToString("\n") { key -> key.contents.decodeToString() }.toByteArray()
         val secKeysStream = ByteArrayInputStream(armoredKeys)
-        val secretKeyRingCollection =
-          PGPainless.readKeyRing().secretKeyRingCollection(secKeysStream)
-        secretKeyRingCollection.forEach { secretKeyRing ->
-          publicKeyRings.add(PGPainless.extractCertificate(secretKeyRing))
-        }
-        if (publicKeyRings.isEmpty()) {
-          val pubKeysStream = ByteArrayInputStream(armoredKeys)
-          val publicKeyRingCollection =
-            PGPainless.readKeyRing().publicKeyRingCollection(pubKeysStream)
-          publicKeyRings.addAll(publicKeyRingCollection)
-        }
+        publicKeyRings.addAll(
+          KeyRingUtils.publicKeyRingCollectionFrom(
+            PGPainless.readKeyRing().secretKeyRingCollection(secKeysStream)
+          )
+        )
+        val pubKeysStream = ByteArrayInputStream(armoredKeys)
+        publicKeyRings.addAll(PGPainless.readKeyRing().publicKeyRingCollection(pubKeysStream))
         require(publicKeyRings.isNotEmpty()) { "No public keys to encrypt message to" }
         val publicKeyRingCollection = PGPPublicKeyRingCollection(publicKeyRings)
         val encryptionOptions = EncryptionOptions().addRecipients(publicKeyRingCollection)
