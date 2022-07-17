@@ -291,7 +291,7 @@ jobs:
         if: "${{ steps.service-changed.outputs.result == 'true' }}"
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Assemble non-free release
+      - name: Run detekt
         if: "${{ steps.service-changed.outputs.result == 'true' }}"
         uses: gradle/gradle-build-action@v2.2.1
         with:
