@@ -262,3 +262,44 @@ jobs:
       with:
           name: Build report
           path: build/reports/kotlin-build/
+
+  detekt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Check if relevant files have changed
+        uses: actions/github-script@v6.1.0
+        id: service-changed
+        with:
+          result-encoding: string
+          script: |
+            const script = require('.github/check-changed-files.js')
+            return await script({github, context})
+
+      - name: Set up JDK
+        if: "${{ steps.service-changed.outputs.result == 'true' }}"
+        uses: actions/setup-java@v3.4.1
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Copy CI gradle.properties
+        if: "${{ steps.service-changed.outputs.result == 'true' }}"
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Assemble non-free release
+        if: "${{ steps.service-changed.outputs.result == 'true' }}"
+        uses: gradle/gradle-build-action@v2.2.1
+        with:
+          arguments: detekt
+
+      - name: Upload Kotlin build report
+        if: "${{ always() }}"
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: Build report
+          path: build/reports/kotlin-build/
