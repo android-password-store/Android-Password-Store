@@ -21,6 +21,9 @@ import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import org.bouncycastle.openpgp.PGPPublicKeyRing
+import org.bouncycastle.openpgp.PGPSecretKeyRing
+import org.pgpainless.PGPainless
 import org.pgpainless.util.selection.userid.SelectUserId
 
 public class PGPKeyManager
@@ -36,9 +39,24 @@ constructor(
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
-        if (tryParseKeyring(key) == null) throw InvalidKeyException
+        val incomingKeyRing = tryParseKeyring(key) ?: throw InvalidKeyException
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
         if (keyFile.exists()) {
+          val existingKeyBytes = keyFile.readBytes()
+          val existingKeyRing =
+            tryParseKeyring(PGPKey(existingKeyBytes)) ?: throw InvalidKeyException
+          when {
+            existingKeyRing is PGPPublicKeyRing && incomingKeyRing is PGPSecretKeyRing -> {
+              keyFile.writeBytes(key.contents)
+              return@runSuspendCatching key
+            }
+            existingKeyRing is PGPPublicKeyRing && incomingKeyRing is PGPPublicKeyRing -> {
+              val updatedPublicKey = PGPainless.mergeCertificate(existingKeyRing, incomingKeyRing)
+              val keyBytes = PGPainless.asciiArmor(updatedPublicKey).encodeToByteArray()
+              keyFile.writeBytes(keyBytes)
+              return@runSuspendCatching key
+            }
+          }
           // Check for replace flag first and if it is false, throw an error
           if (!replace)
             throw KeyAlreadyExistsException(
