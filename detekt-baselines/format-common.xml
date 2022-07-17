@@ -10,7 +10,6 @@
     <ID>MagicNumber:Otp.kt$Otp$6</ID>
     <ID>MagicNumber:Otp.kt$Otp$8</ID>
     <ID>MagicNumber:PasswordEntry.kt$PasswordEntry$1000</ID>
-    <ID>MagicNumber:PasswordEntry.kt$PasswordEntry$1000L</ID>
     <ID>MatchingDeclarationName:Clocks.kt$UserClock : Clock</ID>
     <ID>MatchingDeclarationName:TestClocks.kt$TestUserClock : UserClock</ID>
     <ID>MaxLineLength:PasswordEntryTest.kt$PasswordEntryTest.Companion$"otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&amp;issuer=ACME%20Co&amp;algorithm=SHA1&amp;digits=6&amp;period=30"</ID>
