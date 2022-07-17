@@ -2,7 +2,6 @@ package app.passwordstore.crypto
 
 import app.passwordstore.crypto.GpgIdentifier.KeyId
 import app.passwordstore.crypto.GpgIdentifier.UserId
-import app.passwordstore.crypto.TestUtils.getArmoredPrivateKeyWithMultipleIdentities
 import app.passwordstore.crypto.errors.KeyAlreadyExistsException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
@@ -32,12 +31,12 @@ import org.junit.rules.TemporaryFolder
 class PGPKeyManagerTest {
 
   @get:Rule val temporaryFolder: TemporaryFolder = TemporaryFolder()
-  private val filesDir by unsafeLazy { temporaryFolder.root }
-  private val keysDir by unsafeLazy { File(filesDir, PGPKeyManager.KEY_DIR_NAME) }
   private val dispatcher = StandardTestDispatcher()
   private val scope = TestScope(dispatcher)
+  private val filesDir by unsafeLazy { temporaryFolder.root }
+  private val keysDir by unsafeLazy { File(filesDir, PGPKeyManager.KEY_DIR_NAME) }
   private val keyManager by unsafeLazy { PGPKeyManager(filesDir.absolutePath, dispatcher) }
-  private val privateKey = PGPKey(TestUtils.getArmoredPrivateKey())
+  private val secretKey = PGPKey(TestUtils.getArmoredSecretKey())
   private val publicKey = PGPKey(TestUtils.getArmoredPublicKey())
 
   private fun <T> unsafeLazy(initializer: () -> T) =
@@ -57,7 +56,7 @@ class PGPKeyManagerTest {
   fun addKey() =
     scope.runTest {
       // Check if the key id returned is correct
-      val keyId = keyManager.getKeyId(keyManager.addKey(privateKey).unwrap())
+      val keyId = keyManager.getKeyId(keyManager.addKey(secretKey).unwrap())
       assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
 
       // Check if the keys directory have one file
@@ -72,8 +71,8 @@ class PGPKeyManagerTest {
   fun addKeyWithoutReplaceFlag() =
     scope.runTest {
       // Check adding the keys twice
-      keyManager.addKey(privateKey, false).unwrap()
-      val error = keyManager.addKey(privateKey, false).unwrapError()
+      keyManager.addKey(secretKey, false).unwrap()
+      val error = keyManager.addKey(secretKey, false).unwrapError()
 
       assertIs<KeyAlreadyExistsException>(error)
     }
@@ -82,8 +81,8 @@ class PGPKeyManagerTest {
   fun addKeyWithReplaceFlag() =
     scope.runTest {
       // Check adding the keys twice
-      keyManager.addKey(privateKey, true).unwrap()
-      val keyId = keyManager.getKeyId(keyManager.addKey(privateKey, true).unwrap())
+      keyManager.addKey(secretKey, true).unwrap()
+      val keyId = keyManager.getKeyId(keyManager.addKey(secretKey, true).unwrap())
 
       assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
     }
@@ -92,10 +91,10 @@ class PGPKeyManagerTest {
   fun removeKey() =
     scope.runTest {
       // Add key using KeyManager
-      keyManager.addKey(privateKey).unwrap()
+      keyManager.addKey(secretKey).unwrap()
 
       // Check if the key id returned is correct
-      val keyId = keyManager.getKeyId(keyManager.removeKey(privateKey).unwrap())
+      val keyId = keyManager.getKeyId(keyManager.removeKey(secretKey).unwrap())
       assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
 
       // Check if the keys directory have 0 files
@@ -107,42 +106,42 @@ class PGPKeyManagerTest {
   fun getKeyById() =
     scope.runTest {
       // Add key using KeyManager
-      keyManager.addKey(privateKey).unwrap()
+      keyManager.addKey(secretKey).unwrap()
 
-      val keyId = keyManager.getKeyId(privateKey)
+      val keyId = keyManager.getKeyId(secretKey)
       assertNotNull(keyId)
-      assertEquals(KeyId(CryptoConstants.KEY_ID), keyManager.getKeyId(privateKey))
+      assertEquals(KeyId(CryptoConstants.KEY_ID), keyManager.getKeyId(secretKey))
 
       // Check returned key id matches the expected id and the created key id
       val returnedKey = keyManager.getKeyById(keyId).unwrap()
-      assertEquals(keyManager.getKeyId(privateKey), keyManager.getKeyId(returnedKey))
+      assertEquals(keyManager.getKeyId(secretKey), keyManager.getKeyId(returnedKey))
     }
 
   @Test
   fun getKeyByFullUserId() =
     scope.runTest {
-      keyManager.addKey(privateKey).unwrap()
+      keyManager.addKey(secretKey).unwrap()
 
       val keyId = "${CryptoConstants.KEY_NAME} <${CryptoConstants.KEY_EMAIL}>"
       val returnedKey = keyManager.getKeyById(UserId(keyId)).unwrap()
-      assertEquals(keyManager.getKeyId(privateKey), keyManager.getKeyId(returnedKey))
+      assertEquals(keyManager.getKeyId(secretKey), keyManager.getKeyId(returnedKey))
     }
 
   @Test
   fun getKeyByEmailUserId() =
     scope.runTest {
-      keyManager.addKey(privateKey).unwrap()
+      keyManager.addKey(secretKey).unwrap()
 
       val keyId = CryptoConstants.KEY_EMAIL
       val returnedKey = keyManager.getKeyById(UserId(keyId)).unwrap()
-      assertEquals(keyManager.getKeyId(privateKey), keyManager.getKeyId(returnedKey))
+      assertEquals(keyManager.getKeyId(secretKey), keyManager.getKeyId(returnedKey))
     }
 
   @Test
   fun getNonExistentKey() =
     scope.runTest {
       // Add key using KeyManager
-      keyManager.addKey(privateKey).unwrap()
+      keyManager.addKey(secretKey).unwrap()
 
       val keyId = KeyId(0x08edf7567183ce44)
 
@@ -169,8 +168,8 @@ class PGPKeyManagerTest {
       assertEquals(0, noKeyList.size)
 
       // Add key using KeyManager
-      keyManager.addKey(privateKey).unwrap()
-      keyManager.addKey(PGPKey(getArmoredPrivateKeyWithMultipleIdentities())).unwrap()
+      keyManager.addKey(secretKey).unwrap()
+      keyManager.addKey(PGPKey(TestUtils.getArmoredSecretKeyWithMultipleIdentities())).unwrap()
 
       // Check if KeyManager returns one key
       val singleKeyList = keyManager.getAllKeys().unwrap()
@@ -180,7 +179,7 @@ class PGPKeyManagerTest {
   @Test
   fun getMultipleIdentityKeyWithAllIdentities() {
     scope.runTest {
-      val key = PGPKey(getArmoredPrivateKeyWithMultipleIdentities())
+      val key = PGPKey(TestUtils.getArmoredSecretKeyWithMultipleIdentities())
       keyManager.addKey(key).unwrap()
 
       val johnKey = keyManager.getKeyById(UserId("john@doe.org")).unwrap()
@@ -191,9 +190,9 @@ class PGPKeyManagerTest {
   }
 
   @Test
-  fun replacePrivateKeyWithPublicKey() {
+  fun replaceSecretKeyWithPublicKey() {
     scope.runTest {
-      assertIs<Ok<PGPKey>>(keyManager.addKey(privateKey))
+      assertIs<Ok<PGPKey>>(keyManager.addKey(secretKey))
       assertIs<Err<KeyAlreadyExistsException>>(keyManager.addKey(publicKey))
     }
   }
@@ -202,7 +201,7 @@ class PGPKeyManagerTest {
   fun replacePublicKeyWithSecretKey() {
     scope.runTest {
       assertIs<Ok<PGPKey>>(keyManager.addKey(publicKey))
-      assertIs<Ok<PGPKey>>(keyManager.addKey(privateKey))
+      assertIs<Ok<PGPKey>>(keyManager.addKey(secretKey))
     }
   }
 
@@ -222,8 +221,8 @@ class PGPKeyManagerTest {
   @Test
   fun replaceSecretKeyWithSecretKey() {
     scope.runTest {
-      assertIs<Ok<PGPKey>>(keyManager.addKey(privateKey))
-      assertIs<Err<KeyAlreadyExistsException>>(keyManager.addKey(privateKey))
+      assertIs<Ok<PGPKey>>(keyManager.addKey(secretKey))
+      assertIs<Err<KeyAlreadyExistsException>>(keyManager.addKey(secretKey))
     }
   }
 }

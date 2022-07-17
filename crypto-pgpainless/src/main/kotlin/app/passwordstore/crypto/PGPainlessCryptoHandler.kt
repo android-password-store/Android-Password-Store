@@ -31,13 +31,13 @@ import org.pgpainless.util.Passphrase
 public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
 
   public override fun decrypt(
-    privateKey: PGPKey,
+    secretKey: PGPKey,
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        val pgpSecretKeyRing = PGPainless.readKeyRing().secretKeyRing(privateKey.contents)
+        val pgpSecretKeyRing = PGPainless.readKeyRing().secretKeyRing(secretKey.contents)
         val keyringCollection = PGPSecretKeyRingCollection(listOf(pgpSecretKeyRing))
         val protector =
           PasswordBasedSecretKeyRingProtector.forKey(

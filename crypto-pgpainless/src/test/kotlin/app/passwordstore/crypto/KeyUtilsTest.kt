@@ -2,7 +2,7 @@ package app.passwordstore.crypto
 
 import app.passwordstore.crypto.KeyUtils.tryGetId
 import app.passwordstore.crypto.KeyUtils.tryParseKeyring
-import app.passwordstore.crypto.TestUtils.getArmoredPrivateKeyWithMultipleIdentities
+import app.passwordstore.crypto.TestUtils.getArmoredSecretKeyWithMultipleIdentities
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -12,7 +12,7 @@ import org.bouncycastle.openpgp.PGPSecretKeyRing
 class KeyUtilsTest {
   @Test
   fun parseKeyWithMultipleIdentities() {
-    val key = PGPKey(getArmoredPrivateKeyWithMultipleIdentities())
+    val key = PGPKey(getArmoredSecretKeyWithMultipleIdentities())
     val keyring = tryParseKeyring(key)
     assertNotNull(keyring)
     assertIs<PGPSecretKeyRing>(keyring)

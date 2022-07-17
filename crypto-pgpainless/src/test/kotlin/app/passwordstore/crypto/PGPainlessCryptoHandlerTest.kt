@@ -22,8 +22,8 @@ import org.junit.runner.RunWith
 @Suppress("Unused") // Test runner handles it internally
 enum class EncryptionKey(val keySet: List<PGPKey>) {
   PUBLIC(listOf(PGPKey(TestUtils.getArmoredPublicKey()))),
-  SECRET(listOf(PGPKey(TestUtils.getArmoredPrivateKey()))),
-  ALL(listOf(PGPKey(TestUtils.getArmoredPublicKey()), PGPKey(TestUtils.getArmoredPrivateKey()))),
+  SECRET(listOf(PGPKey(TestUtils.getArmoredSecretKey()))),
+  ALL(listOf(PGPKey(TestUtils.getArmoredPublicKey()), PGPKey(TestUtils.getArmoredSecretKey()))),
 }
 
 @RunWith(TestParameterInjector::class)
@@ -31,7 +31,7 @@ class PGPainlessCryptoHandlerTest {
 
   @TestParameter private lateinit var encryptionKey: EncryptionKey
   private val cryptoHandler = PGPainlessCryptoHandler()
-  private val privateKey = PGPKey(TestUtils.getArmoredPrivateKey())
+  private val secretKey = PGPKey(TestUtils.getArmoredSecretKey())
 
   @Test
   fun encryptAndDecrypt() {
@@ -46,7 +46,7 @@ class PGPainlessCryptoHandlerTest {
     val plaintextStream = ByteArrayOutputStream()
     val decryptRes =
       cryptoHandler.decrypt(
-        privateKey,
+        secretKey,
         CryptoConstants.KEY_PASSPHRASE,
         ciphertextStream.toByteArray().inputStream(),
         plaintextStream,
@@ -68,7 +68,7 @@ class PGPainlessCryptoHandlerTest {
     val plaintextStream = ByteArrayOutputStream()
     val result =
       cryptoHandler.decrypt(
-        privateKey,
+        secretKey,
         "very incorrect passphrase",
         ciphertextStream.toByteArray().inputStream(),
         plaintextStream,
