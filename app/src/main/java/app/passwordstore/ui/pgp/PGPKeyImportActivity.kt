@@ -82,7 +82,7 @@ class PGPKeyImportActivity : AppCompatActivity() {
           .setTitle(getString(R.string.pgp_key_import_succeeded))
           .setMessage(getString(R.string.pgp_key_import_succeeded_message, tryGetId(key)))
           .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-          .setOnCancelListener { finish() }
+          .setCancelable(false)
           .show()
       }
       is Err<Throwable> -> {
@@ -94,14 +94,14 @@ class PGPKeyImportActivity : AppCompatActivity() {
               handleImportResult(runCatching { importKey(lastBytes!!, replace = true) })
             }
             .setNegativeButton(R.string.dialog_no) { _, _ -> finish() }
-            .setOnCancelListener { finish() }
+            .setCancelable(false)
             .show()
         } else {
           MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.pgp_key_import_failed))
             .setMessage(result.error.message)
             .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-            .setOnCancelListener { finish() }
+            .setCancelable(false)
             .show()
         }
       }
