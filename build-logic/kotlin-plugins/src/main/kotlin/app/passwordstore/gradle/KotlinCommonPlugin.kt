@@ -15,6 +15,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("Unused")
@@ -34,6 +35,9 @@ class KotlinCommonPlugin : Plugin<Project> {
           .asFile
     }
     project.tasks.run {
+      project.pluginManager.withPlugin("base") {
+        named(LifecycleBasePlugin.CHECK_TASK_NAME).configure { this.dependsOn(named("detekt")) }
+      }
       withType<JavaCompile>().configureEach {
         sourceCompatibility = JavaVersion.VERSION_11.toString()
         targetCompatibility = JavaVersion.VERSION_11.toString()
