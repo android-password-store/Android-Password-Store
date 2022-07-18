@@ -378,5 +378,6 @@
   <string name="pref_category_pgp_title">PGP settings</string>
   <string name="pwgen_some_error_occurred">Some error occurred</string>
   <string name="git_run_gc_job">Run garbage collection job</string>
+  <string name="activity_label_pgp_key_manager">PGP Key Manager</string>
 
 </resources>

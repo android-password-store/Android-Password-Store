@@ -7,6 +7,7 @@ package app.passwordstore.ui.settings
 
 import androidx.fragment.app.FragmentActivity
 import app.passwordstore.ui.pgp.PGPKeyImportActivity
+import app.passwordstore.ui.pgp.PGPKeyListActivity
 import app.passwordstore.util.extensions.launchActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.onClick
@@ -21,6 +22,14 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
         persistent = false
         onClick {
           activity.launchActivity(PGPKeyImportActivity::class.java)
+          false
+        }
+      }
+      pref("__") {
+        title = "Key manager"
+        persistent = false
+        onClick {
+          activity.launchActivity(PGPKeyListActivity::class.java)
           false
         }
       }

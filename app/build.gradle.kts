@@ -27,6 +27,14 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
+  buildFeatures {
+    compose = true
+    composeOptions {
+      useLiveLiterals = false
+      kotlinCompilerExtensionVersion = libs.compose.compiler.get().versionConstraint.requiredVersion
+    }
+  }
+
   namespace = "app.passwordstore"
 
   lint {
@@ -52,6 +60,7 @@ dependencies {
   implementation(projects.passgen.random)
   implementation(projects.uiCompose)
   implementation(libs.androidx.activity.ktx)
+  implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.autofill)
   implementation(libs.androidx.biometricKtx)

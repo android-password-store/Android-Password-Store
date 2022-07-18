@@ -15,6 +15,7 @@ import android.util.Base64
 import android.util.TypedValue
 import android.view.View
 import android.view.autofill.AutofillManager
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -120,7 +121,7 @@ fun FragmentActivity.snackbar(
 }
 
 /** Launch an activity denoted by [clazz]. */
-fun <T : FragmentActivity> FragmentActivity.launchActivity(clazz: Class<T>) {
+fun <T : ComponentActivity> ComponentActivity.launchActivity(clazz: Class<T>) {
   startActivity(Intent(this, clazz))
 }
 
