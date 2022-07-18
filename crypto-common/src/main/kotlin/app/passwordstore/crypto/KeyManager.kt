@@ -20,8 +20,8 @@ public interface KeyManager<Key, KeyIdentifier> {
    */
   public suspend fun addKey(key: Key, replace: Boolean = false): Result<Key, Throwable>
 
-  /** Removes [key] from the store. */
-  public suspend fun removeKey(key: Key): Result<Key, Throwable>
+  /** Finds a key for [identifier] in the store and deletes it. */
+  public suspend fun removeKey(identifier: KeyIdentifier): Result<Unit, Throwable>
 
   /**
    * Get a [Key] for the given [id]. The actual semantics of what [id] is are left to individual

@@ -2,6 +2,7 @@ package app.passwordstore.crypto
 
 import app.passwordstore.crypto.GpgIdentifier.KeyId
 import app.passwordstore.crypto.GpgIdentifier.UserId
+import app.passwordstore.crypto.KeyUtils.tryGetId
 import app.passwordstore.crypto.errors.KeyAlreadyExistsException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
@@ -93,13 +94,12 @@ class PGPKeyManagerTest {
       // Add key using KeyManager
       keyManager.addKey(secretKey).unwrap()
 
-      // Check if the key id returned is correct
-      val keyId = keyManager.getKeyId(keyManager.removeKey(secretKey).unwrap())
-      assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
+      // Remove key
+      keyManager.removeKey(tryGetId(secretKey)!!).unwrap()
 
-      // Check if the keys directory have 0 files
-      val keysDir = File(filesDir, PGPKeyManager.KEY_DIR_NAME)
-      assertEquals(0, keysDir.list()?.size)
+      // Check that no keys remain
+      val keys = keyManager.getAllKeys().unwrap()
+      assertEquals(0, keys.size)
     }
 
   @Test

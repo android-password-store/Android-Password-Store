@@ -17,6 +17,7 @@ import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
 import app.passwordstore.util.coroutines.runSuspendCatching
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.unwrap
 import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -71,17 +72,15 @@ constructor(
       }
     }
 
-  override suspend fun removeKey(key: PGPKey): Result<PGPKey, Throwable> =
+  override suspend fun removeKey(identifier: GpgIdentifier): Result<Unit, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
-        if (tryParseKeyring(key) == null) throw InvalidKeyException
+        val key = getKeyById(identifier).unwrap()
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
         if (keyFile.exists()) {
           if (!keyFile.delete()) throw KeyDeletionFailedException
         }
-
-        key
       }
     }
 
