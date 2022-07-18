@@ -33,8 +33,6 @@
   <string name="git_commit_move_text">Benenne %1$s in %2$s um.</string>
   <string name="git_commit_move_multiple_text">Verschiebe mehrere Passwörter nach %1$s.</string>
   <!-- PGPHandler -->
-  <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
-  <string name="clipboard_password_no_clear_toast_text">Passwort wurde in die Zwischenablage kopiert</string>
   <string name="clipboard_copied_text">In die Zwischenablage kopiert</string>
   <string name="file_toast_text">Bitte setze einen Pfad</string>
   <string name="path_toast_text">Bitte setze einen Pfad</string>

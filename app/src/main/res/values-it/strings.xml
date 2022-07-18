@@ -37,8 +37,6 @@
   <string name="git_commit_move_text">Rinomina %1$s in %2$s.</string>
   <string name="git_commit_move_multiple_text">Sposta più password in %1$s.</string>
   <!-- PGPHandler -->
-  <string name="clipboard_password_toast_text">Password copiata negli appunti, hai %d secondi per incollarla da qualche parte.</string>
-  <string name="clipboard_password_no_clear_toast_text">Password copiata negli appunti</string>
   <string name="clipboard_copied_text">Copiato negli appunti</string>
   <string name="file_toast_text">Sei pregato di fornire il nome di un file</string>
   <string name="path_toast_text">Sei pregato di fornire il percorso di un file</string>
