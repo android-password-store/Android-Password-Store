@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
@@ -68,6 +69,10 @@ open class BasePgpActivity : AppCompatActivity() {
   ) {
     val clipboard = clipboard ?: return
     val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      clip.description.extras =
+        PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
+    }
     clipboard.setPrimaryClip(clip)
     if (showSnackbar) {
       snackbar(message = resources.getString(snackbarTextRes))
