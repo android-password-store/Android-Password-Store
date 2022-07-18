@@ -36,7 +36,6 @@
   <string name="git_commit_remove_text">Suppression de %1$s.</string>
   <string name="git_commit_move_text">Renommer %1$sà %2$s. </string>
   <string name="git_commit_move_multiple_text">Déplacement de mots de passe vers %1$s.</string>
-  <string name="git_commit_gpg_id">Initialisation des identifiants GPG dans %1$s.</string>
   <!-- PGPHandler -->
   <string name="clipboard_password_toast_text">Mot de passe copié dans le presse papier, vous avez %d secondes pour coller celui-ci.</string>
   <string name="clipboard_password_no_clear_toast_text">Mot de passe copié dans le presse-papiers</string>
@@ -262,9 +261,6 @@
   <string name="preference_custom_public_suffixes_summary">Le remplissage automatique distinguera les sous-domaines de ces domaines</string>
   <string name="preference_custom_public_suffixes_hint">societe.com\npersonnel.com</string>
   <!-- OpenKeychain errors -->
-  <string name="openpgp_error_wrong_passphrase">Phrase de passe incorrecte</string>
-  <string name="openpgp_error_no_user_ids">Aucune clé PGP correspondante trouvée</string>
-  <string name="openpgp_error_unknown">Erreur d\'OpenKeyChain : %s</string>
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Erreur</string>
   <string name="password_creation_file_write_fail_message">Impossible d\'écrire le fichier de mot de passe dans le magasin, veuillez réessayer.</string>
@@ -274,8 +270,6 @@
   <string name="otp_import_success">Configuration TOTP importée avec succès</string>
   <string name="otp_import_failure">Impossible d\'importer la configuration TOTP</string>
   <string name="exporting_passwords">Exportation des mots de passe…</string>
-  <string name="invalid_gpg_id">.gpg-id trouvé, mais il contient un ID de clé, une empreinte digitale ou un ID utilisateur invalide</string>
-  <string name="short_key_ids_unsupported">Un ID de clé dans .gpg-id est trop court, veuillez utiliser soit des identifiants de clés longs (16 caractères) soit des empreintes digitales (40 caractères)</string>
   <string name="invalid_filename_text">Le nom du fichier ne doit pas contenir \'/\', définir le répertoire parent</string>
   <string name="directory_hint">Dossier</string>
   <string name="new_folder_set_gpg_key">Définir la clé GPG pour le dossier</string>
@@ -291,12 +285,6 @@
   <string name="git_break_out_of_detached_success">Il y a eu un conflit lors de la tentative de rebase. Votre branche locale %1$s a été poussée vers une autre branche nommée %2$s\n Utilisez cette branche pour résoudre les conflits sur votre ordinateur</string>
   <string name="git_break_out_of_detached_unneeded">Le dépôt n\'est pas rebasé, pas besoin de pousser vers une autre branche</string>
   <!-- OpenKeychain not installed -->
-  <string name="openkeychain_not_installed_title">OpenKeychain non installé</string>
-  <string name="openkeychain_not_installed_message">OpenKeychain est nécessaire pour le fonctionnement de Password Store, veuillez l\'installer depuis l\'une des boutiques d\'applications ci-dessous</string>
-  <string name="openkeychain_not_installed_google_play">Google Play</string>
-  <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
-  <string name="openkeychain_not_installed_fdroid">F-Droid</string>
-  <string name="fdroid_deeplink_template">https://f-droid.org/fr/packages/%1$s/</string>
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Un fichier portant ce nom existe déjà</string>
   <string name="folder_creation_err_folder_exists">Un dossier portant ce nom existe déjà</string>
