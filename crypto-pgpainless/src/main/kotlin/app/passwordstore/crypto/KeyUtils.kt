@@ -6,6 +6,7 @@
 package app.passwordstore.crypto
 
 import app.passwordstore.crypto.GpgIdentifier.KeyId
+import app.passwordstore.crypto.GpgIdentifier.UserId
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import org.bouncycastle.openpgp.PGPKeyRing
@@ -33,5 +34,10 @@ public object KeyUtils {
   public fun tryGetId(key: PGPKey): KeyId? {
     val keyRing = tryParseKeyring(key) ?: return null
     return KeyId(keyRing.publicKey.keyID)
+  }
+
+  public fun tryGetEmail(key: PGPKey): UserId? {
+    val keyRing = tryParseKeyring(key) ?: return null
+    return UserId(keyRing.publicKey.userIDs.next())
   }
 }
