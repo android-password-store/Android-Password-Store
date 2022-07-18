@@ -40,7 +40,6 @@
   <string name="git_commit_remove_text">Удалить %1$sиз хранилища.</string>
   <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
   <string name="git_commit_move_multiple_text">Переместить несколько паролей в %1$s.</string>
-  <string name="git_commit_gpg_id">Инициализация GPG ID в %1$s.</string>
   <!-- PGPHandler -->
   <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
   <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
@@ -260,9 +259,6 @@
   <string name="preference_custom_public_suffixes_summary">Автозаполнение будет разделять поддомены этих доменов</string>
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
   <!-- OpenKeychain errors -->
-  <string name="openpgp_error_wrong_passphrase">Неверная ключевая фраза</string>
-  <string name="openpgp_error_no_user_ids">Не найдено подходящих PGP ключей</string>
-  <string name="openpgp_error_unknown">Ошибка OpenKeyChain : %s</string>
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Ошибка</string>
   <string name="password_creation_file_write_fail_message">Не удалось записать файл пароля в хранилище, пожалуйста, повторите попытку.</string>
@@ -272,8 +268,6 @@
   <string name="otp_import_success">Конфигурация TOTP успешно импортирована</string>
   <string name="otp_import_failure">Не удалось импортировать конфигурацию TOTP</string>
   <string name="exporting_passwords">Экспорт паролей…</string>
-  <string name="invalid_gpg_id">Найден .gpg-id, но он содержит неверный ID ключа, fingerprint или ID пользователя</string>
-  <string name="short_key_ids_unsupported">Идентификатор ключа в .gpg-id слишком короткий, пожалуйста, используйте длинные идентификаторы (16 символов) или fingerprint (40 символов)</string>
   <string name="invalid_filename_text">Имя файла не должно содержать \'/\', укажите директорию выше</string>
   <string name="directory_hint">Директория</string>
   <string name="new_folder_set_gpg_key">Установить GPG ключ для каталога</string>
@@ -288,12 +282,6 @@
   <string name="git_break_out_of_detached_success">При попытке rebase\'а возник конфликт. Ваша локальная ветка %1$s была запушена %2$s\n Используйте эту ветку для разрешения конфликтов с помощью компьютера</string>
   <string name="git_break_out_of_detached_unneeded">Не нужно пушить в другую ветку - rebase не был запущен</string>
   <!-- OpenKeychain not installed -->
-  <string name="openkeychain_not_installed_title">OpenKeychain не установлен</string>
-  <string name="openkeychain_not_installed_message">OpenKeychain необходим для работы Password Store, пожалуйста, установите его из магазина приложений ниже</string>
-  <string name="openkeychain_not_installed_google_play">Google Play</string>
-  <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
-  <string name="openkeychain_not_installed_fdroid">F-Droid</string>
-  <string name="fdroid_deeplink_template">https://f-droid.org/en/packages/%1$s/</string>
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Файл с таким именем уже существует</string>
   <string name="folder_creation_err_folder_exists">Папка с таким именем уже существует</string>
@@ -324,6 +312,5 @@
   <string name="otp_import_qr_code">Отсканировать QR-код</string>
   <string name="otp_import_manual_entry">Ввести вручную</string>
   <string name="otp_import_manual_hint_account">Учетная запись</string>
-  <string name="gpg_key_select_mandatory">Для продолжения необходимо выбрать GPG-ключ</string>
   <string name="place_shortcut_on_home_screen">Разместить ярлык на рабочем столе</string>
 </resources>

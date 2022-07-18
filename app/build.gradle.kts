@@ -40,6 +40,7 @@ android {
   lint {
     abortOnError = true
     checkReleaseBuilds = false
+    warningsAsErrors = true
     disable.add("MissingTranslation")
     disable.add("PluralsCandidate")
     disable.add("ImpliedQuantity")

@@ -43,7 +43,6 @@
   <string name="git_commit_remove_text">Remove %1$s from store.</string>
   <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
   <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
-  <string name="git_commit_gpg_id">Initialize GPG IDs in %1$s.</string>
 
   <!-- PGPHandler -->
   <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
@@ -272,7 +271,6 @@
   <string name="pref_app_theme_value_follow_system">System default</string>
   <string name="connection_mode_ssh_key">SSH key</string>
   <string name="connection_mode_basic_authentication">Password</string>
-  <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
   <string name="git_server_config_save_success">Successfully saved configuration</string>
   <string name="git_server_config_save_error">The provided repository URL is not valid</string>
   <string name="git_server_config_save_missing_username_https">Please specify the HTTPS username in the form https://username@example.com/…</string>
@@ -293,9 +291,6 @@
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
 
   <!-- OpenKeychain errors -->
-  <string name="openpgp_error_wrong_passphrase">Incorrect passphrase</string>
-  <string name="openpgp_error_no_user_ids">No matching PGP keys found</string>
-  <string name="openpgp_error_unknown">Error from OpenKeyChain : %s</string>
 
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Error</string>
@@ -306,8 +301,6 @@
   <string name="otp_import_success">Successfully imported TOTP configuration</string>
   <string name="otp_import_failure">Failed to import TOTP configuration</string>
   <string name="exporting_passwords">Exporting passwords…</string>
-  <string name="invalid_gpg_id">Found .gpg-id, but it contains an invalid key ID, fingerprint or user ID</string>
-  <string name="short_key_ids_unsupported">A key ID in .gpg-id is too short, please use either long key IDs (16 characters) or fingerprints (40 characters)</string>
   <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
   <string name="directory_hint">Directory</string>
   <string name="new_folder_set_gpg_key">Set GPG key for directory</string>
@@ -326,12 +319,6 @@
   <string name="git_break_out_of_detached_unneeded">The repository is not rebasing, no need to push to another branch</string>
 
   <!-- OpenKeychain not installed -->
-  <string name="openkeychain_not_installed_title">OpenKeychain not installed</string>
-  <string name="openkeychain_not_installed_message">OpenKeychain is required for Password Store to function, please install it from the stores below</string>
-  <string name="openkeychain_not_installed_google_play">Google Play</string>
-  <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
-  <string name="openkeychain_not_installed_fdroid">F-Droid</string>
-  <string name="fdroid_deeplink_template">https://f-droid.org/en/packages/%1$s/</string>
 
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">A file by that name already exists</string>
@@ -368,7 +355,6 @@
   <string name="otp_import_manual_entry">Enter manually</string>
   <string name="otp_import_manual_hint_secret">Secret</string>
   <string name="otp_import_manual_hint_account">Account</string>
-  <string name="gpg_key_select_mandatory">Selecting a GPG key is necessary to proceed</string>
   <string name="place_shortcut_on_home_screen">Place shortcut on home screen</string>
   <string name="password_list_fab_content_description">Create new password or folder</string>
   <string name="pgp_key_import_failed">Failed to import PGP key</string>
