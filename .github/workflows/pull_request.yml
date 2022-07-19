@@ -40,7 +40,7 @@ jobs:
 
     - name: Check codestyle
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: spotlessCheck
 
@@ -81,7 +81,7 @@ jobs:
 
     - name: Run unit tests
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: test -PslimTests
 
@@ -129,7 +129,7 @@ jobs:
 
     - name: Build debug APKs
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: assembleFreeDebug assembleNonFreeDebug
 
@@ -170,7 +170,7 @@ jobs:
 
     - name: Check library API
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: apiCheck
 
@@ -211,7 +211,7 @@ jobs:
 
     - name: Run Lint on debug variants
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: lintDebug
 
@@ -252,7 +252,7 @@ jobs:
 
     - name: Assemble non-free release
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: aNFR
 
@@ -293,7 +293,7 @@ jobs:
 
       - name: Run detekt
         if: "${{ steps.service-changed.outputs.result == 'true' }}"
-        uses: gradle/gradle-build-action@v2.2.1
+        uses: gradle/gradle-build-action@v2.2.2
         with:
           arguments: detekt
 

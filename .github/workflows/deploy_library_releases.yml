@@ -18,7 +18,7 @@ jobs:
         java-version: 17
 
     - name: Upload binaries
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: --no-configuration-cache :autofill-parser:publishAllPublicationsToMavenCentralRepository
       env:
@@ -28,7 +28,7 @@ jobs:
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
 
     - name: Close and release repository
-      uses: gradle/gradle-build-action@v2.2.1
+      uses: gradle/gradle-build-action@v2.2.2
       with:
         arguments: --no-configuration-cache closeAndReleaseRepository
       env:
