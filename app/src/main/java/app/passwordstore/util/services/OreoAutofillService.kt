@@ -37,7 +37,7 @@ import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(26)
+@RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class OreoAutofillService : AutofillService() {
 
@@ -78,7 +78,7 @@ class OreoAutofillService : AutofillService() {
           return
         }
     if (structure.activityComponent.packageName in DENYLISTED_PACKAGES) {
-      if (Build.VERSION.SDK_INT >= 28) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         callback.onSuccess(
           FillResponse.Builder().run {
             disableAutofill(DISABLE_AUTOFILL_DURATION_MS)
@@ -102,7 +102,7 @@ class OreoAutofillService : AutofillService() {
           callback.onSuccess(null)
           return
         }
-    if (Build.VERSION.SDK_INT >= 30) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       api30ResponseBuilderFactory
         .create(formToFill)
         .fillCredentials(this, request.inlineSuggestionsRequest, callback)

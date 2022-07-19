@@ -41,7 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@TargetApi(26)
+@TargetApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class AutofillFilterView : AppCompatActivity() {
 
@@ -71,7 +71,7 @@ class AutofillFilterView : AppCompatActivity() {
           context,
           matchAndDecryptFileRequestCode++,
           intent,
-          if (Build.VERSION.SDK_INT >= 31) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
           } else {
             PendingIntent.FLAG_CANCEL_CURRENT

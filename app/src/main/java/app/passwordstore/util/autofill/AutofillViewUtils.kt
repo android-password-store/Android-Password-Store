@@ -47,7 +47,7 @@ fun makeInlinePresentation(
   imeSpec: InlinePresentationSpec,
   metadata: DatasetMetadata
 ): InlinePresentation? {
-  if (Build.VERSION.SDK_INT < 30) return null
+  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
 
   if (UiVersions.INLINE_UI_VERSION_1 !in UiVersions.getVersions(imeSpec.style)) return null
 
@@ -56,7 +56,7 @@ fun makeInlinePresentation(
       context,
       0,
       Intent(context, PasswordStore::class.java),
-      if (Build.VERSION.SDK_INT >= 31) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         PendingIntent.FLAG_MUTABLE
       } else {
         0

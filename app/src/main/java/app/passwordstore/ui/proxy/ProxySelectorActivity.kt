@@ -62,7 +62,7 @@ class ProxySelectorActivity : AppCompatActivity() {
   }
 
   private fun isNumericAddress(text: CharSequence): Boolean {
-    return if (Build.VERSION.SDK_INT >= 29) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       InetAddresses.isNumericAddress(text as String)
     } else {
       @Suppress("DEPRECATION") Patterns.IP_ADDRESS.matcher(text).matches()

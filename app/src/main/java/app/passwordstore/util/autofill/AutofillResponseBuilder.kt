@@ -32,7 +32,7 @@ import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
 
-@RequiresApi(26)
+@RequiresApi(Build.VERSION_CODES.O)
 class AutofillResponseBuilder
 @AssistedInject
 constructor(
@@ -167,7 +167,7 @@ constructor(
         addDataset(it)
       }
       if (datasetCount == 0) return null
-      if (Build.VERSION.SDK_INT >= 28) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         setHeader(
           makeRemoteView(
             context,
@@ -210,7 +210,7 @@ constructor(
       // fill-in dataset without any visual representation. This causes it to be missing from
       // the Autofill suggestions shown after the user clears the filled out form fields.
       val builder =
-        if (Build.VERSION.SDK_INT >= 28) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
           Dataset.Builder()
         } else {
           @Suppress("DEPRECATION") Dataset.Builder(makeRemoteView(context, makeEmptyMetadata()))

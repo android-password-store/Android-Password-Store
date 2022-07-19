@@ -66,7 +66,7 @@ class PasswordExportService : Service() {
     logcat { "Copying ${repositoryDirectory.path} to $targetDirectory" }
 
     val dateString =
-      if (Build.VERSION.SDK_INT >= 26) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
       } else {
         String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")))
@@ -136,7 +136,7 @@ class PasswordExportService : Service() {
   }
 
   private fun createNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= 26) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val serviceChannel =
         NotificationChannel(
           CHANNEL_ID,

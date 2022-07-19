@@ -53,7 +53,7 @@ internal fun getPublicSuffixPlusOne(
 }
 
 private fun isNumericAddress(domain: String): Boolean {
-  return if (Build.VERSION.SDK_INT >= 29) {
+  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
     InetAddresses.isNumericAddress(domain)
   } else {
     @Suppress("DEPRECATION") Patterns.IP_ADDRESS.matcher(domain).matches()

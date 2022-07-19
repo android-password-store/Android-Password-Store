@@ -35,11 +35,11 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
 
   private val isAutofillServiceEnabled: Boolean
     get() {
-      if (Build.VERSION.SDK_INT < 26) return false
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
       return activity.autofillManager?.hasEnabledAutofillServices() == true
     }
 
-  @RequiresApi(26)
+  @RequiresApi(Build.VERSION_CODES.O)
   private fun showAutofillDialog(pref: SwitchPreference) {
     val observer = LifecycleEventObserver { _, event ->
       when (event) {
@@ -95,10 +95,10 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
     builder.apply {
       switch(PreferenceKeys.AUTOFILL_ENABLE) {
         titleRes = R.string.pref_autofill_enable_title
-        visible = Build.VERSION.SDK_INT >= 26
+        visible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
         defaultValue = isAutofillServiceEnabled
         onClick {
-          if (Build.VERSION.SDK_INT < 26) return@onClick true
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return@onClick true
           if (isAutofillServiceEnabled) {
             activity.autofillManager?.disableAutofillServices()
           } else {
