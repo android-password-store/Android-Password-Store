@@ -22,6 +22,9 @@ import app.passwordstore.databinding.ActivityOreoAutofillPublisherChangedBinding
 import app.passwordstore.util.autofill.AutofillMatcher
 import app.passwordstore.util.autofill.AutofillPublisherChangedException
 import app.passwordstore.util.extensions.asLog
+import app.passwordstore.util.extensions.getApplicationInfoCompat
+import app.passwordstore.util.extensions.getPackageInfoCompat
+import app.passwordstore.util.extensions.getParcelableExtraCompat
 import app.passwordstore.util.extensions.viewBinding
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import com.github.androidpasswordstore.autofillparser.computeCertificatesHash
@@ -93,7 +96,8 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
           this@AutofillPublisherChangedActivity,
           FormOrigin.App(appPackage)
         )
-        val fillResponse = intent.getParcelableExtra<FillResponse>(EXTRA_FILL_RESPONSE_AFTER_RESET)
+        val fillResponse =
+          intent.getParcelableExtraCompat<FillResponse>(EXTRA_FILL_RESPONSE_AFTER_RESET)
         setResult(
           RESULT_OK,
           Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse) }
@@ -106,11 +110,13 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
   private fun showPackageInfo() {
     runCatching {
         with(binding) {
-          val packageInfo = packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
+          val packageInfo =
+            packageManager.getPackageInfoCompat(appPackage, PackageManager.GET_META_DATA)
           val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
           warningAppInstallDate.text =
             getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
-          val appInfo = packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
+          val appInfo =
+            packageManager.getApplicationInfoCompat(appPackage, PackageManager.GET_META_DATA)
           warningAppName.text =
             getString(
               R.string.oreo_autofill_warning_publisher_app_name,

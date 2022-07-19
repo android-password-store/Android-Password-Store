@@ -7,6 +7,7 @@ package com.github.androidpasswordstore.autofillparser
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.ResolveInfoFlags
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -247,7 +248,15 @@ public fun getInstalledBrowsersWithAutofillSupportLevel(
 ): List<Pair<String, BrowserAutofillSupportLevel>> {
   val testWebIntent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse("https://example.org") }
   val installedBrowsers =
-    context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      context.packageManager.queryIntentActivities(
+        testWebIntent,
+        ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong())
+      )
+    } else {
+      @Suppress("DEPRECATION")
+      context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)
+    }
   return installedBrowsers
     .map { it to getBrowserAutofillSupportLevel(context, it.activityInfo.packageName) }
     .filter { it.first.isDefault || it.second != BrowserAutofillSupportLevel.None }

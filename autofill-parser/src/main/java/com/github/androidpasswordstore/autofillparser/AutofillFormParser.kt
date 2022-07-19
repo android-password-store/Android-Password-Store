@@ -7,7 +7,9 @@ package com.github.androidpasswordstore.autofillparser
 import android.app.assist.AssistStructure
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.ApplicationInfoFlags
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
@@ -41,7 +43,15 @@ public sealed class FormOrigin(public open val identifier: String) {
       is Web -> identifier
       is App -> {
         val info =
-          context.packageManager.getApplicationInfo(identifier, PackageManager.GET_META_DATA)
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.packageManager.getApplicationInfo(
+              identifier,
+              ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong())
+            )
+          } else {
+            @Suppress("DEPRECATION")
+            context.packageManager.getApplicationInfo(identifier, PackageManager.GET_META_DATA)
+          }
         val label = context.packageManager.getApplicationLabel(info)
         if (untrusted) "“$label”" else "$label"
       }

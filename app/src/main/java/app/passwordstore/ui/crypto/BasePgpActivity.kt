@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
@@ -68,8 +69,12 @@ open class BasePgpActivity : AppCompatActivity() {
   ) {
     val clipboard = clipboard ?: return
     val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      clip.description.extras =
+        PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
+    }
     clipboard.setPrimaryClip(clip)
-    if (showSnackbar) {
+    if (showSnackbar && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
       snackbar(message = resources.getString(snackbarTextRes))
     }
   }
@@ -80,7 +85,7 @@ open class BasePgpActivity : AppCompatActivity() {
    * clearing the clipboard.
    */
   fun copyPasswordToClipboard(password: String?) {
-    copyTextToClipboard(password, showSnackbar = false)
+    copyTextToClipboard(password)
 
     val clearAfter = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
 
@@ -95,9 +100,6 @@ open class BasePgpActivity : AppCompatActivity() {
       } else {
         startService(service)
       }
-      snackbar(message = resources.getString(R.string.clipboard_password_toast_text, clearAfter))
-    } else {
-      snackbar(message = resources.getString(R.string.clipboard_password_no_clear_toast_text))
     }
   }
 

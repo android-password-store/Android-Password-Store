@@ -4,7 +4,6 @@
  */
 package app.passwordstore.ui.passwords
 
-import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -14,7 +13,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.WindowManager
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
@@ -76,18 +74,6 @@ class PasswordStore : BaseGitActivity() {
   private val model: SearchableRepositoryViewModel by viewModels {
     ViewModelProvider.AndroidViewModelFactory(application)
   }
-
-  private val storagePermissionRequest =
-    registerForActivityResult(RequestPermission()) { granted ->
-      if (granted) checkLocalRepository()
-    }
-
-  private val directorySelectAction =
-    registerForActivityResult(StartActivityForResult()) { result ->
-      if (result.resultCode == RESULT_OK) {
-        checkLocalRepository()
-      }
-    }
 
   private val listRefreshAction =
     registerForActivityResult(StartActivityForResult()) { result ->
@@ -196,7 +182,6 @@ class PasswordStore : BaseGitActivity() {
     return super.onKeyDown(keyCode, event)
   }
 
-  @SuppressLint("NewApi")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_pwdstore)
@@ -313,12 +298,14 @@ class PasswordStore : BaseGitActivity() {
         }
       }
       R.id.refresh -> refreshPasswordList()
-      android.R.id.home -> onBackPressed()
+      android.R.id.home -> onBackPressedDispatcher.onBackPressed()
       else -> return super.onOptionsItemSelected(item)
     }
     return true
   }
 
+  @Deprecated("Deprecated in Java")
+  @Suppress("DEPRECATION")
   override fun onBackPressed() {
     if (getPasswordFragment()?.onBackPressedInActivity() != true) super.onBackPressed()
   }

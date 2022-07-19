@@ -37,8 +37,6 @@
   <string name="git_commit_move_text">Mudar nome %1$s a %2$s.</string>
   <string name="git_commit_move_multiple_text">Mover varios contrasinais a %1$s.</string>
   <!-- PGPHandler -->
-  <string name="clipboard_password_toast_text">Contrasinal copiado ao portapapeis, tes %d segundos para pegala nalgures.</string>
-  <string name="clipboard_password_no_clear_toast_text">Contrasinal copiado ao portapapeis</string>
   <string name="clipboard_copied_text">Copiada ó portapapeis</string>
   <string name="file_toast_text">Debes proporcionar un nome de ficheiro</string>
   <string name="path_toast_text">Por favor indica a ruta ao ficheiro</string>

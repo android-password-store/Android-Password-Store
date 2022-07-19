@@ -41,8 +41,6 @@
   <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
   <string name="git_commit_move_multiple_text">Переместить несколько паролей в %1$s.</string>
   <!-- PGPHandler -->
-  <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
-  <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
   <string name="clipboard_copied_text">Скопировано в буфер обмена</string>
   <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
   <string name="path_toast_text">Пожалуйста, задайте путь к файлу</string>

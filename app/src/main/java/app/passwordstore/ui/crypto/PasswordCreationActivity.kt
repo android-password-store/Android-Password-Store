@@ -262,7 +262,7 @@ class PasswordCreationActivity : BasePgpActivity() {
     when (item.itemId) {
       android.R.id.home -> {
         setResult(RESULT_CANCELED)
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
       }
       R.id.save_password -> {
         copy = false

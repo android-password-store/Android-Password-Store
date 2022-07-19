@@ -54,6 +54,7 @@ constructor(
   private val scenarioSupportsSave = scenario.hasPasswordFieldsToSave
   private val canBeSaved = saveFlags != null && scenarioSupportsSave
 
+  @Suppress("DEPRECATION")
   private fun makeIntentDataset(
     context: Context,
     action: AutofillAction,
@@ -212,7 +213,7 @@ constructor(
         if (Build.VERSION.SDK_INT >= 28) {
           Dataset.Builder()
         } else {
-          Dataset.Builder(makeRemoteView(context, makeEmptyMetadata()))
+          @Suppress("DEPRECATION") Dataset.Builder(makeRemoteView(context, makeEmptyMetadata()))
         }
       return builder.run {
         if (scenario != null) fillWith(scenario, action, credentials)

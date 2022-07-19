@@ -54,7 +54,15 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
   val stableHashOld = stableHash(signaturesOld.map { it.toByteArray() })
   if (Build.VERSION.SDK_INT >= 28) {
     val info =
-      context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNING_CERTIFICATES)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        context.packageManager.getPackageInfo(
+          appPackage,
+          PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
+        )
+      } else {
+        @Suppress("DEPRECATION")
+        context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNING_CERTIFICATES)
+      }
     val signaturesNew =
       info.signingInfo.signingCertificateHistory ?: info.signingInfo.apkContentsSigners
     val stableHashNew = stableHash(signaturesNew.map { it.toByteArray() })

@@ -17,6 +17,7 @@ import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
+import app.passwordstore.util.extensions.getParcelableExtraCompat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -29,7 +30,7 @@ class PasswordExportService : Service() {
     if (intent != null) {
       when (intent.action) {
         ACTION_EXPORT_PASSWORD -> {
-          val uri = intent.getParcelableExtra<Uri>("uri")
+          val uri = intent.getParcelableExtraCompat<Uri>("uri")
           if (uri != null) {
             val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
 

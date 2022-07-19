@@ -37,8 +37,6 @@
   <string name="git_commit_move_text">Renomear %1$s para %2$s.</string>
   <string name="git_commit_move_multiple_text">Mova múltiplas senhas para %1$s.</string>
   <!-- PGPHandler -->
-  <string name="clipboard_password_toast_text">Senha copiada para área de transferência, você tem %d segundos para colá-la em algum lugar.</string>
-  <string name="clipboard_password_no_clear_toast_text">Senha copiada para área de transferência</string>
   <string name="clipboard_copied_text">Copiado para a área de transferência</string>
   <string name="file_toast_text">Por favor, informe um nome de arquivo</string>
   <string name="path_toast_text">Por favor, forneça o caminho do arquivo</string>

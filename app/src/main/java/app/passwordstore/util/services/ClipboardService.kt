@@ -39,7 +39,11 @@ class ClipboardService : Service() {
       when (intent.action) {
         ACTION_CLEAR -> {
           clearClipboard()
-          stopForeground(true)
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+          } else {
+            @Suppress("DEPRECATION") stopForeground(true)
+          }
           stopSelf()
           return super.onStartCommand(intent, flags, startId)
         }
@@ -55,7 +59,11 @@ class ClipboardService : Service() {
             withContext(Dispatchers.IO) { startTimer(time) }
             withContext(Dispatchers.Main) {
               clearClipboard()
-              stopForeground(true)
+              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+              } else {
+                @Suppress("DEPRECATION") stopForeground(true)
+              }
               stopSelf()
             }
           }

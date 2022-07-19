@@ -6,6 +6,7 @@
 package app.passwordstore.ui.onboarding.activity
 
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import app.passwordstore.R
 
@@ -14,13 +15,11 @@ class OnboardingActivity : AppCompatActivity(R.layout.activity_onboarding) {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     supportActionBar?.hide()
-  }
-
-  override fun onBackPressed() {
-    if (supportFragmentManager.backStackEntryCount == 0) {
-      finishAffinity()
-    } else {
-      super.onBackPressed()
+    val callback = onBackPressedDispatcher.addCallback(enabled = false) { finishAffinity() }
+    supportFragmentManager.addOnBackStackChangedListener {
+      if (supportFragmentManager.backStackEntryCount == 0) {
+        callback.isEnabled = true
+      }
     }
   }
 }

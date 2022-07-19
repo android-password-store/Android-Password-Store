@@ -10,7 +10,14 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.ApplicationInfoFlags
+import android.content.pm.PackageManager.PackageInfoFlags
+import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.Base64
 import android.util.TypedValue
 import android.view.View
@@ -131,4 +138,46 @@ fun SharedPreferences.getString(key: String): String? = getString(key, null)
 /** Convert this [String] to its [Base64] representation */
 fun String.base64(): String {
   return Base64.encodeToString(encodeToByteArray(), Base64.NO_WRAP)
+}
+
+inline fun <reified T> Bundle.getParcelableCompat(key: String): T? {
+  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    getParcelable(key, T::class.java)
+  } else {
+    @Suppress("DEPRECATION") getParcelable(key)
+  }
+}
+
+inline fun <reified T : Parcelable> Bundle.getParcelableArrayListCompat(
+  key: String
+): ArrayList<T>? {
+  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    getParcelableArrayList(key, T::class.java)
+  } else {
+    @Suppress("DEPRECATION") getParcelableArrayList(key)
+  }
+}
+
+inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(key: String): T? {
+  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    getParcelableExtra(key, T::class.java)
+  } else {
+    @Suppress("DEPRECATION") getParcelableExtra(key)
+  }
+}
+
+fun PackageManager.getPackageInfoCompat(packageName: String, flags: Int): PackageInfo {
+  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    getPackageInfo(packageName, PackageInfoFlags.of(flags.toLong()))
+  } else {
+    @Suppress("DEPRECATION") getPackageInfo(packageName, flags)
+  }
+}
+
+fun PackageManager.getApplicationInfoCompat(packageName: String, flags: Int): ApplicationInfo {
+  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    getApplicationInfo(packageName, ApplicationInfoFlags.of(flags.toLong()))
+  } else {
+    @Suppress("DEPRECATION") getApplicationInfo(packageName, flags)
+  }
 }

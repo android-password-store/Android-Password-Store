@@ -10,6 +10,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import app.passwordstore.R
 import app.passwordstore.databinding.ActivityPreferenceRecyclerviewBinding
+import app.passwordstore.util.extensions.getParcelableCompat
 import app.passwordstore.util.extensions.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.Maxr1998.modernpreferences.Preference
@@ -84,7 +85,7 @@ class SettingsActivity : AppCompatActivity() {
           }
       }
     savedInstanceState
-      ?.getParcelable<PreferencesAdapter.SavedState>("adapter")
+      ?.getParcelableCompat<PreferencesAdapter.SavedState>("adapter")
       ?.let(adapter::loadSavedState)
     binding.preferenceRecyclerView.adapter = adapter
   }
@@ -106,6 +107,8 @@ class SettingsActivity : AppCompatActivity() {
     }
   }
 
+  @Deprecated("Deprecated in Java")
+  @Suppress("DEPRECATION")
   override fun onBackPressed() {
     if (!preferencesAdapter.goBack()) super.onBackPressed()
   }

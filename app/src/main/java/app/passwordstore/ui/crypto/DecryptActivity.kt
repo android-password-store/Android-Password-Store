@@ -78,7 +78,7 @@ class DecryptActivity : BasePgpActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      android.R.id.home -> onBackPressed()
+      android.R.id.home -> onBackPressedDispatcher.onBackPressed()
       R.id.edit_password -> editPassword()
       R.id.share_password_as_plaintext -> shareAsPlaintext()
       R.id.copy_password -> copyPasswordToClipboard(passwordEntry?.password)
