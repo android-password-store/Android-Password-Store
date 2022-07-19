@@ -22,8 +22,9 @@ public suspend inline fun <V> runSuspendCatching(block: () -> V): Result<V, Thro
 
   return try {
     Ok(block())
+  } catch (e: CancellationException) {
+    throw e
   } catch (e: Throwable) {
-    if (e is CancellationException) throw e
     Err(e)
   }
 }
@@ -42,8 +43,9 @@ public suspend inline infix fun <T, V> T.runSuspendCatching(
 
   return try {
     Ok(block())
+  } catch (e: CancellationException) {
+    throw e
   } catch (e: Throwable) {
-    if (e is CancellationException) throw e
     Err(e)
   }
 }
