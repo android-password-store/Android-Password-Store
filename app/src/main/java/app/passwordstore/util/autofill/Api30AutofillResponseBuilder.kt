@@ -7,9 +7,11 @@ package app.passwordstore.util.autofill
 
 import android.content.Context
 import android.content.IntentSender
+import android.os.Build
 import android.service.autofill.Dataset
 import android.service.autofill.FillCallback
 import android.service.autofill.FillResponse
+import android.service.autofill.Presentations
 import android.service.autofill.SaveInfo
 import android.view.inputmethod.InlineSuggestionsRequest
 import android.widget.inline.InlinePresentationSpec
@@ -61,6 +63,23 @@ constructor(
     metadata: DatasetMetadata,
     imeSpec: InlinePresentationSpec?,
   ): Dataset {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      makeIntentDataSetTiramisu(context, action, intentSender, metadata, imeSpec)
+    } else {
+      makeIntentDataSetR(context, action, intentSender, metadata, imeSpec)
+    }
+  }
+
+  /** Helper for creating an Autofill [Dataset]s for Android R and above. */
+  @RequiresApi(Build.VERSION_CODES.R)
+  @Suppress("DEPRECATION")
+  private fun makeIntentDataSetR(
+    context: Context,
+    action: AutofillAction,
+    intentSender: IntentSender,
+    metadata: DatasetMetadata,
+    imeSpec: InlinePresentationSpec?,
+  ): Dataset {
     return Dataset.Builder(makeRemoteView(context, metadata)).run {
       fillWith(scenario, action, credentials = null)
       setAuthentication(intentSender)
@@ -70,6 +89,30 @@ constructor(
           setInlinePresentation(inlinePresentation)
         }
       }
+      build()
+    }
+  }
+
+  /** Helper for creating Autofill [Dataset]s for Android Tiramisu and above. */
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private fun makeIntentDataSetTiramisu(
+    context: Context,
+    action: AutofillAction,
+    intentSender: IntentSender,
+    metadata: DatasetMetadata,
+    imeSpec: InlinePresentationSpec?,
+  ): Dataset {
+    val presentationsBuilder = Presentations.Builder()
+    if (imeSpec != null) {
+      val inlinePresentation = makeInlinePresentation(context, imeSpec, metadata)
+      if (inlinePresentation != null) {
+        presentationsBuilder.setInlinePresentation(inlinePresentation)
+      }
+    }
+    val presentations = presentationsBuilder.build()
+    return Dataset.Builder(presentations).run {
+      fillWith(scenario, action, credentials = null)
+      setAuthentication(intentSender)
       build()
     }
   }
