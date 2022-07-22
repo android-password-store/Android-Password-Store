@@ -47,7 +47,7 @@ class MiscSettings(activity: FragmentActivity) : SettingsProvider {
             putExtra("uri", uri)
           }
 
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           activity.startForegroundService(service)
         } else {
           activity.startService(service)

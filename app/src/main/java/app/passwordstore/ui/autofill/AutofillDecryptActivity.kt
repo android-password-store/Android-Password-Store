@@ -38,7 +38,7 @@ import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(26)
+@RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class AutofillDecryptActivity : AppCompatActivity() {
 
@@ -67,7 +67,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
           context,
           decryptFileRequestCode++,
           intent,
-          if (Build.VERSION.SDK_INT >= 31) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
           } else {
             PendingIntent.FLAG_CANCEL_CURRENT

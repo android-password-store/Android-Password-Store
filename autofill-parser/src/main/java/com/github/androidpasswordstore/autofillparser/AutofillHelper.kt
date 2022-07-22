@@ -52,7 +52,7 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
   val signaturesOld =
     context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNATURES).signatures
   val stableHashOld = stableHash(signaturesOld.map { it.toByteArray() })
-  if (Build.VERSION.SDK_INT >= 28) {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     val info =
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         context.packageManager.getPackageInfo(
@@ -79,14 +79,15 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
  * its `webDomain` and `webScheme`, if available.
  */
 internal val AssistStructure.ViewNode.webOrigin: String?
-  @RequiresApi(26)
+  @RequiresApi(Build.VERSION_CODES.O)
   get() =
     webDomain?.let { domain ->
-      val scheme = (if (Build.VERSION.SDK_INT >= 28) webScheme else null) ?: "https"
+      val scheme =
+        (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) webScheme else null) ?: "https"
       "$scheme://$domain"
     }
 
-@RequiresApi(26)
+@RequiresApi(Build.VERSION_CODES.O)
 public class FixedSaveCallback(context: Context, private val callback: SaveCallback) {
 
   private val applicationContext = context.applicationContext
@@ -102,7 +103,7 @@ public class FixedSaveCallback(context: Context, private val callback: SaveCallb
   }
 
   public fun onSuccess(intentSender: IntentSender) {
-    if (Build.VERSION.SDK_INT >= 28) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       callback.onSuccess(intentSender)
     } else {
       callback.onSuccess()
@@ -129,7 +130,7 @@ private fun visitViewNode(
   }
 }
 
-@RequiresApi(26)
+@RequiresApi(Build.VERSION_CODES.O)
 internal fun AssistStructure.findNodeByAutofillId(
   autofillId: AutofillId
 ): AssistStructure.ViewNode? {

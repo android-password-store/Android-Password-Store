@@ -52,7 +52,7 @@ suspend fun <T> Task<T>.suspendableAwait() =
     }
   }
 
-@RequiresApi(26)
+@RequiresApi(Build.VERSION_CODES.O)
 class AutofillSmsActivity : AppCompatActivity() {
 
   companion object {

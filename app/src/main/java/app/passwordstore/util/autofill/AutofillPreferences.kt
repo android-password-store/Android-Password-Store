@@ -5,6 +5,7 @@
 package app.passwordstore.util.autofill
 
 import android.content.Context
+import android.os.Build
 import androidx.annotation.RequiresApi
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.util.extensions.getString
@@ -102,7 +103,7 @@ enum class DirectoryStructure(val value: String) {
           ?: file.nameWithoutExtension
     }
 
-  @RequiresApi(26)
+  @RequiresApi(Build.VERSION_CODES.O)
   fun getSaveFolderName(sanitizedIdentifier: String, username: String?) =
     when (this) {
       EncryptedUsername -> "/"

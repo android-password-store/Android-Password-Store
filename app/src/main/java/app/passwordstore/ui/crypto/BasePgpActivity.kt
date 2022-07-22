@@ -95,7 +95,7 @@ open class BasePgpActivity : AppCompatActivity() {
           action = ClipboardService.ACTION_START
           putExtra(ClipboardService.EXTRA_NOTIFICATION_TIME, clearAfter)
         }
-      if (Build.VERSION.SDK_INT >= 26) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         startForegroundService(service)
       } else {
         startService(service)

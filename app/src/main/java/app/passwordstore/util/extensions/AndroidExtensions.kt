@@ -40,7 +40,7 @@ import logcat.logcat
 
 /** Get an instance of [AutofillManager]. Only available on Android Oreo and above */
 val Context.autofillManager: AutofillManager?
-  @RequiresApi(26) get() = getSystemService()
+  @RequiresApi(Build.VERSION_CODES.O) get() = getSystemService()
 
 /** Get an instance of [ClipboardManager] */
 val Context.clipboard

@@ -34,7 +34,7 @@ import logcat.asLog
 import logcat.logcat
 
 /** Implements [AutofillResponseBuilder]'s methods for API 30 and above */
-@RequiresApi(30)
+@RequiresApi(Build.VERSION_CODES.R)
 class Api30AutofillResponseBuilder
 @AssistedInject
 constructor(

@@ -33,7 +33,7 @@ import com.github.michaelbull.result.runCatching
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@TargetApi(26)
+@TargetApi(Build.VERSION_CODES.O)
 class AutofillPublisherChangedActivity : AppCompatActivity() {
 
   companion object {
@@ -57,7 +57,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
           context,
           publisherChangedRequestCode++,
           intent,
-          if (Build.VERSION.SDK_INT >= 31) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
           } else {
             PendingIntent.FLAG_CANCEL_CURRENT
