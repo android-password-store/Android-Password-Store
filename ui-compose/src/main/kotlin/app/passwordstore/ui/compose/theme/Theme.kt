@@ -1,12 +1,12 @@
 package app.passwordstore.ui.compose.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-private val LightThemeColors =
+internal val LightThemeColors =
   lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
@@ -34,7 +34,7 @@ private val LightThemeColors =
     inverseOnSurface = md_theme_light_inverseOnSurface,
     inverseSurface = md_theme_light_inverseSurface,
   )
-private val DarkThemeColors =
+internal val DarkThemeColors =
   darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
@@ -65,15 +65,8 @@ private val DarkThemeColors =
 
 @Composable
 public fun APSTheme(
-  useDarkTheme: Boolean = isSystemInDarkTheme(),
+  colors: ColorScheme,
   content: @Composable () -> Unit,
 ) {
-  val colors =
-    if (!useDarkTheme) {
-      LightThemeColors
-    } else {
-      DarkThemeColors
-    }
-
   MaterialTheme(colorScheme = colors, typography = AppTypography, content = content)
 }
