@@ -9,7 +9,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import app.passwordstore.ui.compose.theme.APSTheme
+import app.passwordstore.ui.compose.theme.decideColorScheme
 import app.passwordstore.util.viewmodel.PGPKeyListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +24,8 @@ class PGPKeyListActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
-      APSTheme {
+      val context = LocalContext.current
+      APSTheme(colors = decideColorScheme(context)) {
         Scaffold { paddingValues ->
           PGPKeyList(viewModel = viewModel, modifier = Modifier.padding(paddingValues))
         }
