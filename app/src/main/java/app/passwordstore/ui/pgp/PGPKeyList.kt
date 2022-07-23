@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import app.passwordstore.crypto.GpgIdentifier
 
 @Composable
-public fun KeyList(
+fun KeyList(
   identifiers: List<GpgIdentifier>,
   onItemClick: (identifier: GpgIdentifier) -> Unit,
   modifier: Modifier = Modifier,
