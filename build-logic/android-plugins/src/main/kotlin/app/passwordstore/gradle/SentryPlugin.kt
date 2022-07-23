@@ -4,7 +4,6 @@ import app.passwordstore.gradle.flavors.FlavorDimensions
 import app.passwordstore.gradle.flavors.ProductFlavors
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import io.sentry.android.gradle.SentryPlugin
-import io.sentry.android.gradle.extensions.InstrumentationFeature
 import io.sentry.android.gradle.extensions.SentryPluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -32,10 +31,7 @@ class SentryPlugin : Plugin<Project> {
         )
         ignoredBuildTypes.set(setOf("debug"))
         ignoredFlavors.set(setOf(ProductFlavors.FREE))
-        tracingInstrumentation {
-          enabled.set(true)
-          features.set(setOf(InstrumentationFeature.FILE_IO))
-        }
+        tracingInstrumentation { enabled.set(false) }
         autoInstallation.enabled.set(false)
       }
     }
