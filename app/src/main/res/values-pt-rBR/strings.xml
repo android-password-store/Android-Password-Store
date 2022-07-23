@@ -36,7 +36,10 @@
   <string name="git_commit_remove_text">Remova %1$s do armazenamento.</string>
   <string name="git_commit_move_text">Renomear %1$s para %2$s.</string>
   <string name="git_commit_move_multiple_text">Mova múltiplas senhas para %1$s.</string>
+  <string name="git_commit_gpg_id">Inicializar IDs GPG em %1$s.</string>
   <!-- PGPHandler -->
+  <string name="clipboard_password_toast_text">Senha copiada para área de transferência, você tem %d segundos para colá-la em algum lugar.</string>
+  <string name="clipboard_password_no_clear_toast_text">Senha copiada para área de transferência</string>
   <string name="clipboard_copied_text">Copiado para a área de transferência</string>
   <string name="file_toast_text">Por favor, informe um nome de arquivo</string>
   <string name="path_toast_text">Por favor, forneça o caminho do arquivo</string>
@@ -259,6 +262,9 @@
   <string name="preference_custom_public_suffixes_summary">O preenchimento automático distinguirá os subdomínios destes domínios</string>
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
   <!-- OpenKeychain errors -->
+  <string name="openpgp_error_wrong_passphrase">Senha incorreta</string>
+  <string name="openpgp_error_no_user_ids">Nenhuma chave PGP correspondente foi encontrada</string>
+  <string name="openpgp_error_unknown">Erro do OpenKeyChain : %s</string>
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Erro</string>
   <string name="password_creation_file_write_fail_message">Falha ao armazenar o arquivo de senha. Por favor, tente novamente.</string>
@@ -268,6 +274,8 @@
   <string name="otp_import_success">Configuração TOTP importada com sucesso</string>
   <string name="otp_import_failure">Falha ao importar a configuração TOTP</string>
   <string name="exporting_passwords">Exportando senhas…</string>
+  <string name="invalid_gpg_id">Encontrado .gpg-id, mas contém uma ID de chave inválida, fingerprint ou ID de usuário</string>
+  <string name="short_key_ids_unsupported">O ID de chave em .gpg-id é muito curto, por favor utilize os IDs de chaves longos (16 caracteres) ou fingerprints (40 caracteres)</string>
   <string name="invalid_filename_text">Nome do arquivo não deve conter \'/\', defina o diretório acima</string>
   <string name="directory_hint">Diretório</string>
   <string name="new_folder_set_gpg_key">Definir chave GPG para diretório</string>
@@ -283,6 +291,12 @@
   <string name="git_break_out_of_detached_success">Houve um conflito ao executar o rebase. Houve um push de branch %1$s local para outra branch chamada %2$s\n Use esta branch para resolver o conflito no seu computador</string>
   <string name="git_break_out_of_detached_unneeded">O repositório não está sendo rebased, não há necessidade de fazer push para outro branch</string>
   <!-- OpenKeychain not installed -->
+  <string name="openkeychain_not_installed_title">OpenKeychain não instalado</string>
+  <string name="openkeychain_not_installed_message">OpenKeychain é necessário para que o Password Store funcione, por favor, instale-o a partir das lojas abaixo</string>
+  <string name="openkeychain_not_installed_google_play">Google Play</string>
+  <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
+  <string name="openkeychain_not_installed_fdroid">F-Droid</string>
+  <string name="fdroid_deeplink_template">https://f-droid.org/pt/pacotes/%1$s/</string>
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Já existe um arquivo com esse nome</string>
   <string name="folder_creation_err_folder_exists">Já existe uma pasta com esse nome</string>
@@ -315,6 +329,7 @@
   <string name="otp_import_manual_entry">Inserir manualmente</string>
   <string name="otp_import_manual_hint_secret">Segredo</string>
   <string name="otp_import_manual_hint_account">Conta</string>
+  <string name="gpg_key_select_mandatory">A seleção de uma chave GPG é necessária para prosseguir</string>
   <string name="place_shortcut_on_home_screen">Criar atalho na tela inicial</string>
   <string name="password_list_fab_content_description">Criar nova senha ou pasta</string>
   <string name="pgp_key_import_failed">Falha ao importar a chave PGP</string>

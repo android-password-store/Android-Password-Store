@@ -32,7 +32,10 @@
   <string name="git_commit_remove_text">%1$s aus dem Store entfernen.</string>
   <string name="git_commit_move_text">Benenne %1$s in %2$s um.</string>
   <string name="git_commit_move_multiple_text">Verschiebe mehrere Passwörter nach %1$s.</string>
+  <string name="git_commit_gpg_id">Initialisiere GPG-IDs in %1$s.</string>
   <!-- PGPHandler -->
+  <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
+  <string name="clipboard_password_no_clear_toast_text">Passwort wurde in die Zwischenablage kopiert</string>
   <string name="clipboard_copied_text">In die Zwischenablage kopiert</string>
   <string name="file_toast_text">Bitte setze einen Pfad</string>
   <string name="path_toast_text">Bitte setze einen Pfad</string>
@@ -255,6 +258,9 @@
   <string name="preference_custom_public_suffixes_summary">Autofill wird Subdomains dieser Domains unterscheiden</string>
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
   <!-- OpenKeychain errors -->
+  <string name="openpgp_error_wrong_passphrase">Falsches Passwort</string>
+  <string name="openpgp_error_no_user_ids">Kein passender PGP Schlüssel gefunden</string>
+  <string name="openpgp_error_unknown">Fehler von OpenKeyChain : %s</string>
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Fehler</string>
   <string name="password_creation_file_write_fail_message">Fehler beim Speichern der Passwortdatei auf dem Speicher, bitte versuchen Sie es erneut.</string>
@@ -264,6 +270,8 @@
   <string name="otp_import_success">TOTP-Konfiguration erfolgreich importiert</string>
   <string name="otp_import_failure">Import der TOTP-Konfiguration fehlgeschlagen</string>
   <string name="exporting_passwords">Exportiere Passwörter…</string>
+  <string name="invalid_gpg_id">.gpg-id gefunden, enthält aber eine ungültige Schlüssel-ID, Fingerabdruck oder Benutzer-ID</string>
+  <string name="short_key_ids_unsupported">Eine Schlüssel-ID in .gpg-id ist zu kurz, bitte verwenden Sie entweder lange Schlüssel-IDs (16 Zeichen) oder Fingerabdrücke (40 Zeichen)</string>
   <string name="invalid_filename_text">Dateiname darf nicht \'/\' enthalten, Verzeichnis oben setzen</string>
   <string name="directory_hint">Ordner</string>
   <string name="new_folder_set_gpg_key">GPG Schlüssel für Ordner festlegen</string>
@@ -279,6 +287,12 @@
   <string name="git_break_out_of_detached_success">Es gab einen Klonflikt während des rebase-Prozesses. Dein lokaler %1$s branch wurde auf einen anderen Branch namens %2$s gepusht.\nNutze diesen Branch um Konflikte auf deinem Computer zu beheben</string>
   <string name="git_break_out_of_detached_unneeded">Das Repository befindet sich nicht im Rebase-Prozess, es ist nicht nötig, den Zustand auf einen weiteren Branch zu pushen</string>
   <!-- OpenKeychain not installed -->
+  <string name="openkeychain_not_installed_title">OpenKeychain nicht installiert</string>
+  <string name="openkeychain_not_installed_message">OpenKeychain wird für Password Store benötigt, bitte installieren Sie es von einem der unten aufgeführten Stores</string>
+  <string name="openkeychain_not_installed_google_play">Google Play</string>
+  <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
+  <string name="openkeychain_not_installed_fdroid">F-Droid</string>
+  <string name="fdroid_deeplink_template">https://f-droid.org/en/packages/%1$s/</string>
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Dateiname bereits vergeben</string>
   <string name="folder_creation_err_folder_exists">Ein Ordner mit diesem Namen existiert bereits</string>
@@ -310,6 +324,7 @@
   <string name="otp_import_manual_entry">Manuell eingeben</string>
   <string name="otp_import_manual_hint_secret">Schlüssel</string>
   <string name="otp_import_manual_hint_account">Account</string>
+  <string name="gpg_key_select_mandatory">Die Auswahl eines GPG-Schlüssels ist notwendig, um fortzufahren</string>
   <string name="place_shortcut_on_home_screen">Verknüpfung auf dem Home-Screen erstellen</string>
   <string name="password_list_fab_content_description">Neues Passwort oder neuen Ordner erstellen</string>
   <string name="pgp_key_import_failed">Fehler beim Import des PGP-Keys</string>
