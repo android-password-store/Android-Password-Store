@@ -76,6 +76,7 @@ dependencies {
   implementation(libs.androidx.recyclerviewSelection)
   implementation(libs.androidx.security)
   implementation(libs.androidx.swiperefreshlayout)
+  implementation(libs.compose.ui.tooling)
   implementation(libs.dagger.hilt.android)
 
   implementation(libs.kotlin.coroutines.android)
