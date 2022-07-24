@@ -5,6 +5,8 @@
 package app.passwordstore
 
 import android.content.SharedPreferences
+import android.os.Build
+import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
@@ -24,10 +26,13 @@ import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import io.sentry.Sentry
 import io.sentry.protocol.User
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority.DEBUG
+import logcat.LogPriority.VERBOSE
 import logcat.LogcatLogger
+import logcat.logcat
 
 @Suppress("Unused")
 @HiltAndroidApp
@@ -47,6 +52,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
       LogcatLogger.install(AndroidLogcatLogger(DEBUG))
+      setVmPolicy()
     }
     prefs.registerOnSharedPreferenceChangeListener(this)
     setNightMode()
@@ -73,6 +79,44 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     if (key == PreferenceKeys.APP_THEME) {
       setNightMode()
     }
+  }
+
+  private fun setVmPolicy() {
+    val builder =
+      StrictMode.VmPolicy.Builder()
+        .detectActivityLeaks()
+        .detectCleartextNetwork()
+        .detectFileUriExposure()
+        .detectLeakedClosableObjects()
+        .detectLeakedRegistrationObjects()
+        .detectLeakedSqlLiteObjects()
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      builder.detectContentUriWithoutPermission()
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      builder.detectCredentialProtectedWhileLocked().detectImplicitDirectBoot()
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      builder.detectNonSdkApiUsage()
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      builder.detectIncorrectContextUse().detectUnsafeIntentLaunch()
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      builder.penaltyListener(Executors.newSingleThreadExecutor()) { violation ->
+        logcat(VERBOSE) { violation.stackTraceToString() }
+      }
+    } else {
+      builder.penaltyLog()
+    }
+
+    val policy = builder.build()
+    StrictMode.setVmPolicy(policy)
   }
 
   private fun setNightMode() {
