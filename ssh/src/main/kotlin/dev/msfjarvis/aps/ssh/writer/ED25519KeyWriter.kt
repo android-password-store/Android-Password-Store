@@ -5,6 +5,7 @@ import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKey
 import dev.msfjarvis.aps.ssh.utils.Constants.ANDROIDX_SECURITY_KEYSET_PREF_NAME
 import dev.msfjarvis.aps.ssh.utils.Constants.KEYSTORE_ALIAS
+import dev.msfjarvis.aps.ssh.utils.createStringPublicKey
 import java.io.File
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -28,7 +29,7 @@ public class ED25519KeyWriter(
   }
 
   override suspend fun writePublicKey(publicKey: PublicKey, publicKeyFile: File) {
-    TODO("Not yet implemented")
+    publicKeyFile.writeText(publicKey.createStringPublicKey())
   }
 
   @Suppress("BlockingMethodInNonBlockingContext")
