@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:aapt="http://schemas.android.com/aapt"
+  android:width="108dp"
+  android:height="108dp"
+  android:viewportWidth="432"
+  android:viewportHeight="432">
+  <path android:pathData="M128.18,195.79C126.46,181.89 137.12,169.6 150.91,169.6H281.09C294.91,169.6 305.59,181.95 303.8,195.88L292.58,283.72C291.09,295.32 281.37,304 269.86,304H161.8C150.26,304 140.51,295.27 139.07,283.63L128.18,195.79Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+        android:endX="216"
+        android:endY="304"
+        android:startX="216"
+        android:startY="169.6"
+        android:type="linear">
+        <item
+          android:color="#FFFFA800"
+          android:offset="0" />
+        <item
+          android:color="#FFFF6341"
+          android:offset="1" />
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path android:pathData="M245.33,169.6V160C245.33,144.09 232.2,131.2 216,131.2C199.8,131.2 186.67,144.09 186.67,160V169.6H167.11V160C167.11,133.49 189,112 216,112C243,112 264.89,133.49 264.89,160V169.6H245.33Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+        android:centerX="216"
+        android:centerY="169.6"
+        android:gradientRadius="33.6"
+        android:type="radial">
+        <item
+          android:color="#FFD1004B"
+          android:offset="0.24" />
+        <item
+          android:color="#FFFFD749"
+          android:offset="0.75" />
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+    android:fillColor="#FFD749"
+    android:pathData="M245.33,169.6h19.56v38.4h-19.56z" />
+  <path
+    android:fillColor="#FFD749"
+    android:pathData="M245.33,217.6h19.56v48h-19.56z" />
+  <path
+    android:fillColor="#FFD749"
+    android:pathData="M239.11,205.19l13.83,13.58l-34.57,33.94l-13.83,-13.58z" />
+  <path
+    android:fillColor="#FFFFF0"
+    android:pathData="M235.56,208a19.56,19.2 0,1 0,39.11 0a19.56,19.2 0,1 0,-39.11 0z" />
+  <path
+    android:fillColor="#FFFFF0"
+    android:pathData="M235.56,275.2a19.56,19.2 0,1 0,39.11 0a19.56,19.2 0,1 0,-39.11 0z" />
+  <path
+    android:fillColor="#FFFFF0"
+    android:pathData="M204.54,252.71m-13.83,-13.58a19.56,19.2 0,1 1,27.66 27.15a19.56,19.2 0,1 1,-27.66 -27.15" />
+</vector>
