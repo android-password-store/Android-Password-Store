@@ -20,7 +20,7 @@
     android:layout_height="60dp"
     android:background="@android:color/transparent"
     android:contentDescription="@string/app_name"
-    android:src="@mipmap/ic_launcher_foreground"
+    android:src="@drawable/ic_launcher_foreground"
     app:layout_constraintBottom_toTopOf="@id/warningSign"
     app:layout_constraintEnd_toStartOf="@id/app_name"
     app:layout_constraintHorizontal_chainStyle="packed"
