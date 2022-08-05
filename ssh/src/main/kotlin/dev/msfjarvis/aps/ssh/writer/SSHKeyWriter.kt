@@ -1,11 +1,9 @@
 package dev.msfjarvis.aps.ssh.writer
 
-import java.io.File
-import java.security.PrivateKey
-import java.security.PublicKey
+import dev.msfjarvis.aps.ssh.SSHKey
+import java.security.KeyPair
 
 public interface SSHKeyWriter {
 
-  public suspend fun writePrivateKey(privateKey: PrivateKey, privateKeyFile: File)
-  public suspend fun writePublicKey(publicKey: PublicKey, publicKeyFile: File)
+  public suspend fun writeKeyPair(keyPair: KeyPair, sshKeyFile: SSHKey)
 }
