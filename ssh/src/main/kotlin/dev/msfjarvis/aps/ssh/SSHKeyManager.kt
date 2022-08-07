@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
+import android.security.keystore.KeyInfo
 import androidx.core.content.edit
 import dev.msfjarvis.aps.ssh.generator.ECDSAKeyGenerator
 import dev.msfjarvis.aps.ssh.generator.ED25519KeyGenerator
@@ -24,8 +25,14 @@ import dev.msfjarvis.aps.ssh.writer.KeystoreNativeKeyWriter
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.security.KeyFactory
 import java.security.KeyPair
 import java.security.KeyStore
+import java.security.PrivateKey
+import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
+import logcat.asLog
+import logcat.logcat
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
 import net.schmizz.sshj.userauth.password.PasswordFinder
@@ -63,6 +70,35 @@ public class SSHKeyManager(private val applicationContext: Context) {
     } catch (e: IllegalStateException) {
       false
     }
+  }
+
+  public suspend fun canShowPublicKey(): Boolean = runCatching { keyType() in listOf(SSHKeyType.LegacyGenerated, SSHKeyType.KeystoreNative, SSHKeyType.KeystoreWrappedEd25519) }.getOrElse { false }
+
+  public suspend fun publicKey(): String? = runCatching { createNewSSHKey(keyType = keyType()).publicKey.readText() }.getOrElse { return null }
+
+  public suspend fun needsAuthentication(): Boolean {
+    return runCatching {
+      val keyType = keyType()
+      if (keyType == SSHKeyType.KeystoreNative || keyType == SSHKeyType.KeystoreWrappedEd25519) return false
+
+      when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
+        is PrivateKey -> {
+          val factory = KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
+          return factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
+        }
+        is SecretKey -> {
+          val factory = SecretKeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
+          (factory.getKeySpec(key, KeyInfo::class.java) as KeyInfo).isUserAuthenticationRequired
+        }
+        else -> throw IllegalStateException("SSH key does not exist in Keystore")
+      }
+    }
+      .getOrElse { error ->
+        // It is fine to swallow the exception here since it will reappear when the key
+        // is used for SSH authentication and can then be shown in the UI.
+        logcat { error.asLog() }
+        false
+      }
   }
 
   public suspend fun importKey(uri: Uri) {
@@ -107,6 +143,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
   }
 
   public suspend fun generateKey(algorithm: SSHKeyAlgorithm, requiresAuthentication: Boolean) {
+    deleteKey()
     val (sshKeyGenerator, sshKeyType) =
       when (algorithm) {
         SSHKeyAlgorithm.RSA -> Pair(RSAKeyGenerator(), SSHKeyType.KeystoreNative)
@@ -167,7 +204,9 @@ public class SSHKeyManager(private val applicationContext: Context) {
       .getSharedPreferences(ANDROIDX_SECURITY_KEYSET_PREF_NAME, Context.MODE_PRIVATE)
       .edit { clear() }
 
-    val sshKey = createNewSSHKey(keyType = keyType())
+    // If there's no keyType(), we'll just use SSHKeyType.Imported, since they key is going to be deleted, it does not really matter what the key type is.
+    // The other way to handle this is to return if the keyType() throws an exception.
+    val sshKey = kotlin.runCatching { createNewSSHKey(keyType = keyType()) }.getOrElse { createNewSSHKey(keyType = SSHKeyType.Imported) }
     if (sshKey.privateKey.isFile) {
       sshKey.privateKey.delete()
     }

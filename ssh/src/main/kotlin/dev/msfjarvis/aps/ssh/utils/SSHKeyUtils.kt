@@ -11,8 +11,8 @@ internal object SSHKeyUtils {
 
   fun isValid(lines: List<String>): Boolean {
     return lines.size > 2 &&
-      !Regex("BEGIN .* PRIVATE KEY").containsMatchIn(lines.first()) &&
-      !Regex("END .* PRIVATE KEY").containsMatchIn(lines.last())
+      Regex("BEGIN .* PRIVATE KEY").containsMatchIn(lines.first()) &&
+      Regex("END .* PRIVATE KEY").containsMatchIn(lines.last())
   }
 
   @Suppress("BlockingMethodInNonBlockingContext")
