@@ -30,7 +30,6 @@ import net.schmizz.sshj.transport.kex.ECDHNistP
 import net.schmizz.sshj.transport.random.JCERandom
 import net.schmizz.sshj.transport.random.SingletonRandomFactory
 import net.schmizz.sshj.userauth.keyprovider.OpenSSHKeyFile
-import net.schmizz.sshj.userauth.keyprovider.PKCS5KeyFile
 import net.schmizz.sshj.userauth.keyprovider.PKCS8KeyFile
 import net.schmizz.sshj.userauth.keyprovider.PuTTYKeyFile
 import org.bouncycastle.jce.provider.BouncyCastleProvider
@@ -252,7 +251,6 @@ class SshjConfig : ConfigImpl() {
       listOf(
         OpenSSHKeyV1KeyFile.Factory(),
         PKCS8KeyFile.Factory(),
-        PKCS5KeyFile.Factory(),
         OpenSSHKeyFile.Factory(),
         PuTTYKeyFile.Factory(),
       )
