@@ -10,7 +10,7 @@ import app.passwordstore.crypto.GpgIdentifier.UserId
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import org.bouncycastle.openpgp.PGPKeyRing
-import org.pgpainless.PGPainless
+import org.pgpainless.key.parsing.KeyRingReader
 
 /** Utility methods to deal with [PGPKey]s. */
 public object KeyUtils {
@@ -19,15 +19,7 @@ public object KeyUtils {
    * then as a public one before the method gives up and returns null.
    */
   public fun tryParseKeyring(key: PGPKey): PGPKeyRing? {
-    val secKeyRing = runCatching { PGPainless.readKeyRing().secretKeyRing(key.contents) }.get()
-    if (secKeyRing != null) {
-      return secKeyRing
-    }
-    val pubKeyRing = runCatching { PGPainless.readKeyRing().publicKeyRing(key.contents) }.get()
-    if (pubKeyRing != null) {
-      return pubKeyRing
-    }
-    return null
+    return runCatching { KeyRingReader.readKeyRing(key.contents.inputStream()) }.get()
   }
 
   /** Parses a [PGPKeyRing] from the given [key] and calculates its long key ID */
