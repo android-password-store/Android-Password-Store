@@ -1,5 +1,6 @@
 package app.passwordstore.ui
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SmallTopAppBar
@@ -11,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 public fun APSAppBar(
   title: String,
   backgroundColor: Color,

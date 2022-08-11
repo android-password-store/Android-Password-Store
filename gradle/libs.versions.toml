@@ -1,9 +1,9 @@
 [versions]
-agp = "7.2.1"
-androidxActivity = "1.6.0-alpha05"
+agp = "7.2.2"
+androidxActivity = "1.6.0-beta01"
 bouncycastle = "1.71"
-composeFoundation = "1.3.0-alpha01"
-composeUi = "1.3.0-alpha01"
+composeFoundation = "1.3.0-alpha03"
+composeUi = "1.3.0-alpha03"
 coroutines = "1.6.4"
 flowbinding = "1.2.0"
 hilt = "2.43.2"
@@ -15,21 +15,21 @@ lifecycle = "2.6.0-alpha01"
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
-androidx-annotation = "androidx.annotation:annotation:1.4.0-beta01"
+androidx-annotation = "androidx.annotation:annotation:1.5.0-alpha02"
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.0-alpha05"
 androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha04"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha03"
-androidx-core-ktx = "androidx.core:core-ktx:1.9.0-alpha05"
+androidx-core-ktx = "androidx.core:core-ktx:1.9.0-beta01"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.5.0-rc01"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.0-alpha01"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-material = "com.google.android.material:material:1.7.0-alpha03"
 androidx-preference = "androidx.preference:preference:1.2.0"
-androidx-recyclerview = "androidx.recyclerview:recyclerview:1.3.0-beta01"
+androidx-recyclerview = "androidx.recyclerview:recyclerview:1.3.0-beta02"
 androidx-recyclerviewSelection = "androidx.recyclerview:recyclerview-selection:1.2.0-alpha01"
 androidx-security = "androidx.security:security-crypto:1.1.0-alpha03"
 androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
@@ -49,17 +49,17 @@ build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.9.1"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.5.3"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
 compose-animation = "androidx.compose.animation:animation:1.1.1"
-compose-compiler = "androidx.compose.compiler:compiler:1.2.0"
+compose-compiler = "androidx.compose.compiler:compiler:1.3.0"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "composeFoundation" }
 compose-hilt = "androidx.hilt:hilt-navigation-compose:1.0.0"
-compose-material = "androidx.compose.material:material:1.3.0-alpha01"
-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha14"
+compose-material = "androidx.compose.material:material:1.3.0-alpha03"
+compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha16"
 compose-runtime = "androidx.compose.runtime:runtime:1.2.0-rc01"
 compose-ui-core = { module = "androidx.compose.ui:ui", version.ref = "composeUi" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeUi" }
-compose-ui-tooling = "androidx.compose.ui:ui-tooling:1.0.5"
-compose-ui-util = "androidx.compose.ui:ui-util:1.2.0-rc01"
+compose-ui-tooling = "androidx.compose.ui:ui-tooling:1.3.0-alpha03"
+compose-ui-util = "androidx.compose.ui:ui-util:1.3.0-alpha01"
 compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding", version.ref = "composeUi" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
@@ -86,7 +86,7 @@ thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.1"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.1"
 thirdparty-nonfree-sentry = "io.sentry:sentry-android:6.3.1"
-thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.3.4"
+thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.3.5"
 thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 # TODO: Remove the explicit bcpkix dependency when upgrading this to a BC 1.71 compatible version
 thirdparty-sshj = "com.hierynomus:sshj:0.34.0"
