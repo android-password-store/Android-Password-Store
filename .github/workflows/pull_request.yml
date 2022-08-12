@@ -19,7 +19,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@v6.1.0
+      uses: actions/github-script@v6.1.1
       id: service-changed
       with:
         result-encoding: string
@@ -60,7 +60,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@v6.1.0
+      uses: actions/github-script@v6.1.1
       id: service-changed
       with:
         result-encoding: string
@@ -108,7 +108,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@v6.1.0
+      uses: actions/github-script@v6.1.1
       id: service-changed
       with:
         result-encoding: string
@@ -149,7 +149,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@v6.1.0
+      uses: actions/github-script@v6.1.1
       id: service-changed
       with:
         result-encoding: string
@@ -190,7 +190,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@v6.1.0
+      uses: actions/github-script@v6.1.1
       id: service-changed
       with:
         result-encoding: string
@@ -231,7 +231,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@v6.1.0
+      uses: actions/github-script@v6.1.1
       id: service-changed
       with:
         result-encoding: string
@@ -272,7 +272,7 @@ jobs:
           fetch-depth: 0
 
       - name: Check if relevant files have changed
-        uses: actions/github-script@v6.1.0
+        uses: actions/github-script@v6.1.1
         id: service-changed
         with:
           result-encoding: string
