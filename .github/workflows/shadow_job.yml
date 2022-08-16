@@ -40,7 +40,7 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Run checks
-      uses: gradle/gradle-build-action@v2.2.2
+      uses: gradle/gradle-build-action@v2.2.3
       env:
         DEP_OVERRIDE: true
         DEP_OVERRIDE_agp: ${{ matrix.agp-version }}
