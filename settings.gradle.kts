@@ -11,7 +11,7 @@ pluginManagement {
   repositories {
     includeBuild("build-logic")
     exclusiveContent {
-      forRepository(::google)
+      forRepository { google() }
       filter {
         includeGroup("androidx.databinding")
         includeGroup("com.android")
@@ -36,7 +36,7 @@ pluginManagement {
       }
     }
     exclusiveContent {
-      forRepository(::gradlePluginPortal)
+      forRepository { gradlePluginPortal() }
       filter {
         includeModule("com.github.ben-manes", "gradle-versions-plugin")
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
@@ -65,7 +65,7 @@ dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
     exclusiveContent {
-      forRepository(::google)
+      forRepository { google() }
       filter {
         includeGroup("com.android")
         includeGroup("com.android.tools.analytics-library")
