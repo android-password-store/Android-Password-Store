@@ -21,6 +21,7 @@ import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.runCatching
+import com.github.michaelbull.result.unwrapError
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -35,6 +36,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.logcat
 
 @OptIn(ExperimentalTime::class)
 @AndroidEntryPoint
@@ -140,7 +143,9 @@ class DecryptActivity : BasePgpActivity() {
     lifecycleScope.launch(Dispatchers.Main) {
       dialog.password.collectLatest { value ->
         if (value != null) {
-          if (runCatching { decrypt(value) }.isErr()) {
+          val res = runCatching { decrypt(value) }
+          if (res.isErr()) {
+            logcat(ERROR) { res.unwrapError().stackTraceToString() }
             decrypt(isError = true)
           }
         }
