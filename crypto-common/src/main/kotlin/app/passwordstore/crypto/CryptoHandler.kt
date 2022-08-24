@@ -14,13 +14,13 @@ import java.io.OutputStream
 public interface CryptoHandler<Key> {
 
   /**
-   * Decrypt the given [ciphertextStream] using a [secretKey] and [passphrase], and writes the
-   * resultant plaintext to [outputStream]. The returned [Result] should be checked to ensure it is
-   * **not** an instance of [com.github.michaelbull.result.Err] before the contents of
+   * Decrypt the given [ciphertextStream] using a set of potential [keys] and [passphrase], and
+   * writes the resultant plaintext to [outputStream]. The returned [Result] should be checked to
+   * ensure it is **not** an instance of [com.github.michaelbull.result.Err] before the contents of
    * [outputStream] are used.
    */
   public fun decrypt(
-    secretKey: Key,
+    keys: List<Key>,
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,

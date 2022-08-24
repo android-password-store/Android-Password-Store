@@ -388,7 +388,7 @@ class PasswordCreationActivity : BasePgpActivity() {
             val result =
               withContext(Dispatchers.IO) {
                 val outputStream = ByteArrayOutputStream()
-                repository.encrypt(content.byteInputStream(), outputStream)
+                repository.encrypt(gpgIdentifiers, content.byteInputStream(), outputStream)
                 outputStream
               }
             val file = File(path)

@@ -30,17 +30,20 @@ import org.pgpainless.util.Passphrase
 public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
 
   public override fun decrypt(
-    secretKey: PGPKey,
+    keys: List<PGPKey>,
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        val pgpSecretKeyRing = PGPainless.readKeyRing().secretKeyRing(secretKey.contents)
-        val keyringCollection = PGPSecretKeyRingCollection(listOf(pgpSecretKeyRing))
+        if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
+        val keyringCollection =
+          keys
+            .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
+            .run(::PGPSecretKeyRingCollection)
         val protector =
           PasswordBasedSecretKeyRingProtector.forKey(
-            pgpSecretKeyRing,
+            keyringCollection.first(),
             Passphrase.fromPassword(passphrase)
           )
         PGPainless.decryptAndOrVerify()
