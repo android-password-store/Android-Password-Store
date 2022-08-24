@@ -166,7 +166,6 @@ class DecryptActivity : BasePgpActivity() {
         )
         outputStream
       }
-    require(result.size() != 0) { "Incorrect password" }
     startAutoDismissTimer()
 
     val entry = passwordEntryFactory.create(result.toByteArray())
