@@ -46,7 +46,7 @@ class PGPainlessCryptoHandlerTest {
     val plaintextStream = ByteArrayOutputStream()
     val decryptRes =
       cryptoHandler.decrypt(
-        secretKey,
+        listOf(secretKey),
         CryptoConstants.KEY_PASSPHRASE,
         ciphertextStream.toByteArray().inputStream(),
         plaintextStream,
@@ -68,7 +68,7 @@ class PGPainlessCryptoHandlerTest {
     val plaintextStream = ByteArrayOutputStream()
     val result =
       cryptoHandler.decrypt(
-        secretKey,
+        listOf(secretKey),
         "very incorrect passphrase",
         ciphertextStream.toByteArray().inputStream(),
         plaintextStream,

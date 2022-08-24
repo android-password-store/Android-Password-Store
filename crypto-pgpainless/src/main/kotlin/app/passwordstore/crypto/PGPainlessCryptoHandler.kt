@@ -12,12 +12,12 @@ import app.passwordstore.crypto.errors.UnknownError
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
-import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 import org.bouncycastle.openpgp.PGPPublicKeyRing
 import org.bouncycastle.openpgp.PGPPublicKeyRingCollection
+import org.bouncycastle.openpgp.PGPSecretKeyRing
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
 import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.ConsumerOptions
@@ -25,23 +25,25 @@ import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.ProducerOptions
 import org.pgpainless.exception.WrongPassphraseException
 import org.pgpainless.key.protection.PasswordBasedSecretKeyRingProtector
-import org.pgpainless.key.util.KeyRingUtils
 import org.pgpainless.util.Passphrase
 
 public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
 
   public override fun decrypt(
-    secretKey: PGPKey,
+    keys: List<PGPKey>,
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        val pgpSecretKeyRing = PGPainless.readKeyRing().secretKeyRing(secretKey.contents)
-        val keyringCollection = PGPSecretKeyRingCollection(listOf(pgpSecretKeyRing))
+        if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
+        val keyringCollection =
+          keys
+            .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
+            .run(::PGPSecretKeyRingCollection)
         val protector =
           PasswordBasedSecretKeyRingProtector.forKey(
-            pgpSecretKeyRing,
+            keyringCollection.first(),
             Passphrase.fromPassword(passphrase)
           )
         PGPainless.decryptAndOrVerify()
@@ -68,17 +70,14 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
         if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
-        val publicKeyRings = arrayListOf<PGPPublicKeyRing>()
-        val armoredKeys =
-          keys.joinToString("\n") { key -> key.contents.decodeToString() }.toByteArray()
-        val secKeysStream = ByteArrayInputStream(armoredKeys)
-        publicKeyRings.addAll(
-          KeyRingUtils.publicKeyRingCollectionFrom(
-            PGPainless.readKeyRing().secretKeyRingCollection(secKeysStream)
-          )
-        )
-        val pubKeysStream = ByteArrayInputStream(armoredKeys)
-        publicKeyRings.addAll(PGPainless.readKeyRing().publicKeyRingCollection(pubKeysStream))
+        val publicKeyRings =
+          keys.mapNotNull(KeyUtils::tryParseKeyring).mapNotNull { keyRing ->
+            when (keyRing) {
+              is PGPPublicKeyRing -> keyRing
+              is PGPSecretKeyRing -> PGPainless.extractCertificate(keyRing)
+              else -> null
+            }
+          }
         require(keys.size == publicKeyRings.size) {
           "Failed to parse all keys: keys=${keys.size},parsed=${publicKeyRings.size}"
         }
