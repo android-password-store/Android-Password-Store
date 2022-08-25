@@ -10,13 +10,21 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.util.git.sshj.SshKey
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
+import dev.msfjarvis.aps.ssh.SSHKeyManager
+import javax.inject.Inject
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SshKeyImportActivity : AppCompatActivity() {
+
+  @Inject lateinit var sshKeyManager: SSHKeyManager
 
   private val sshKeyImportAction =
     registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -25,15 +33,17 @@ class SshKeyImportActivity : AppCompatActivity() {
         return@registerForActivityResult
       }
       runCatching {
-          SshKey.import(uri)
-          Toast.makeText(
-              this,
+          lifecycleScope.launch {
+            sshKeyManager.importKey(uri)
+            Toast.makeText(
+              this@SshKeyImportActivity,
               resources.getString(R.string.ssh_key_success_dialog_title),
               Toast.LENGTH_LONG
             )
-            .show()
-          setResult(RESULT_OK)
-          finish()
+              .show()
+            setResult(RESULT_OK)
+            finish()
+          }
         }
         .onFailure { e ->
           MaterialAlertDialogBuilder(this)
@@ -46,17 +56,19 @@ class SshKeyImportActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    if (SshKey.exists) {
-      MaterialAlertDialogBuilder(this).run {
-        setTitle(R.string.ssh_keygen_existing_title)
-        setMessage(R.string.ssh_keygen_existing_message)
-        setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ -> importSshKey() }
-        setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> finish() }
-        setOnCancelListener { finish() }
-        show()
+    lifecycleScope.launchWhenStarted {
+      if (sshKeyManager.keyExists()) {
+        MaterialAlertDialogBuilder(this@SshKeyImportActivity).run {
+          setTitle(R.string.ssh_keygen_existing_title)
+          setMessage(R.string.ssh_keygen_existing_message)
+          setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ -> importSshKey() }
+          setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> finish() }
+          setOnCancelListener { finish() }
+          show()
+        }
+      } else {
+        importSshKey()
       }
-    } else {
-      importSshKey()
     }
   }
 

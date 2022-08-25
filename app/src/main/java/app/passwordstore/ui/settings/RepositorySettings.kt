@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.injection.prefs.GitPreferences
@@ -47,6 +48,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
 
   private val generateSshKey =
     activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      // TODO: use assisted inject to get SSHKeyManager and use it here
       showSshKeyPref?.visible = SshKey.canShowSshPublicKey
     }
 

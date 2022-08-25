@@ -10,6 +10,7 @@ import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.settings.AuthMode
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
+import dev.msfjarvis.aps.ssh.SSHKeyManager
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -19,7 +20,9 @@ import java.util.Collections
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority.WARN
 import logcat.logcat
@@ -65,7 +68,7 @@ abstract class InteractivePasswordFinder : PasswordFinder {
   final override fun shouldRetry(resource: Resource<*>?) = true
 }
 
-class SshjSessionFactory(private val authMethod: SshAuthMethod, private val hostKeyFile: File) :
+class SshjSessionFactory(private val authMethod: SshAuthMethod, private val hostKeyFile: File, private val sshKeyManager: SSHKeyManager) :
   SshSessionFactory() {
 
   private var currentSession: SshjSession? = null
@@ -77,7 +80,7 @@ class SshjSessionFactory(private val authMethod: SshAuthMethod, private val host
     tms: Int
   ): RemoteSession {
     return currentSession
-      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile).connect().also {
+      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, sshKeyManager).connect().also {
         logcat { "New SSH connection created" }
         currentSession = it
       }
@@ -120,9 +123,12 @@ private class SshjSession(
   uri: URIish,
   private val username: String,
   private val authMethod: SshAuthMethod,
-  private val hostKeyFile: File
+  private val hostKeyFile: File,
+  private val sshKeyManager: SSHKeyManager
 ) : RemoteSession {
 
+  private lateinit var job: Job
+  private lateinit var coroutineScope: CoroutineScope
   private lateinit var ssh: SSHClient
   private var currentCommand: Session? = null
 
@@ -143,6 +149,8 @@ private class SshjSession(
     }
 
   fun connect(): SshjSession {
+    job = Job()
+    coroutineScope = CoroutineScope(job + Dispatchers.Main)
     ssh = SSHClient(SshjConfig())
     ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
     ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
@@ -153,8 +161,7 @@ private class SshjSession(
         ssh.auth(username, passwordAuth)
       }
       is SshAuthMethod.SshKey -> {
-        val pubkeyAuth =
-          AuthPublickey(SshKey.provide(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey)))
+        val pubkeyAuth = AuthPublickey(sshKeyManager.keyProvider(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey)))
         ssh.auth(username, pubkeyAuth, passwordAuth)
       }
     }

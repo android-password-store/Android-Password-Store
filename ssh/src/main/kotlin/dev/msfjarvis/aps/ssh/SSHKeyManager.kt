@@ -54,7 +54,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
     }
 
   // Let's make this suspend so that we can use datastore's non-blocking apis
-  public suspend fun keyType(): SSHKeyType {
+  public fun keyType(): SSHKeyType {
     // TODO: throw a custom exception here
     return SSHKeyType.fromValue(
       applicationContext.sharedPrefs.getString(Constants.GIT_REMOTE_KEY_TYPE, null)
@@ -72,11 +72,11 @@ public class SSHKeyManager(private val applicationContext: Context) {
     }
   }
 
-  public suspend fun canShowPublicKey(): Boolean = runCatching { keyType() in listOf(SSHKeyType.LegacyGenerated, SSHKeyType.KeystoreNative, SSHKeyType.KeystoreWrappedEd25519) }.getOrElse { false }
+  public fun canShowPublicKey(): Boolean = runCatching { keyType() in listOf(SSHKeyType.LegacyGenerated, SSHKeyType.KeystoreNative, SSHKeyType.KeystoreWrappedEd25519) }.getOrElse { false }
 
-  public suspend fun publicKey(): String? = runCatching { createNewSSHKey(keyType = keyType()).publicKey.readText() }.getOrElse { return null }
+  public fun publicKey(): String? = runCatching { createNewSSHKey(keyType = keyType()).publicKey.readText() }.getOrElse { return null }
 
-  public suspend fun needsAuthentication(): Boolean {
+  public fun needsAuthentication(): Boolean {
     return runCatching {
       val keyType = keyType()
       if (keyType == SSHKeyType.KeystoreNative || keyType == SSHKeyType.KeystoreWrappedEd25519) return false
@@ -197,7 +197,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
     setSSHKeyType(SSHKeyType.Imported)
   }
 
-  public suspend fun deleteKey() {
+  public fun deleteKey() {
     androidKeystore.deleteEntry(KEYSTORE_ALIAS)
     // Remove Tink key set used by AndroidX's EncryptedFile.
     applicationContext
@@ -217,22 +217,20 @@ public class SSHKeyManager(private val applicationContext: Context) {
     clearSSHKeyPreferences()
   }
 
-  public suspend fun keyProvider(
+  public fun keyProvider(
     client: SSHClient,
     passphraseFinder: PasswordFinder
   ): KeyProvider? {
     val sshKeyFile =
       kotlin
         .runCatching { createNewSSHKey(keyType = keyType()) }
-        .getOrElse {
-          return null
-        }
+        .getOrElse { return null }
+
     return when (sshKeyFile.type) {
       SSHKeyType.LegacyGenerated,
       SSHKeyType.Imported -> client.loadKeys(sshKeyFile.privateKey.absolutePath, passphraseFinder)
       SSHKeyType.KeystoreNative -> KeystoreNativeKeyProvider(androidKeystore)
-      SSHKeyType.KeystoreWrappedEd25519 ->
-        KeystoreWrappedEd25519KeyProvider(applicationContext, sshKeyFile)
+      SSHKeyType.KeystoreWrappedEd25519 -> KeystoreWrappedEd25519KeyProvider(applicationContext, sshKeyFile)
     }
   }
 

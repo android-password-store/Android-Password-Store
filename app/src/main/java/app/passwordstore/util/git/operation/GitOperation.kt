@@ -19,15 +19,20 @@ import app.passwordstore.util.auth.BiometricAuthenticator.Result.Retry
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Success
 import app.passwordstore.util.git.GitCommandExecutor
 import app.passwordstore.util.git.sshj.SshAuthMethod
-import app.passwordstore.util.git.sshj.SshKey
 import app.passwordstore.util.git.sshj.SshjSessionFactory
 import app.passwordstore.util.settings.AuthMode
+import app.passwordstore.util.settings.GitSettings
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import dev.msfjarvis.aps.ssh.SSHKeyManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +67,12 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   open val requiresAuth: Boolean = true
   private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
   private var sshSessionFactory: SshjSessionFactory? = null
+  private val hiltEntryPoint =
+    EntryPointAccessors.fromApplication(
+      callingActivity.applicationContext,
+      GitOperationEntryPoint::class.java
+    )
+  private val sshKeyManager = hiltEntryPoint.sshKeyManager()
   protected val repository = PasswordRepository.repository!!
   protected val git = Git(repository)
   private val authActivity
@@ -115,7 +126,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     authMethod: SshAuthMethod,
     credentialsProvider: CredentialsProvider? = null
   ) {
-    sshSessionFactory = SshjSessionFactory(authMethod, hostKeyFile)
+    sshSessionFactory = SshjSessionFactory(authMethod, hostKeyFile, sshKeyManager)
     commands.filterIsInstance<TransportCommand<*, *>>().forEach { command ->
       command.setTransportConfigCallback { transport: Transport ->
         (transport as? SshTransport)?.sshSessionFactory = sshSessionFactory
@@ -163,8 +174,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   suspend fun executeAfterAuthentication(authMode: AuthMode): Result<Unit, Throwable> {
     when (authMode) {
       AuthMode.SshKey ->
-        if (SshKey.exists) {
-          if (SshKey.mustAuthenticate) {
+        if (sshKeyManager.keyExists()) {
+          if (sshKeyManager.needsAuthentication()) {
             val result =
               withContext(Dispatchers.Main) {
                 suspendCoroutine<BiometricAuthenticator.Result> { cont ->
@@ -230,5 +241,12 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
     /** Timeout in seconds before [TransportCommand] will abort a stalled IO operation. */
     private const val CONNECT_TIMEOUT = 10
+  }
+
+  @EntryPoint
+  @InstallIn(SingletonComponent::class)
+  interface GitOperationEntryPoint {
+    fun gitSettings(): GitSettings
+    fun sshKeyManager(): SSHKeyManager
   }
 }
