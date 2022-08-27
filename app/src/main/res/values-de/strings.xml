@@ -29,7 +29,7 @@
   <!-- git commits -->
   <string name="git_commit_add_text">Füge generiertes Passwort für %1$s mittels Android Passwort Store hinzu.</string>
   <string name="git_commit_edit_text">Bearbeite das Passwort für %1$s mittels Android Password Store.</string>
-  <string name="git_commit_remove_text">%1$s aus dem Store entfernen.</string>
+  <string name="git_commit_remove_text">%1$s aus dem Speicher entfernen.</string>
   <string name="git_commit_move_text">Benenne %1$s in %2$s um.</string>
   <string name="git_commit_move_multiple_text">Verschiebe mehrere Passwörter nach %1$s.</string>
   <!-- PGPHandler -->
@@ -177,7 +177,7 @@
   <string name="oreo_autofill_generate_password">Passwort generieren…</string>
   <string name="oreo_autofill_fill_otp_from_sms">Code aus SMS extrahieren…</string>
   <string name="oreo_autofill_max_matches_reached">Maximale Anzahl an Übereinstimmungen (%1$d) erreicht; Lösche Übereinstimmungen, bevor neue hinzugefügt werden.</string>
-  <string name="oreo_autofill_warning_publisher_header">Der Hersteller dieser App hat sich geändert, seit Sie einen Eintrag zum Passwort-Speicher mit ihm verknüpft haben:</string>
+  <string name="oreo_autofill_warning_publisher_header">Der Hersteller dieser App hat sich geändert, seit Sie einen Eintrag zum Passwort-Speicher mit ihr verknüpft haben:</string>
   <string name="oreo_autofill_warning_publisher_footer"><b>Die derzeit installierte App versucht, Ihre Anmeldeinformationen zu stehlen, indem sie vorgibt, eine vertrauenswürdige App zu sein.</b>\n\nVersuchen Sie die App zu deinstallieren und installieren Sie sie erneut aus einer vertrauenswürdigen Quelle wie dem Play Store, Amazon Appstore, F-Droid oder dem Shop Ihres Telefonherstellers.</string>
   <string name="oreo_autofill_warning_publisher_install_time">Installiert: %1$s</string>
   <string name="oreo_autofill_warning_publisher_advanced_info_button">Erweiterte Informationen</string>
