@@ -36,6 +36,7 @@ jobs:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       with:
         arguments: collectFreeReleaseApks collectNonFreeReleaseApks -PsentryUploadMappings
+        gradle-home-cache-cleanup: true
 
     - name: Clean secrets
       run: scripts/signing-cleanup.sh

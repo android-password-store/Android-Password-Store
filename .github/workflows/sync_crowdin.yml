@@ -21,6 +21,7 @@ jobs:
         uses: gradle/gradle-build-action@v2.3.0
         with:
           arguments: --no-configuration-cache crowdin
+          gradle-home-cache-cleanup: true
         env:
           CROWDIN_LOGIN: ${{ secrets.CROWDIN_LOGIN }}
           CROWDIN_PROJECT_KEY: ${{ secrets.CROWDIN_PROJECT_KEY }}

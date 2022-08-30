@@ -21,6 +21,7 @@ jobs:
         uses: gradle/gradle-build-action@v2.3.0
         with:
           arguments: updatePSL
+          gradle-home-cache-cleanup: true
 
       - name: Compare list changes
         run: if [[ $(git diff --binary --stat) != "" ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
@@ -30,6 +31,7 @@ jobs:
         if: "${{ env.UPDATED == 'true' }}"
         with:
           arguments: :autofill-parser:test -PslimTests
+          gradle-home-cache-cleanup: true
 
       - name: Create Pull Request
         id: cpr
