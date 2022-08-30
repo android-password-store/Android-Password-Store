@@ -2,7 +2,7 @@ name: Sync localisations from Crowdin
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 0 * * 0'
 
 jobs:
   sync-crowdin:
@@ -21,6 +21,7 @@ jobs:
         uses: gradle/gradle-build-action@v2.3.0
         with:
           arguments: --no-configuration-cache crowdin
+          gradle-home-cache-cleanup: true
         env:
           CROWDIN_LOGIN: ${{ secrets.CROWDIN_LOGIN }}
           CROWDIN_PROJECT_KEY: ${{ secrets.CROWDIN_PROJECT_KEY }}
@@ -30,10 +31,10 @@ jobs:
         run: if [[ $(git diff --stat) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v4.1.1
         if: "env.UPDATED == 'true'"
         with:
-          assignees: msfjarvis
           author: GitHub Actions <noreply@github.com>
           base: develop
           body: This is an automated pull request to sync localisations from Crowdin.
@@ -42,3 +43,14 @@ jobs:
           labels: A-localisation, P-low, S-waiting-on-review
           title: Sync localisations from Crowdin
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Close, re-open and enable squash merge for PR
+        if: "${{ steps.cpr.outputs.pull-request-operation == 'created' }}"
+        shell: bash
+        run: |
+          gh pr close "${PR_URL}"
+          gh pr reopen "${PR_URL}"
+          gh pr merge --squash --auto "${PR_URL}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.PSL_UPDATE_TOKEN }}
+          PR_URL: ${{ steps.cpr.outputs.pull-request-url }}

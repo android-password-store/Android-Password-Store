@@ -43,13 +43,14 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.0
       with:
         arguments: spotlessCheck
+        gradle-home-cache-cleanup: true
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -84,6 +85,7 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.0
       with:
         arguments: test -PslimTests
+        gradle-home-cache-cleanup: true
 
     - name: (Fail-only) Upload test report
       if: "${{ failure() }}"
@@ -96,8 +98,8 @@ jobs:
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   build-apks:
     runs-on: ubuntu-latest
@@ -132,13 +134,14 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.0
       with:
         arguments: assembleFreeDebug assembleNonFreeDebug
+        gradle-home-cache-cleanup: true
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   check-api:
     runs-on: ubuntu-latest
@@ -173,13 +176,14 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.0
       with:
         arguments: apiCheck
+        gradle-home-cache-cleanup: true
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   lint-debug:
     runs-on: ubuntu-latest
@@ -214,13 +218,14 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.0
       with:
         arguments: lintDebug
+        gradle-home-cache-cleanup: true
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   assemble-release-apks:
     runs-on: ubuntu-latest
@@ -255,13 +260,14 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.0
       with:
         arguments: aNFR
+        gradle-home-cache-cleanup: true
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   detekt:
     runs-on: ubuntu-latest
@@ -296,6 +302,7 @@ jobs:
         uses: gradle/gradle-build-action@v2.3.0
         with:
           arguments: detekt
+          gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
