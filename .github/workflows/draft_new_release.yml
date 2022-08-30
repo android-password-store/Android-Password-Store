@@ -47,6 +47,11 @@ jobs:
         with:
           version: ${{ github.event.milestone.title }}
 
+      - name: Setup Gradle caching
+        uses: gradle/gradle-build-action@v2.3.0
+        with:
+          gradle-home-cache-cleanup: true
+
       - name: Initialize git config and commit changes
         shell: bash
         run: |
