@@ -49,8 +49,8 @@ jobs:
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -98,8 +98,8 @@ jobs:
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   build-apks:
     runs-on: ubuntu-latest
@@ -140,8 +140,8 @@ jobs:
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   check-api:
     runs-on: ubuntu-latest
@@ -182,8 +182,8 @@ jobs:
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   lint-debug:
     runs-on: ubuntu-latest
@@ -224,8 +224,8 @@ jobs:
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   assemble-release-apks:
     runs-on: ubuntu-latest
@@ -266,8 +266,8 @@ jobs:
       if: "${{ always() }}"
       uses: actions/upload-artifact@v3.1.0
       with:
-          name: Build report
-          path: build/reports/kotlin-build/
+        name: Build report
+        path: build/reports/kotlin-build/
 
   detekt:
     runs-on: ubuntu-latest
