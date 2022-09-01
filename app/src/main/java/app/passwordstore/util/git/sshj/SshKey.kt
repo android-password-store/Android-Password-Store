@@ -205,7 +205,7 @@ object SshKey {
     val sshKeyInputStream =
       context.contentResolver.openInputStream(uri)
         ?: throw IOException(context.getString(R.string.ssh_key_does_not_exist))
-    val lines = sshKeyInputStream.bufferedReader().readLines()
+    val lines = sshKeyInputStream.use { `is` -> `is`.bufferedReader().readLines() }
 
     // The file must have more than 2 lines, and the first and last line must have private key
     // markers.
