@@ -71,7 +71,6 @@ constructor(
   }
 
   /** Helper for creating an Autofill [Dataset]s for Android R and above. */
-  @RequiresApi(Build.VERSION_CODES.R)
   @Suppress("DEPRECATION")
   private fun makeIntentDataSetR(
     context: Context,
