@@ -24,7 +24,7 @@ import org.pgpainless.decryption_verification.ConsumerOptions
 import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.ProducerOptions
 import org.pgpainless.exception.WrongPassphraseException
-import org.pgpainless.key.protection.PasswordBasedSecretKeyRingProtector
+import org.pgpainless.key.protection.SecretKeyRingProtector
 import org.pgpainless.util.Passphrase
 
 public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
@@ -41,11 +41,7 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
           keys
             .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
             .run(::PGPSecretKeyRingCollection)
-        val protector =
-          PasswordBasedSecretKeyRingProtector.forKey(
-            keyringCollection.first(),
-            Passphrase.fromPassword(passphrase)
-          )
+        val protector = SecretKeyRingProtector.unlockAnyKeyWith(Passphrase.fromPassword(passphrase))
         PGPainless.decryptAndOrVerify()
           .onInputStream(ciphertextStream)
           .withOptions(
