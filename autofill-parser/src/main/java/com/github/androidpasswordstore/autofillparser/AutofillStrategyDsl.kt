@@ -285,7 +285,9 @@ private constructor(
               FillableFieldType.NewPassword,
             )
         }
-      ) { "Every rule block can only have either genericPassword or {current,new}Password blocks" }
+      ) {
+        "Every rule block can only have either genericPassword or {current,new}Password blocks"
+      }
       matchers.add(
         AutofillRuleMatcher(
           type = FillableFieldType.GenericPassword,

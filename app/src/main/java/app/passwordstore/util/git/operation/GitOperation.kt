@@ -155,10 +155,14 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
       .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
       .setPositiveButton(
         callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)
-      ) { _, _ -> getSshKey(false) }
+      ) { _, _ ->
+        getSshKey(false)
+      }
       .setNegativeButton(
         callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)
-      ) { _, _ -> getSshKey(true) }
+      ) { _, _ ->
+        getSshKey(true)
+      }
       .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
         // Finish the blank GitActivity so user doesn't have to press back
         callingActivity.finish()
@@ -177,7 +181,9 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                   BiometricAuthenticator.authenticate(
                     callingActivity,
                     R.string.biometric_prompt_title_ssh_auth
-                  ) { result -> if (result !is Failure) cont.resume(result) }
+                  ) { result ->
+                    if (result !is Failure) cont.resume(result)
+                  }
                 }
               }
             when (result) {

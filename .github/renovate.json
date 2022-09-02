@@ -8,5 +8,17 @@
       "matchPackagePatterns": ["^kotlin", "^org.jetbrains.kotlin"],
       "groupName": "kotlin"
     }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": [
+        ".kt$"
+      ],
+      "matchStrings": [
+        "KTFMT_VERSION = \"(?<currentValue>.*)\""
+      ],
+      "datasourceTemplate": "maven",
+      "depNameTemplate": "com.facebook:ktfmt"
+    }
   ]
 }

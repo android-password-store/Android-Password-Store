@@ -242,7 +242,9 @@ public class OpenPgpSignatureResult : Parcelable {
         !(signatureStatus == RESULT_NO_SIGNATURE ||
           signatureStatus == RESULT_KEY_MISSING ||
           signatureStatus == RESULT_INVALID_SIGNATURE)
-      ) { "can only use this method for valid types of signatures" }
+      ) {
+        "can only use this method for valid types of signatures"
+      }
       return OpenPgpSignatureResult(
         signatureStatus,
         primaryUserId,
