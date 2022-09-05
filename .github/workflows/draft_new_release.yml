@@ -40,7 +40,7 @@ jobs:
         uses: actions/setup-java@v3.4.1
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 18
 
       - name: Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.3.0

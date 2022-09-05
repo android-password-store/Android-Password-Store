@@ -32,7 +32,7 @@ jobs:
       uses: actions/setup-java@v3.4.1
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 18
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -74,7 +74,7 @@ jobs:
       uses: actions/setup-java@v3.4.1
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 18
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -123,7 +123,7 @@ jobs:
       uses: actions/setup-java@v3.4.1
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 18
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -165,7 +165,7 @@ jobs:
       uses: actions/setup-java@v3.4.1
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 18
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -207,7 +207,7 @@ jobs:
       uses: actions/setup-java@v3.4.1
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 18
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -249,7 +249,7 @@ jobs:
       uses: actions/setup-java@v3.4.1
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 18
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -291,7 +291,7 @@ jobs:
         uses: actions/setup-java@v3.4.1
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 18
 
       - name: Copy CI gradle.properties
         if: "${{ steps.service-changed.outputs.result == 'true' }}"
