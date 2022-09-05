@@ -45,14 +45,12 @@ jobs:
           commit-message: "autofill-parser: update publicsuffixes file"
           labels: A-PSL
           title: Update Public Suffix List data
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PSL_UPDATE_TOKEN }}
 
-      - name: Close, re-open and enable squash merge for PR
+      - name: Enable automerge for PR
         if: "${{ steps.cpr.outputs.pull-request-operation == 'created' }}"
         shell: bash
         run: |
-          gh pr close "${PR_URL}"
-          gh pr reopen "${PR_URL}"
           gh pr merge --squash --auto "${PR_URL}"
         env:
           GITHUB_TOKEN: ${{ secrets.PSL_UPDATE_TOKEN }}
