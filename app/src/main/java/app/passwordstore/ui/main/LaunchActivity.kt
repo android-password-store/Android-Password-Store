@@ -4,6 +4,7 @@
  */
 package app.passwordstore.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@SuppressLint("CustomSplashScreen")
 class LaunchActivity : AppCompatActivity() {
 
   @Inject lateinit var features: Features

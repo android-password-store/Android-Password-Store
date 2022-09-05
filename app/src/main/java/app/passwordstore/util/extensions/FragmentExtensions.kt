@@ -28,7 +28,6 @@ fun FragmentManager.performTransactionWithBackStack(
   @IdRes containerViewId: Int = android.R.id.content
 ) {
   commit {
-    beginTransaction()
     addToBackStack(destinationFragment.tag)
     setCustomAnimations(
       R.animator.slide_in_left,
