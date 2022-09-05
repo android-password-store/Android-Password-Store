@@ -21,7 +21,6 @@ jobs:
           - nightly
         java-version:
           - 11
-          - 17
           - 18
     runs-on: ubuntu-latest
     steps:
