@@ -16,6 +16,7 @@ import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
 import app.passwordstore.ui.adapters.FieldItemAdapter
+import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.isErr
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
@@ -91,13 +92,16 @@ class DecryptActivity : BasePgpActivity() {
   }
 
   /**
-   * Automatically finishes the activity 60 seconds after decryption succeeded to prevent
-   * information leaks from stale activities.
+   * Automatically finishes the activity after [PreferenceKeys.GENERAL_SHOW_TIME] seconds decryption
+   * succeeded to prevent information leaks from stale activities.
    */
   private fun startAutoDismissTimer() {
     lifecycleScope.launch {
-      delay(60.seconds)
-      finish()
+      val timeout = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
+      if (timeout != 0) {
+        delay(timeout.seconds)
+        finish()
+      }
     }
   }
 
