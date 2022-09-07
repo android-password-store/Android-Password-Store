@@ -35,7 +35,6 @@
     <ID>LongMethod:RepositorySettings.kt$RepositorySettings$override fun provideSettings(builder: PreferenceScreen.Builder)</ID>
     <ID>LoopWithTooManyJumpStatements:AutofillMatcher.kt$AutofillMatcher.Companion$for ((key, value) in prefs.all) { if (!key.startsWith(PREFERENCE_PREFIX_MATCHES)) continue // We know that preferences starting with `PREFERENCE_PREFIX_MATCHES` were // created with `putStringSet`. @Suppress("UNCHECKED_CAST") val oldMatches = value as? Set&lt;String> if (oldMatches == null) { logcat(WARN) { "Failed to read matches for $key" } continue } // Delete all matches for file locations that are going to be overwritten, then // transfer matches over to the files at their new locations. val newMatches = oldMatches .asSequence() .minus(deletePathList) .minus(oldNewPathMap.values) .map { match -> val newPath = oldNewPathMap[match] ?: return@map match logcat { "Updating match for $key: $match --> $newPath" } newPath } .toSet() if (newMatches != oldMatches) prefs.edit { putStringSet(key, newMatches) } }</ID>
     <ID>LoopWithTooManyJumpStatements:ErrorMessages.kt$ErrorMessages$while (cause.cause != null) { if (cause is GitException) break val nextCause = cause.cause!! if (nextCause is RemoteException) break cause = nextCause }</ID>
-    <ID>MagicNumber:BasePgpActivity.kt$BasePgpActivity$45</ID>
     <ID>MagicNumber:ClipboardService.kt$ClipboardService$1000</ID>
     <ID>MagicNumber:ClipboardService.kt$ClipboardService$1000L</ID>
     <ID>MagicNumber:ClipboardService.kt$ClipboardService$45</ID>

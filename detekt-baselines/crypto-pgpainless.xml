@@ -10,6 +10,5 @@
     <ID>MagicNumber:GpgIdentifier.kt$GpgIdentifier.KeyId$8</ID>
     <ID>NestedBlockDepth:GpgIdentifier.kt$GpgIdentifier.Companion$private fun splitUserId(userId: String): String?</ID>
     <ID>ReturnCount:GpgIdentifier.kt$GpgIdentifier.Companion$public fun fromString(identifier: String): GpgIdentifier?</ID>
-    <ID>ReturnCount:KeyUtils.kt$KeyUtils$public fun tryParseKeyring(key: PGPKey): PGPKeyRing?</ID>
   </CurrentIssues>
 </SmellBaseline>

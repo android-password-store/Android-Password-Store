@@ -20,6 +20,7 @@ import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.isErr
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
+import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.runCatching
 import com.github.michaelbull.result.unwrapError
@@ -97,7 +98,9 @@ class DecryptActivity : BasePgpActivity() {
    */
   private fun startAutoDismissTimer() {
     lifecycleScope.launch {
-      val timeout = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 60
+      val timeout =
+        settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull()
+          ?: Constants.DEFAULT_DECRYPTION_TIMEOUT
       if (timeout != 0) {
         delay(timeout.seconds)
         finish()

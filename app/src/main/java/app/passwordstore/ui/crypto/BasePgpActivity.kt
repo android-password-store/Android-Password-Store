@@ -22,6 +22,7 @@ import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.snackbar
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.services.ClipboardService
+import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,7 +88,9 @@ open class BasePgpActivity : AppCompatActivity() {
   fun copyPasswordToClipboard(password: String?) {
     copyTextToClipboard(password)
 
-    val clearAfter = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 60
+    val clearAfter =
+      settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull()
+        ?: Constants.DEFAULT_DECRYPTION_TIMEOUT
 
     if (clearAfter != 0) {
       val service =
