@@ -23,8 +23,8 @@ The source code is split across 12 modules and 1 subproject.
 - `format-common` handles parsing the `pass` file format.
 - `passgen/random` contains the default password generator.
 - `passgen/diceware` is our new password generator that implements the [Diceware](https://theworld.com/~reinhold/diceware.html) algorithm.
-- `sentry-stub` contains no-op variants of [Sentry](https://sentry.io/) APIs that we use to ensure the FOSS-only variant of APS continues to compile in absence of Sentry dependencies.
-- `ui-compose` has the theming code for building UI components in [Jetpack Compose](https://developer.android.com/jetpack/compose), but is currently unused.
+- `sentry-stub` contains no-op variants of [Sentry](https://sentry.io/) APIs that we use to ensure the FOSS-only, telemetry-free variant of APS continues to compile in absence of Sentry dependencies.
+- `ui-compose` has the theming code for building UI components in [Jetpack Compose](https://developer.android.com/jetpack/compose).
 - `app` is everything else that constitutes APS.
 
 In most scenarios, the `app` directory is where you'd be contributing changes to. While most of the code has been rewritten and documented, there are still gnarly "legacy" parts that might be challenging to understand at a glance. Please get in touch via the [Discussions](https://github.com/android-password-store/Android-Password-Store/discussions) page with any questions you have, and we'd love to explain and improve things.
@@ -50,17 +50,6 @@ The app comes in two 'flavors', a FOSS-only **free** variant and a **nonFree** v
 ```
 
 You can find the generated APK at `app/outputs`.
-
-The project makes use of the unstable [Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html) feature of Gradle. This has the potential to cause spurious build failures that look something like this:
-
-```
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-Could not find build ':kotlin-plugins:generatePrecompiledScriptPluginAccessors:accessors8052664764592233112'
-```
-
-This can be resolved by simply re-running the command, or adding the `--no-configuration-cache` parameter.
 
 ## Pre-push checks
 
