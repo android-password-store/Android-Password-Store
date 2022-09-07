@@ -87,7 +87,7 @@ open class BasePgpActivity : AppCompatActivity() {
   fun copyPasswordToClipboard(password: String?) {
     copyTextToClipboard(password)
 
-    val clearAfter = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
+    val clearAfter = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 60
 
     if (clearAfter != 0) {
       val service =

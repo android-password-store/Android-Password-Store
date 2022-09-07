@@ -97,7 +97,7 @@ class DecryptActivity : BasePgpActivity() {
    */
   private fun startAutoDismissTimer() {
     lifecycleScope.launch {
-      val timeout = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
+      val timeout = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 60
       if (timeout != 0) {
         delay(timeout.seconds)
         finish()
