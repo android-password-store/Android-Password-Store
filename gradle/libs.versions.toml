@@ -15,7 +15,7 @@ lifecycle = "2.6.0-alpha01"
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.2"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
-androidx-annotation = "androidx.annotation:annotation:1.5.0-beta01"
+androidx-annotation = "androidx.annotation:annotation:1.5.0-rc01"
 # @pin beta01 moved DrawableWrapper to public API, breaking the FastScroll library
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.0-rc01"
 androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
