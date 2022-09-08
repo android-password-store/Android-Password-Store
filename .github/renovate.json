@@ -5,8 +5,20 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["^kotlin", "^org.jetbrains.kotlin"],
+      "matchPackagePatterns": [
+        "^kotlin",
+        "^org.jetbrains.kotlin"
+      ],
       "groupName": "kotlin"
+    },
+    {
+      "managers": [
+        "gradle"
+      ],
+      "matchPackagePatterns": [
+        "^androidx.appcompat"
+      ],
+      "enabled": false
     }
   ],
   "regexManagers": [
