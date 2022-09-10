@@ -23,7 +23,7 @@ class PublishedAndroidLibraryPlugin : Plugin<Project> {
       apply(SigningPlugin::class)
     }
     project.extensions.getByType<MavenPublishBaseExtension>().run {
-      publishToMavenCentral(SonatypeHost.DEFAULT)
+      publishToMavenCentral(SonatypeHost.DEFAULT, true)
       signAllPublications()
     }
     project.afterEvaluate {

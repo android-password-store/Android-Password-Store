@@ -27,12 +27,3 @@ jobs:
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.NEXUS_PUBLISH_GPG_KEY }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
-
-    - name: Close and release repository
-      uses: gradle/gradle-build-action@v2.3.0
-      with:
-        arguments: --no-configuration-cache closeAndReleaseRepository
-        gradle-home-cache-cleanup: true
-      env:
-        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
-        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
