@@ -13,8 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         agp-version:
-          - 7.2.1
-          - 7.3.0-rc01
+          - 7.3.0
           - 7.4.0-alpha10
         gradle-version:
           - wrapper
