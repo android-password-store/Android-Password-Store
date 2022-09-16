@@ -12,7 +12,7 @@ leakcanary = "2.9.1"
 lifecycle = "2.6.0-alpha02"
 
 [libraries]
-android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.2"
+android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidx-annotation = "androidx.annotation:annotation:1.5.0-rc01"
