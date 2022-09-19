@@ -22,6 +22,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.passwordstore.R
@@ -38,6 +39,8 @@ import app.passwordstore.util.viewmodel.SearchableRepositoryAdapter
 import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
@@ -193,20 +196,23 @@ class AutofillFilterView : AppCompatActivity() {
           R.string.oreo_autofill_match_with,
           formOrigin.getPrettyIdentifier(applicationContext)
         )
-      model.searchResult.observe(this@AutofillFilterView) { result ->
-        val list = result.passwordItems
-        (rvPassword.adapter as SearchableRepositoryAdapter).submitList(list) {
-          rvPassword.scrollToPosition(0)
+      model.searchResult
+        .flowWithLifecycle(lifecycle)
+        .onEach { result ->
+          val list = result.passwordItems
+          (rvPassword.adapter as SearchableRepositoryAdapter).submitList(list) {
+            rvPassword.scrollToPosition(0)
+          }
+          // Switch RecyclerView out for a "no results" message if the new list is empty and
+          // the message is not yet shown (and vice versa).
+          if (
+            (list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
+              (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id)
+          ) {
+            rvPasswordSwitcher.showNext()
+          }
         }
-        // Switch RecyclerView out for a "no results" message if the new list is empty and
-        // the message is not yet shown (and vice versa).
-        if (
-          (list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
-            (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id)
-        ) {
-          rvPasswordSwitcher.showNext()
-        }
-      }
+        .launchIn(lifecycleScope)
     }
   }
 
