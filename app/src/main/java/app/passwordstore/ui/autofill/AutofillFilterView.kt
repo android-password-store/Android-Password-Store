@@ -21,7 +21,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -88,9 +87,7 @@ class AutofillFilterView : AppCompatActivity() {
   private lateinit var directoryStructure: DirectoryStructure
   private val binding by viewBinding(ActivityOreoAutofillFilterBinding::inflate)
 
-  private val model: SearchableRepositoryViewModel by viewModels {
-    ViewModelProvider.AndroidViewModelFactory(application)
-  }
+  private val model: SearchableRepositoryViewModel by viewModels()
 
   private val decryptAction =
     registerForActivityResult(StartActivityForResult()) { result ->

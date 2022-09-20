@@ -20,7 +20,6 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
@@ -72,9 +71,7 @@ class PasswordStore : BaseGitActivity() {
   private lateinit var searchItem: MenuItem
   private val settings by lazy { sharedPrefs }
 
-  private val model: SearchableRepositoryViewModel by viewModels {
-    ViewModelProvider.AndroidViewModelFactory(application)
-  }
+  private val model: SearchableRepositoryViewModel by viewModels()
 
   private val listRefreshAction =
     registerForActivityResult(StartActivityForResult()) { result ->

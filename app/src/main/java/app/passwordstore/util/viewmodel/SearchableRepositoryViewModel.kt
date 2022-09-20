@@ -5,6 +5,7 @@
 package app.passwordstore.util.viewmodel
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
@@ -22,17 +23,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.data.repo.PasswordRepository
+import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.DirectoryStructure
-import app.passwordstore.util.extensions.sharedPrefs
-import app.passwordstore.util.extensions.unsafeLazy
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PasswordSortOrder
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import java.text.Collator
 import java.util.Locale
 import java.util.Stack
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,6 +46,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
@@ -106,7 +110,14 @@ enum class ListMode {
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SearchableRepositoryViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class SearchableRepositoryViewModel
+@Inject
+constructor(
+  application: Application,
+  dispatcherProvider: DispatcherProvider,
+  @SettingsPreferences private val settings: SharedPreferences,
+) : AndroidViewModel(application) {
 
   private var _updateCounter = 0
   private val updateCounter: Int
@@ -118,7 +129,6 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
   private val root
     get() = PasswordRepository.getRepositoryDirectory()
-  private val settings by unsafeLazy { application.sharedPrefs }
   private val showHiddenContents
     get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
   private val defaultSearchMode
@@ -190,14 +200,20 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
           }
         val prefilteredResultFlow =
           when (searchAction.listMode) {
-            ListMode.FilesOnly -> listResultFlow.filter { it.isFile }
-            ListMode.DirectoriesOnly -> listResultFlow.filter { it.isDirectory }
+            ListMode.FilesOnly ->
+              listResultFlow.filter { it.isFile }.flowOn(dispatcherProvider.io())
+            ListMode.DirectoriesOnly ->
+              listResultFlow.filter { it.isDirectory }.flowOn(dispatcherProvider.io())
             ListMode.AllEntries -> listResultFlow
           }
         val passwordList =
           when (if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode) {
             FilterMode.NoFilter -> {
-              prefilteredResultFlow.map { it.toPasswordItem() }.toList().sortedWith(itemComparator)
+              prefilteredResultFlow
+                .map { it.toPasswordItem() }
+                .flowOn(dispatcherProvider.io())
+                .toList()
+                .sortedWith(itemComparator)
             }
             FilterMode.StrictDomain -> {
               check(searchAction.listMode == ListMode.FilesOnly) {
@@ -210,6 +226,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                     regex.containsMatchIn(absoluteFile.relativeTo(root).path)
                   }
                   .map { it.toPasswordItem() }
+                  .flowOn(dispatcherProvider.io())
                   .toList()
                   .sortedWith(itemComparator)
               } else {
@@ -223,6 +240,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                   Pair(item.fuzzyMatch(searchAction.filter), item)
                 }
                 .filter { it.first > 0 }
+                .flowOn(dispatcherProvider.io())
                 .toList()
                 .sortedWith(
                   compareByDescending<Pair<Int, PasswordItem>> { it.first }
@@ -233,6 +251,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
           }
         SearchResult(passwordList, isFiltered = searchAction.filterMode != FilterMode.NoFilter)
       }
+      .flowOn(dispatcherProvider.io())
 
   private fun shouldTake(file: File) =
     with(file) {
