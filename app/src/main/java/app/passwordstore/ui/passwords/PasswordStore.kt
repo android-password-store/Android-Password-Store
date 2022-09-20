@@ -20,7 +20,7 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.password.PasswordItem
@@ -71,9 +71,7 @@ class PasswordStore : BaseGitActivity() {
   private lateinit var searchItem: MenuItem
   private val settings by lazy { sharedPrefs }
 
-  private val model: SearchableRepositoryViewModel by viewModels {
-    ViewModelProvider.AndroidViewModelFactory(application)
-  }
+  private val model: SearchableRepositoryViewModel by viewModels()
 
   private val listRefreshAction =
     registerForActivityResult(StartActivityForResult()) { result ->
@@ -186,10 +184,12 @@ class PasswordStore : BaseGitActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_pwdstore)
 
-    model.currentDir.observe(this) { dir ->
-      val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
-      supportActionBar?.apply {
-        if (dir != basePath) title = dir.name else setTitle(R.string.app_name)
+    lifecycleScope.launchWhenCreated {
+      model.currentDir.flowWithLifecycle(lifecycle).collect { dir ->
+        val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
+        supportActionBar?.apply {
+          if (dir != basePath) title = dir.name else setTitle(R.string.app_name)
+        }
       }
     }
   }
@@ -238,7 +238,7 @@ class PasswordStore : BaseGitActivity() {
           // List the contents of the current directory if the user enters a blank
           // search term.
           if (filter.isEmpty())
-            model.navigateTo(newDirectory = model.currentDir.value!!, pushPreviousLocation = false)
+            model.navigateTo(newDirectory = model.currentDir.value, pushPreviousLocation = false)
           else model.search(filter)
           return true
         }
@@ -544,12 +544,12 @@ class PasswordStore : BaseGitActivity() {
    */
   fun refreshPasswordList(target: File? = null) {
     val plist = getPasswordFragment()
-    if (target?.isDirectory == true && model.currentDir.value?.contains(target) == true) {
+    if (target?.isDirectory == true && model.currentDir.value.contains(target)) {
       plist?.navigateTo(target)
-    } else if (target?.isFile == true && model.currentDir.value?.contains(target) == true) {
+    } else if (target?.isFile == true && model.currentDir.value.contains(target)) {
       // Creating new passwords is handled by an activity, so we will refresh in onStart.
       plist?.scrollToOnNextRefresh(target)
-    } else if (model.currentDir.value?.isDirectory == true) {
+    } else if (model.currentDir.value.isDirectory) {
       model.forceRefresh()
     } else {
       model.reset()

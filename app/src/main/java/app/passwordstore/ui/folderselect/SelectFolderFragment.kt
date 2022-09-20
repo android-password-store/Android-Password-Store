@@ -10,6 +10,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.passwordstore.R
@@ -23,6 +24,8 @@ import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import java.io.File
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
@@ -51,9 +54,10 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
 
     val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
     model.navigateTo(File(path), listMode = ListMode.DirectoriesOnly, pushPreviousLocation = false)
-    model.searchResult.observe(viewLifecycleOwner) { result ->
-      recyclerAdapter.submitList(result.passwordItems)
-    }
+    model.searchResult
+      .flowWithLifecycle(lifecycle)
+      .onEach { result -> recyclerAdapter.submitList(result.passwordItems) }
+      .launchIn(lifecycleScope)
   }
 
   override fun onAttach(context: Context) {
@@ -77,7 +81,7 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
   }
 
   val currentDir: File
-    get() = model.currentDir.value!!
+    get() = model.currentDir.value
 
   interface OnFragmentInteractionListener {
 

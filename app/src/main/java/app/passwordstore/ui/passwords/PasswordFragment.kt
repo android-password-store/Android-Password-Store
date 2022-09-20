@@ -18,6 +18,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +49,8 @@ import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
@@ -74,7 +77,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
 
   val currentDir: File
-    get() = model.currentDir.value!!
+    get() = model.currentDir.value
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -174,36 +177,37 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
     val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
     model.navigateTo(File(path), pushPreviousLocation = false)
-    model.searchResult.observe(viewLifecycleOwner) { result ->
-      // Only run animations when the new list is filtered, i.e., the user submitted a search,
-      // and not on folder navigations since the latter leads to too many removal animations.
-      (recyclerView.itemAnimator as OnOffItemAnimator).isEnabled = result.isFiltered
-      recyclerAdapter.submitList(result.passwordItems) {
-        when {
-          result.isFiltered -> {
-            // When the result is filtered, we always scroll to the top since that is
-            // where
-            // the best fuzzy match appears.
-            recyclerView.scrollToPosition(0)
-          }
-          scrollTarget != null -> {
-            scrollTarget?.let {
-              recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+    model.searchResult
+      .flowWithLifecycle(lifecycle)
+      .onEach { result ->
+        // Only run animations when the new list is filtered, i.e., the user submitted a search,
+        // and not on folder navigation since the latter leads to too many removal animations.
+        (recyclerView.itemAnimator as OnOffItemAnimator).isEnabled = result.isFiltered
+        recyclerAdapter.submitList(result.passwordItems) {
+          when {
+            result.isFiltered -> {
+              // When the result is filtered, we always scroll to the top since that is
+              // where the best fuzzy match appears.
+              recyclerView.scrollToPosition(0)
             }
-            scrollTarget = null
-          }
-          else -> {
-            // When the result is not filtered and there is a saved scroll position for
-            // it,
-            // we try to restore it.
-            recyclerViewStateToRestore?.let {
-              recyclerView.layoutManager!!.onRestoreInstanceState(it)
+            scrollTarget != null -> {
+              scrollTarget?.let {
+                recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+              }
+              scrollTarget = null
             }
-            recyclerViewStateToRestore = null
+            else -> {
+              // When the result is not filtered and there is a saved scroll position for
+              // it, we try to restore it.
+              recyclerViewStateToRestore?.let {
+                recyclerView.layoutManager!!.onRestoreInstanceState(it)
+              }
+              recyclerViewStateToRestore = null
+            }
           }
         }
       }
-    }
+      .launchIn(lifecycleScope)
   }
 
   private val actionModeCallback =

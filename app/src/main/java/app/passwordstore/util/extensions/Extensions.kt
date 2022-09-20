@@ -6,7 +6,6 @@ package app.passwordstore.util.extensions
 
 import app.passwordstore.data.repo.PasswordRepository
 import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
@@ -15,14 +14,6 @@ import java.util.Date
 import logcat.asLog
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
-
-/** The default OpenPGP provider for the app */
-const val OPENPGP_PROVIDER = "org.sufficientlysecure.keychain"
-
-/** Clears the given [flag] from the value of this [Int] */
-fun Int.clearFlag(flag: Int): Int {
-  return this and flag.inv()
-}
 
 /** Checks if this [Int] contains the given [flag] */
 infix fun Int.hasFlag(flag: Int): Boolean {
@@ -73,24 +64,11 @@ val RevCommit.time: Date
     return Date(epochMilliseconds)
   }
 
-/**
- * Splits this [String] into an [Array] of [String] s, split on the UNIX LF line ending and stripped
- * of any empty lines.
- */
-fun String.splitLines(): Array<String> {
-  return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-}
-
 /** Alias to [lazy] with thread safety mode always set to [LazyThreadSafetyMode.NONE]. */
 fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE) { initializer.invoke() }
 
 /** A convenience extension to turn a [Throwable] with a message into a loggable string. */
 fun Throwable.asLog(message: String): String = "$message\n${asLog()}"
-
-/** Extension on [Result] that returns if the type is [Ok] */
-fun <V, E> Result<V, E>.isOk(): Boolean {
-  return this is Ok<V>
-}
 
 /** Extension on [Result] that returns if the type is [Err] */
 fun <V, E> Result<V, E>.isErr(): Boolean {

@@ -5,16 +5,13 @@
 package app.passwordstore.util.viewmodel
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.Selection
@@ -26,30 +23,35 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.data.repo.PasswordRepository
+import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.DirectoryStructure
-import app.passwordstore.util.extensions.sharedPrefs
-import app.passwordstore.util.extensions.unsafeLazy
+import app.passwordstore.util.checkMainThread
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PasswordSortOrder
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import java.text.Collator
 import java.util.Locale
 import java.util.Stack
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
@@ -108,8 +110,15 @@ enum class ListMode {
   AllEntries
 }
 
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class SearchableRepositoryViewModel(application: Application) : AndroidViewModel(application) {
+@OptIn(ExperimentalCoroutinesApi::class)
+@HiltViewModel
+class SearchableRepositoryViewModel
+@Inject
+constructor(
+  application: Application,
+  dispatcherProvider: DispatcherProvider,
+  @SettingsPreferences private val settings: SharedPreferences,
+) : AndroidViewModel(application) {
 
   private var _updateCounter = 0
   private val updateCounter: Int
@@ -121,7 +130,6 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
   private val root
     get() = PasswordRepository.getRepositoryDirectory()
-  private val settings by unsafeLazy { application.sharedPrefs }
   private val showHiddenContents
     get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
   private val defaultSearchMode
@@ -169,8 +177,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
   private fun updateSearchAction(action: SearchAction) = action.copy(updateCounter = updateCounter)
 
-  private val searchAction =
-    MutableLiveData(
+  private val searchActionFlow =
+    MutableStateFlow(
       makeSearchAction(
         baseDirectory = root,
         filter = "",
@@ -179,13 +187,13 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         listMode = ListMode.AllEntries
       )
     )
-  private val searchActionFlow = searchAction.asFlow().distinctUntilChanged()
 
   data class SearchResult(val passwordItems: List<PasswordItem>, val isFiltered: Boolean)
 
   val searchResult =
     searchActionFlow
       .mapLatest { searchAction ->
+        checkMainThread()
         val listResultFlow =
           when (searchAction.searchMode) {
             SearchMode.RecursivelyInSubdirectories ->
@@ -194,14 +202,20 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
           }
         val prefilteredResultFlow =
           when (searchAction.listMode) {
-            ListMode.FilesOnly -> listResultFlow.filter { it.isFile }
-            ListMode.DirectoriesOnly -> listResultFlow.filter { it.isDirectory }
+            ListMode.FilesOnly ->
+              listResultFlow.filter { it.isFile }.flowOn(dispatcherProvider.io())
+            ListMode.DirectoriesOnly ->
+              listResultFlow.filter { it.isDirectory }.flowOn(dispatcherProvider.io())
             ListMode.AllEntries -> listResultFlow
           }
         val passwordList =
           when (if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode) {
             FilterMode.NoFilter -> {
-              prefilteredResultFlow.map { it.toPasswordItem() }.toList().sortedWith(itemComparator)
+              prefilteredResultFlow
+                .map { it.toPasswordItem() }
+                .flowOn(dispatcherProvider.io())
+                .toList()
+                .sortedWith(itemComparator)
             }
             FilterMode.StrictDomain -> {
               check(searchAction.listMode == ListMode.FilesOnly) {
@@ -214,6 +228,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                     regex.containsMatchIn(absoluteFile.relativeTo(root).path)
                   }
                   .map { it.toPasswordItem() }
+                  .flowOn(dispatcherProvider.io())
                   .toList()
                   .sortedWith(itemComparator)
               } else {
@@ -227,6 +242,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                   Pair(item.fuzzyMatch(searchAction.filter), item)
                 }
                 .filter { it.first > 0 }
+                .flowOn(dispatcherProvider.io())
                 .toList()
                 .sortedWith(
                   compareByDescending<Pair<Int, PasswordItem>> { it.first }
@@ -237,7 +253,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
           }
         SearchResult(passwordList, isFiltered = searchAction.filterMode != FilterMode.NoFilter)
       }
-      .asLiveData(Dispatchers.IO)
+      .flowOn(dispatcherProvider.io())
 
   private fun shouldTake(file: File) =
     with(file) {
@@ -270,8 +286,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
       .filter(::shouldTake)
   }
 
-  private val _currentDir = MutableLiveData(root)
-  val currentDir = _currentDir as LiveData<File>
+  private val _currentDir = MutableStateFlow(root)
+  val currentDir = _currentDir.asStateFlow()
 
   data class NavigationStackEntry(val dir: File, val recyclerViewState: Parcelable?)
 
@@ -286,9 +302,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     if (!newDirectory.exists()) return
     require(newDirectory.isDirectory) { "Can only navigate to a directory" }
     if (pushPreviousLocation) {
-      navigationStack.push(NavigationStackEntry(_currentDir.value!!, recyclerViewState))
+      navigationStack.push(NavigationStackEntry(_currentDir.value, recyclerViewState))
     }
-    searchAction.postValue(
+    searchActionFlow.update {
       makeSearchAction(
         filter = "",
         baseDirectory = newDirectory,
@@ -296,8 +312,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         searchMode = SearchMode.InCurrentDirectoryOnly,
         listMode = listMode
       )
-    )
-    _currentDir.postValue(newDirectory)
+    }
+    _currentDir.update { newDirectory }
   }
 
   val canNavigateBack
@@ -330,20 +346,20 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     listMode: ListMode = ListMode.AllEntries
   ) {
     require(baseDirectory?.isDirectory != false) { "Can only search in a directory" }
-    searchAction.postValue(
+    searchActionFlow.update {
       makeSearchAction(
         filter = filter,
-        baseDirectory = baseDirectory ?: _currentDir.value!!,
+        baseDirectory = baseDirectory ?: _currentDir.value,
         filterMode = filterMode,
         searchMode = searchMode ?: defaultSearchMode,
         listMode = listMode
       )
-    )
+    }
   }
 
   fun forceRefresh() {
     forceUpdateOnNextSearchAction()
-    searchAction.postValue(updateSearchAction(searchAction.value!!))
+    searchActionFlow.update { updateSearchAction(searchActionFlow.value) }
   }
 
   companion object {
