@@ -26,6 +26,7 @@ import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.DirectoryStructure
+import app.passwordstore.util.checkMainThread
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PasswordSortOrder
 import app.passwordstore.util.settings.PreferenceKeys
@@ -192,6 +193,7 @@ constructor(
   val searchResult =
     searchActionFlow
       .mapLatest { searchAction ->
+        checkMainThread()
         val listResultFlow =
           when (searchAction.searchMode) {
             SearchMode.RecursivelyInSubdirectories ->

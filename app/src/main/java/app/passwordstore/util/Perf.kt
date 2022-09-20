@@ -3,6 +3,7 @@
 
 package app.passwordstore.util
 
+import android.os.Looper
 import android.os.SystemClock
 import logcat.logcat
 
@@ -24,4 +25,15 @@ fun <T> logExecutionTimeBlocking(tag: String, block: () -> T): T {
   val end = SystemClock.uptimeMillis()
   logcat(tag) { "Finished in ${end - start}ms" }
   return res
+}
+
+/**
+ * Throws if called on the main thread, used to ensure an operation being offloaded to a background
+ * thread is correctly being moved off the main thread.
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun checkMainThread() {
+  require(Looper.myLooper() != Looper.getMainLooper()) {
+    "This operation must not run on the main thread"
+  }
 }
