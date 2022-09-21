@@ -14,17 +14,12 @@
       <option name="DO_NOT_WRAP_AFTER_SINGLE_ANNOTATION" value="true" />
     </JavaCodeStyleSettings>
     <JetCodeStyleSettings>
-      <option name="PACKAGES_TO_USE_STAR_IMPORTS">
-        <value />
-      </option>
       <option name="PACKAGES_IMPORT_LAYOUT">
         <value>
           <package name="" alias="false" withSubpackages="true" />
           <package name="" alias="true" withSubpackages="true" />
         </value>
       </option>
-      <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
-      <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
       <option name="CONTINUATION_INDENT_IN_PARAMETER_LISTS" value="true" />
       <option name="CONTINUATION_INDENT_IN_ARGUMENT_LISTS" value="true" />
       <option name="CONTINUATION_INDENT_FOR_EXPRESSION_BODIES" value="true" />
