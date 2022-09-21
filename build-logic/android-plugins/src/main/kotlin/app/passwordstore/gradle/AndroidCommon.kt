@@ -4,7 +4,9 @@ import app.passwordstore.gradle.flavors.configureSlimTests
 import com.android.build.gradle.TestedExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.withType
 
 @Suppress("UnstableApiUsage")
 object AndroidCommon {
@@ -39,6 +41,12 @@ object AndroidCommon {
       testOptions {
         animationsDisabled = true
         unitTests.isReturnDefaultValues = true
+      }
+      project.tasks.withType<Test> {
+        jvmArgs(
+          "--add-opens=java.base/java.lang=ALL-UNNAMED",
+          "--add-opens=java.base/java.util=ALL-UNNAMED",
+        )
       }
 
       project.configureSlimTests()
