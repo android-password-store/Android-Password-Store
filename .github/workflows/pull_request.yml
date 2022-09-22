@@ -40,7 +40,7 @@ jobs:
 
     - name: Check codestyle
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.3.0
+      uses: gradle/gradle-build-action@v2.3.1
       with:
         arguments: spotlessCheck
         gradle-home-cache-cleanup: true
@@ -82,7 +82,7 @@ jobs:
 
     - name: Run unit tests
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.3.0
+      uses: gradle/gradle-build-action@v2.3.1
       with:
         arguments: test -PslimTests
         gradle-home-cache-cleanup: true
@@ -131,7 +131,7 @@ jobs:
 
     - name: Build debug APKs
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.3.0
+      uses: gradle/gradle-build-action@v2.3.1
       with:
         arguments: assembleFreeDebug assembleNonFreeDebug
         gradle-home-cache-cleanup: true
@@ -173,7 +173,7 @@ jobs:
 
     - name: Check library API
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.3.0
+      uses: gradle/gradle-build-action@v2.3.1
       with:
         arguments: apiCheck
         gradle-home-cache-cleanup: true
@@ -215,7 +215,7 @@ jobs:
 
     - name: Run Lint on debug variants
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.3.0
+      uses: gradle/gradle-build-action@v2.3.1
       with:
         arguments: lintDebug
         gradle-home-cache-cleanup: true
@@ -257,7 +257,7 @@ jobs:
 
     - name: Assemble non-free release
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
-      uses: gradle/gradle-build-action@v2.3.0
+      uses: gradle/gradle-build-action@v2.3.1
       with:
         arguments: aNFR
         gradle-home-cache-cleanup: true
@@ -299,7 +299,7 @@ jobs:
 
       - name: Run detekt
         if: "${{ steps.service-changed.outputs.result == 'true' }}"
-        uses: gradle/gradle-build-action@v2.3.0
+        uses: gradle/gradle-build-action@v2.3.1
         with:
           arguments: detekt
           gradle-home-cache-cleanup: true

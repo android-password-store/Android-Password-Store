@@ -48,7 +48,7 @@ jobs:
           version: ${{ github.event.milestone.title }}
 
       - name: Setup Gradle caching
-        uses: gradle/gradle-build-action@v2.3.0
+        uses: gradle/gradle-build-action@v2.3.1
         with:
           gradle-home-cache-cleanup: true
 
