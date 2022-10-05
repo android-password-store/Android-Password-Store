@@ -77,6 +77,7 @@ dependencyResolutionManagement {
         includeGroup("androidx.cardview")
         includeGroup("androidx.collection")
         includeGroup("androidx.compose.animation")
+        includeGroup("androidx.compose.compiler")
         includeGroup("androidx.compose.foundation")
         includeGroup("androidx.compose.material")
         includeGroup("androidx.compose.material3")
@@ -142,10 +143,6 @@ dependencyResolutionManagement {
         includeModule("com.android.tools", "sdk-common")
         includeModule("com.google.android.material", "material")
       }
-    }
-    exclusiveContent {
-      forRepository { maven(url = "https://androidx.dev/storage/compose-compiler/repository/") }
-      filter { includeGroup("androidx.compose.compiler") }
     }
     exclusiveContent {
       forRepository { maven("https://jitpack.io") }

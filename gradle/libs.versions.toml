@@ -50,7 +50,7 @@ build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.11.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.6.1"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
 compose-animation = "androidx.compose.animation:animation:1.3.0-beta03"
-compose-compiler = "androidx.compose.compiler:compiler:1.4.0-dev-k1.7.20-RC-a143c065804"
+compose-compiler = "androidx.compose.compiler:compiler:1.3.2"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "composeFoundation" }
 compose-hilt = "androidx.hilt:hilt-navigation-compose:1.0.0"
