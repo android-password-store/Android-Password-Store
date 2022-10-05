@@ -62,7 +62,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     DynamicColors.applyToActivitiesIfAvailable(this)
     Sentry.configureScope { scope ->
       val user = User()
-      user.others =
+      user.data =
         Feature.VALUES.associate { feature ->
           "features.${feature.configKey}" to features.isEnabled(feature).toString()
         }

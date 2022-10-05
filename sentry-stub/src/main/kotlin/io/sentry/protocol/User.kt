@@ -7,6 +7,6 @@ public data class User(
   public var id: String? = null,
   public var username: String? = null,
   public var ipAddress: String? = null,
-  public var others: Map<String?, String>? = null,
+  public var data: Map<String?, String>? = null,
   public var unknown: Map<String?, String>? = null,
 )
