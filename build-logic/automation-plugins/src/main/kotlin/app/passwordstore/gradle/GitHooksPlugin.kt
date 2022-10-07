@@ -11,8 +11,8 @@ class GitHooksPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     project.tasks.register<GitHooks>("installGitHooks") {
       val projectDirectory = project.layout.projectDirectory
-      hookScript.set(projectDirectory.file("scripts/pre-push-hook.sh").asFile.readText())
-      hookOutput.set(projectDirectory.file(".git/hooks/pre-push").asFile)
+      hookSource.set(projectDirectory.file("scripts/pre-push-hook.sh"))
+      hookOutput.set(projectDirectory.file(".git/hooks/pre-push"))
     }
   }
 }
