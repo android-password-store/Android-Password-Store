@@ -16,6 +16,7 @@ import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
 import app.passwordstore.ui.adapters.FieldItemAdapter
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
@@ -30,7 +31,6 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
@@ -49,6 +49,7 @@ class DecryptActivity : BasePgpActivity() {
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var repository: CryptoRepository
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
 
   private var passwordEntry: PasswordEntry? = null
   private var retries = 0
@@ -147,7 +148,7 @@ class DecryptActivity : BasePgpActivity() {
     if (isError) {
       dialog.setError()
     }
-    lifecycleScope.launch(Dispatchers.Main) {
+    lifecycleScope.launch(dispatcherProvider.main()) {
       dialog.password.collectLatest { value ->
         if (value != null) {
           when (val result = decryptWithPassphrase(value)) {
@@ -169,7 +170,7 @@ class DecryptActivity : BasePgpActivity() {
   }
 
   private suspend fun decryptWithPassphrase(password: String) = runCatching {
-    val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
+    val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
     val outputStream = ByteArrayOutputStream()
     val result =
       repository.decrypt(
@@ -184,7 +185,7 @@ class DecryptActivity : BasePgpActivity() {
   }
 
   private suspend fun createPasswordUI(entry: PasswordEntry) =
-    withContext(Dispatchers.Main) {
+    withContext(dispatcherProvider.main()) {
       val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
       invalidateOptionsMenu()
 
