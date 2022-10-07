@@ -3,9 +3,12 @@ package app.passwordstore.ui.crypto
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -17,8 +20,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.data.passfile.PasswordEntry
+import app.passwordstore.ui.APSAppBar
+import app.passwordstore.ui.compose.theme.APSThemePreview
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.UriTotpFinder
 import kotlin.time.ExperimentalTime
@@ -32,28 +38,42 @@ fun PasswordEntryScreen(
   entry: PasswordEntry,
   modifier: Modifier = Modifier,
 ) {
-  val clipboard = LocalClipboardManager.current
-  Box(modifier = modifier.fillMaxSize()) {
-    Column {
-      Text(entryName)
-      if (entry.password != null) {
-        TextField(
-          value = entry.password!!,
-          onValueChange = {},
-          readOnly = true,
-          label = { Text("Password") },
-          trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(entry.password!!)) } },
+  Scaffold(
+    topBar = {
+      APSAppBar(
+        title = "",
+        navigationIcon = painterResource(R.drawable.ic_arrow_back_black_24dp),
+        onNavigationIconClick = {},
+        backgroundColor = MaterialTheme.colorScheme.surface,
+      )
+    },
+  ) { paddingValues ->
+    val clipboard = LocalClipboardManager.current
+    Box(modifier = modifier.fillMaxSize().padding(paddingValues)) {
+      Column(modifier = Modifier.padding(8.dp)) {
+        Text(
+          text = entryName,
+          style = MaterialTheme.typography.headlineSmall,
         )
-      }
-      if (entry.hasTotp()) {
-        val totp by entry.totp.collectAsState(runBlocking { entry.totp.first() })
-        TextField(
-          value = totp.value,
-          onValueChange = {},
-          readOnly = true,
-          label = { Text("OTP (expires in ${totp.remainingTime.inWholeSeconds}s)") },
-          trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(totp.value)) } }
-        )
+        if (entry.password != null) {
+          TextField(
+            value = entry.password!!,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("Password") },
+            trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(entry.password!!)) } },
+          )
+        }
+        if (entry.hasTotp()) {
+          val totp by entry.totp.collectAsState(runBlocking { entry.totp.first() })
+          TextField(
+            value = totp.value,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("OTP (expires in ${totp.remainingTime.inWholeSeconds}s)") },
+            trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(totp.value)) } }
+          )
+        }
       }
     }
   }
@@ -74,7 +94,7 @@ private fun CopyButton(onClick: () -> Unit) {
 @Preview
 @Composable
 private fun PasswordEntryPreview() {
-  PasswordEntryScreen("Test Entry", createTestEntry())
+  APSThemePreview { PasswordEntryScreen("Test Entry", createTestEntry()) }
 }
 
 fun createTestEntry() =

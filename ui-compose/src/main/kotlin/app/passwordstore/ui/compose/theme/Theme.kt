@@ -70,3 +70,8 @@ public fun APSTheme(
 ) {
   MaterialTheme(colorScheme = colors, typography = AppTypography, content = content)
 }
+
+@Composable
+public fun APSThemePreview(content: @Composable () -> Unit) {
+  MaterialTheme(colorScheme = LightThemeColors, typography = AppTypography, content = content)
+}
