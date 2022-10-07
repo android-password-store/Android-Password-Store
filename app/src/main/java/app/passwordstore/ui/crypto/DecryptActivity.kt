@@ -17,13 +17,13 @@ import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
 import app.passwordstore.ui.adapters.FieldItemAdapter
 import app.passwordstore.util.extensions.getString
-import app.passwordstore.util.extensions.isErr
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.runCatching
-import com.github.michaelbull.result.unwrapError
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -66,7 +66,7 @@ class DecryptActivity : BasePgpActivity() {
         true
       }
     }
-    decrypt(isError = false)
+    askPassphrase(isError = false)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -137,7 +137,7 @@ class DecryptActivity : BasePgpActivity() {
     )
   }
 
-  private fun decrypt(isError: Boolean) {
+  private fun askPassphrase(isError: Boolean) {
     if (retries < MAX_RETRIES) {
       retries += 1
     } else {
@@ -150,10 +150,17 @@ class DecryptActivity : BasePgpActivity() {
     lifecycleScope.launch(Dispatchers.Main) {
       dialog.password.collectLatest { value ->
         if (value != null) {
-          val res = runCatching { decrypt(value) }
-          if (res.isErr()) {
-            logcat(ERROR) { res.unwrapError().stackTraceToString() }
-            decrypt(isError = true)
+          when (val result = decryptWithPassphrase(value)) {
+            is Ok -> {
+              val entry = passwordEntryFactory.create(result.value.toByteArray())
+              passwordEntry = entry
+              createPasswordUI(entry)
+              startAutoDismissTimer()
+            }
+            is Err -> {
+              logcat(ERROR) { result.error.stackTraceToString() }
+              askPassphrase(isError = true)
+            }
           }
         }
       }
@@ -161,26 +168,22 @@ class DecryptActivity : BasePgpActivity() {
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
-  private suspend fun decrypt(password: String) {
+  private suspend fun decryptWithPassphrase(password: String) = runCatching {
     val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
+    val outputStream = ByteArrayOutputStream()
     val result =
-      withContext(Dispatchers.IO) {
-        val outputStream = ByteArrayOutputStream()
-        repository.decrypt(
-          password,
-          message,
-          outputStream,
-        )
-        outputStream
-      }
-    startAutoDismissTimer()
-
-    val entry = passwordEntryFactory.create(result.toByteArray())
-    passwordEntry = entry
-    createPasswordUi(entry)
+      repository.decrypt(
+        password,
+        message,
+        outputStream,
+      )
+    when (result) {
+      is Ok -> outputStream
+      is Err -> throw result.error
+    }
   }
 
-  private suspend fun createPasswordUi(entry: PasswordEntry) =
+  private suspend fun createPasswordUI(entry: PasswordEntry) =
     withContext(Dispatchers.Main) {
       val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
       invalidateOptionsMenu()
