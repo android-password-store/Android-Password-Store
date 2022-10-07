@@ -45,7 +45,6 @@ constructor(
     out: ByteArrayOutputStream,
   ) {
     val keys = pgpKeyManager.getAllKeys().unwrap()
-    // Iterates through the keys until the first successful decryption, then returns.
     pgpCryptoHandler.decrypt(keys, password, message, out)
   }
 
