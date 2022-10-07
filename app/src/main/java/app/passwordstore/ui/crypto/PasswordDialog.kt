@@ -19,6 +19,7 @@ import app.passwordstore.util.extensions.unsafeLazy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 /** [DialogFragment] to request a password from the user and forward it along. */
 class PasswordDialog : DialogFragment() {
@@ -32,7 +33,7 @@ class PasswordDialog : DialogFragment() {
     val builder = MaterialAlertDialogBuilder(requireContext())
     builder.setView(binding.root)
     builder.setTitle(R.string.password)
-    builder.setPositiveButton(android.R.string.ok) { _, _ -> tryEmitPassword() }
+    builder.setPositiveButton(android.R.string.ok) { _, _ -> setPasswordAndDismiss() }
     val dialog = builder.create()
     dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     dialog.setOnShowListener {
@@ -42,7 +43,7 @@ class PasswordDialog : DialogFragment() {
       binding.passwordEditText.doOnTextChanged { _, _, _, _ -> binding.passwordField.error = null }
       binding.passwordEditText.setOnKeyListener { _, keyCode, _ ->
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
-          tryEmitPassword()
+          setPasswordAndDismiss()
           return@setOnKeyListener true
         }
         false
@@ -64,9 +65,8 @@ class PasswordDialog : DialogFragment() {
     finish()
   }
 
-  @Suppress("ControlFlowWithEmptyBody")
-  private fun tryEmitPassword() {
-    do {} while (!_password.tryEmit(binding.passwordEditText.text.toString()))
+  private fun setPasswordAndDismiss() {
+    _password.update { binding.passwordEditText.text.toString() }
     dismissAllowingStateLoss()
   }
 }
