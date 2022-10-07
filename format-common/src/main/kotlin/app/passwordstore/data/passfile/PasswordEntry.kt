@@ -62,7 +62,7 @@ constructor(
       do {
         val otp = calculateTotp()
         emit(otp)
-        delay(1000L)
+        delay(THOUSAND_LONG)
       } while (coroutineContext.isActive)
     } else {
       awaitCancellation()
@@ -180,8 +180,8 @@ constructor(
     val totpAlgorithm = totpFinder.findAlgorithm(content)
     val issuer = totpFinder.findIssuer(content)
     val millis = clock.millis()
-    val remainingTime = (totpPeriod - ((millis / 1000) % totpPeriod)).seconds
-    Otp.calculateCode(totpSecret!!, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
+    val remainingTime = (totpPeriod - ((millis / THOUSAND) % totpPeriod)).seconds
+    Otp.calculateCode(totpSecret!!, millis / (THOUSAND * totpPeriod), totpAlgorithm, digits, issuer)
       .mapBoth(
         { code ->
           return Totp(code, remainingTime)
@@ -217,5 +217,7 @@ constructor(
         "secret:",
         "pass:",
       )
+    private const val THOUSAND = 1000
+    private const val THOUSAND_LONG = 1000L
   }
 }
