@@ -89,6 +89,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
       arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
     "com.kiwibrowser.browser" to arrayOf("wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig="),
     "us.spotco.fennec_dos" to arrayOf("/4H1vlY5ZZTu5w/vKDIlbhUhQSLiupzt0mAF/9S8qqg="),
+    "com.vivaldi.browser" to arrayOf("6KeFRGVbqMCYF/cydo9WibFmLsSyvFoLwOwTjTPKPR4="),
   )
 
 private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {

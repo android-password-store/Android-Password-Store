@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- [Vivaldi](https://play.google.com/store/apps/details?id=com.vivaldi.browser) is now supported as an Autofill-capable browser.
+
 ## [1.1.1]
 
 ### Added
