@@ -8,8 +8,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +35,6 @@ public fun APSAppBar(
       }
     },
     colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = backgroundColor),
-    modifier = modifier,
+    modifier = modifier.shadow(8.dp),
   )
 }
