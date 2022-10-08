@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.APSAppBar
+import app.passwordstore.ui.compose.PasswordField
 import app.passwordstore.ui.compose.theme.APSThemePreview
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.UriTotpFinder
@@ -56,13 +57,7 @@ fun PasswordEntryScreen(
           style = MaterialTheme.typography.headlineSmall,
         )
         if (entry.password != null) {
-          TextField(
-            value = entry.password!!,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("Password") },
-            trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(entry.password!!)) } },
-          )
+          PasswordField(value = entry.password!!, label = "Password", initialVisibility = false)
         }
         if (entry.hasTotp()) {
           val totp by entry.totp.collectAsState(runBlocking { entry.totp.first() })
@@ -97,7 +92,7 @@ private fun PasswordEntryPreview() {
   APSThemePreview { PasswordEntryScreen("Test Entry", createTestEntry()) }
 }
 
-fun createTestEntry() =
+private fun createTestEntry() =
   PasswordEntry(
     UserClock(),
     UriTotpFinder(),
