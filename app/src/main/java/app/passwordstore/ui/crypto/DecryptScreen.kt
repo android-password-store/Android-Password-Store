@@ -69,6 +69,15 @@ fun PasswordEntryScreen(
             trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(totp.value)) } }
           )
         }
+        if (entry.username != null) {
+          TextField(
+            value = entry.username!!,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("Username") },
+            trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(entry.username!!)) } },
+          )
+        }
       }
     }
   }
