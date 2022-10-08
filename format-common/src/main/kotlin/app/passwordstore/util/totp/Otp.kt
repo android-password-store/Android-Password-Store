@@ -67,10 +67,14 @@ internal object Otp {
           return Err(IllegalArgumentException("Digits specifier has to be either 's' or numeric"))
         }
         numDigits < MINIMUM_DIGITS -> {
-          return Err(IllegalArgumentException("TOTP codes have to be at least $MINIMUM_DIGITS digits long"))
+          return Err(
+            IllegalArgumentException("TOTP codes have to be at least $MINIMUM_DIGITS digits long")
+          )
         }
         numDigits > MAXIMUM_DIGITS -> {
-          return Err(IllegalArgumentException("TOTP codes can be at most $MAXIMUM_DIGITS digits long"))
+          return Err(
+            IllegalArgumentException("TOTP codes can be at most $MAXIMUM_DIGITS digits long")
+          )
         }
         else -> {
           // 2^31 = 2_147_483_648, so we can extract at most 10 digits with the first one

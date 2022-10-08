@@ -182,7 +182,13 @@ constructor(
     val issuer = totpFinder.findIssuer(content)
     val millis = clock.millis()
     val remainingTime = (totpPeriod - ((millis / ONE_SECOND) % totpPeriod)).seconds
-    Otp.calculateCode(totpSecret!!, millis / (ONE_SECOND * totpPeriod), totpAlgorithm, digits, issuer)
+    Otp.calculateCode(
+        totpSecret!!,
+        millis / (ONE_SECOND * totpPeriod),
+        totpAlgorithm,
+        digits,
+        issuer
+      )
       .mapBoth(
         { code ->
           return Totp(code, remainingTime)
