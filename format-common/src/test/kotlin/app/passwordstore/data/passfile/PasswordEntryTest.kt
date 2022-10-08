@@ -194,6 +194,7 @@ class PasswordEntryTest {
 
   companion object {
 
+    @Suppress("MaxLineLength")
     const val TOTP_URI =
       "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
 

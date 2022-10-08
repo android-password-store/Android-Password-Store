@@ -1,18 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <SmellBaseline>
   <ManuallySuppressedIssues/>
-  <CurrentIssues>
-    <ID>MagicNumber:Otp.kt$Otp$0x7f</ID>
-    <ID>MagicNumber:Otp.kt$Otp$10</ID>
-    <ID>MagicNumber:Otp.kt$Otp$26</ID>
-    <ID>MagicNumber:Otp.kt$Otp$4</ID>
-    <ID>MagicNumber:Otp.kt$Otp$5</ID>
-    <ID>MagicNumber:Otp.kt$Otp$6</ID>
-    <ID>MagicNumber:Otp.kt$Otp$8</ID>
-    <ID>MagicNumber:PasswordEntry.kt$PasswordEntry$1000</ID>
-    <ID>MatchingDeclarationName:Clocks.kt$UserClock : Clock</ID>
-    <ID>MatchingDeclarationName:TestClocks.kt$TestUserClock : UserClock</ID>
-    <ID>MaxLineLength:PasswordEntryTest.kt$PasswordEntryTest.Companion$"otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&amp;issuer=ACME%20Co&amp;algorithm=SHA1&amp;digits=6&amp;period=30"</ID>
-    <ID>ReturnCount:PasswordEntry.kt$PasswordEntry$private fun findAndStripPassword(passContent: List&lt;String>): Pair&lt;String?, List&lt;String>></ID>
-  </CurrentIssues>
+  <CurrentIssues/>
 </SmellBaseline>

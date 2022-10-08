@@ -18,6 +18,13 @@ internal object Otp {
 
   private val BASE_32 = Base32()
   private val STEAM_ALPHABET = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
+  private const val BYTE_BUFFER_CAPACITY = 8
+  private const val END_INDEX_OFFSET = 4
+  private const val STEAM_GUARD_DIGITS = 5
+  private const val MINIMUM_DIGITS = 6
+  private const val MAXIMUM_DIGITS = 10
+  private const val ALPHABET_LENGTH = 26
+  private const val MOST_SIGNIFICANT_BYTE = 0x7f
 
   fun calculateCode(
     secret: String,
@@ -32,13 +39,13 @@ internal object Otp {
     val digest =
       Mac.getInstance(algo).run {
         init(secretKey)
-        doFinal(ByteBuffer.allocate(8).putLong(counter).array())
+        doFinal(ByteBuffer.allocate(BYTE_BUFFER_CAPACITY).putLong(counter).array())
       }
     // Least significant 4 bits are used as an offset into the digest.
     val offset = (digest.last() and 0xf).toInt()
     // Extract 32 bits at the offset and clear the most significant bit.
-    val code = digest.copyOfRange(offset, offset + 4)
-    code[0] = (0x7f and code[0].toInt()).toByte()
+    val code = digest.copyOfRange(offset, offset.plus(END_INDEX_OFFSET))
+    code[0] = (MOST_SIGNIFICANT_BYTE and code[0].toInt()).toByte()
     val codeInt = ByteBuffer.wrap(code).int
     check(codeInt > 0)
     // SteamGuard is a horrible OTP implementation that generates non-standard 5 digit OTPs as
@@ -47,9 +54,9 @@ internal object Otp {
     if (digits == "s" || issuer == "Steam") {
       var remainingCodeInt = codeInt
       buildString {
-        repeat(5) {
+        repeat(STEAM_GUARD_DIGITS) {
           append(STEAM_ALPHABET[remainingCodeInt % STEAM_ALPHABET.size])
-          remainingCodeInt /= 26
+          remainingCodeInt /= ALPHABET_LENGTH
         }
       }
     } else {
@@ -59,17 +66,21 @@ internal object Otp {
         numDigits == null -> {
           return Err(IllegalArgumentException("Digits specifier has to be either 's' or numeric"))
         }
-        numDigits < 6 -> {
-          return Err(IllegalArgumentException("TOTP codes have to be at least 6 digits long"))
+        numDigits < MINIMUM_DIGITS -> {
+          return Err(
+            IllegalArgumentException("TOTP codes have to be at least $MINIMUM_DIGITS digits long")
+          )
         }
-        numDigits > 10 -> {
-          return Err(IllegalArgumentException("TOTP codes can be at most 10 digits long"))
+        numDigits > MAXIMUM_DIGITS -> {
+          return Err(
+            IllegalArgumentException("TOTP codes can be at most $MAXIMUM_DIGITS digits long")
+          )
         }
         else -> {
           // 2^31 = 2_147_483_648, so we can extract at most 10 digits with the first one
           // always being 0, 1, or 2. Pad with leading zeroes.
-          val codeStringBase10 = codeInt.toString(10).padStart(10, '0')
-          check(codeStringBase10.length == 10)
+          val codeStringBase10 = codeInt.toString(MAXIMUM_DIGITS).padStart(MAXIMUM_DIGITS, '0')
+          check(codeStringBase10.length == MAXIMUM_DIGITS)
           codeStringBase10.takeLast(numDigits)
         }
       }
