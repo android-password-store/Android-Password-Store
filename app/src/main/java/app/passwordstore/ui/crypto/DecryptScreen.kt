@@ -49,15 +49,20 @@ fun PasswordEntryScreen(
       )
     },
   ) { paddingValues ->
-    val clipboard = LocalClipboardManager.current
     Box(modifier = modifier.fillMaxSize().padding(paddingValues)) {
       Column(modifier = Modifier.padding(8.dp)) {
         Text(
           text = entryName,
           style = MaterialTheme.typography.headlineSmall,
+          modifier = Modifier.padding(bottom = 8.dp),
         )
         if (entry.password != null) {
-          PasswordField(value = entry.password!!, label = "Password", initialVisibility = false)
+          PasswordField(
+            value = entry.password!!,
+            label = "Password",
+            initialVisibility = false,
+            modifier = Modifier.padding(bottom = 8.dp),
+          )
         }
         if (entry.hasTotp()) {
           val totp by entry.totp.collectAsState(runBlocking { entry.totp.first() })
@@ -66,7 +71,8 @@ fun PasswordEntryScreen(
             onValueChange = {},
             readOnly = true,
             label = { Text("OTP (expires in ${totp.remainingTime.inWholeSeconds}s)") },
-            trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(totp.value)) } }
+            trailingIcon = { CopyButton({ totp.value }) },
+            modifier = Modifier.padding(bottom = 8.dp),
           )
         }
         if (entry.username != null) {
@@ -75,7 +81,8 @@ fun PasswordEntryScreen(
             onValueChange = {},
             readOnly = true,
             label = { Text("Username") },
-            trailingIcon = { CopyButton { clipboard.setText(AnnotatedString(entry.username!!)) } },
+            trailingIcon = { CopyButton({ entry.username!! }) },
+            modifier = Modifier.padding(bottom = 8.dp),
           )
         }
       }
@@ -84,9 +91,14 @@ fun PasswordEntryScreen(
 }
 
 @Composable
-private fun CopyButton(onClick: () -> Unit) {
+private fun CopyButton(
+  textToCopy: () -> String,
+  modifier: Modifier = Modifier,
+) {
+  val clipboard = LocalClipboardManager.current
   IconButton(
-    onClick = onClick,
+    onClick = { clipboard.setText(AnnotatedString(textToCopy())) },
+    modifier = modifier,
   ) {
     Icon(
       painter = painterResource(R.drawable.ic_content_copy),
