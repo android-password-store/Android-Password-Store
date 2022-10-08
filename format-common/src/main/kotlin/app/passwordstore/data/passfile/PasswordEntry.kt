@@ -62,7 +62,7 @@ constructor(
       do {
         val otp = calculateTotp()
         emit(otp)
-        delay(THOUSAND_LONG)
+        delay(ONE_SECOND.seconds)
       } while (coroutineContext.isActive)
     } else {
       awaitCancellation()
@@ -90,6 +90,7 @@ constructor(
     return totpSecret != null
   }
 
+  @Suppress("ReturnCount")
   private fun findAndStripPassword(passContent: List<String>): Pair<String?, List<String>> {
     if (TotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) return Pair(null, passContent)
     for (line in passContent) {
@@ -180,8 +181,8 @@ constructor(
     val totpAlgorithm = totpFinder.findAlgorithm(content)
     val issuer = totpFinder.findIssuer(content)
     val millis = clock.millis()
-    val remainingTime = (totpPeriod - ((millis / THOUSAND) % totpPeriod)).seconds
-    Otp.calculateCode(totpSecret!!, millis / (THOUSAND * totpPeriod), totpAlgorithm, digits, issuer)
+    val remainingTime = (totpPeriod - ((millis / ONE_SECOND) % totpPeriod)).seconds
+    Otp.calculateCode(totpSecret!!, millis / (ONE_SECOND * totpPeriod), totpAlgorithm, digits, issuer)
       .mapBoth(
         { code ->
           return Totp(code, remainingTime)
@@ -217,7 +218,6 @@ constructor(
         "secret:",
         "pass:",
       )
-    private const val THOUSAND = 1000
-    private const val THOUSAND_LONG = 1000L
+    private const val ONE_SECOND = 1000
   }
 }

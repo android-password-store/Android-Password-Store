@@ -194,9 +194,9 @@ class PasswordEntryTest {
 
   companion object {
 
-    private const val SECRET = "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"
+    @Suppress("MaxLineLength")
     const val TOTP_URI =
-      "otpauth://totp/ACME%20Co:john@example.com?secret=$SECRET&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
+      "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
 
     val fakeClock = TestUserClock()
 

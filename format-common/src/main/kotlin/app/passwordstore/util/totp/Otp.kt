@@ -20,9 +20,9 @@ internal object Otp {
   private val STEAM_ALPHABET = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
   private const val BYTE_BUFFER_CAPACITY = 8
   private const val END_INDEX_OFFSET = 4
-  private const val STEAM_GUARD_QUANTITY_DIGITS = 5
-  private const val MINIMUM_DIGIT = 6
-  private const val MAXIMUM_DIGIT = 10
+  private const val STEAM_GUARD_DIGITS = 5
+  private const val MINIMUM_DIGITS = 6
+  private const val MAXIMUM_DIGITS = 10
   private const val ALPHABET_LENGTH = 26
   private const val MOST_SIGNIFICANT_BYTE = 0x7f
 
@@ -54,7 +54,7 @@ internal object Otp {
     if (digits == "s" || issuer == "Steam") {
       var remainingCodeInt = codeInt
       buildString {
-        repeat(STEAM_GUARD_QUANTITY_DIGITS) {
+        repeat(STEAM_GUARD_DIGITS) {
           append(STEAM_ALPHABET[remainingCodeInt % STEAM_ALPHABET.size])
           remainingCodeInt /= ALPHABET_LENGTH
         }
@@ -66,17 +66,17 @@ internal object Otp {
         numDigits == null -> {
           return Err(IllegalArgumentException("Digits specifier has to be either 's' or numeric"))
         }
-        numDigits < MINIMUM_DIGIT -> {
-          return Err(IllegalArgumentException("TOTP codes have to be at least 6 digits long"))
+        numDigits < MINIMUM_DIGITS -> {
+          return Err(IllegalArgumentException("TOTP codes have to be at least $MINIMUM_DIGITS digits long"))
         }
-        numDigits > MAXIMUM_DIGIT -> {
-          return Err(IllegalArgumentException("TOTP codes can be at most 10 digits long"))
+        numDigits > MAXIMUM_DIGITS -> {
+          return Err(IllegalArgumentException("TOTP codes can be at most $MAXIMUM_DIGITS digits long"))
         }
         else -> {
           // 2^31 = 2_147_483_648, so we can extract at most 10 digits with the first one
           // always being 0, 1, or 2. Pad with leading zeroes.
-          val codeStringBase10 = codeInt.toString(MAXIMUM_DIGIT).padStart(MAXIMUM_DIGIT, '0')
-          check(codeStringBase10.length == MAXIMUM_DIGIT)
+          val codeStringBase10 = codeInt.toString(MAXIMUM_DIGITS).padStart(MAXIMUM_DIGITS, '0')
+          check(codeStringBase10.length == MAXIMUM_DIGITS)
           codeStringBase10.takeLast(numDigits)
         }
       }
