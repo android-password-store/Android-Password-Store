@@ -4,26 +4,19 @@
 package app.passwordstore.util
 
 import android.os.Looper
-import android.os.SystemClock
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 import logcat.logcat
 
 /**
  * Small helper to execute a given [block] and log the time it took to execute it. Intended for use
  * in day-to-day perf investigations and code using it should probably not be shipped.
  */
-suspend fun <T> logExecutionTime(tag: String, block: suspend () -> T): T {
-  val start = SystemClock.uptimeMillis()
-  val res = block()
-  val end = SystemClock.uptimeMillis()
-  logcat(tag) { "Finished in ${end - start}ms" }
-  return res
-}
-
-fun <T> logExecutionTimeBlocking(tag: String, block: () -> T): T {
-  val start = SystemClock.uptimeMillis()
-  val res = block()
-  val end = SystemClock.uptimeMillis()
-  logcat(tag) { "Finished in ${end - start}ms" }
+@OptIn(ExperimentalTime::class)
+inline fun <T> logExecutionTime(tag: String, crossinline block: () -> T): T {
+  val res: T
+  val duration = measureTime { res = block() }
+  logcat(tag) { "Finished in ${duration.inWholeMilliseconds}ms" }
   return res
 }
 
