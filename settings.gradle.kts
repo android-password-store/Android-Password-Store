@@ -220,6 +220,8 @@ include("coroutine-utils-testing")
 
 include("crypto-common")
 
+include("crypto-hwsecurity")
+
 include("crypto-pgpainless")
 
 include("format-common")
