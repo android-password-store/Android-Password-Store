@@ -21,13 +21,14 @@ public fun PasswordField(
   value: String,
   label: String,
   initialVisibility: Boolean,
+  readOnly: Boolean,
   modifier: Modifier = Modifier,
 ) {
   var visible by remember { mutableStateOf(initialVisibility) }
   TextField(
     value = value,
     onValueChange = {},
-    readOnly = true,
+    readOnly = readOnly,
     label = { Text(label) },
     visualTransformation =
       if (visible) VisualTransformation.None else PasswordVisualTransformation(),
