@@ -1,0 +1,64 @@
+public final class app/passwordstore/crypto/DeviceIdentifier {
+	public static final synthetic fun box-impl ([B)Lapp/passwordstore/crypto/DeviceIdentifier;
+	public static fun constructor-impl ([B)[B
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl ([BLjava/lang/Object;)Z
+	public static final fun equals-impl0 ([B[B)Z
+	public static final fun getManufacturer-impl ([B)I
+	public static final fun getOpenPgpVersion-impl ([B)Ljava/lang/String;
+	public static final fun getSerialNumber-impl ([B)[B
+	public fun hashCode ()I
+	public static fun hashCode-impl ([B)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl ([B)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()[B
+}
+
+public final class app/passwordstore/crypto/DeviceIdentifierKt {
+	public static final fun getManufacturerName-0zlKB64 ([B)Ljava/lang/String;
+}
+
+public final class app/passwordstore/crypto/DeviceKeyInfo {
+	public fun <init> (Lorg/pgpainless/algorithm/PublicKeyAlgorithm;Lorg/pgpainless/key/OpenPgpFingerprint;)V
+	public final fun component1 ()Lorg/pgpainless/algorithm/PublicKeyAlgorithm;
+	public final fun component2 ()Lorg/pgpainless/key/OpenPgpFingerprint;
+	public final fun copy (Lorg/pgpainless/algorithm/PublicKeyAlgorithm;Lorg/pgpainless/key/OpenPgpFingerprint;)Lapp/passwordstore/crypto/DeviceKeyInfo;
+	public static synthetic fun copy$default (Lapp/passwordstore/crypto/DeviceKeyInfo;Lorg/pgpainless/algorithm/PublicKeyAlgorithm;Lorg/pgpainless/key/OpenPgpFingerprint;ILjava/lang/Object;)Lapp/passwordstore/crypto/DeviceKeyInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAlgorithm ()Lorg/pgpainless/algorithm/PublicKeyAlgorithm;
+	public final fun getFingerprint ()Lorg/pgpainless/key/OpenPgpFingerprint;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class app/passwordstore/crypto/HWSecurityDevice {
+	public synthetic fun <init> ([BLjava/lang/String;Lapp/passwordstore/crypto/DeviceKeyInfo;Lapp/passwordstore/crypto/DeviceKeyInfo;Lapp/passwordstore/crypto/DeviceKeyInfo;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAuthKeyInfo ()Lapp/passwordstore/crypto/DeviceKeyInfo;
+	public final fun getEncryptKeyInfo ()Lapp/passwordstore/crypto/DeviceKeyInfo;
+	public final fun getId-z5xZLwU ()[B
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSignKeyInfo ()Lapp/passwordstore/crypto/DeviceKeyInfo;
+}
+
+public final class app/passwordstore/crypto/HWSecurityDeviceHandler : app/passwordstore/crypto/DeviceHandler {
+	public fun <init> (Lapp/passwordstore/crypto/HWSecurityManager;Landroidx/fragment/app/FragmentManager;)V
+	public fun decryptSessionKey (Lapp/passwordstore/crypto/PGPEncryptedSessionKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun decryptSessionKey (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun pairWithPublicKey (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pairWithPublicKey-P2gA-3I ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class app/passwordstore/crypto/HWSecurityException : org/pgpainless/decryption_verification/HardwareSecurity$HardwareSecurityException {
+	public fun <init> (Ljava/lang/String;)V
+	public fun getMessage ()Ljava/lang/String;
+}
+
+public final class app/passwordstore/crypto/HWSecurityManager {
+	public fun <init> (Landroid/app/Application;)V
+	public final fun decryptSessionKey (Landroidx/fragment/app/FragmentManager;Lapp/passwordstore/crypto/PGPEncryptedSessionKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun init (Z)V
+	public static synthetic fun init$default (Lapp/passwordstore/crypto/HWSecurityManager;ZILjava/lang/Object;)V
+	public final fun isHardwareAvailable ()Z
+	public final fun readDevice (Landroidx/fragment/app/FragmentManager;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
