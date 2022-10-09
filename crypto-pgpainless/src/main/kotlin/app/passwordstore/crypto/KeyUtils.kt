@@ -9,7 +9,15 @@ import app.passwordstore.crypto.GpgIdentifier.KeyId
 import app.passwordstore.crypto.GpgIdentifier.UserId
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
+import java.io.ByteArrayOutputStream
+import org.bouncycastle.bcpg.GnuExtendedS2K
+import org.bouncycastle.bcpg.S2K
+import org.bouncycastle.bcpg.SecretKeyPacket
+import org.bouncycastle.bcpg.SecretSubkeyPacket
+import org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags
 import org.bouncycastle.openpgp.PGPKeyRing
+import org.bouncycastle.openpgp.PGPPublicKey
+import org.bouncycastle.openpgp.PGPPublicKeyRing
 import org.bouncycastle.openpgp.PGPSecretKey
 import org.bouncycastle.openpgp.PGPSecretKeyRing
 import org.pgpainless.algorithm.EncryptionPurpose
@@ -37,6 +45,29 @@ public object KeyUtils {
     val keyRing = tryParseKeyring(key) ?: return null
     return UserId(keyRing.publicKey.userIDs.next())
   }
+
+  public fun tryCreateStubKey(
+    publicKey: PGPKey,
+    serial: ByteArray,
+    stubFingerprints: List<OpenPgpFingerprint>
+  ): PGPKey? {
+    val keyRing = tryParseKeyring(publicKey) as? PGPPublicKeyRing ?: return null
+    val secretKeyRing =
+      keyRing
+        .fold(PGPSecretKeyRing(emptyList())) { ring, key ->
+          PGPSecretKeyRing.insertSecretKey(
+            ring,
+            if (stubFingerprints.any { it == OpenPgpFingerprint.parseFromBinary(key.fingerprint) }) {
+              toCardSecretKey(key, serial)
+            } else {
+              toDummySecretKey(key)
+            }
+          )
+        }
+
+    return PGPKey(secretKeyRing.encoded)
+  }
+
   public fun tryGetEncryptionKeyFingerprint(key: PGPKey): OpenPgpFingerprint? {
     val keyRing = tryParseKeyring(key) ?: return null
     val encryptionSubkey =
@@ -58,4 +89,64 @@ public object KeyUtils {
     val encryptionKey = info.getEncryptionSubkeys(EncryptionPurpose.ANY).lastOrNull() ?: return null
     return info.getSecretKey(encryptionKey.keyID)
   }
+}
+
+private fun toDummySecretKey(publicKey: PGPPublicKey): PGPSecretKey {
+
+  return PGPSecretKey(
+    if (publicKey.isMasterKey) {
+      SecretKeyPacket(
+        publicKey.publicKeyPacket,
+        SymmetricKeyAlgorithmTags.NULL,
+        SecretKeyPacket.USAGE_CHECKSUM,
+        GnuExtendedS2K(S2K.GNU_PROTECTION_MODE_NO_PRIVATE_KEY),
+        byteArrayOf(),
+        byteArrayOf()
+      )
+    } else {
+      SecretSubkeyPacket(
+        publicKey.publicKeyPacket,
+        SymmetricKeyAlgorithmTags.NULL,
+        SecretKeyPacket.USAGE_CHECKSUM,
+        GnuExtendedS2K(S2K.GNU_PROTECTION_MODE_NO_PRIVATE_KEY),
+        byteArrayOf(),
+        byteArrayOf()
+      )
+    },
+    publicKey
+  )
+}
+
+@Suppress("MagicNumber")
+private fun toCardSecretKey(publicKey: PGPPublicKey, serial: ByteArray): PGPSecretKey {
+  return PGPSecretKey(
+    if (publicKey.isMasterKey) {
+      SecretKeyPacket(
+        publicKey.publicKeyPacket,
+        SymmetricKeyAlgorithmTags.NULL,
+        SecretKeyPacket.USAGE_CHECKSUM,
+        GnuExtendedS2K(S2K.GNU_PROTECTION_MODE_DIVERT_TO_CARD),
+        ByteArray(8),
+        encodeSerial(serial),
+      )
+    } else {
+      SecretSubkeyPacket(
+        publicKey.publicKeyPacket,
+        SymmetricKeyAlgorithmTags.NULL,
+        SecretKeyPacket.USAGE_CHECKSUM,
+        GnuExtendedS2K(S2K.GNU_PROTECTION_MODE_DIVERT_TO_CARD),
+        ByteArray(8),
+        encodeSerial(serial),
+      )
+    },
+    publicKey
+  )
+}
+
+@Suppress("MagicNumber")
+private fun encodeSerial(serial: ByteArray): ByteArray {
+  val out = ByteArrayOutputStream()
+  out.write(serial.size)
+  out.write(serial, 0, minOf(16, serial.size))
+  return out.toByteArray()
 }
