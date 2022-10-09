@@ -50,6 +50,7 @@
 
     <activity
       android:name=".ui.crypto.DecryptActivity"
+      android:configChanges="keyboard|keyboardHidden"
       android:exported="true" />
 
     <activity
@@ -93,6 +94,7 @@
       android:name=".ui.settings.SettingsActivity"
       android:exported="false"
       android:label="@string/action_settings"
+      android:configChanges="keyboard|keyboardHidden"
       android:parentActivityName=".ui.passwords.PasswordStore" />
 
     <activity
@@ -136,6 +138,7 @@
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.autofill.AutofillDecryptActivity"
+      android:configChanges="keyboard|keyboardHidden"
       android:exported="false"
       android:theme="@style/NoBackgroundThemeM3" />
     <activity
@@ -162,6 +165,7 @@
       android:windowSoftInputMode="adjustNothing" />
     <activity
       android:name=".ui.pgp.PGPKeyImportActivity"
+      android:configChanges="keyboard|keyboardHidden"
       android:theme="@style/NoBackgroundThemeM3" />
     <activity
       android:name=".ui.pgp.PGPKeyListActivity"
