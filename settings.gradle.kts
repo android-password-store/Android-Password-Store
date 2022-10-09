@@ -173,8 +173,7 @@ gitRepositories {
     branch.set("hardwareDecryption")
     includeBuild {
       dependencySubstitution {
-        substitute(module("org.pgpainless:pgpainless-core"))
-          .using(project(":pgpainless-core"))
+        substitute(module("org.pgpainless:pgpainless-core")).using(project(":pgpainless-core"))
       }
     }
   }
@@ -183,19 +182,20 @@ gitRepositories {
     branch.set("pendingintent-mutability")
     includeBuild {
       dependencySubstitution {
-        for (module in listOf(
-          "core",
-          "intent-usb",
-          "intent-nfc",
-          "provider",
-          "fido",
-          "fido2",
-          "openpgp",
-          "piv",
-          "sshj",
-          "ssh",
-          "ui",
-        )) {
+        for (module in
+          listOf(
+            "core",
+            "intent-usb",
+            "intent-nfc",
+            "provider",
+            "fido",
+            "fido2",
+            "openpgp",
+            "piv",
+            "sshj",
+            "ssh",
+            "ui",
+          )) {
           substitute(module("com.github.android-password-store.hwsecurity:hwsecurity-$module"))
             .using(project(":hwsecurity:$module"))
         }

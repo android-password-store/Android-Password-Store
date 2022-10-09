@@ -7,7 +7,12 @@ package app.passwordstore
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.StrictMode
-import androidx.appcompat.app.AppCompatDelegate.*
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
+import app.passwordstore.crypto.HWSecurityManager
 import app.passwordstore.injection.context.FilesDirPath
 import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.extensions.getString
@@ -42,16 +47,18 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
   @Inject lateinit var proxyUtils: ProxyUtils
   @Inject lateinit var gitSettings: GitSettings
   @Inject lateinit var features: Features
+  @Inject lateinit var deviceManager: HWSecurityManager
 
   override fun onCreate() {
     super.onCreate()
     instance = this
     LeakCanary.config =
       LeakCanary.config.copy(eventListeners = LeakCanary.config.eventListeners + SentryLeakUploader)
-    if (
+
+    val enableLogging =
       BuildConfig.ENABLE_DEBUG_FEATURES ||
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
-    ) {
+    if (enableLogging) {
       LogcatLogger.install(AndroidLogcatLogger(DEBUG))
       AppWatcher.manualInstall(this)
       setVmPolicy()
@@ -62,6 +69,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     runMigrations(filesDirPath, prefs, gitSettings)
     proxyUtils.setDefaultProxy()
     DynamicColors.applyToActivitiesIfAvailable(this)
+    deviceManager.init(enableLogging)
     Sentry.configureScope { scope ->
       val user = User()
       user.data =

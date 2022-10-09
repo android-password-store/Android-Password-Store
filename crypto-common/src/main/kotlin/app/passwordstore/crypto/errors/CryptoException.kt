@@ -6,7 +6,8 @@ public sealed class CryptoException(message: String? = null, cause: Throwable? =
   Exception(message, cause)
 
 /** Sealed exception types for [KeyManager]. */
-public sealed class KeyManagerException(message: String? = null, cause: Throwable? = null) : CryptoException(message, cause)
+public sealed class KeyManagerException(message: String? = null, cause: Throwable? = null) :
+  CryptoException(message, cause)
 
 /** Store contains no keys. */
 public object NoKeysAvailableException : KeyManagerException("No keys were found")
@@ -46,13 +47,12 @@ public class NoKeysProvided(message: String?) : CryptoHandlerException(message, 
 /** An unexpected error that cannot be mapped to a known type. */
 public class UnknownError(cause: Throwable) : CryptoHandlerException(null, cause)
 
-public class KeySpecific(public val key: Any, cause: Throwable?) : CryptoHandlerException(key.toString(), cause)
+public class KeySpecific(public val key: Any, cause: Throwable?) :
+  CryptoHandlerException(key.toString(), cause)
 
 /** Wrapper containing possibly multiple child exceptions via [suppressedExceptions]. */
-public class MultipleKeySpecific(
-  message: String?,
-  public val errors: List<KeySpecific>
-) : CryptoHandlerException(message) {
+public class MultipleKeySpecific(message: String?, public val errors: List<KeySpecific>) :
+  CryptoHandlerException(message) {
   init {
     for (error in errors) {
       addSuppressed(error)
@@ -68,7 +68,8 @@ public sealed class DeviceHandlerException(message: String? = null, cause: Throw
 public class DeviceOperationCanceled(message: String) : DeviceHandlerException(message, null)
 
 /** The device crypto operation failed. */
-public class DeviceOperationFailed(message: String?, cause: Throwable? = null) : DeviceHandlerException(message, cause)
+public class DeviceOperationFailed(message: String?, cause: Throwable? = null) :
+  DeviceHandlerException(message, cause)
 
 /** The device's key fingerprint doesn't match the fingerprint we are trying to pair it to. */
 public class DeviceFingerprintMismatch(

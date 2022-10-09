@@ -10,6 +10,11 @@ import app.passwordstore.crypto.GpgIdentifier.UserId
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import org.bouncycastle.openpgp.PGPKeyRing
+import org.bouncycastle.openpgp.PGPSecretKey
+import org.bouncycastle.openpgp.PGPSecretKeyRing
+import org.pgpainless.algorithm.EncryptionPurpose
+import org.pgpainless.key.OpenPgpFingerprint
+import org.pgpainless.key.info.KeyRingInfo
 import org.pgpainless.key.parsing.KeyRingReader
 
 /** Utility methods to deal with [PGPKey]s. */
@@ -31,5 +36,26 @@ public object KeyUtils {
   public fun tryGetEmail(key: PGPKey): UserId? {
     val keyRing = tryParseKeyring(key) ?: return null
     return UserId(keyRing.publicKey.userIDs.next())
+  }
+  public fun tryGetEncryptionKeyFingerprint(key: PGPKey): OpenPgpFingerprint? {
+    val keyRing = tryParseKeyring(key) ?: return null
+    val encryptionSubkey =
+      KeyRingInfo(keyRing).getEncryptionSubkeys(EncryptionPurpose.ANY).lastOrNull()
+    return encryptionSubkey?.let(OpenPgpFingerprint::of)
+  }
+
+  public fun tryGetEncryptionKey(key: PGPKey): PGPSecretKey? {
+    val keyRing = tryParseKeyring(key) as? PGPSecretKeyRing ?: return null
+    return tryGetEncryptionKey(keyRing)
+  }
+
+  public fun tryGetEncryptionKey(keyRing: PGPSecretKeyRing): PGPSecretKey? {
+    val info = KeyRingInfo(keyRing)
+    return tryGetEncryptionKey(info)
+  }
+
+  private fun tryGetEncryptionKey(info: KeyRingInfo): PGPSecretKey? {
+    val encryptionKey = info.getEncryptionSubkeys(EncryptionPurpose.ANY).lastOrNull() ?: return null
+    return info.getSecretKey(encryptionKey.keyID)
   }
 }

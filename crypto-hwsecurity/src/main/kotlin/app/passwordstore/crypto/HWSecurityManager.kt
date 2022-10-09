@@ -32,22 +32,18 @@ import org.pgpainless.algorithm.PublicKeyAlgorithm
 import org.pgpainless.decryption_verification.HardwareSecurity.HardwareSecurityException
 
 @Singleton
-public class HWSecurityManager @Inject constructor(
+public class HWSecurityManager
+@Inject
+constructor(
   private val application: Application,
 ) {
 
-  private val securityKeyManager: SecurityKeyManager by lazy {
-    SecurityKeyManager.getInstance()
-  }
+  private val securityKeyManager: SecurityKeyManager by lazy { SecurityKeyManager.getInstance() }
 
-  public fun init(
-    enableLogging: Boolean = false
-  ) {
+  public fun init(enableLogging: Boolean = false) {
     securityKeyManager.init(
       application,
-      SecurityKeyManagerConfig.Builder()
-        .setEnableDebugLogging(enableLogging)
-        .build()
+      SecurityKeyManagerConfig.Builder().setEnableDebugLogging(enableLogging).build()
     )
   }
 
@@ -59,88 +55,92 @@ public class HWSecurityManager @Inject constructor(
     fragmentManager: FragmentManager,
     pinMode: PinMode,
     block: suspend (OpenPgpSecurityKey, PinProvider?) -> T
-  ): T = withContext(Dispatchers.Main) {
-    val fragment = OpenPgpSecurityKeyDialogFragment.newInstance(
-      SecurityKeyDialogOptions.builder()
-        .setPinMode(pinMode)
-        .setFormFactor(SecurityKeyDialogOptions.FormFactor.SECURITY_KEY)
-        .setPreventScreenshots(false) // TODO
-        .build()
-    )
+  ): T =
+    withContext(Dispatchers.Main) {
+      val fragment =
+        OpenPgpSecurityKeyDialogFragment.newInstance(
+          SecurityKeyDialogOptions.builder()
+            .setPinMode(pinMode)
+            .setFormFactor(SecurityKeyDialogOptions.FormFactor.SECURITY_KEY)
+            .setPreventScreenshots(false) // TODO
+            .build()
+        )
 
-    val deferred = CompletableDeferred<T>()
+      val deferred = CompletableDeferred<T>()
 
-    fragment.setSecurityKeyDialogCallback(object : SecurityKeyDialogCallback<OpenPgpSecurityKey> {
-      private var result: Result<T> = Result.failure(CancellationException())
+      fragment.setSecurityKeyDialogCallback(
+        object : SecurityKeyDialogCallback<OpenPgpSecurityKey> {
+          private var result: Result<T> = Result.failure(CancellationException())
 
-      override fun onSecurityKeyDialogDiscovered(
-        dialogInterface: SecurityKeyDialogInterface,
-        securityKey: OpenPgpSecurityKey,
-        pinProvider: PinProvider?
-      ) {
-        fragment.lifecycleScope.launch {
-          fragment.repeatOnLifecycle(Lifecycle.State.CREATED) {
-            runCatching {
-              fragment.postProgressMessage("Decrypting password entry")
-              result = Result.success(block(securityKey, pinProvider))
-              fragment.successAndDismiss()
-            }.onFailure { e ->
-              when (e) {
-                is IOException -> fragment.postError(e)
-                else -> {
-                  result = Result.failure(e)
-                  fragment.dismiss()
-                }
+          override fun onSecurityKeyDialogDiscovered(
+            dialogInterface: SecurityKeyDialogInterface,
+            securityKey: OpenPgpSecurityKey,
+            pinProvider: PinProvider?
+          ) {
+            fragment.lifecycleScope.launch {
+              fragment.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                runCatching {
+                    fragment.postProgressMessage("Decrypting password entry")
+                    result = Result.success(block(securityKey, pinProvider))
+                    fragment.successAndDismiss()
+                  }
+                  .onFailure { e ->
+                    when (e) {
+                      is IOException -> fragment.postError(e)
+                      else -> {
+                        result = Result.failure(e)
+                        fragment.dismiss()
+                      }
+                    }
+                  }
               }
             }
           }
+
+          override fun onSecurityKeyDialogCancel() {
+            deferred.cancel()
+          }
+
+          override fun onSecurityKeyDialogDismiss() {
+            deferred.completeWith(result)
+          }
         }
-      }
+      )
 
-      override fun onSecurityKeyDialogCancel() {
-        deferred.cancel()
-      }
+      fragment.show(fragmentManager)
 
-      override fun onSecurityKeyDialogDismiss() {
-        deferred.completeWith(result)
-      }
-    })
+      val value = deferred.await()
+      // HWSecurity doesn't clean up fast enough for LeakCanary's liking.
+      securityKeyManager.clearConnectedSecurityKeys()
+      value
+    }
 
-    fragment.show(fragmentManager)
-
-    val value = deferred.await()
-    // HWSecurity doesn't clean up fast enough for LeakCanary's liking.
-    securityKeyManager.clearConnectedSecurityKeys()
-    value
-  }
-
-  public suspend fun readDevice(
-    fragmentManager: FragmentManager
-  ): HWSecurityDevice = withOpenDevice(fragmentManager, PinMode.NO_PIN_INPUT) { securityKey, _ ->
-    securityKey.toDevice()
-  }
+  public suspend fun readDevice(fragmentManager: FragmentManager): HWSecurityDevice =
+    withOpenDevice(fragmentManager, PinMode.NO_PIN_INPUT) { securityKey, _ ->
+      securityKey.toDevice()
+    }
 
   public suspend fun decryptSessionKey(
     fragmentManager: FragmentManager,
     encryptedSessionKey: PGPEncryptedSessionKey
-  ): PGPSessionKey = withOpenDevice(fragmentManager, PinMode.PIN_INPUT) { securityKey, pinProvider ->
-    val pin = pinProvider?.getPin(securityKey.openPgpInstanceAid)
-      ?: throw HWSecurityException("PIN required for decryption")
+  ): PGPSessionKey =
+    withOpenDevice(fragmentManager, PinMode.PIN_INPUT) { securityKey, pinProvider ->
+      val pin =
+        pinProvider?.getPin(securityKey.openPgpInstanceAid)
+          ?: throw HWSecurityException("PIN required for decryption")
 
-    val contents = withContext(Dispatchers.IO) {
-      when (val a = encryptedSessionKey.algorithm) {
-        PublicKeyAlgorithm.RSA_GENERAL ->
-          decryptSessionKeyRsa(encryptedSessionKey, securityKey, pin)
+      val contents =
+        withContext(Dispatchers.IO) {
+          when (val a = encryptedSessionKey.algorithm) {
+            PublicKeyAlgorithm.RSA_GENERAL ->
+              decryptSessionKeyRsa(encryptedSessionKey, securityKey, pin)
+            PublicKeyAlgorithm.ECDH -> decryptSessionKeyEcdh(encryptedSessionKey, securityKey, pin)
+            else -> throw HWSecurityException("Unsupported encryption algorithm: ${a.name}")
+          }
+        }
 
-        PublicKeyAlgorithm.ECDH ->
-          decryptSessionKeyEcdh(encryptedSessionKey, securityKey, pin)
-
-        else -> throw HWSecurityException("Unsupported encryption algorithm: ${a.name}")
-      }
+      PGPSessionKey(encryptedSessionKey.algorithm.algorithmId, contents)
     }
-
-    PGPSessionKey(encryptedSessionKey.algorithm.algorithmId, contents)
-  }
 }
 
 public class HWSecurityException(override val message: String) : HardwareSecurityException()
@@ -150,8 +150,7 @@ private fun decryptSessionKeyRsa(
   securityKey: OpenPgpSecurityKey,
   pin: ByteSecret,
 ): ByteArray {
-  return PsoDecryptOp
-    .create(securityKey.openPgpAppletConnection)
+  return PsoDecryptOp.create(securityKey.openPgpAppletConnection)
     .verifyAndDecryptSessionKey(pin, encryptedSessionKey.contents, 0, null)
 }
 
@@ -161,22 +160,18 @@ private fun decryptSessionKeyEcdh(
   securityKey: OpenPgpSecurityKey,
   pin: ByteSecret,
 ): ByteArray {
-  val key = encryptedSessionKey.publicKey.publicKeyPacket.key.run {
-    this as? ECDHPublicBCPGKey
-      ?: throw HWSecurityException("Expected ECDHPublicBCPGKey but got ${this::class.simpleName}")
-  }
-  val symmetricKeySize = when (val id = key.symmetricKeyAlgorithm.toInt()) {
-    SymmetricKeyAlgorithmTags.AES_128 -> 128
-    SymmetricKeyAlgorithmTags.AES_192 -> 192
-    SymmetricKeyAlgorithmTags.AES_256 -> 256
-    else -> throw HWSecurityException("Unexpected symmetric key algorithm: $id")
-  }
-  return PsoDecryptOp
-    .create(securityKey.openPgpAppletConnection)
-    .verifyAndDecryptSessionKey(
-      pin,
-      encryptedSessionKey.contents,
-      symmetricKeySize,
-      byteArrayOf()
-    )
+  val key =
+    encryptedSessionKey.publicKey.publicKeyPacket.key.run {
+      this as? ECDHPublicBCPGKey
+        ?: throw HWSecurityException("Expected ECDHPublicBCPGKey but got ${this::class.simpleName}")
+    }
+  val symmetricKeySize =
+    when (val id = key.symmetricKeyAlgorithm.toInt()) {
+      SymmetricKeyAlgorithmTags.AES_128 -> 128
+      SymmetricKeyAlgorithmTags.AES_192 -> 192
+      SymmetricKeyAlgorithmTags.AES_256 -> 256
+      else -> throw HWSecurityException("Unexpected symmetric key algorithm: $id")
+    }
+  return PsoDecryptOp.create(securityKey.openPgpAppletConnection)
+    .verifyAndDecryptSessionKey(pin, encryptedSessionKey.contents, symmetricKeySize, byteArrayOf())
 }

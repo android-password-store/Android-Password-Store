@@ -11,7 +11,13 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /** Generic interface to implement cryptographic operations on top of. */
-public interface CryptoHandler<Key, EncOpts : CryptoOptions, DecryptOpts : CryptoOptions> {
+public interface CryptoHandler<
+  Key,
+  EncOpts : CryptoOptions,
+  DecryptOpts : CryptoOptions,
+  EncryptedSessionKey,
+  DecryptedSessionKey,
+> {
 
   /**
    * Decrypt the given [ciphertextStream] using a set of potential [keys] and [passphrase], and
@@ -25,6 +31,7 @@ public interface CryptoHandler<Key, EncOpts : CryptoOptions, DecryptOpts : Crypt
     ciphertextStream: InputStream,
     outputStream: OutputStream,
     options: DecryptOpts,
+    onDecryptSessionKey: (EncryptedSessionKey) -> DecryptedSessionKey,
   ): Result<Unit, CryptoHandlerException>
 
   /**

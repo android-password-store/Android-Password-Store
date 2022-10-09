@@ -4,14 +4,15 @@ import org.pgpainless.algorithm.PublicKeyAlgorithm
 import org.pgpainless.key.OpenPgpFingerprint
 
 public data class DeviceKeyInfo(
-    public val algorithm: PublicKeyAlgorithm,
-    public val fingerprint: OpenPgpFingerprint
+  public val algorithm: PublicKeyAlgorithm,
+  public val fingerprint: OpenPgpFingerprint
 ) {
-    override fun toString(): String = "${algorithm.displayName()} ${fingerprint.prettyPrint()}"
+  override fun toString(): String = "${algorithm.displayName()} ${fingerprint.prettyPrint()}"
 }
 
 @Suppress("DEPRECATION")
-private fun PublicKeyAlgorithm.displayName(): String = when (this) {
+private fun PublicKeyAlgorithm.displayName(): String =
+  when (this) {
     PublicKeyAlgorithm.RSA_GENERAL -> "RSA"
     PublicKeyAlgorithm.RSA_ENCRYPT -> "RSA (encrypt-only, deprecated)"
     PublicKeyAlgorithm.RSA_SIGN -> "RSA (sign-only, deprecated)"
@@ -23,4 +24,4 @@ private fun PublicKeyAlgorithm.displayName(): String = when (this) {
     PublicKeyAlgorithm.ELGAMAL_GENERAL -> "ElGamal (general, deprecated)"
     PublicKeyAlgorithm.DIFFIE_HELLMAN -> "Diffie-Hellman"
     PublicKeyAlgorithm.EDDSA -> "EDDSA"
-}
+  }

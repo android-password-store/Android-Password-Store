@@ -7,6 +7,7 @@ package app.passwordstore.data.crypto
 
 import android.content.SharedPreferences
 import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.crypto.HWSecurityDeviceHandler
 import app.passwordstore.crypto.PGPDecryptOptions
 import app.passwordstore.crypto.PGPEncryptOptions
 import app.passwordstore.crypto.PGPKeyManager
@@ -16,11 +17,13 @@ import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getAll
+import com.github.michaelbull.result.getOrThrow
 import com.github.michaelbull.result.unwrap
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class CryptoRepository
@@ -29,6 +32,7 @@ constructor(
   private val pgpKeyManager: PGPKeyManager,
   private val pgpCryptoHandler: PGPainlessCryptoHandler,
   @SettingsPreferences private val settings: SharedPreferences,
+  private val deviceHandler: HWSecurityDeviceHandler,
 ) {
 
   suspend fun decrypt(
@@ -50,7 +54,10 @@ constructor(
   ): Result<Unit, CryptoHandlerException> {
     val decryptionOptions = PGPDecryptOptions.Builder().build()
     val keys = pgpKeyManager.getAllKeys().unwrap()
-    return pgpCryptoHandler.decrypt(keys, password, message, out, decryptionOptions)
+    return pgpCryptoHandler.decrypt(keys, password, message, out, decryptionOptions) {
+      encryptedSessionKey ->
+      runBlocking { deviceHandler.decryptSessionKey(encryptedSessionKey).getOrThrow() }
+    }
   }
 
   private suspend fun encryptPgp(

@@ -10,7 +10,5 @@ public class PGPEncryptedSessionKey(
   public val contents: ByteArray
 )
 
-public fun PGPSessionKey(
-  algorithm: PublicKeyAlgorithm,
-  sessionKey: ByteArray
-): PGPSessionKey = PGPSessionKey(algorithm.algorithmId, sessionKey)
+public fun PGPSessionKey(algorithm: PublicKeyAlgorithm, sessionKey: ByteArray): PGPSessionKey =
+  PGPSessionKey(algorithm.algorithmId, sessionKey)

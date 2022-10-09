@@ -16,37 +16,39 @@ public class HWSecurityDeviceHandler(
 
   override suspend fun pairWithPublicKey(
     publicKey: PGPKey
-  ): Result<PGPKey, DeviceHandlerException> = runCatching {
-    val publicFingerprint = KeyUtils.tryGetEncryptionKeyFingerprint(publicKey)
-      ?: throw DeviceOperationFailed("Failed to get encryption key fingerprint")
-    val device = deviceManager.readDevice(fragmentManager)
-    if (publicFingerprint != device.encryptKeyInfo?.fingerprint) {
-      throw DeviceFingerprintMismatch(
-        publicFingerprint.toString(),
-        device.encryptKeyInfo?.fingerprint?.toString() ?: "Missing encryption key"
-      )
-    }
-    KeyUtils.tryCreateStubKey(
-      publicKey,
-      device.id.serialNumber,
-      listOfNotNull(
-        device.encryptKeyInfo.fingerprint,
-        device.signKeyInfo?.fingerprint,
-        device.authKeyInfo?.fingerprint
-      )
-    ) ?: throw DeviceOperationFailed("Failed to create stub secret key")
-  }.mapError { error ->
-    when (error) {
-      is DeviceHandlerException -> error
-      else -> DeviceOperationFailed("Failed to pair device", error)
-    }
-  }
+  ): Result<PGPKey, DeviceHandlerException> =
+    runCatching {
+        val publicFingerprint =
+          KeyUtils.tryGetEncryptionKeyFingerprint(publicKey)
+            ?: throw DeviceOperationFailed("Failed to get encryption key fingerprint")
+        val device = deviceManager.readDevice(fragmentManager)
+        if (publicFingerprint != device.encryptKeyInfo?.fingerprint) {
+          throw DeviceFingerprintMismatch(
+            publicFingerprint.toString(),
+            device.encryptKeyInfo?.fingerprint?.toString() ?: "Missing encryption key"
+          )
+        }
+        KeyUtils.tryCreateStubKey(
+          publicKey,
+          device.id.serialNumber,
+          listOfNotNull(
+            device.encryptKeyInfo.fingerprint,
+            device.signKeyInfo?.fingerprint,
+            device.authKeyInfo?.fingerprint
+          )
+        )
+          ?: throw DeviceOperationFailed("Failed to create stub secret key")
+      }
+      .mapError { error ->
+        when (error) {
+          is DeviceHandlerException -> error
+          else -> DeviceOperationFailed("Failed to pair device", error)
+        }
+      }
 
   override suspend fun decryptSessionKey(
     encryptedSessionKey: PGPEncryptedSessionKey
-  ): Result<PGPSessionKey, DeviceHandlerException> = runCatching {
-    deviceManager.decryptSessionKey(fragmentManager, encryptedSessionKey)
-  }.mapError { error ->
-    DeviceOperationFailed("Failed to decrypt session key", error)
-  }
+  ): Result<PGPSessionKey, DeviceHandlerException> =
+    runCatching { deviceManager.decryptSessionKey(fragmentManager, encryptedSessionKey) }
+      .mapError { error -> DeviceOperationFailed("Failed to decrypt session key", error) }
 }
