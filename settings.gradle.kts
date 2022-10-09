@@ -4,6 +4,8 @@
  */
 @file:Suppress("UnstableApiUsage")
 
+import me.champeau.gradle.igp.gitRepositories
+
 rootProject.name = "APS"
 
 // Plugin repositories
@@ -41,6 +43,8 @@ pluginManagement {
         includeModule("com.github.ben-manes", "gradle-versions-plugin")
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
         includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
+        includeModule("me.champeau.includegit", "me.champeau.includegit.gradle.plugin")
+        includeModule("me.champeau.gradle.includegit", "plugin")
       }
     }
     exclusiveContent {
@@ -51,7 +55,10 @@ pluginManagement {
   }
 }
 
-plugins { id("com.gradle.enterprise") version "3.11.1" }
+plugins {
+  id("com.gradle.enterprise") version "3.11.1"
+  id("me.champeau.includegit") version "0.1.5"
+}
 
 gradleEnterprise {
   buildScan {
@@ -153,6 +160,34 @@ dependencyResolutionManagement {
       filter { includeModule("com.android.tools", "r8") }
     }
     mavenCentral()
+  }
+}
+
+gitRepositories {
+  checkoutsDirectory.set(rootProject.projectDir.resolve("build/checkouts"))
+  include("hwsecurity") {
+    uri.set("https://github.com/tadfisher/hwsecurity.git")
+    branch.set("pendingintent-mutability")
+    includeBuild {
+      dependencySubstitution {
+        for (module in listOf(
+          "core",
+          "intent-usb",
+          "intent-nfc",
+          "provider",
+          "fido",
+          "fido2",
+          "openpgp",
+          "piv",
+          "sshj",
+          "ssh",
+          "ui",
+        )) {
+          substitute(module("com.github.android-password-store.hwsecurity:hwsecurity-$module"))
+            .using(project(":hwsecurity:$module"))
+        }
+      }
+    }
   }
 }
 
