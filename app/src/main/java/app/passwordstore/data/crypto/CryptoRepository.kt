@@ -6,16 +6,19 @@
 package app.passwordstore.data.crypto
 
 import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.crypto.HWSecurityDeviceHandler
 import app.passwordstore.crypto.PGPKeyManager
 import app.passwordstore.crypto.PGPainlessCryptoHandler
 import app.passwordstore.crypto.errors.CryptoHandlerException
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getAll
+import com.github.michaelbull.result.getOrThrow
 import com.github.michaelbull.result.unwrap
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class CryptoRepository
@@ -23,6 +26,7 @@ class CryptoRepository
 constructor(
   private val pgpKeyManager: PGPKeyManager,
   private val pgpCryptoHandler: PGPainlessCryptoHandler,
+  private val deviceHandler: HWSecurityDeviceHandler
 ) {
 
   suspend fun decrypt(
@@ -43,7 +47,11 @@ constructor(
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
     val keys = pgpKeyManager.getAllKeys().unwrap()
-    return pgpCryptoHandler.decrypt(keys, password, message, out)
+    return pgpCryptoHandler.decrypt(keys, password, message, out) { encryptedSessionKey ->
+      runBlocking {
+        deviceHandler.decryptSessionKey(encryptedSessionKey).getOrThrow()
+      }
+    }
   }
 
   private suspend fun encryptPgp(

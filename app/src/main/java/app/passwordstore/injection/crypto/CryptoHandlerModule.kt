@@ -5,14 +5,30 @@
 
 package app.passwordstore.injection.crypto
 
+import android.app.Activity
+import androidx.fragment.app.FragmentActivity
+import app.passwordstore.crypto.HWSecurityDeviceHandler
+import app.passwordstore.crypto.HWSecurityManager
 import app.passwordstore.crypto.PGPainlessCryptoHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityComponent::class)
 object CryptoHandlerModule {
+
+  @Provides
+  @ActivityScoped
+  fun provideDeviceHandler(
+    activity: Activity,
+    deviceManager: HWSecurityManager
+  ): HWSecurityDeviceHandler = HWSecurityDeviceHandler(
+    deviceManager = deviceManager,
+    fragmentManager = (activity as FragmentActivity).supportFragmentManager
+  )
+
   @Provides fun providePgpCryptoHandler() = PGPainlessCryptoHandler()
 }

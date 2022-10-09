@@ -14,26 +14,31 @@ import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
 import java.io.InputStream
 import java.io.OutputStream
-import javax.inject.Inject
+import org.bouncycastle.CachingPublicKeyDataDecryptorFactory
 import org.bouncycastle.openpgp.PGPPublicKeyRing
 import org.bouncycastle.openpgp.PGPPublicKeyRingCollection
 import org.bouncycastle.openpgp.PGPSecretKeyRing
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
+import org.bouncycastle.openpgp.PGPSessionKey
 import org.pgpainless.PGPainless
+import org.pgpainless.algorithm.PublicKeyAlgorithm
 import org.pgpainless.decryption_verification.ConsumerOptions
+import org.pgpainless.decryption_verification.HardwareSecurity
+import org.pgpainless.decryption_verification.HardwareSecurity.HardwareDataDecryptorFactory
 import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.ProducerOptions
 import org.pgpainless.exception.WrongPassphraseException
 import org.pgpainless.key.protection.SecretKeyRingProtector
 import org.pgpainless.util.Passphrase
 
-public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
+public class PGPainlessCryptoHandler : CryptoHandler<PGPKey, PGPEncryptedSessionKey, PGPSessionKey> {
 
   public override fun decrypt(
     keys: List<PGPKey>,
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
+    onDecryptSessionKey: (PGPEncryptedSessionKey) -> PGPSessionKey
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
         if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
@@ -42,18 +47,41 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
             .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
             .run(::PGPSecretKeyRingCollection)
         val protector = SecretKeyRingProtector.unlockAnyKeyWith(Passphrase.fromPassword(passphrase))
+        val hardwareBackedKeys =
+          keyringCollection.mapNotNull { keyring ->
+            KeyUtils.tryGetEncryptionKey(keyring)
+              ?.takeIf { it.keyID in HardwareSecurity.getIdsOfHardwareBackedKeys(keyring) }
+          }
         PGPainless.decryptAndOrVerify()
           .onInputStream(ciphertextStream)
           .withOptions(
-            ConsumerOptions()
-              .addDecryptionKeys(keyringCollection, protector)
-              .addDecryptionPassphrase(Passphrase.fromPassword(passphrase))
+            ConsumerOptions().apply {
+                for (key in hardwareBackedKeys) {
+                  addCustomDecryptorFactory(
+                    setOf(key.keyID),
+                    CachingPublicKeyDataDecryptorFactory(
+                      HardwareDataDecryptorFactory { keyAlgorithm, secKeyData ->
+                        onDecryptSessionKey(
+                          PGPEncryptedSessionKey(
+                            key.publicKey,
+                            PublicKeyAlgorithm.requireFromId(keyAlgorithm),
+                            secKeyData
+                          )
+                        ).key
+                      }
+                    )
+                  )
+                }
+                addDecryptionKeys(keyringCollection, protector)
+                addDecryptionPassphrase(Passphrase.fromPassword(passphrase))
+            }
           )
           .use { decryptionStream -> decryptionStream.copyTo(outputStream) }
         return@runCatching
       }
       .mapError { error ->
         when (error) {
+          is CryptoHandlerException -> error
           is WrongPassphraseException -> IncorrectPassphraseException(error)
           else -> UnknownError(error)
         }
