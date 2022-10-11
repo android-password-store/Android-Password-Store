@@ -16,7 +16,7 @@ public sealed class GpgIdentifier {
 
     /** Convert a [Long] key ID to a formatted string. */
     private fun convertKeyIdToHex(keyId: Long): String {
-      return convertKeyIdToHex32bit(keyId shr 32) + convertKeyIdToHex32bit(keyId)
+      return convertKeyIdToHex32bit(keyId shr HEX_32_BIT_COUNT) + convertKeyIdToHex32bit(keyId)
     }
 
     /**
@@ -24,8 +24,8 @@ public sealed class GpgIdentifier {
      * to a lowercase hex ID.
      */
     private fun convertKeyIdToHex32bit(keyId: Long): String {
-      var hexString = java.lang.Long.toHexString(keyId and 0xffffffffL).lowercase(Locale.ENGLISH)
-      while (hexString.length < 8) {
+      var hexString = java.lang.Long.toHexString(keyId and HEX_32_BITMASK).lowercase(Locale.ENGLISH)
+      while (hexString.length < HEX_32_STRING_LENGTH) {
         hexString = "0$hexString"
       }
       return hexString
@@ -38,6 +38,13 @@ public sealed class GpgIdentifier {
   }
 
   public companion object {
+    private const val HEX_RADIX = 16
+    private const val HEX_32_BIT_COUNT = 32
+    private const val HEX_32_BITMASK = 0xffffffffL
+    private const val HEX_32_STRING_LENGTH = 8
+    private const val TRUNCATED_FINGERPRINT_LENGTH = 16
+
+    @Suppress("ReturnCount")
     public fun fromString(identifier: String): GpgIdentifier? {
       if (identifier.isEmpty()) return null
       // Match long key IDs:
@@ -45,7 +52,7 @@ public sealed class GpgIdentifier {
       val maybeLongKeyId =
         identifier.removePrefix("0x").takeIf { it.matches("[a-fA-F\\d]{16}".toRegex()) }
       if (maybeLongKeyId != null) {
-        val keyId = maybeLongKeyId.toULong(16)
+        val keyId = maybeLongKeyId.toULong(HEX_RADIX)
         return KeyId(keyId.toLong())
       }
 
@@ -57,37 +64,46 @@ public sealed class GpgIdentifier {
         // Truncating to the long key ID is not a security issue since OpenKeychain only
         // accepts
         // non-ambiguous key IDs.
-        val keyId = maybeFingerprint.takeLast(16).toULong(16)
+        val keyId = maybeFingerprint.takeLast(TRUNCATED_FINGERPRINT_LENGTH).toULong(HEX_RADIX)
         return KeyId(keyId.toLong())
       }
 
       return splitUserId(identifier)?.let { UserId(it) }
     }
 
-    private val USER_ID_PATTERN = Pattern.compile("^(.*?)(?: \\((.*)\\))?(?: <(.*)>)?$")
-    private val EMAIL_PATTERN = Pattern.compile("^<?\"?([^<>\"]*@[^<>\"]*[.]?[^<>\"]*)\"?>?$")
+    private object UserIdRegex {
+      val PATTERN: Pattern = Pattern.compile("^(.*?)(?: \\((.*)\\))?(?: <(.*)>)?$")
+      const val NAME = 1
+      const val EMAIL = 3
+    }
+
+    private object EmailRegex {
+      val PATTERN: Pattern = Pattern.compile("^<?\"?([^<>\"]*@[^<>\"]*[.]?[^<>\"]*)\"?>?$")
+      const val EMAIL = 1
+    }
 
     /**
      * Takes a 'Name (Comment) <Email>' user ID in any of its permutations and attempts to extract
      * an email from it.
      */
+    @Suppress("NestedBlockDepth")
     private fun splitUserId(userId: String): String? {
       if (userId.isNotEmpty()) {
-        val matcher = USER_ID_PATTERN.matcher(userId)
+        val matcher = UserIdRegex.PATTERN.matcher(userId)
         if (matcher.matches()) {
-          var name = if (matcher.group(1)?.isEmpty() == true) null else matcher.group(1)
-          var email = matcher.group(3)
+          var name = if (matcher.group(UserIdRegex.NAME)?.isEmpty() == true) null else matcher.group(UserIdRegex.NAME)
+          var email = matcher.group(UserIdRegex.EMAIL)
           if (email != null && name != null) {
-            val emailMatcher = EMAIL_PATTERN.matcher(name)
-            if (emailMatcher.matches() && email == emailMatcher.group(1)) {
-              email = emailMatcher.group(1)
+            val emailMatcher = EmailRegex.PATTERN.matcher(name)
+            if (emailMatcher.matches() && email == emailMatcher.group(EmailRegex.EMAIL)) {
+              email = emailMatcher.group(EmailRegex.EMAIL)
               name = null
             }
           }
           if (email == null && name != null) {
-            val emailMatcher = EMAIL_PATTERN.matcher(name)
+            val emailMatcher = EmailRegex.PATTERN.matcher(name)
             if (emailMatcher.matches()) {
-              email = emailMatcher.group(1)
+              email = emailMatcher.group(EmailRegex.EMAIL)
             }
           }
           return email

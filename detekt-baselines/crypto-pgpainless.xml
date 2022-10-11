@@ -3,12 +3,5 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>ForbiddenComment:PGPKeyManager.kt$PGPKeyManager$// TODO: This is a temp hack for now and in future it should check that the GPGKeyManager can</ID>
-    <ID>MagicNumber:GpgIdentifier.kt$GpgIdentifier.Companion$16</ID>
-    <ID>MagicNumber:GpgIdentifier.kt$GpgIdentifier.Companion$3</ID>
-    <ID>MagicNumber:GpgIdentifier.kt$GpgIdentifier.KeyId$0xffffffffL</ID>
-    <ID>MagicNumber:GpgIdentifier.kt$GpgIdentifier.KeyId$32</ID>
-    <ID>MagicNumber:GpgIdentifier.kt$GpgIdentifier.KeyId$8</ID>
-    <ID>NestedBlockDepth:GpgIdentifier.kt$GpgIdentifier.Companion$private fun splitUserId(userId: String): String?</ID>
-    <ID>ReturnCount:GpgIdentifier.kt$GpgIdentifier.Companion$public fun fromString(identifier: String): GpgIdentifier?</ID>
   </CurrentIssues>
 </SmellBaseline>
