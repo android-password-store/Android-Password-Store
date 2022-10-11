@@ -91,7 +91,9 @@ public sealed class GpgIdentifier {
       if (userId.isNotEmpty()) {
         val matcher = UserIdRegex.PATTERN.matcher(userId)
         if (matcher.matches()) {
-          var name = if (matcher.group(UserIdRegex.NAME)?.isEmpty() == true) null else matcher.group(UserIdRegex.NAME)
+          var name =
+            if (matcher.group(UserIdRegex.NAME)?.isEmpty() == true) null
+            else matcher.group(UserIdRegex.NAME)
           var email = matcher.group(UserIdRegex.EMAIL)
           if (email != null && name != null) {
             val emailMatcher = EmailRegex.PATTERN.matcher(name)
