@@ -178,6 +178,8 @@ include("crypto-pgpainless")
 
 include("format-common")
 
+include("format-common-impl")
+
 include("passgen:diceware")
 
 include("passgen:random")
