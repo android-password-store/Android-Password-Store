@@ -41,6 +41,7 @@ pluginManagement {
         includeModule("com.github.ben-manes", "gradle-versions-plugin")
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
         includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
+        includeModule("me.tylerbwong.gradle.metalava", "plugin")
       }
     }
     exclusiveContent {
@@ -141,6 +142,7 @@ dependencyResolutionManagement {
         includeModule("com.android.tools", "repository")
         includeModule("com.android.tools", "sdklib")
         includeModule("com.android.tools", "sdk-common")
+        includeModule("com.android.tools.metalava", "metalava")
         includeModule("com.google.android.material", "material")
       }
     }

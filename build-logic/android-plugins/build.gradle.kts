@@ -56,6 +56,7 @@ gradlePlugin {
 dependencies {
   implementation(libs.build.agp)
   implementation(libs.build.mavenpublish)
+  implementation(libs.build.metalava)
   implementation(libs.build.r8)
   implementation(libs.build.semver)
   implementation(libs.build.sentry)
