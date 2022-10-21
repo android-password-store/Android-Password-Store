@@ -1,0 +1,154 @@
+// Signature format: 4.0
+package com.github.androidpasswordstore.autofillparser {
+
+  public enum AutofillAction {
+    method public static com.github.androidpasswordstore.autofillparser.AutofillAction valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.github.androidpasswordstore.autofillparser.AutofillAction[] values();
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.AutofillAction FillOtpFromSms;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.AutofillAction Generate;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.AutofillAction Match;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.AutofillAction Search;
+  }
+
+  public final class AutofillHelperKt {
+    method public static String computeCertificatesHash(android.content.Context context, String appPackage);
+  }
+
+  @RequiresApi(android.os.Build.VERSION_CODES.O) public abstract sealed class AutofillScenario<T> {
+    method public final java.util.List<T> getFieldsToSave();
+    method public final boolean getHasFieldsToSave();
+    method public final boolean getHasPasswordFieldsToSave();
+    method public final boolean getHasUsername();
+    method public abstract java.util.List<T> getPasswordFieldsToSave();
+    method public abstract T? getUsername();
+    method public final boolean hasFieldsToFillOn(com.github.androidpasswordstore.autofillparser.AutofillAction action);
+    property public final java.util.List<T> fieldsToSave;
+    property public final boolean hasFieldsToSave;
+    property public final boolean hasPasswordFieldsToSave;
+    property public final boolean hasUsername;
+    property public abstract java.util.List<T> passwordFieldsToSave;
+    property public abstract T? username;
+    field public static final com.github.androidpasswordstore.autofillparser.AutofillScenario.Companion Companion;
+  }
+
+  public static final class AutofillScenario.Companion {
+    method @Deprecated public com.github.androidpasswordstore.autofillparser.AutofillScenario<android.view.autofill.AutofillId>? fromBundle(android.os.Bundle clientState);
+    method public com.github.androidpasswordstore.autofillparser.AutofillScenario<android.view.autofill.AutofillId>? fromClientState(android.os.Bundle clientState);
+  }
+
+  public final class AutofillScenarioKt {
+    method @RequiresApi(android.os.Build.VERSION_CODES.O) public static void fillWithAutofillId(android.service.autofill.Dataset.Builder, com.github.androidpasswordstore.autofillparser.AutofillScenario<android.view.autofill.AutofillId> scenario, com.github.androidpasswordstore.autofillparser.AutofillAction action, com.github.androidpasswordstore.autofillparser.Credentials? credentials);
+    method @RequiresApi(android.os.Build.VERSION_CODES.O) public static String? getPasswordValue(com.github.androidpasswordstore.autofillparser.AutofillScenario<? extends android.app.assist.AssistStructure.ViewNode>);
+    method @RequiresApi(android.os.Build.VERSION_CODES.O) public static String? getUsernameValue(com.github.androidpasswordstore.autofillparser.AutofillScenario<? extends android.app.assist.AssistStructure.ViewNode>);
+    method @RequiresApi(android.os.Build.VERSION_CODES.O) public static com.github.androidpasswordstore.autofillparser.AutofillScenario<android.app.assist.AssistStructure.ViewNode>? recoverNodes(com.github.androidpasswordstore.autofillparser.AutofillScenario<android.view.autofill.AutofillId>, android.app.assist.AssistStructure structure);
+  }
+
+  public final class AutofillStrategyDslKt {
+  }
+
+  public final class AutofillStrategyKt {
+  }
+
+  public enum BrowserAutofillSupportLevel {
+    method public static com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel valueOf(String name) throws java.lang.IllegalArgumentException;
+    method public static com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel[] values();
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel FlakyFill;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel GeneralFill;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel GeneralFillAndSave;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel None;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel PasswordFill;
+    enum_constant public static final com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel PasswordFillAndSaveIfNoAccessibility;
+  }
+
+  public final class Credentials {
+    ctor public Credentials(String? username, String? password, String? otp);
+    method public String? component1();
+    method public String? component2();
+    method public String? component3();
+    method public com.github.androidpasswordstore.autofillparser.Credentials copy(String? username, String? password, String? otp);
+    method public String? getOtp();
+    method public String? getPassword();
+    method public String? getUsername();
+    property public final String? otp;
+    property public final String? password;
+    property public final String? username;
+  }
+
+  public final class FeatureAndTrustDetectionKt {
+    method @RequiresApi(android.os.Build.VERSION_CODES.O) public static java.util.List<kotlin.Pair<java.lang.String,com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel>> getInstalledBrowsersWithAutofillSupportLevel(android.content.Context context);
+  }
+
+  @RequiresApi(android.os.Build.VERSION_CODES.O) public final class FillableForm {
+    method public com.github.androidpasswordstore.autofillparser.FormOrigin getFormOrigin();
+    method public java.util.List<android.view.autofill.AutofillId> getIgnoredIds();
+    method public Integer? getSaveFlags();
+    method public com.github.androidpasswordstore.autofillparser.AutofillScenario<android.view.autofill.AutofillId> getScenario();
+    method public android.os.Bundle toClientState();
+    property public final com.github.androidpasswordstore.autofillparser.FormOrigin formOrigin;
+    property public final java.util.List<android.view.autofill.AutofillId> ignoredIds;
+    property public final Integer? saveFlags;
+    property public final com.github.androidpasswordstore.autofillparser.AutofillScenario<android.view.autofill.AutofillId> scenario;
+    field public static final com.github.androidpasswordstore.autofillparser.FillableForm.Companion Companion;
+  }
+
+  public static final class FillableForm.Companion {
+    method public com.github.androidpasswordstore.autofillparser.FillableForm? parseAssistStructure(android.content.Context context, android.app.assist.AssistStructure structure, boolean isManualRequest, optional kotlin.sequences.Sequence<java.lang.String> customSuffixes);
+  }
+
+  @RequiresApi(android.os.Build.VERSION_CODES.O) public final class FixedSaveCallback {
+    ctor public FixedSaveCallback(android.content.Context context, android.service.autofill.SaveCallback callback);
+    method public void onFailure(CharSequence message);
+    method public void onSuccess(android.content.IntentSender intentSender);
+  }
+
+  public abstract sealed class FormOrigin {
+    method public String getIdentifier();
+    method public final String getPrettyIdentifier(android.content.Context context, optional boolean untrusted);
+    method public final android.os.Bundle toBundle();
+    property public String identifier;
+    field public static final com.github.androidpasswordstore.autofillparser.FormOrigin.Companion Companion;
+  }
+
+  public static final class FormOrigin.App extends com.github.androidpasswordstore.autofillparser.FormOrigin {
+    ctor public FormOrigin.App(String identifier);
+    method public String component1();
+    method public com.github.androidpasswordstore.autofillparser.FormOrigin.App copy(String identifier);
+    property public String identifier;
+  }
+
+  public static final class FormOrigin.Companion {
+    method public com.github.androidpasswordstore.autofillparser.FormOrigin? fromBundle(android.os.Bundle bundle);
+  }
+
+  public static final class FormOrigin.Web extends com.github.androidpasswordstore.autofillparser.FormOrigin {
+    ctor public FormOrigin.Web(String identifier);
+    method public String component1();
+    method public com.github.androidpasswordstore.autofillparser.FormOrigin.Web copy(String identifier);
+    property public String identifier;
+  }
+
+  public final class PublicSuffixListCacheKt {
+    method public static void cachePublicSuffixList(android.content.Context context);
+  }
+
+}
+
+package mozilla.components.lib.publicsuffixlist {
+
+  public final class PublicSuffixListLoaderKt {
+  }
+
+  public final class PublicSuffixListLoaderTest {
+    ctor public PublicSuffixListLoaderTest();
+    method public void testLoadingBundledPublicSuffixList();
+  }
+
+}
+
+package mozilla.components.lib.publicsuffixlist.ext {
+
+  public final class ByteArrayKt {
+  }
+
+}
+
