@@ -9,7 +9,7 @@ rootProject.name = "build-logic"
 dependencyResolutionManagement {
   repositories {
     exclusiveContent {
-      forRepository(::google)
+      forRepository { google() }
       filter {
         includeGroup("androidx.databinding")
         includeGroup("com.android")
@@ -31,11 +31,15 @@ dependencyResolutionManagement {
         includeModule("com.android.tools", "repository")
         includeModule("com.android.tools", "sdklib")
         includeModule("com.android.tools", "sdk-common")
+        includeModule("com.android.tools.metalava", "metalava")
       }
     }
     exclusiveContent {
-      forRepository(::gradlePluginPortal)
-      filter { includeModule("com.github.ben-manes", "gradle-versions-plugin") }
+      forRepository { gradlePluginPortal() }
+      filter {
+        includeModule("com.github.ben-manes", "gradle-versions-plugin")
+        includeModule("me.tylerbwong.gradle.metalava", "plugin")
+      }
     }
     exclusiveContent {
       forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }

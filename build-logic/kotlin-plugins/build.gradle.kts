@@ -26,10 +26,6 @@ afterEvaluate {
 
 gradlePlugin {
   plugins {
-    register("binary-compatibility") {
-      id = "com.github.android-password-store.binary-compatibility"
-      implementationClass = "app.passwordstore.gradle.BinaryCompatibilityPlugin"
-    }
     register("kotlin-android") {
       id = "com.github.android-password-store.kotlin-android"
       implementationClass = "app.passwordstore.gradle.KotlinAndroidPlugin"
@@ -59,7 +55,6 @@ gradlePlugin {
 
 dependencies {
   implementation(libs.build.agp)
-  implementation(libs.build.binarycompat)
   implementation(libs.build.detekt)
   implementation(libs.build.kotlin)
   implementation(libs.build.r8)
