@@ -175,7 +175,7 @@ jobs:
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
       uses: gradle/gradle-build-action@v2.3.2
       with:
-        arguments: apiCheck
+        arguments: metalavaCheckCompatibilityRelease
         gradle-home-cache-cleanup: true
 
     - name: Upload Kotlin build report
