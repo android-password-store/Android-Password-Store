@@ -47,7 +47,7 @@ jobs:
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: Build report
         path: build/reports/kotlin-build/
@@ -89,14 +89,14 @@ jobs:
 
     - name: (Fail-only) Upload test report
       if: "${{ failure() }}"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.1
       with:
           name: Test report
           path: app/build/reports
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: Build report
         path: build/reports/kotlin-build/
@@ -138,7 +138,7 @@ jobs:
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: Build report
         path: build/reports/kotlin-build/
@@ -180,7 +180,7 @@ jobs:
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: Build report
         path: build/reports/kotlin-build/
@@ -222,7 +222,7 @@ jobs:
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: Build report
         path: build/reports/kotlin-build/
@@ -264,7 +264,7 @@ jobs:
 
     - name: Upload Kotlin build report
       if: "${{ always() }}"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: Build report
         path: build/reports/kotlin-build/
@@ -306,7 +306,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: Build report
           path: build/reports/kotlin-build/
