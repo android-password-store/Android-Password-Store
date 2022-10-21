@@ -144,7 +144,7 @@ class PasswordEntryTest {
   }
 
   /**
-   * Same as [testGeneratesOtpFromTotpUri], but advances the clock by 5 seconds. This exercises the
+   * Same as [generatesOtpFromTotpUri], but advances the clock by 5 seconds. This exercises the
    * [Totp.remainingTime] calculation logic, and acts as a regression test to resolve the bug which
    * blocked https://msfjarvis.dev/aps/issue/1550.
    */
