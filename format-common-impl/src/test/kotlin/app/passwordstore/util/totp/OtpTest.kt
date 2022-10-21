@@ -137,12 +137,32 @@ class OtpTest {
       )
     val paddedOtp =
       generateOtp(
-        1593367171420 / (1000 * 30),
+        counter = 1593367171420 / (1000 * 30),
         secret = "ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA====",
       )
 
     assertNotNull(unpaddedOtp)
     assertNotNull(paddedOtp)
     assertEquals(unpaddedOtp, paddedOtp)
+  }
+
+  @Test
+  fun generateSteamTotp() {
+    val issuerOtp =
+      generateOtp(
+        counter = 48297900 / (1000 * 30),
+        secret = "STK7746GVMCHMNH5FBIAQXGPV3I7ZHRG",
+        issuer = "Steam",
+      )
+    val digitsOtp =
+      generateOtp(
+        counter = 48297900 / (1000 * 30),
+        secret = "STK7746GVMCHMNH5FBIAQXGPV3I7ZHRG",
+        digits = "s",
+      )
+    assertNotNull(issuerOtp)
+    assertNotNull(digitsOtp)
+    assertEquals("6M3CT", issuerOtp)
+    assertEquals("6M3CT", digitsOtp)
   }
 }
