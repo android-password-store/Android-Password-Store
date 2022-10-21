@@ -9,7 +9,7 @@ import app.cash.turbine.test
 import app.passwordstore.test.CoroutineTestRule
 import app.passwordstore.util.time.TestUserClock
 import app.passwordstore.util.time.UserClock
-import app.passwordstore.util.totp.TotpFinder
+import app.passwordstore.util.totp.UriTotpFinder
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -21,15 +21,20 @@ import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@RunWith(RobolectricTestRunner::class)
 class PasswordEntryTest {
 
   @get:Rule val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
+  private val totpFinder = UriTotpFinder()
+
   private fun makeEntry(content: String, clock: UserClock = fakeClock) =
     PasswordEntry(
       clock,
-      testFinder,
+      totpFinder,
       content.encodeToByteArray(),
     )
 
@@ -144,7 +149,7 @@ class PasswordEntryTest {
   }
 
   /**
-   * Same as [testGeneratesOtpFromTotpUri], but advances the clock by 5 seconds. This exercises the
+   * Same as [generatesOtpFromTotpUri], but advances the clock by 5 seconds. This exercises the
    * [Totp.remainingTime] calculation logic, and acts as a regression test to resolve the bug which
    * blocked https://msfjarvis.dev/aps/issue/1550.
    */
@@ -199,28 +204,5 @@ class PasswordEntryTest {
       "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
 
     val fakeClock = TestUserClock()
-
-    // This implementation is hardcoded for the URI above.
-    val testFinder =
-      object : TotpFinder {
-        override fun findSecret(content: String): String {
-          return "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"
-        }
-
-        override fun findDigits(content: String): String {
-          return "6"
-        }
-
-        override fun findPeriod(content: String): Long {
-          return 30
-        }
-
-        override fun findAlgorithm(content: String): String {
-          return "SHA1"
-        }
-        override fun findIssuer(content: String): String {
-          return "ACME Co"
-        }
-      }
   }
 }

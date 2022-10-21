@@ -14,7 +14,6 @@
     <ID>ComplexMethod:PasswordCreationActivity.kt$PasswordCreationActivity$override fun onCreate(savedInstanceState: Bundle?)</ID>
     <ID>ComplexMethod:PasswordCreationActivity.kt$PasswordCreationActivity$private fun encrypt()</ID>
     <ID>ComplexMethod:PasswordFragment.kt$PasswordFragment$private fun initializePasswordList()</ID>
-    <ID>EmptyDoWhileBlock:PasswordDialog.kt$PasswordDialog${}</ID>
     <ID>EmptyFunctionBlock:BasicBottomSheet.kt$BasicBottomSheet.&lt;no name provided&gt;${}</ID>
     <ID>EmptyFunctionBlock:ItemCreationBottomSheet.kt$ItemCreationBottomSheet.&lt;no name provided&gt;${}</ID>
     <ID>EmptyFunctionBlock:PasswordFragment.kt$PasswordFragment.&lt;no name provided&gt;.&lt;no name provided&gt;${}</ID>
@@ -58,7 +57,6 @@
     <ID>MagicNumber:SshKey.kt$SshKey.Algorithm.Ecdsa$256</ID>
     <ID>MagicNumber:SshKey.kt$SshKey.Algorithm.Rsa$3072</ID>
     <ID>MagicNumber:SshjSessionFactory.kt$SshjSession$22</ID>
-    <ID>MagicNumber:UriTotpFinder.kt$UriTotpFinder$30</ID>
     <ID>MatchingDeclarationName:AutofillViewUtils.kt$DatasetMetadata</ID>
     <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used."</ID>
     <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."</ID>
@@ -82,7 +80,6 @@
     <ID>ReturnCount:OreoAutofillService.kt$OreoAutofillService$override fun onSaveRequest(request: SaveRequest, callback: SaveCallback)</ID>
     <ID>ReturnCount:PasswordStore.kt$PasswordStore$override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean</ID>
     <ID>ReturnCount:ShortcutHandler.kt$ShortcutHandler$fun addPinnedShortcut(item: PasswordItem, intent: Intent)</ID>
-    <ID>ReturnCount:UriTotpFinder.kt$UriTotpFinder$override fun findSecret(content: String): String?</ID>
     <ID>SpreadOperator:Api30AutofillResponseBuilder.kt$Api30AutofillResponseBuilder$(*ignoredIds.toTypedArray())</ID>
     <ID>SpreadOperator:AutofillResponseBuilder.kt$AutofillResponseBuilder$(*ignoredIds.toTypedArray())</ID>
     <ID>SpreadOperator:BreakOutOfDetached.kt$BreakOutOfDetached$( // abort the rebase git.rebase().setOperation(RebaseCommand.Operation.ABORT), *resetCommands, )</ID>

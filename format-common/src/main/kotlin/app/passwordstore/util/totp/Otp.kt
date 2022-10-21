@@ -6,6 +6,7 @@
 package app.passwordstore.util.totp
 
 import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
 import java.nio.ByteBuffer
 import java.util.Locale
@@ -14,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 import org.apache.commons.codec.binary.Base32
 
-internal object Otp {
+public object Otp {
 
   private val BASE_32 = Base32()
   private val STEAM_ALPHABET = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
@@ -26,13 +27,13 @@ internal object Otp {
   private const val ALPHABET_LENGTH = 26
   private const val MOST_SIGNIFICANT_BYTE = 0x7f
 
-  fun calculateCode(
+  public fun calculateCode(
     secret: String,
     counter: Long,
     algorithm: String,
     digits: String,
     issuer: String?,
-  ) = runCatching {
+  ): Result<String, Throwable> = runCatching {
     val algo = "Hmac${algorithm.uppercase(Locale.ROOT)}"
     val decodedSecret = BASE_32.decode(secret)
     val secretKey = SecretKeySpec(decodedSecret, algo)

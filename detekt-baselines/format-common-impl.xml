@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>ReturnCount:UriTotpFinder.kt$UriTotpFinder$override fun findSecret(content: String): String?</ID>
+  </CurrentIssues>
+</SmellBaseline>

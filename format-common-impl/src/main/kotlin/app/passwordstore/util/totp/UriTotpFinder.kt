@@ -1,15 +1,14 @@
-/*
- * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
- */
-
 package app.passwordstore.util.totp
 
 import android.net.Uri
 import javax.inject.Inject
 
 /** [Uri] backed TOTP URL parser. */
-class UriTotpFinder @Inject constructor() : TotpFinder {
+public class UriTotpFinder @Inject constructor() : TotpFinder {
+
+  private companion object {
+    private const val DEFAULT_TOTP_PERIOD = 30L
+  }
 
   override fun findSecret(content: String): String? {
     content.split("\n".toRegex()).forEach { line ->
@@ -28,7 +27,7 @@ class UriTotpFinder @Inject constructor() : TotpFinder {
   }
 
   override fun findPeriod(content: String): Long {
-    return getQueryParameter(content, "period")?.toLongOrNull() ?: 30
+    return getQueryParameter(content, "period")?.toLongOrNull() ?: DEFAULT_TOTP_PERIOD
   }
 
   override fun findAlgorithm(content: String): String {
