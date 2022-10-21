@@ -5,6 +5,7 @@
 
 package app.passwordstore.data.passfile
 
+import androidx.annotation.VisibleForTesting
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.Otp
 import app.passwordstore.util.totp.TotpFinder
@@ -202,10 +203,11 @@ constructor(
     public fun create(bytes: ByteArray): PasswordEntry
   }
 
-  internal companion object {
+  public companion object {
 
     private const val EXTRA_CONTENT = "Extra Content"
-    internal val USERNAME_FIELDS =
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public val USERNAME_FIELDS: Array<String> =
       arrayOf(
         "login:",
         "username:",
@@ -218,7 +220,8 @@ constructor(
         "id:",
         "identity:",
       )
-    internal val PASSWORD_FIELDS =
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public val PASSWORD_FIELDS: Array<String> =
       arrayOf(
         "password:",
         "secret:",
