@@ -18,7 +18,7 @@ jobs:
         java-version: 18
 
     - name: Upload binaries
-      uses: gradle/gradle-build-action@v2.3.2
+      uses: gradle/gradle-build-action@v2.3.3
       with:
         arguments: --no-configuration-cache :autofill-parser:publishAllPublicationsToMavenCentralRepository
         gradle-home-cache-cleanup: true
