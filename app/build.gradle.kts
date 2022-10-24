@@ -107,9 +107,9 @@ dependencies {
   }
 
   debugImplementation(libs.thirdparty.leakcanary)
-  add("nonFreeImplementation", libs.thirdparty.nonfree.googlePlayAuthApiPhone)
-  add("nonFreeImplementation", libs.thirdparty.nonfree.sentry)
-  add("freeImplementation", projects.sentryStub)
+  nonFreeImplementation(libs.thirdparty.nonfree.googlePlayAuthApiPhone)
+  nonFreeImplementation(libs.thirdparty.nonfree.sentry)
+  freeImplementation(projects.sentryStub)
 
   testImplementation(libs.testing.robolectric)
   testImplementation(libs.testing.sharedPrefsMock)
