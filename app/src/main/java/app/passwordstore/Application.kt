@@ -18,17 +18,28 @@ import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.features.Feature
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.git.sshj.setUpBouncyCastleForSshj
+import app.passwordstore.util.log.ForwardingLogcatLogger
 import app.passwordstore.util.proxy.ProxyUtils
 import app.passwordstore.util.settings.GitSettings
 import app.passwordstore.util.settings.PreferenceKeys
 import app.passwordstore.util.settings.runMigrations
 import com.google.android.material.color.DynamicColors
+import com.pandulapeter.beagle.Beagle
+import com.pandulapeter.beagle.common.configuration.Behavior
+import com.pandulapeter.beagle.log.BeagleLogger
+import com.pandulapeter.beagle.modules.AppInfoButtonModule
+import com.pandulapeter.beagle.modules.DeviceInfoModule
+import com.pandulapeter.beagle.modules.DividerModule
+import com.pandulapeter.beagle.modules.HeaderModule
+import com.pandulapeter.beagle.modules.LifecycleLogListModule
+import com.pandulapeter.beagle.modules.LogListModule
+import com.pandulapeter.beagle.modules.PaddingModule
+import com.pandulapeter.beagle.modules.ScreenCaptureToolboxModule
 import dagger.hilt.android.HiltAndroidApp
 import io.sentry.Sentry
 import io.sentry.protocol.User
 import java.util.concurrent.Executors
 import javax.inject.Inject
-import logcat.AndroidLogcatLogger
 import logcat.LogPriority.DEBUG
 import logcat.LogPriority.VERBOSE
 import logcat.LogcatLogger
@@ -51,7 +62,33 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
       BuildConfig.ENABLE_DEBUG_FEATURES ||
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
-      LogcatLogger.install(AndroidLogcatLogger(DEBUG))
+      Beagle.initialize(
+        application = this,
+        behavior =
+          Behavior(
+            logBehavior =
+              Behavior.LogBehavior(
+                loggers = listOf(BeagleLogger),
+              )
+          )
+      )
+      Beagle.set(
+        HeaderModule(
+          title = getString(R.string.app_name),
+          subtitle = BuildConfig.APPLICATION_ID,
+          text =
+            "${BuildConfig.BUILD_TYPE} v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        ),
+        AppInfoButtonModule(),
+        PaddingModule(),
+        ScreenCaptureToolboxModule(),
+        DividerModule(),
+        LogListModule(),
+        LifecycleLogListModule(),
+        DividerModule(),
+        DeviceInfoModule(),
+      )
+      LogcatLogger.install(ForwardingLogcatLogger(DEBUG))
       setVmPolicy()
     }
     prefs.registerOnSharedPreferenceChangeListener(this)
