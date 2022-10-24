@@ -50,7 +50,7 @@ build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:
 build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.11.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.7.0"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.43.0"
-compose-animation = "androidx.compose.animation:animation:1.3.0-rc01"
+compose-animation = "androidx.compose.animation:animation:1.3.0"
 compose-compiler = "androidx.compose.compiler:compiler:1.3.2"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "composeFoundation" }
