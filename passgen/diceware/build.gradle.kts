@@ -2,6 +2,7 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+@file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 
 plugins {
   id("com.github.android-password-store.android-library")
