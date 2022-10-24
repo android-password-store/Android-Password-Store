@@ -52,7 +52,7 @@ fun setUpBouncyCastleForSshj() {
     runCatching { Class.forName("sun.security.jca.Providers") }
     Security.insertProviderAt(BouncyCastleProvider(), bcIndex + 1)
   }
-  logcat("setUpBouncyCastleForSshj") {
+  logcat("setUpBouncyCastleForSshj", priority = VERBOSE) {
     "JCE providers: ${Security.getProviders().joinToString { "${it.name} (${it.version})" }}"
   }
   // Prevent sshj from forwarding all cryptographic operations to BC.
