@@ -24,7 +24,7 @@
   "regexManagers": [
     {
       "fileMatch": [
-        ".kt$"
+        "build-logic/kotlin-plugins/src/main/kotlin/app/passwordstore/gradle/SpotlessPlugin.kt"
       ],
       "matchStrings": [
         "KTFMT_VERSION = \"(?<currentValue>.*)\""
