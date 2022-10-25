@@ -133,6 +133,7 @@ dependencyResolutionManagement {
         includeGroup("com.android.tools.layoutlib")
         includeGroup("com.android.tools.lint")
         includeGroup("com.google.android.gms")
+        includeModule("androidx.compose", "compose-bom")
         includeModule("com.android.tools", "annotations")
         includeModule("com.android.tools", "common")
         includeModule("com.android.tools", "desugar_jdk_libs")

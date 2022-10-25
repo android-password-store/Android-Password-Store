@@ -15,13 +15,14 @@ android {
     compose = true
     composeOptions {
       useLiveLiterals = false
-      kotlinCompilerExtensionVersion = libs.compose.compiler.get().versionConstraint.requiredVersion
+      kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
   }
   namespace = "app.passwordstore.ui.compose"
 }
 
 dependencies {
+  api(platform(libs.compose.bom))
   api(libs.compose.foundation.core)
   api(libs.compose.foundation.layout)
   api(libs.compose.material3)

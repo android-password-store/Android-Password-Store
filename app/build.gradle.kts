@@ -32,7 +32,7 @@ android {
     compose = true
     composeOptions {
       useLiveLiterals = false
-      kotlinCompilerExtensionVersion = libs.compose.compiler.get().versionConstraint.requiredVersion
+      kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
   }
 
@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+  implementation(platform(libs.compose.bom))
   kapt(libs.dagger.hilt.compiler)
   implementation(libs.androidx.annotation)
   coreLibraryDesugaring(libs.android.desugarJdkLibs)
