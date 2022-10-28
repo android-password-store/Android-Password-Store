@@ -13,6 +13,7 @@ import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import java.io.ByteArrayOutputStream
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
@@ -79,6 +80,23 @@ class PGPainlessCryptoHandlerTest {
       )
     assertIs<Err<Throwable>>(result)
     assertIs<IncorrectPassphraseException>(result.getError())
+  }
+
+  @Test
+  fun encryptAsciiArmored() {
+    val ciphertextStream = ByteArrayOutputStream()
+    val encryptRes =
+      cryptoHandler.encrypt(
+        encryptionKey.keySet,
+        CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        ciphertextStream,
+        PGPEncryptOptions.Builder().withAsciiArmor(true).build(),
+      )
+    assertIs<Ok<Unit>>(encryptRes)
+    val ciphertext = ciphertextStream.toString(Charsets.UTF_8)
+    assertContains(ciphertext, "Version: PGPainless")
+    assertContains(ciphertext, "-----BEGIN PGP MESSAGE-----")
+    assertContains(ciphertext, "-----END PGP MESSAGE-----")
   }
 
   @Test
