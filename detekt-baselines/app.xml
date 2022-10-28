@@ -61,7 +61,6 @@
     <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used."</ID>
     <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."</ID>
     <ID>MaxLineLength:DecryptScreen.kt$ |otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&amp;issuer=ACME%20Co&amp;algorithm=SHA1&amp;digits=6&amp;period=30</ID>
-    <ID>MaxLineLength:UriTotpFinderTest.kt$UriTotpFinderTest.Companion$"otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&amp;issuer=ACME%20Co&amp;algorithm=SHA256&amp;digits=12&amp;period=25"</ID>
     <ID>NestedBlockDepth:FieldItemAdapter.kt$FieldItemAdapter.FieldItemViewHolder$fun bind(fieldItem: FieldItem, showPassword: Boolean, copyTextToClipboard: (String?) -&gt; Unit)</ID>
     <ID>NestedBlockDepth:GitOperation.kt$GitOperation$suspend fun executeAfterAuthentication(authMode: AuthMode): Result&lt;Unit, Throwable&gt;</ID>
     <ID>NestedBlockDepth:PasswordExportService.kt$PasswordExportService$override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int</ID>
