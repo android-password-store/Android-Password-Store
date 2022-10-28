@@ -11,7 +11,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /** Generic interface to implement cryptographic operations on top of. */
-public interface CryptoHandler<Key> {
+public interface CryptoHandler<Key, EncOpts : CryptoOptions, DecryptOpts : CryptoOptions> {
 
   /**
    * Decrypt the given [ciphertextStream] using a set of potential [keys] and [passphrase], and
@@ -24,6 +24,7 @@ public interface CryptoHandler<Key> {
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
+    options: DecryptOpts,
   ): Result<Unit, CryptoHandlerException>
 
   /**
@@ -35,6 +36,7 @@ public interface CryptoHandler<Key> {
     keys: List<Key>,
     plaintextStream: InputStream,
     outputStream: OutputStream,
+    options: EncOpts,
   ): Result<Unit, CryptoHandlerException>
 
   /** Given a [fileName], return whether this instance can handle it. */

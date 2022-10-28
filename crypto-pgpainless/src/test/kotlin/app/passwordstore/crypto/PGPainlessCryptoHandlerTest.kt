@@ -41,6 +41,7 @@ class PGPainlessCryptoHandlerTest {
         encryptionKey.keySet,
         CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
         ciphertextStream,
+        PGPEncryptOptions.Builder().build(),
       )
     assertIs<Ok<Unit>>(encryptRes)
     val plaintextStream = ByteArrayOutputStream()
@@ -50,6 +51,7 @@ class PGPainlessCryptoHandlerTest {
         CryptoConstants.KEY_PASSPHRASE,
         ciphertextStream.toByteArray().inputStream(),
         plaintextStream,
+        PGPDecryptOptions.Builder().build(),
       )
     assertIs<Ok<Unit>>(decryptRes)
     assertEquals(CryptoConstants.PLAIN_TEXT, plaintextStream.toString(Charsets.UTF_8))
@@ -63,6 +65,7 @@ class PGPainlessCryptoHandlerTest {
         encryptionKey.keySet,
         CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
         ciphertextStream,
+        PGPEncryptOptions.Builder().build(),
       )
     assertIs<Ok<Unit>>(encryptRes)
     val plaintextStream = ByteArrayOutputStream()
@@ -72,6 +75,7 @@ class PGPainlessCryptoHandlerTest {
         "very incorrect passphrase",
         ciphertextStream.toByteArray().inputStream(),
         plaintextStream,
+        PGPDecryptOptions.Builder().build(),
       )
     assertIs<Err<Throwable>>(result)
     assertIs<IncorrectPassphraseException>(result.getError())

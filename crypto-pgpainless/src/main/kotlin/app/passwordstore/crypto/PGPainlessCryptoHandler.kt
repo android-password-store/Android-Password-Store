@@ -27,13 +27,15 @@ import org.pgpainless.exception.WrongPassphraseException
 import org.pgpainless.key.protection.SecretKeyRingProtector
 import org.pgpainless.util.Passphrase
 
-public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
+public class PGPainlessCryptoHandler @Inject constructor() :
+  CryptoHandler<PGPKey, PGPEncryptOptions, PGPDecryptOptions> {
 
   public override fun decrypt(
     keys: List<PGPKey>,
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
+    options: PGPDecryptOptions,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
         if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
@@ -63,6 +65,7 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKe
     keys: List<PGPKey>,
     plaintextStream: InputStream,
     outputStream: OutputStream,
+    options: PGPEncryptOptions,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
         if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")

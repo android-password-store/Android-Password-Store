@@ -6,6 +6,8 @@
 package app.passwordstore.data.crypto
 
 import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.crypto.PGPDecryptOptions
+import app.passwordstore.crypto.PGPEncryptOptions
 import app.passwordstore.crypto.PGPKeyManager
 import app.passwordstore.crypto.PGPainlessCryptoHandler
 import app.passwordstore.crypto.errors.CryptoHandlerException
@@ -42,8 +44,9 @@ constructor(
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
+    val decryptionOptions = PGPDecryptOptions.Builder().build()
     val keys = pgpKeyManager.getAllKeys().unwrap()
-    return pgpCryptoHandler.decrypt(keys, password, message, out)
+    return pgpCryptoHandler.decrypt(keys, password, message, out, decryptionOptions)
   }
 
   private suspend fun encryptPgp(
@@ -51,11 +54,13 @@ constructor(
     content: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
+    val encryptionOptions = PGPEncryptOptions.Builder().build()
     val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.getAll()
     return pgpCryptoHandler.encrypt(
       keys,
       content,
       out,
+      encryptionOptions,
     )
   }
 }
