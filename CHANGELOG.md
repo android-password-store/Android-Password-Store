@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 -   Introduce crash reporting backed by Sentry
 -   TOTP field now shows the remaining time for which it is valid
 -   Allow customizing the timeout for decrypted password screen
+-   Allow toggling ASCII armored output
 
 ### Fixed
 
