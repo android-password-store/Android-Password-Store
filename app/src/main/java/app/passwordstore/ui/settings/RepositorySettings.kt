@@ -126,10 +126,11 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
             visible = false
             return
           }
-          when {
-            httpsPass != null -> titleRes = R.string.clear_saved_passphrase_https
-            sshPass != null -> titleRes = R.string.clear_saved_passphrase_ssh
-          }
+          titleRes =
+            when {
+              httpsPass != null -> R.string.clear_saved_passphrase_https
+              else -> R.string.clear_saved_passphrase_ssh
+            }
           visible = true
           requestRebind()
         }

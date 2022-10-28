@@ -6,6 +6,7 @@
 package app.passwordstore.ui.settings
 
 import androidx.fragment.app.FragmentActivity
+import app.passwordstore.R
 import app.passwordstore.ui.pgp.PGPKeyImportActivity
 import app.passwordstore.ui.pgp.PGPKeyListActivity
 import app.passwordstore.util.extensions.launchActivity
@@ -20,7 +21,7 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
   override fun provideSettings(builder: PreferenceScreen.Builder) {
     builder.apply {
       pref("_") {
-        title = "Import PGP key"
+        titleRes = R.string.pref_import_pgp_key_title
         persistent = false
         onClick {
           activity.launchActivity(PGPKeyImportActivity::class.java)
@@ -28,7 +29,7 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
         }
       }
       pref("__") {
-        title = "Key manager"
+        titleRes = R.string.pref_pgp_key_manager_title
         persistent = false
         onClick {
           activity.launchActivity(PGPKeyListActivity::class.java)
@@ -36,7 +37,7 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
         }
       }
       switch(PreferenceKeys.ASCII_ARMOR) {
-        title = "Encrypt in ASCII armor mode"
+        titleRes = R.string.pref_pgp_ascii_armor_title
         persistent = true
       }
     }
