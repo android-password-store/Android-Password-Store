@@ -85,4 +85,5 @@ object PreferenceKeys {
   const val DICEWARE_SEPARATOR = "diceware_separator"
   const val DICEWARE_LENGTH = "diceware_length"
   const val DISABLE_SYNC_ACTION = "disable_sync_action"
+  const val ASCII_ARMOR = "pgpainless_ascii_armor"
 }

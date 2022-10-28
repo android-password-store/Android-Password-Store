@@ -9,9 +9,11 @@ import androidx.fragment.app.FragmentActivity
 import app.passwordstore.ui.pgp.PGPKeyImportActivity
 import app.passwordstore.ui.pgp.PGPKeyListActivity
 import app.passwordstore.util.extensions.launchActivity
+import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
+import de.Maxr1998.modernpreferences.helpers.switch
 
 class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
 
@@ -32,6 +34,10 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
           activity.launchActivity(PGPKeyListActivity::class.java)
           false
         }
+      }
+      switch(PreferenceKeys.ASCII_ARMOR) {
+        title = "Encrypt in ASCII armor mode"
+        persistent = true
       }
     }
   }
