@@ -83,7 +83,9 @@ public class PGPainlessCryptoHandler @Inject constructor() :
         require(publicKeyRings.isNotEmpty()) { "No public keys to encrypt message to" }
         val publicKeyRingCollection = PGPPublicKeyRingCollection(publicKeyRings)
         val encryptionOptions = EncryptionOptions().addRecipients(publicKeyRingCollection)
-        val producerOptions = ProducerOptions.encrypt(encryptionOptions).setAsciiArmor(false)
+        val producerOptions =
+          ProducerOptions.encrypt(encryptionOptions)
+            .setAsciiArmor(options.isOptionEnabled(PGPEncryptOptions.ASCII_ARMOR))
         val encryptor =
           PGPainless.encryptAndOrSign().onOutputStream(outputStream).withOptions(producerOptions)
         plaintextStream.copyTo(encryptor)

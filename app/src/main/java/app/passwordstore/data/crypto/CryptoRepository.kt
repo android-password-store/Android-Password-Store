@@ -5,12 +5,15 @@
 
 package app.passwordstore.data.crypto
 
+import android.content.SharedPreferences
 import app.passwordstore.crypto.GpgIdentifier
 import app.passwordstore.crypto.PGPDecryptOptions
 import app.passwordstore.crypto.PGPEncryptOptions
 import app.passwordstore.crypto.PGPKeyManager
 import app.passwordstore.crypto.PGPainlessCryptoHandler
 import app.passwordstore.crypto.errors.CryptoHandlerException
+import app.passwordstore.injection.prefs.SettingsPreferences
+import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getAll
 import com.github.michaelbull.result.unwrap
@@ -25,6 +28,7 @@ class CryptoRepository
 constructor(
   private val pgpKeyManager: PGPKeyManager,
   private val pgpCryptoHandler: PGPainlessCryptoHandler,
+  @SettingsPreferences private val settings: SharedPreferences,
 ) {
 
   suspend fun decrypt(
@@ -54,7 +58,10 @@ constructor(
     content: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
-    val encryptionOptions = PGPEncryptOptions.Builder().build()
+    val encryptionOptions =
+      PGPEncryptOptions.Builder()
+        .withAsciiArmor(settings.getBoolean(PreferenceKeys.ASCII_ARMOR, false))
+        .build()
     val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.getAll()
     return pgpCryptoHandler.encrypt(
       keys,
