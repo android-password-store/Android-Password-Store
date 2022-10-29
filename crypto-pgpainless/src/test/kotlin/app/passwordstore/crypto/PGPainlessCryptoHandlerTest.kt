@@ -59,7 +59,7 @@ class PGPainlessCryptoHandlerTest {
         plaintextStream,
         PGPDecryptOptions.Builder().build(),
       )
-    assertIs<Ok<Unit>>(decryptRes)
+    assertIs<Ok<Unit>>(decryptRes, decryptRes.getError()?.cause?.stackTraceToString())
     assertEquals(CryptoConstants.PLAIN_TEXT, plaintextStream.toString(Charsets.UTF_8))
   }
 
@@ -84,7 +84,10 @@ class PGPainlessCryptoHandlerTest {
         PGPDecryptOptions.Builder().build(),
       )
     assertIs<Err<Throwable>>(result)
-    assertIs<IncorrectPassphraseException>(result.getError())
+    assertIs<IncorrectPassphraseException>(
+      result.getError(),
+      result.getError()?.cause?.stackTraceToString()
+    )
   }
 
   @Test
