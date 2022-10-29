@@ -358,7 +358,7 @@ class PasswordCreationActivity : BasePgpActivity() {
           }
           .filterIsInstance<GpgIdentifier>()
       if (gpgIdentifiers.isEmpty()) {
-        error("Failed to parse identifiers from .gpg-id")
+        error("Failed to parse identifiers from .gpg-id: ${gpgIdentifierFile.readText()}")
       }
       val content = "$editPass\n$editExtra"
       val path =
