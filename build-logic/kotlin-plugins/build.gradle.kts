@@ -47,10 +47,6 @@ gradlePlugin {
       id = "com.github.android-password-store.ktfmt"
       implementationClass = "app.passwordstore.gradle.KtfmtPlugin"
     }
-    register("spotless") {
-      id = "com.github.android-password-store.spotless"
-      implementationClass = "app.passwordstore.gradle.SpotlessPlugin"
-    }
     register("versions") {
       id = "com.github.android-password-store.versions"
       implementationClass = "app.passwordstore.gradle.DependencyUpdatesPlugin"
@@ -65,7 +61,6 @@ dependencies {
   implementation(libs.build.kotlin)
   implementation(libs.build.ktfmt)
   implementation(libs.build.r8)
-  implementation(libs.build.spotless)
   implementation(libs.build.vcu)
   implementation(libs.build.versions)
   implementation(libs.kotlin.coroutines.core)
