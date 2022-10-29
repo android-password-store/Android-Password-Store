@@ -24,7 +24,12 @@ import org.junit.runner.RunWith
 enum class EncryptionKey(val keySet: List<PGPKey>) {
   PUBLIC(listOf(PGPKey(TestUtils.getArmoredPublicKey()))),
   SECRET(listOf(PGPKey(TestUtils.getArmoredSecretKey()))),
+  PUBLIC_GPG237(listOf(PGPKey(TestUtils.getPublicKeyGPG237()))),
+  PRIVATE_GPG237(listOf(PGPKey(TestUtils.getSecretKeyGPG237()))),
   ALL(listOf(PGPKey(TestUtils.getArmoredPublicKey()), PGPKey(TestUtils.getArmoredSecretKey()))),
+  ALL_GPG237(
+    listOf(PGPKey(TestUtils.getPublicKeyGPG237()), PGPKey(TestUtils.getSecretKeyGPG237())),
+  ),
 }
 
 @RunWith(TestParameterInjector::class)

@@ -225,4 +225,15 @@ class PGPKeyManagerTest {
       assertIs<Err<KeyAlreadyExistsException>>(keyManager.addKey(secretKey))
     }
   }
+
+  @Test
+  fun addGPG237Keys() {
+    val publicKey = PGPKey(TestUtils.getPublicKeyGPG237())
+    val privateKey = PGPKey(TestUtils.getSecretKeyGPG237())
+    scope.runTest {
+      assertIs<Ok<PGPKey>>(keyManager.addKey(publicKey))
+      assertIs<Ok<PGPKey>>(keyManager.addKey(privateKey))
+      assertIs<Ok<PGPKey>>(keyManager.getKeyById(UserId("john.doe@example.com")))
+    }
+  }
 }

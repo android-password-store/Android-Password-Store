@@ -13,4 +13,9 @@ object TestUtils {
     this::class.java.classLoader.getResource("secret_key_multiple_identities").readBytes()
   fun getArmoredPublicKeyWithMultipleIdentities() =
     this::class.java.classLoader.getResource("public_key_multiple_identities").readBytes()
+
+  fun getPublicKeyGPG237() = this::class.java.classLoader.getResource("public_gpg_2_37").readBytes()
+
+  fun getSecretKeyGPG237() =
+    this::class.java.classLoader.getResource("private_gpg_2_37").readBytes()
 }
