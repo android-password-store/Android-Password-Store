@@ -20,7 +20,7 @@ afterEvaluate {
   tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
       jvmTarget = JavaVersion.VERSION_11.toString()
-      freeCompilerArgs = freeCompilerArgs + "-Xsam-conversions=class"
+      freeCompilerArgs = freeCompilerArgs + "-Xsam-conversions=class" + "-opt-in=kotlin.RequiresOptIn"
     }
   }
 }
@@ -43,6 +43,10 @@ gradlePlugin {
       id = "com.github.android-password-store.kotlin-library"
       implementationClass = "app.passwordstore.gradle.KotlinLibraryPlugin"
     }
+    register("ktfmt") {
+      id = "com.github.android-password-store.ktfmt"
+      implementationClass = "app.passwordstore.gradle.KtfmtPlugin"
+    }
     register("spotless") {
       id = "com.github.android-password-store.spotless"
       implementationClass = "app.passwordstore.gradle.SpotlessPlugin"
@@ -57,9 +61,12 @@ gradlePlugin {
 dependencies {
   implementation(libs.build.agp)
   implementation(libs.build.detekt)
+  implementation(libs.build.diffutils)
   implementation(libs.build.kotlin)
+  implementation(libs.build.ktfmt)
   implementation(libs.build.r8)
   implementation(libs.build.spotless)
   implementation(libs.build.vcu)
   implementation(libs.build.versions)
+  implementation(libs.kotlin.coroutines.core)
 }

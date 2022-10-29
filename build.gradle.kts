@@ -5,8 +5,9 @@
 @file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 
 plugins {
-  id("com.github.android-password-store.kotlin-common")
   id("com.github.android-password-store.git-hooks")
+  id("com.github.android-password-store.kotlin-common")
+  id("com.github.android-password-store.ktfmt")
   id("com.github.android-password-store.spotless")
   id("com.github.android-password-store.versions")
   alias(libs.plugins.hilt) apply false
