@@ -70,6 +70,10 @@ constructor(
     }
   }
 
+  /** Obtain the [Totp.value] for this [PasswordEntry] at the current time. */
+  public val currentOtp: String
+    get() = calculateTotp().value
+
   /**
    * String representation of [extraContent] but with authentication related data such as TOTP URIs
    * and usernames stripped.

@@ -15,8 +15,6 @@ import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.autofillparser.Credentials
 import java.io.File
 import java.nio.file.Paths
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 enum class DirectoryStructure(val value: String) {
   EncryptedUsername("encrypted_username"),
@@ -143,7 +141,7 @@ object AutofillPreferences {
     // Always give priority to a username stored in the encrypted extras
     val username =
       entry.username ?: directoryStructure.getUsernameFor(file) ?: context.getDefaultUsername()
-    val totp = if (entry.hasTotp()) runBlocking { entry.totp.first().value } else null
+    val totp = if (entry.hasTotp()) entry.currentOtp else null
     return Credentials(username, entry.password, totp)
   }
 }
