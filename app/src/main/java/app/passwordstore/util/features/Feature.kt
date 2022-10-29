@@ -18,7 +18,7 @@ enum class Feature(
     "The PGPainless backend is now the only available one",
     level = DeprecationLevel.ERROR
   )
-  EnablePGPainlessBackend(false, "enable_pgp_v2_backend"),
+  EnablePGPainlessBackend(true, "enable_pgp_v2_backend"),
   ;
 
   companion object {
