@@ -17,16 +17,10 @@ import app.passwordstore.ui.passwords.PasswordStore
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.extensions.sharedPrefs
-import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.PreferenceKeys
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
-@AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
 class LaunchActivity : AppCompatActivity() {
-
-  @Inject lateinit var features: Features
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
