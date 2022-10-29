@@ -1,0 +1,3 @@
+Latest release for APS from revision __SNAPSHOT_REV__
+
+Consult the release channels documentation [here](https://docs.passwordstore.app/docs/users/release-channels) for the differences between free and nonFree builds.

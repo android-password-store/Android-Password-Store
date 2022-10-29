@@ -36,7 +36,8 @@ function create_rev_file() {
 function create_release() {
   local CHANGELOG_FILE
   CHANGELOG_FILE="$(mktemp)"
-  echo "Latest release for APS from revision ${CURRENT_REV}" | tee "${CHANGELOG_FILE}"
+  cp scripts/snapshot-changelog-template.txt "${CHANGELOG_FILE}"
+  sed -i "s/__SNAPSHOT_REV__/${CURRENT_REV}/" "${CHANGELOG_FILE}"
   pushd "${ASSET_DIRECTORY}" || return
   gh release create --prerelease --title "Latest snapshot build" --notes-file "${CHANGELOG_FILE}" "${LATEST_TAG}" ./*
   popd || return
