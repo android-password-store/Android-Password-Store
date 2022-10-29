@@ -90,7 +90,8 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with:
           name: Test report
-          path: app/build/reports
+          if-no-files-found: error
+          path: "**/build/reports/tests/"
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
