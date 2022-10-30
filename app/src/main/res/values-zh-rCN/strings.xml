@@ -111,6 +111,9 @@
   <string name="pref_rebase_on_pull_title">拉取时进行变基</string>
   <string name="pref_rebase_on_pull_summary">拉取或同步时，创建一个带上游更改的合并提交</string>
   <string name="pref_rebase_on_pull_summary_on">拉取或同步时，对远程存储库中不存在的提交进行变基操作</string>
+  <string name="pref_import_pgp_key_title">导入 PGP 密钥</string>
+  <string name="pref_pgp_key_manager_title">密钥管理器</string>
+  <string name="pref_pgp_ascii_armor_title">以 ASCII 装甲模式加密</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">生成密码</string>
   <string name="pwgen_generate">生成</string>
@@ -272,6 +275,7 @@ personal.com</string>
   <string name="otp_import_success">导入TOTP配置成功</string>
   <string name="otp_import_failure">导入TOTP配置失败</string>
   <string name="exporting_passwords">正在导出密码…</string>
+  <string name="invalid_gpg_id">找到了 .gpg-id，但它包含无效的密钥ID、指纹或用户ID</string>
   <string name="invalid_filename_text">文件名不能包含\'/\'</string>
   <string name="directory_hint">目录</string>
   <string name="new_folder_set_gpg_key">为目录设置GPG密钥</string>
