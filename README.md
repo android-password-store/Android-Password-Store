@@ -22,13 +22,11 @@ We're in the process of rewriting our documentation from scratch, and the work-i
 
 ## Contributing
 
-Want to contribute? See if you can [find an issue](https://github.com/android-password-store/Android-Password-Store/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) you wanna close, then send a PR!
+Want to contribute? See if you can [find an issue](https://github.com/android-password-store/Android-Password-Store/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) you are interested in, then send a PR. Consult the [contribution](CONTRIBUTING.md) docs 
 
 Interested in helping to translate Password Store? Contribute [here](https://crowdin.com/project/android-password-store)!
 
 Wanna test development builds to find bugs and offer feedback? Read the [release channels](https://docs.passwordstore.app/docs/Users/release-channels) documentation to get access!
-
-Code contributions? [Here](CONTRIBUTING.md) you are welcomed!
 
 ## Community
 
@@ -37,25 +35,11 @@ Ways to get in touch:
 * [Github issues](https://github.com/android-password-store/Android-Password-Store/issues): Use it if you have a bug report, or you want to submit a feature request.
 * [GitHub Discussions](https://github.com/android-password-store/Android-Password-Store/discussions): Use it if you do not understand something, or want to discuss a feature request in more detail with all community members before pitching it to maintainers.
 
-## Contributors
+## Donations
 
-This project exists thanks to all the people who contribute.
+The project accepts financial contributions through the following platforms
 
-[![Opencollective](https://opencollective.com/Android-Password-Store/contributors.svg?width=890&button=false)](https://github.com/android-password-store/Android-Password-Store/graphs/contributors)
-
-## Backers
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/Android-Password-Store#backer)]
-
-[![Backers](https://opencollective.com/Android-Password-Store/backers.svg?width=890)](https://opencollective.com/Android-Password-Store#backers)
-
-## Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website.[[Become a sponsor](https://opencollective.com/Android-Password-Store#sponsor)]
-
-[![Triplebyte](https://opencollective.com/Android-Password-Store/sponsor/0/avatar.svg)](https://opencollective.com/Android-Password-Store/sponsor/0/website)
-[![Applicative GmbH](https://opencollective.com/Android-Password-Store/sponsor/1/avatar.svg)](https://opencollective.com/Android-Password-Store/sponsor/1/website)
-[![ScrapingBee](https://opencollective.com/Android-Password-Store/sponsor/2/avatar.svg)](https://opencollective.com/Android-Password-Store/sponsor/2/website)
-[![Become a Sponsor](https://opencollective.com/Android-Password-Store/sponsor/3/avatar.svg)](https://opencollective.com/Android-Password-Store/sponsor/3/website)
+- [GitHub Sponsors](https://github.com/sponsors/android-password-store)
+- [OpenCollective](https://opencollective.com/android-password-store)
 
 <sub>Google Play and the Google Play logo are trademarks of Google LLC.</sub>
