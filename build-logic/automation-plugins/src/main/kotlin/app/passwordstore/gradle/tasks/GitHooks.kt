@@ -26,7 +26,7 @@ import org.gradle.api.tasks.TaskAction
 @CacheableTask
 abstract class GitHooks : DefaultTask() {
   @get:InputFile
-  @get:PathSensitive(PathSensitivity.RELATIVE)
+  @get:PathSensitive(PathSensitivity.NONE)
   abstract val hookSource: RegularFileProperty
 
   @get:OutputFile abstract val hookOutput: RegularFileProperty
