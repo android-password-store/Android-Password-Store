@@ -52,7 +52,7 @@ pluginManagement {
   }
 }
 
-plugins { id("com.gradle.enterprise") version "3.11.2" }
+plugins { id("com.gradle.enterprise") version "3.11.3" }
 
 gradleEnterprise {
   buildScan {
