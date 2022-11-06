@@ -112,6 +112,9 @@
   <string name="pref_rebase_on_pull_title">Rebasear em pull</string>
   <string name="pref_rebase_on_pull_summary">Ao realizar um pull ou sincronizar, crie um merge commit com as alterações do upstream</string>
   <string name="pref_rebase_on_pull_summary_on">Ao realizar um pull ou sincronizar, rebase commits que não estão presentes no repositório remoto</string>
+  <string name="pref_import_pgp_key_title">Importar chave PGP</string>
+  <string name="pref_pgp_key_manager_title">Gerenciador de Chaves</string>
+  <string name="pref_pgp_ascii_armor_title">Criptografar no modo de proteção ASCII</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Gerar Senha</string>
   <string name="pwgen_generate">Gerar</string>
@@ -268,6 +271,7 @@
   <string name="otp_import_success">Configuração TOTP importada com sucesso</string>
   <string name="otp_import_failure">Falha ao importar a configuração TOTP</string>
   <string name="exporting_passwords">Exportando senhas…</string>
+  <string name="invalid_gpg_id">Encontrado .gpg-id, mas contém um ID de chave, fingerprint ou ID de usuário inválidos</string>
   <string name="invalid_filename_text">Nome do arquivo não deve conter \'/\', defina o diretório acima</string>
   <string name="directory_hint">Diretório</string>
   <string name="new_folder_set_gpg_key">Definir chave GPG para diretório</string>
