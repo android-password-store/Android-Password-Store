@@ -2,6 +2,7 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+@file:Suppress("JUnitMalformedDeclaration") // The test runner takes care of it
 
 package app.passwordstore.crypto
 
@@ -30,12 +31,11 @@ enum class EncryptionKey(val keySet: List<PGPKey>) {
 @RunWith(TestParameterInjector::class)
 class PGPainlessCryptoHandlerTest {
 
-  @TestParameter private lateinit var encryptionKey: EncryptionKey
   private val cryptoHandler = PGPainlessCryptoHandler()
   private val secretKey = PGPKey(TestUtils.getArmoredSecretKey())
 
   @Test
-  fun encryptAndDecrypt() {
+  fun encryptAndDecrypt(@TestParameter encryptionKey: EncryptionKey) {
     val ciphertextStream = ByteArrayOutputStream()
     val encryptRes =
       cryptoHandler.encrypt(
@@ -59,7 +59,7 @@ class PGPainlessCryptoHandlerTest {
   }
 
   @Test
-  fun decryptWithWrongPassphrase() {
+  fun decryptWithWrongPassphrase(@TestParameter encryptionKey: EncryptionKey) {
     val ciphertextStream = ByteArrayOutputStream()
     val encryptRes =
       cryptoHandler.encrypt(
@@ -83,7 +83,7 @@ class PGPainlessCryptoHandlerTest {
   }
 
   @Test
-  fun encryptAsciiArmored() {
+  fun encryptAsciiArmored(@TestParameter encryptionKey: EncryptionKey) {
     val ciphertextStream = ByteArrayOutputStream()
     val encryptRes =
       cryptoHandler.encrypt(
