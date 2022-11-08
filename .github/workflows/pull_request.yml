@@ -120,7 +120,7 @@ jobs:
       - name: Build debug APKs
         uses: gradle/gradle-build-action@v2.3.3
         with:
-          arguments: assembleFreeDebug assembleNonFreeDebug
+          arguments: assembleFreeDebug assembleNonFreeDebug assembleNonFreeRelease
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
@@ -183,37 +183,6 @@ jobs:
         uses: gradle/gradle-build-action@v2.3.3
         with:
           arguments: lintDebug
-          gradle-home-cache-cleanup: true
-
-      - name: Upload Kotlin build report
-        if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.1
-        with:
-          name: Build report
-          path: build/reports/kotlin-build/
-
-  assemble-release-apks:
-    needs: [ "check-changed-files" ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3.1.0
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
-        with:
-          distribution: temurin
-          java-version: 18
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Assemble non-free release
-        uses: gradle/gradle-build-action@v2.3.3
-        with:
-          arguments: aNFR
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
