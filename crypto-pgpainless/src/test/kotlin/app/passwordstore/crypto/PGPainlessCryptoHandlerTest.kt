@@ -6,6 +6,8 @@
 
 package app.passwordstore.crypto
 
+import app.passwordstore.crypto.CryptoConstants.KEY_PASSPHRASE
+import app.passwordstore.crypto.CryptoConstants.PLAIN_TEXT
 import app.passwordstore.crypto.errors.IncorrectPassphraseException
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
@@ -20,6 +22,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 import org.junit.runner.RunWith
+import org.pgpainless.PGPainless
+import org.pgpainless.decryption_verification.MessageInspector
 
 @Suppress("Unused") // Test runner handles it internally
 enum class EncryptionKey(val keySet: List<PGPKey>) {
@@ -40,7 +44,7 @@ class PGPainlessCryptoHandlerTest {
     val encryptRes =
       cryptoHandler.encrypt(
         encryptionKey.keySet,
-        CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
         ciphertextStream,
         PGPEncryptOptions.Builder().build(),
       )
@@ -49,13 +53,13 @@ class PGPainlessCryptoHandlerTest {
     val decryptRes =
       cryptoHandler.decrypt(
         listOf(secretKey),
-        CryptoConstants.KEY_PASSPHRASE,
+        KEY_PASSPHRASE,
         ciphertextStream.toByteArray().inputStream(),
         plaintextStream,
         PGPDecryptOptions.Builder().build(),
       )
     assertIs<Ok<Unit>>(decryptRes)
-    assertEquals(CryptoConstants.PLAIN_TEXT, plaintextStream.toString(Charsets.UTF_8))
+    assertEquals(PLAIN_TEXT, plaintextStream.toString(Charsets.UTF_8))
   }
 
   @Test
@@ -64,7 +68,7 @@ class PGPainlessCryptoHandlerTest {
     val encryptRes =
       cryptoHandler.encrypt(
         encryptionKey.keySet,
-        CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
         ciphertextStream,
         PGPEncryptOptions.Builder().build(),
       )
@@ -88,7 +92,7 @@ class PGPainlessCryptoHandlerTest {
     val encryptRes =
       cryptoHandler.encrypt(
         encryptionKey.keySet,
-        CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
         ciphertextStream,
         PGPEncryptOptions.Builder().withAsciiArmor(true).build(),
       )
@@ -97,6 +101,42 @@ class PGPainlessCryptoHandlerTest {
     assertContains(ciphertext, "Version: PGPainless")
     assertContains(ciphertext, "-----BEGIN PGP MESSAGE-----")
     assertContains(ciphertext, "-----END PGP MESSAGE-----")
+  }
+
+  @Test
+  fun encryptMultiple() {
+    val alice =
+      PGPainless.generateKeyRing().modernKeyRing("Alice <owner@example.com>", KEY_PASSPHRASE)
+    val bob = PGPainless.generateKeyRing().modernKeyRing("Bob <owner@example.com>", KEY_PASSPHRASE)
+    val aliceKey = PGPKey(PGPainless.asciiArmor(alice).encodeToByteArray())
+    val bobKey = PGPKey(PGPainless.asciiArmor(bob).encodeToByteArray())
+    val ciphertextStream = ByteArrayOutputStream()
+    val encryptRes =
+      cryptoHandler.encrypt(
+        listOf(aliceKey, bobKey),
+        PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        ciphertextStream,
+        PGPEncryptOptions.Builder().withAsciiArmor(true).build(),
+      )
+    assertIs<Ok<Unit>>(encryptRes)
+    val message = ciphertextStream.toByteArray().decodeToString()
+    val info = MessageInspector.determineEncryptionInfoForMessage(message)
+    assertTrue(info.isEncrypted)
+    assertEquals(2, info.keyIds.size)
+    assertFalse(info.isSignedOnly)
+    for (key in listOf(aliceKey, bobKey)) {
+      val ciphertextStreamCopy = message.byteInputStream()
+      val plaintextStream = ByteArrayOutputStream()
+      val res =
+        cryptoHandler.decrypt(
+          listOf(key),
+          KEY_PASSPHRASE,
+          ciphertextStreamCopy,
+          plaintextStream,
+          PGPDecryptOptions.Builder().build(),
+        )
+      assertIs<Ok<Unit>>(res)
+    }
   }
 
   @Test
