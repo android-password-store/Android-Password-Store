@@ -17,6 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -223,6 +224,42 @@ class PGPKeyManagerTest {
     scope.runTest {
       assertIs<Ok<PGPKey>>(keyManager.addKey(secretKey))
       assertIs<Err<KeyAlreadyExistsException>>(keyManager.addKey(secretKey))
+    }
+  }
+
+  @Test
+  fun addMultipleKeysWithSameEmail() {
+    scope.runTest {
+      val alice =
+        PGPKey(this::class.java.classLoader.getResource("alice_owner@example_com")!!.readBytes())
+      val bobby =
+        PGPKey(this::class.java.classLoader.getResource("bobby_owner@example_com")!!.readBytes())
+      assertIs<Ok<PGPKey>>(keyManager.addKey(alice))
+      assertIs<Ok<PGPKey>>(keyManager.addKey(bobby))
+
+      keyManager.getAllKeys().apply {
+        assertIs<Ok<List<PGPKey>>>(this)
+        assertEquals(2, this.value.size)
+      }
+
+      val longKeyIds =
+        arrayOf(
+          KeyId(-7087927403306410599), // Alice
+          KeyId(-961222705095032109), // Bobby
+        )
+      val userIds =
+        arrayOf(
+          UserId("Alice <owner@example.com>"),
+          UserId("Bobby <owner@example.com>"),
+        )
+
+      for (idCollection in arrayOf(longKeyIds, userIds)) {
+        val alice1 = keyManager.getKeyById(idCollection[0])
+        val bobby1 = keyManager.getKeyById(idCollection[1])
+        assertIs<Ok<PGPKey>>(alice1)
+        assertIs<Ok<PGPKey>>(bobby1)
+        assertNotEquals(alice1.value.contents, bobby1.value.contents)
+      }
     }
   }
 }
