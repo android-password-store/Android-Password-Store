@@ -52,7 +52,7 @@ build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.7.0"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.43.0"
 compose-animation = { module = "androidx.compose.animation:animation" }
-compose-bom = "androidx.compose:compose-bom:2022.10.00"
+compose-bom = "androidx.compose:compose-bom:2022.11.00"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-hilt = "androidx.hilt:hilt-navigation-compose:1.0.0"
