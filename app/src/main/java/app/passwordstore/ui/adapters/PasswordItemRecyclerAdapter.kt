@@ -50,7 +50,7 @@ open class PasswordItemRecyclerAdapter(coroutineScope: CoroutineScope) :
     private val name: AppCompatTextView = itemView.findViewById(R.id.label)
     private val childCount: AppCompatTextView = itemView.findViewById(R.id.child_count)
     private val folderIndicator: AppCompatImageView = itemView.findViewById(R.id.folder_indicator)
-    lateinit var itemDetails: ItemDetailsLookup.ItemDetails<String>
+    var itemDetails: ItemDetailsLookup.ItemDetails<String>? = null
 
     suspend fun bind(item: PasswordItem) {
       val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
