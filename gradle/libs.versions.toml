@@ -50,7 +50,7 @@ build-r8 = "com.android.tools:r8:4.0.18-dev"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.3.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.7.0"
-build-versions = "com.github.ben-manes:gradle-versions-plugin:0.43.0"
+build-versions = "com.github.ben-manes:gradle-versions-plugin:0.44.0"
 compose-animation = { module = "androidx.compose.animation:animation" }
 compose-bom = "androidx.compose:compose-bom:2022.11.00"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
