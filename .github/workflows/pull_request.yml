@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
 
       - name: Check if relevant files have changed
-        uses: actions/github-script@v6.3.3
+        uses: actions/github-script@d556feaca394842dc55e4734bf3bb9f685482fa0 # v6.3.3
         id: service-changed
         with:
           result-encoding: string
@@ -35,12 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # v3.6.0
         with:
           distribution: temurin
           java-version: 18
@@ -49,14 +49,14 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Check codestyle
-        uses: gradle/gradle-build-action@v2.3.3
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
         with:
           arguments: ktfmtCheck
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # v3.1.1
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -66,12 +66,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # v3.6.0
         with:
           distribution: temurin
           java-version: 18
@@ -80,21 +80,21 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Run unit tests
-        uses: gradle/gradle-build-action@v2.3.3
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
         with:
           arguments: test -PslimTests
           gradle-home-cache-cleanup: true
 
       - name: (Fail-only) Upload test report
         if: "${{ failure() }}"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # v3.1.1
         with:
           name: Test report
           path: app/build/reports
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # v3.1.1
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -104,12 +104,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # v3.6.0
         with:
           distribution: temurin
           java-version: 18
@@ -118,14 +118,14 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Build debug APKs
-        uses: gradle/gradle-build-action@v2.3.3
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
         with:
           arguments: assembleFreeDebug assembleNonFreeDebug assembleNonFreeRelease
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # v3.1.1
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -135,12 +135,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # v3.6.0
         with:
           distribution: temurin
           java-version: 18
@@ -149,14 +149,14 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Check library API
-        uses: gradle/gradle-build-action@v2.3.3
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
         with:
           arguments: metalavaCheckCompatibilityRelease
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # v3.1.1
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -166,12 +166,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # v3.6.0
         with:
           distribution: temurin
           java-version: 18
@@ -180,14 +180,14 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Run Lint on debug variants
-        uses: gradle/gradle-build-action@v2.3.3
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
         with:
           arguments: lintDebug
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # v3.1.1
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -197,12 +197,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
         with:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # v3.6.0
         with:
           distribution: temurin
           java-version: 18
@@ -211,14 +211,14 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Run detekt
-        uses: gradle/gradle-build-action@v2.3.3
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
         with:
           arguments: detekt
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # v3.1.1
         with:
           name: Build report
           path: build/reports/kotlin-build/
