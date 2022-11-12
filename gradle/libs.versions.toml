@@ -4,11 +4,11 @@ androidxActivity = "1.7.0-alpha02"
 beagle = "2.9.0"
 bouncycastle = "1.72"
 # @keep used for kotlinCompilerExtensionVersion
-composeCompiler = "1.3.2"
+composeCompiler = "1.4.0-alpha02"
 coroutines = "1.6.4"
 flowbinding = "1.2.0"
 hilt = "2.44.1"
-kotlin = "1.7.20"
+kotlin = "1.7.21"
 leakcanary = "2.10"
 lifecycle = "2.6.0-alpha03"
 
