@@ -74,7 +74,7 @@ testing-junit = "junit:junit:4.13.2"
 testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 testing-robolectric = "org.robolectric:robolectric:4.9"
 testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
-testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.9"
+testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.10"
 testing-turbine = "app.cash.turbine:turbine:0.12.1"
 thirdparty-beagle-log = { module = "io.github.pandulapeter.beagle:log", version.ref = "beagle" }
 thirdparty-beagle-log-noop = { module = "io.github.pandulapeter.beagle:log-noop", version.ref = "beagle" }
