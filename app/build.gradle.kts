@@ -104,12 +104,9 @@ dependencies {
   if (snapshot.snapshot) {
     implementation(libs.thirdparty.whatthestack)
     implementation(libs.thirdparty.beagle.ui.drawer)
-    implementation(libs.thirdparty.beagle.log)
   } else {
     debugImplementation(libs.thirdparty.beagle.ui.drawer)
-    debugImplementation(libs.thirdparty.beagle.log)
     releaseImplementation(libs.thirdparty.beagle.noop)
-    releaseImplementation(libs.thirdparty.beagle.log.noop)
     debugImplementation(libs.thirdparty.whatthestack)
   }
 
