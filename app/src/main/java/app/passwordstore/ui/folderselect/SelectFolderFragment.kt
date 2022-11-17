@@ -23,11 +23,13 @@ import app.passwordstore.util.viewmodel.ListMode
 import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
+@AndroidEntryPoint
 class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
 
   private val binding by viewBinding(PasswordRecyclerViewBinding::bind)

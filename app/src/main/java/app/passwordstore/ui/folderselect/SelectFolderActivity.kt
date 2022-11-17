@@ -14,7 +14,9 @@ import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.passwords.PASSWORD_FRAGMENT_TAG
 import app.passwordstore.ui.passwords.PasswordStore
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
 
   private lateinit var passwordList: SelectFolderFragment
