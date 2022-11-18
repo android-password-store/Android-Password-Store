@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,6 +19,7 @@ import app.passwordstore.R
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.theme.APSTheme
 import app.passwordstore.ui.compose.theme.decideColorScheme
+import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.viewmodel.PGPKeyListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,6 +43,14 @@ class PGPKeyListActivity : ComponentActivity() {
               backgroundColor = MaterialTheme.colorScheme.surface,
             )
           },
+          floatingActionButton = {
+            FloatingActionButton(onClick = { launchActivity(PGPKeyImportActivity::class.java) }) {
+              Icon(
+                painter = painterResource(R.drawable.ic_add_48dp),
+                stringResource(R.string.pref_import_pgp_key_title)
+              )
+            }
+          }
         ) { paddingValues ->
           PGPKeyList(viewModel = viewModel, modifier = Modifier.padding(paddingValues))
         }
