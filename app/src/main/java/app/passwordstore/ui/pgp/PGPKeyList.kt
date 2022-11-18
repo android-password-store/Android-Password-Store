@@ -6,10 +6,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -36,6 +42,30 @@ private fun KeyItem(
   onItemClick: (identifier: GpgIdentifier) -> Unit,
   modifier: Modifier = Modifier,
 ) {
+  var isDeleting by remember { mutableStateOf(false) }
+  if (isDeleting) {
+    AlertDialog(
+      onDismissRequest = { isDeleting = false },
+      title = {
+        Text(text = stringResource(R.string.pgp_key_manager_delete_confirmation_dialog_title))
+      },
+      confirmButton = {
+        TextButton(
+          onClick = {
+            onItemClick(identifier)
+            isDeleting = false
+          }
+        ) {
+          Text(text = stringResource(R.string.dialog_yes))
+        }
+      },
+      dismissButton = {
+        TextButton(onClick = { isDeleting = false }) {
+          Text(text = stringResource(R.string.dialog_no))
+        }
+      },
+    )
+  }
   val label =
     when (identifier) {
       is GpgIdentifier.KeyId -> identifier.id.toString()
@@ -47,7 +77,7 @@ private fun KeyItem(
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Text(text = label)
-    IconButton(onClick = { onItemClick(identifier) }) {
+    IconButton(onClick = { isDeleting = true }) {
       Icon(
         painter = painterResource(R.drawable.ic_delete_24dp),
         stringResource(id = R.string.delete)

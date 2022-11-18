@@ -367,5 +367,5 @@
   <string name="pwgen_some_error_occurred">Some error occurred</string>
   <string name="git_run_gc_job">Run garbage collection job</string>
   <string name="activity_label_pgp_key_manager">PGP Key Manager</string>
-
+  <string name="pgp_key_manager_delete_confirmation_dialog_title">Delete key?</string>
 </resources>
