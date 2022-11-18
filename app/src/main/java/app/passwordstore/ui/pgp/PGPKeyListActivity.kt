@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import app.passwordstore.R
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.theme.APSTheme
@@ -70,8 +71,8 @@ class PGPKeyListActivity : ComponentActivity() {
 
 @Composable
 fun PGPKeyList(
-  viewModel: PGPKeyListViewModel,
   modifier: Modifier = Modifier,
+  viewModel: PGPKeyListViewModel = viewModel(),
 ) {
   KeyList(
     identifiers = viewModel.keys,

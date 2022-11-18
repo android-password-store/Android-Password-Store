@@ -72,6 +72,7 @@ dependencies {
   implementation(libs.androidx.documentfile)
   implementation(libs.androidx.fragment.ktx)
   implementation(libs.bundles.androidxLifecycle)
+  implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.material)
   implementation(libs.androidx.preference)
   implementation(libs.androidx.recyclerview)
