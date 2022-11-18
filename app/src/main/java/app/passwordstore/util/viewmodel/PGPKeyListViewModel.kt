@@ -20,10 +20,10 @@ class PGPKeyListViewModel @Inject constructor(private val keyManager: PGPKeyMana
   var keys: List<GpgIdentifier> by mutableStateOf(emptyList())
 
   init {
-    getKeys()
+    updateKeySet()
   }
 
-  private fun getKeys() {
+  fun updateKeySet() {
     viewModelScope.launch {
       when (
         val result =
@@ -40,7 +40,7 @@ class PGPKeyListViewModel @Inject constructor(private val keyManager: PGPKeyMana
   fun deleteKey(identifier: GpgIdentifier) {
     viewModelScope.launch {
       keyManager.removeKey(identifier)
-      getKeys()
+      updateKeySet()
     }
   }
 }

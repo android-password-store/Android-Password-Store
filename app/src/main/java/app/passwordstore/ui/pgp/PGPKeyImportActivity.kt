@@ -73,6 +73,7 @@ class PGPKeyImportActivity : AppCompatActivity() {
       is Ok<PGPKey?> -> {
         val key = result.value
         if (key == null) {
+          setResult(RESULT_CANCELED)
           finish()
           // This return convinces Kotlin that the control flow for `key == null` definitely
           // terminates here and allows for a smart cast below.
@@ -81,7 +82,10 @@ class PGPKeyImportActivity : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
           .setTitle(getString(R.string.pgp_key_import_succeeded))
           .setMessage(getString(R.string.pgp_key_import_succeeded_message, tryGetId(key)))
-          .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
+          .setPositiveButton(android.R.string.ok) { _, _ ->
+            setResult(RESULT_OK)
+            finish()
+          }
           .setCancelable(false)
           .show()
       }

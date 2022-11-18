@@ -1,8 +1,10 @@
 package app.passwordstore.ui.pgp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +21,6 @@ import app.passwordstore.R
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.theme.APSTheme
 import app.passwordstore.ui.compose.theme.decideColorScheme
-import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.viewmodel.PGPKeyListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +29,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class PGPKeyListActivity : ComponentActivity() {
 
   private val viewModel: PGPKeyListViewModel by viewModels()
+  private val keyImportAction =
+    registerForActivityResult(StartActivityForResult()) {
+      if (it.resultCode == RESULT_OK) {
+        viewModel.updateKeySet()
+      }
+    }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -44,7 +51,9 @@ class PGPKeyListActivity : ComponentActivity() {
             )
           },
           floatingActionButton = {
-            FloatingActionButton(onClick = { launchActivity(PGPKeyImportActivity::class.java) }) {
+            FloatingActionButton(
+              onClick = { keyImportAction.launch(Intent(this, PGPKeyImportActivity::class.java)) }
+            ) {
               Icon(
                 painter = painterResource(R.drawable.ic_add_48dp),
                 stringResource(R.string.pref_import_pgp_key_title)
