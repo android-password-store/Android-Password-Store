@@ -43,29 +43,14 @@ private fun KeyItem(
   modifier: Modifier = Modifier,
 ) {
   var isDeleting by remember { mutableStateOf(false) }
-  if (isDeleting) {
-    AlertDialog(
-      onDismissRequest = { isDeleting = false },
-      title = {
-        Text(text = stringResource(R.string.pgp_key_manager_delete_confirmation_dialog_title))
-      },
-      confirmButton = {
-        TextButton(
-          onClick = {
-            onItemClick(identifier)
-            isDeleting = false
-          }
-        ) {
-          Text(text = stringResource(R.string.dialog_yes))
-        }
-      },
-      dismissButton = {
-        TextButton(onClick = { isDeleting = false }) {
-          Text(text = stringResource(R.string.dialog_no))
-        }
-      },
-    )
-  }
+  DeleteConfirmationDialog(
+    isDeleting = isDeleting,
+    onDismiss = { isDeleting = false },
+    onConfirm = {
+      onItemClick(identifier)
+      isDeleting = false
+    }
+  )
   val label =
     when (identifier) {
       is GpgIdentifier.KeyId -> identifier.id.toString()
@@ -83,6 +68,29 @@ private fun KeyItem(
         stringResource(id = R.string.delete)
       )
     }
+  }
+}
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+private inline fun DeleteConfirmationDialog(
+  isDeleting: Boolean,
+  noinline onDismiss: () -> Unit,
+  noinline onConfirm: () -> Unit,
+) {
+  if (isDeleting) {
+    AlertDialog(
+      onDismissRequest = onDismiss,
+      title = {
+        Text(text = stringResource(R.string.pgp_key_manager_delete_confirmation_dialog_title))
+      },
+      confirmButton = {
+        TextButton(onClick = onConfirm) { Text(text = stringResource(R.string.dialog_yes)) }
+      },
+      dismissButton = {
+        TextButton(onClick = onDismiss) { Text(text = stringResource(R.string.dialog_no)) }
+      },
+    )
   }
 }
 
