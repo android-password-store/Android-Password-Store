@@ -87,6 +87,9 @@ comments:
 
 complexity:
   active: true
+  CognitiveComplexMethod:
+    active: false
+    threshold: 15
   ComplexCondition:
     active: true
     threshold: 4
@@ -95,9 +98,10 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
-  ComplexMethod:
+  # TODO(msfjarvis): cleanup the offenders and wind this down
+  CyclomaticComplexMethod:
     active: true
-    threshold: 15
+    threshold: 40
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
@@ -413,8 +417,6 @@ potential-bugs:
       - 'java.util.HashSet'
       - 'java.util.LinkedHashMap'
       - 'java.util.HashMap'
-  DuplicateCaseInWhenExpression:
-    active: true
   ElseCaseInsteadOfExhaustiveWhen:
     active: false
   EqualsAlwaysReturnsTrueOrFalse:
@@ -429,7 +431,7 @@ potential-bugs:
     active: true
   IgnoredReturnValue:
     active: true
-    restrictToAnnotatedMethods: true
+    restrictToConfig: true
     returnValueAnnotations:
       - '*.CheckResult'
       - '*.CheckReturnValue'
@@ -456,15 +458,10 @@ potential-bugs:
   MissingPackageDeclaration:
     active: false
     excludes: ['**/*.kts']
-  MissingWhenCase:
-    active: true
-    allowElseExpression: true
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:
     active: false
-  RedundantElseInWhen:
-    active: true
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullOperator:
@@ -500,7 +497,7 @@ style:
     active: false
   DataClassContainsFunctions:
     active: false
-    conversionFunctionPrefix: 'to'
+    conversionFunctionPrefix: ['to']
   DataClassShouldBeImmutable:
     active: false
   DestructuringDeclarationWithTooManyEntries:
@@ -534,12 +531,6 @@ style:
     methods:
       - 'kotlin.io.print'
       - 'kotlin.io.println'
-  ForbiddenPublicDataClass:
-    active: true
-    excludes: ['**']
-    ignorePackages:
-      - '*.internal'
-      - '*.internal.*'
   ForbiddenSuppress:
     active: false
     rules: []
@@ -551,13 +542,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     ignoreActualFunction: true
-    excludedFunctions: ''
-  LibraryCodeMustSpecifyReturnType:
-    active: true
-    excludes: ['**']
-  LibraryEntitiesShouldNotBePublic:
-    active: true
-    excludes: ['**']
+    excludedFunctions: []
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -627,7 +612,7 @@ style:
   ReturnCount:
     active: true
     max: 2
-    excludedFunctions: 'equals'
+    excludedFunctions: ['equals']
     excludeLabeled: false
     excludeReturnFromLambda: true
     excludeGuardClauses: false

@@ -36,9 +36,7 @@ class ProxyUtils @Inject constructor(private val gitSettings: GitSettings) {
         }
 
         override fun connectFailed(uri: URI?, sa: SocketAddress?, ioe: IOException?) {
-          if (uri == null || sa == null || ioe == null) {
-            throw IllegalArgumentException("Arguments can't be null.")
-          }
+          require(uri == null || sa == null || ioe == null) { "Arguments can't be null." }
         }
       }
     )
