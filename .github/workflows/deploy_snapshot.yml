@@ -3,6 +3,10 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: write
+  actions: write
+
 name: Deploy snapshot builds
 jobs:
   deploy-release-snapshot:

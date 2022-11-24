@@ -19,7 +19,7 @@ function overwrite_remote_tag() {
 }
 
 function has_release() {
-  gh release view "${LATEST_TAG}" &>/dev/null
+  gh release view "${LATEST_TAG}"
   echo "$?"
 }
 
@@ -28,9 +28,9 @@ function delete_release() {
 }
 
 function create_rev_file() {
-  pushd "${ASSET_DIRECTORY}" || return
+  pushd "${ASSET_DIRECTORY}" || exit 1
   echo "${CURRENT_REV}" | tee rev-hash.txt
-  popd || return
+  popd || exit 1
 }
 
 function create_release() {
@@ -38,19 +38,19 @@ function create_release() {
   CHANGELOG_FILE="$(mktemp)"
   cp scripts/snapshot-changelog-template.txt "${CHANGELOG_FILE}"
   sed -i "s/__SNAPSHOT_REV__/${CURRENT_REV}/" "${CHANGELOG_FILE}"
-  pushd "${ASSET_DIRECTORY}" || return
+  pushd "${ASSET_DIRECTORY}" || exit 1
   gh release create --prerelease --title "Latest snapshot build" --notes-file "${CHANGELOG_FILE}" "${LATEST_TAG}" ./*
-  popd || return
+  popd || exit 1
 }
 
 overwrite_local_tag
 
-if [[ "$(has_release)" -eq 0 ]]; then
-  delete_release
-fi
-
 create_rev_file
 
 overwrite_remote_tag
+
+if [[ "$(has_release)" -eq 0 ]]; then
+  delete_release
+fi
 
 create_release
