@@ -53,7 +53,6 @@ class KotlinCommonPlugin : Plugin<Project> {
       withType<Test>().configureEach {
         maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
         testLogging { events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED) }
-        doNotTrackState("We want tests to always run even if Gradle thinks otherwise")
       }
     }
   }
