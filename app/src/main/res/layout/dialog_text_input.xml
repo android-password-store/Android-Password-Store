@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2022 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="@dimen/activity_horizontal_margin">
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/text_input_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/edit_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+    <requestFocus />
+  </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>
