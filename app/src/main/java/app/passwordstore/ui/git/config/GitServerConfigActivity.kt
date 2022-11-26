@@ -62,17 +62,17 @@ class GitServerConfigActivity : BaseGitActivity() {
       when (newAuthMode) {
         AuthMode.SshKey -> check(binding.authModeSshKey.id)
         AuthMode.Password -> check(binding.authModePassword.id)
-        AuthMode.None -> check(View.NO_ID)
+        AuthMode.None -> clearChecked()
       }
-      addOnButtonCheckedListener { _, checkedId, isChecked ->
-        if (!isChecked) {
+      addOnButtonCheckedListener { _, _, _ ->
+        if (checkedButtonIds.isEmpty()) {
           newAuthMode = AuthMode.None
-          return@addOnButtonCheckedListener
-        }
-        when (checkedId) {
-          binding.authModeSshKey.id -> newAuthMode = AuthMode.SshKey
-          binding.authModePassword.id -> newAuthMode = AuthMode.Password
-          View.NO_ID -> newAuthMode = AuthMode.None
+        } else {
+          when (checkedButtonId) {
+            binding.authModeSshKey.id -> newAuthMode = AuthMode.SshKey
+            binding.authModePassword.id -> newAuthMode = AuthMode.Password
+            View.NO_ID -> newAuthMode = AuthMode.None
+          }
         }
       }
     }
@@ -214,7 +214,7 @@ class GitServerConfigActivity : BaseGitActivity() {
       if (isHttps) {
         authModeSshKey.isVisible = false
         authModePassword.isVisible = true
-        if (authModeGroup.checkedButtonId != authModePassword.id) authModeGroup.check(View.NO_ID)
+        if (authModeGroup.checkedButtonId != authModePassword.id) authModeGroup.clearChecked()
       } else {
         authModeSshKey.isVisible = true
         authModePassword.isVisible = true
