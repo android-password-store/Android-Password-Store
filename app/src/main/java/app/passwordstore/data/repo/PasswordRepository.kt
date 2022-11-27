@@ -16,6 +16,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import java.io.File
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
@@ -123,6 +124,18 @@ object PasswordRepository {
     initializeRepository(dir.resolve(".git"))
 
     return repository
+  }
+
+  /** Get the currently checked out branch. */
+  fun getCurrentBranch(): String? {
+    val repository = repository ?: return null
+    val headRef = repository.getRef(Constants.HEAD) ?: return null
+    return if (headRef.isSymbolic) {
+      val branchName = headRef.target.name
+      Repository.shortenRefName(branchName)
+    } else {
+      null
+    }
   }
 
   /**
