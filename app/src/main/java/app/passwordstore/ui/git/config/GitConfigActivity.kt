@@ -94,48 +94,8 @@ class GitConfigActivity : BaseGitActivity() {
       runCatching { startActivity(Intent(this, GitLogActivity::class.java)) }
         .onFailure { ex -> logcat(ERROR) { ex.asLog("Failed to start GitLogActivity") } }
     }
-    binding.gitAbortRebase.setOnClickListener {
-      lifecycleScope.launch {
-        launchGitOperation(GitOp.BREAK_OUT_OF_DETACHED)
-          .fold(
-            success = {
-              val branch = PasswordRepository.getCurrentBranch()
-              MaterialAlertDialogBuilder(this@GitConfigActivity).run {
-                setTitle(resources.getString(R.string.git_abort_and_push_title))
-                setMessage(
-                  resources.getString(
-                    R.string.git_break_out_of_detached_success,
-                    branch,
-                    "conflicting-$branch-...",
-                  )
-                )
-                setOnDismissListener { finish() }
-                setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ -> }
-                show()
-              }
-            },
-            failure = { err -> promptOnErrorHandler(err) { finish() } },
-          )
-      }
-    }
-    binding.gitResetToRemote.setOnClickListener {
-      val dialog =
-        TextInputDialog.newInstance(getString(R.string.git_utils_reset_remote_branch_title))
-      dialog.show(supportFragmentManager, "BRANCH_INPUT_DIALOG")
-      dialog.setFragmentResultListener(TextInputDialog.REQUEST_KEY) { _, bundle ->
-        val result = bundle.getString(TextInputDialog.BUNDLE_KEY_TEXT)
-        if (!result.isNullOrEmpty()) {
-          remoteBranch = result
-          lifecycleScope.launch {
-            launchGitOperation(GitOp.RESET)
-              .fold(
-                success = ::finishOnSuccessHandler,
-                failure = { err -> promptOnErrorHandler(err) { finish() } },
-              )
-          }
-        }
-      }
-    }
+    binding.gitAbortRebase.setOnClickListener { abortRebase() }
+    binding.gitResetToRemote.setOnClickListener { resetToRemote() }
     binding.gitGc.setOnClickListener {
       lifecycleScope.launch {
         launchGitOperation(GitOp.GC)
@@ -144,6 +104,50 @@ class GitConfigActivity : BaseGitActivity() {
             failure = { err -> promptOnErrorHandler(err) { finish() } },
           )
       }
+    }
+  }
+
+  private fun resetToRemote() {
+    val dialog =
+      TextInputDialog.newInstance(getString(R.string.git_utils_reset_remote_branch_title))
+    dialog.show(supportFragmentManager, "BRANCH_INPUT_DIALOG")
+    dialog.setFragmentResultListener(TextInputDialog.REQUEST_KEY) { _, bundle ->
+      val result = bundle.getString(TextInputDialog.BUNDLE_KEY_TEXT)
+      if (!result.isNullOrEmpty()) {
+        remoteBranch = result
+        lifecycleScope.launch {
+          launchGitOperation(GitOp.RESET)
+            .fold(
+              success = ::finishOnSuccessHandler,
+              failure = { err -> promptOnErrorHandler(err) { finish() } },
+            )
+        }
+      }
+    }
+  }
+
+  private fun abortRebase() {
+    lifecycleScope.launch {
+      launchGitOperation(GitOp.BREAK_OUT_OF_DETACHED)
+        .fold(
+          success = {
+            val branch = PasswordRepository.getCurrentBranch()
+            MaterialAlertDialogBuilder(this@GitConfigActivity).run {
+              setTitle(resources.getString(R.string.git_abort_and_push_title))
+              setMessage(
+                resources.getString(
+                  R.string.git_break_out_of_detached_success,
+                  branch,
+                  "conflicting-$branch-...",
+                )
+              )
+              setOnDismissListener { finish() }
+              setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ -> }
+              show()
+            }
+          },
+          failure = { err -> promptOnErrorHandler(err) { finish() } },
+        )
     }
   }
 
