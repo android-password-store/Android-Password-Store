@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 -   Using HTTPS without authentication is now fully supported, and no longer asks for a username
 -   Enabling 'Show hidden files and folders' no longer shows Git-related files and folders
 -   XkPasswd password generator has been removed in favor of one backed by [Diceware](https://theworld.com/~reinhold/diceware.html)
+-   The app no longer prompts for a branch during clone and instead always uses the default one. Use the hard reset option in Git utilities to switch to the desired branch after cloning.
 
 ## [1.13.5] - 2021-07-28
 
