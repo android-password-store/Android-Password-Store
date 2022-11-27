@@ -58,6 +58,12 @@ abstract class BaseGitActivity : AppCompatActivity() {
   @GitPreferences @Inject lateinit var gitPrefs: SharedPreferences
 
   /**
+   * Poor workaround to pass in a specified remote branch for [ResetToRemoteOperation]. Callers of
+   * [launchGitOperation] should set this before calling the method with [GitOp.RESET].
+   */
+  protected var remoteBranch = ""
+
+  /**
    * Attempt to launch the requested Git operation.
    * @param operation The type of git operation to launch
    */
@@ -77,7 +83,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
         GitOp.PUSH -> PushOperation(this)
         GitOp.SYNC -> SyncOperation(this, gitSettings.rebaseOnPull)
         GitOp.BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
-        GitOp.RESET -> ResetToRemoteOperation(this)
+        GitOp.RESET -> ResetToRemoteOperation(this, remoteBranch)
         GitOp.GC -> GcOperation(this)
       }
     return (if (op.requiresAuth) {

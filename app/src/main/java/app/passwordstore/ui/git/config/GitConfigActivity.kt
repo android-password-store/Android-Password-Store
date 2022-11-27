@@ -11,10 +11,12 @@ import android.os.Looper
 import android.util.Patterns
 import android.view.MenuItem
 import androidx.core.os.postDelayed
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.databinding.ActivityGitConfigBinding
+import app.passwordstore.ui.dialogs.TextInputDialog
 import app.passwordstore.ui.git.base.BaseGitActivity
 import app.passwordstore.ui.git.log.GitLogActivity
 import app.passwordstore.util.extensions.viewBinding
@@ -115,12 +117,21 @@ class GitConfigActivity : BaseGitActivity() {
       }
     }
     binding.gitResetToRemote.setOnClickListener {
-      lifecycleScope.launch {
-        launchGitOperation(GitOp.RESET)
-          .fold(
-            success = ::finishOnSuccessHandler,
-            failure = { err -> promptOnErrorHandler(err) { finish() } },
-          )
+      val dialog =
+        TextInputDialog.newInstance(getString(R.string.git_utils_reset_remote_branch_title))
+      dialog.show(supportFragmentManager, "BRANCH_INPUT_DIALOG")
+      dialog.setFragmentResultListener(TextInputDialog.REQUEST_KEY) { _, bundle ->
+        val result = bundle.getString(TextInputDialog.BUNDLE_KEY_TEXT)
+        if (!result.isNullOrEmpty()) {
+          remoteBranch = result
+          lifecycleScope.launch {
+            launchGitOperation(GitOp.RESET)
+              .fold(
+                success = ::finishOnSuccessHandler,
+                failure = { err -> promptOnErrorHandler(err) { finish() } },
+              )
+          }
+        }
       }
     }
     binding.gitGc.setOnClickListener {

@@ -5,22 +5,22 @@
 package app.passwordstore.util.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
+import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode.TRACK
 import org.eclipse.jgit.api.ResetCommand
 
-class ResetToRemoteOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
+class ResetToRemoteOperation(callingActivity: AppCompatActivity, remoteBranch: String) :
+  GitOperation(callingActivity) {
 
   override val commands =
     arrayOf(
-      // Stage all files
-      git.add().addFilepattern("."),
       // Fetch everything from the origin remote
-      git.fetch().setRemote("origin"),
+      git.fetch().setRemote("origin").setRemoveDeletedRefs(true),
+      // Force-create $remoteBranch if it doesn't exist. This covers the case where a branch name is
+      // changed.
+      git.branchCreate().setName(remoteBranch).setForce(true),
+      git.checkout().setName(remoteBranch).setForce(true).setUpstreamMode(TRACK),
       // Do a hard reset to the remote branch. Equivalent to git reset --hard
       // origin/$remoteBranch
       git.reset().setRef("origin/$remoteBranch").setMode(ResetCommand.ResetType.HARD),
-      // Force-create $remoteBranch if it doesn't exist. This covers the case where you
-      // switched
-      // branches from 'master' to anything else.
-      git.branchCreate().setName(remoteBranch).setForce(true),
     )
 }
