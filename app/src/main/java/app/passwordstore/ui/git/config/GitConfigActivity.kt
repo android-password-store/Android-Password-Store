@@ -19,6 +19,7 @@ import app.passwordstore.databinding.ActivityGitConfigBinding
 import app.passwordstore.ui.dialogs.TextInputDialog
 import app.passwordstore.ui.git.base.BaseGitActivity
 import app.passwordstore.ui.git.log.GitLogActivity
+import app.passwordstore.util.extensions.asLog
 import app.passwordstore.util.extensions.viewBinding
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.getOrElse
@@ -91,7 +92,7 @@ class GitConfigActivity : BaseGitActivity() {
     }
     binding.gitLog.setOnClickListener {
       runCatching { startActivity(Intent(this, GitLogActivity::class.java)) }
-        .onFailure { ex -> logcat(ERROR) { "Failed to start GitLogActivity\n${ex}" } }
+        .onFailure { ex -> logcat(ERROR) { ex.asLog("Failed to start GitLogActivity") } }
     }
     binding.gitAbortRebase.setOnClickListener {
       lifecycleScope.launch {
