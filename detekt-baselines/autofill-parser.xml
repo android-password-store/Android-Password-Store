@@ -2,7 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
-    <ID>ComplexMethod:AutofillStrategyDsl.kt$AutofillRule$fun match( allPassword: List&lt;FormField&gt;, allUsername: List&lt;FormField&gt;, allOtp: List&lt;FormField&gt;, singleOriginMode: Boolean, isManualRequest: Boolean ): AutofillScenario&lt;FormField&gt;?</ID>
     <ID>DestructuringDeclarationWithTooManyEntries:AutofillStrategyDsl.kt$AutofillRule$(type, matcher, optional, matchHidden)</ID>
     <ID>ForbiddenComment:AutofillFormParser.kt$AutofillFormParser$// TODO: Support WebViews in apps via Digital Asset Links</ID>
     <ID>ForbiddenComment:AutofillStrategy.kt$// TODO: Introduce a custom fill/generate/update flow for this scenario</ID>

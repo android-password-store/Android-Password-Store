@@ -7,13 +7,6 @@
     <ID>ComplexCondition:GitServerConfigActivity.kt$GitServerConfigActivity$localDir.exists() &amp;&amp; localDirFiles.isNotEmpty() &amp;&amp; !(localDirFiles.size == 1 &amp;&amp; localDirFiles[0].name == ".git")</ID>
     <ID>ComplexCondition:PasswordCreationActivity.kt$PasswordCreationActivity$(!editing || (editing &amp;&amp; suggestedName != file.nameWithoutExtension)) &amp;&amp; file.exists()</ID>
     <ID>ComplexCondition:PasswordStore.kt$PasswordStore$(keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_F &amp;&amp; event.isCtrlPressed) &amp;&amp; !searchItem.isActionViewExpanded</ID>
-    <ID>ComplexMethod:AutofillFilterView.kt$AutofillFilterView$private fun bindUI()</ID>
-    <ID>ComplexMethod:GitCommandExecutor.kt$GitCommandExecutor$suspend fun execute(): Result&lt;Unit, Throwable&gt;</ID>
-    <ID>ComplexMethod:GitServerConfigActivity.kt$GitServerConfigActivity$override fun onCreate(savedInstanceState: Bundle?)</ID>
-    <ID>ComplexMethod:Migrations.kt$private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettings: GitSettings)</ID>
-    <ID>ComplexMethod:PasswordCreationActivity.kt$PasswordCreationActivity$override fun onCreate(savedInstanceState: Bundle?)</ID>
-    <ID>ComplexMethod:PasswordCreationActivity.kt$PasswordCreationActivity$private fun encrypt()</ID>
-    <ID>ComplexMethod:PasswordFragment.kt$PasswordFragment$private fun initializePasswordList()</ID>
     <ID>EmptyFunctionBlock:BasicBottomSheet.kt$BasicBottomSheet.&lt;no name provided&gt;${}</ID>
     <ID>EmptyFunctionBlock:ItemCreationBottomSheet.kt$ItemCreationBottomSheet.&lt;no name provided&gt;${}</ID>
     <ID>EmptyFunctionBlock:PasswordFragment.kt$PasswordFragment.&lt;no name provided&gt;.&lt;no name provided&gt;${}</ID>
@@ -60,7 +53,6 @@
     <ID>MatchingDeclarationName:AutofillViewUtils.kt$DatasetMetadata</ID>
     <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used."</ID>
     <ID>MaxLineLength:BaseGitActivity.kt$BaseGitActivity$"WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."</ID>
-    <ID>MaxLineLength:DecryptScreen.kt$ |otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&amp;issuer=ACME%20Co&amp;algorithm=SHA1&amp;digits=6&amp;period=30</ID>
     <ID>NestedBlockDepth:FieldItemAdapter.kt$FieldItemAdapter.FieldItemViewHolder$fun bind(fieldItem: FieldItem, showPassword: Boolean, copyTextToClipboard: (String?) -&gt; Unit)</ID>
     <ID>NestedBlockDepth:GitOperation.kt$GitOperation$suspend fun executeAfterAuthentication(authMode: AuthMode): Result&lt;Unit, Throwable&gt;</ID>
     <ID>NestedBlockDepth:PasswordExportService.kt$PasswordExportService$override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int</ID>
@@ -74,9 +66,10 @@
     <ID>ReturnCount:ClipboardService.kt$ClipboardService$override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int</ID>
     <ID>ReturnCount:Extensions.kt$fun File.contains(other: File): Boolean</ID>
     <ID>ReturnCount:GitOperation.kt$GitOperation$suspend fun executeAfterAuthentication(authMode: AuthMode): Result&lt;Unit, Throwable&gt;</ID>
-    <ID>ReturnCount:GitSettings.kt$GitSettings$fun updateConnectionSettingsIfValid( newAuthMode: AuthMode, newUrl: String, newBranch: String ): UpdateConnectionSettingsResult</ID>
+    <ID>ReturnCount:GitSettings.kt$GitSettings$fun updateConnectionSettingsIfValid( newAuthMode: AuthMode, newUrl: String ): UpdateConnectionSettingsResult</ID>
     <ID>ReturnCount:OreoAutofillService.kt$OreoAutofillService$override fun onFillRequest( request: FillRequest, cancellationSignal: CancellationSignal, callback: FillCallback )</ID>
     <ID>ReturnCount:OreoAutofillService.kt$OreoAutofillService$override fun onSaveRequest(request: SaveRequest, callback: SaveCallback)</ID>
+    <ID>ReturnCount:PasswordRepository.kt$PasswordRepository$fun getCurrentBranch(): String?</ID>
     <ID>ReturnCount:PasswordStore.kt$PasswordStore$override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean</ID>
     <ID>ReturnCount:ShortcutHandler.kt$ShortcutHandler$fun addPinnedShortcut(item: PasswordItem, intent: Intent)</ID>
     <ID>SpreadOperator:Api30AutofillResponseBuilder.kt$Api30AutofillResponseBuilder$(*ignoredIds.toTypedArray())</ID>
@@ -103,6 +96,6 @@
     <ID>UseCheckOrError:SshKey.kt$SshKey$throw IllegalStateException("SSH key does not exist in Keystore")</ID>
     <ID>UseCheckOrError:SshKeyGenActivity.kt$SshKeyGenActivity$throw IllegalStateException("Impossible key type selection")</ID>
     <ID>UtilityClassWithPublicConstructor:AutofillMatcher.kt$AutofillMatcher</ID>
-    <ID>WildcardImport:GitOperation.kt$import app.passwordstore.util.auth.BiometricAuthenticator.Result.*</ID>
+    <ID>WildcardImport:Application.kt$import androidx.appcompat.app.AppCompatDelegate.*</ID>
   </CurrentIssues>
 </SmellBaseline>
