@@ -1,7 +1,6 @@
 [versions]
 agp = "7.3.1"
 androidxActivity = "1.7.0-alpha02"
-beagle = "2.9.0"
 bouncycastle = "1.72"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.4.0-alpha02"
@@ -76,8 +75,6 @@ testing-robolectric = "org.robolectric:robolectric:4.9"
 testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
 testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.10"
 testing-turbine = "app.cash.turbine:turbine:0.12.1"
-thirdparty-beagle-noop = { module = "io.github.pandulapeter.beagle:noop", version.ref = "beagle" }
-thirdparty-beagle-ui-drawer = { module = "io.github.pandulapeter.beagle:ui-drawer", version.ref = "beagle" }
 thirdparty-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk15to18", version.ref = "bouncycastle" }
 thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15to18", version.ref = "bouncycastle" }
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
