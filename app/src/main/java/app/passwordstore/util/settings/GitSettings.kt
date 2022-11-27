@@ -89,11 +89,6 @@ constructor(
     set(value) {
       settings.edit { putString(PreferenceKeys.GIT_CONFIG_AUTHOR_EMAIL, value) }
     }
-  var branch
-    get() = settings.getString(PreferenceKeys.GIT_BRANCH_NAME) ?: DEFAULT_BRANCH
-    private set(value) {
-      settings.edit { putString(PreferenceKeys.GIT_BRANCH_NAME, value) }
-    }
   var useMultiplexing
     get() = settings.getBoolean(PreferenceKeys.GIT_REMOTE_USE_MULTIPLEXING, true)
     set(value) {
@@ -135,8 +130,7 @@ constructor(
 
   fun updateConnectionSettingsIfValid(
     newAuthMode: AuthMode,
-    newUrl: String,
-    newBranch: String
+    newUrl: String
   ): UpdateConnectionSettingsResult {
     val parsedUrl =
       runCatching { URIish(newUrl) }
@@ -167,7 +161,6 @@ constructor(
 
     url = newUrl
     authMode = newAuthMode
-    branch = newBranch
     return UpdateConnectionSettingsResult.Valid
   }
 
@@ -178,8 +171,4 @@ constructor(
 
   /** Returns true if a host key was previously saved */
   fun hasSavedHostKey(): Boolean = File(hostKeyPath).exists()
-
-  companion object {
-    private const val DEFAULT_BRANCH = "master"
-  }
 }

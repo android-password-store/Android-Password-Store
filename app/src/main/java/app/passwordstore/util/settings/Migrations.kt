@@ -27,6 +27,15 @@ fun runMigrations(filesDirPath: String, sharedPrefs: SharedPreferences, gitSetti
   migrateToClipboardHistory(sharedPrefs)
   migrateToDiceware(sharedPrefs)
   removeExternalStorageProperties(sharedPrefs)
+  removeCurrentBranchValue(sharedPrefs)
+}
+
+fun removeCurrentBranchValue(sharedPrefs: SharedPreferences) {
+  if (sharedPrefs.contains(PreferenceKeys.GIT_BRANCH_NAME)) {
+    return
+  }
+  logcat(TAG, INFO) { "Deleting now unused branch name preference" }
+  sharedPrefs.edit { remove(PreferenceKeys.GIT_BRANCH_NAME) }
 }
 
 private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettings: GitSettings) {
@@ -36,7 +45,6 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettin
   val serverUser = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_USERNAME) ?: ""
   val serverPath = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_LOCATION) ?: ""
   val protocol = Protocol.fromString(sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
-
   // Whether we need the leading ssh:// depends on the use of a custom port.
   val hostnamePart = serverHostname.removePrefix("ssh://")
   val url =
@@ -83,8 +91,7 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettin
     url == null ||
       gitSettings.updateConnectionSettingsIfValid(
         newAuthMode = gitSettings.authMode,
-        newUrl = url,
-        newBranch = gitSettings.branch
+        newUrl = url
       ) != GitSettings.UpdateConnectionSettingsResult.Valid
   ) {
     logcat(TAG, ERROR) { "Failed to migrate to URL-based Git config, generated URL is invalid" }

@@ -13,23 +13,20 @@ import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.sshkeygen.SshKeyGenActivity
 import app.passwordstore.ui.sshkeygen.SshKeyImportActivity
 import app.passwordstore.util.auth.BiometricAuthenticator
-import app.passwordstore.util.auth.BiometricAuthenticator.Result.*
+import app.passwordstore.util.auth.BiometricAuthenticator.Result.Cancelled
+import app.passwordstore.util.auth.BiometricAuthenticator.Result.Failure
+import app.passwordstore.util.auth.BiometricAuthenticator.Result.Success
 import app.passwordstore.util.git.GitCommandExecutor
 import app.passwordstore.util.git.sshj.SshAuthMethod
 import app.passwordstore.util.git.sshj.SshKey
 import app.passwordstore.util.git.sshj.SshjSessionFactory
 import app.passwordstore.util.settings.AuthMode
-import app.passwordstore.util.settings.GitSettings
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -64,15 +61,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   open val requiresAuth: Boolean = true
   private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
   private var sshSessionFactory: SshjSessionFactory? = null
-  private val hiltEntryPoint =
-    EntryPointAccessors.fromApplication(
-      callingActivity.applicationContext,
-      GitOperationEntryPoint::class.java
-    )
-
   protected val repository = PasswordRepository.repository!!
   protected val git = Git(repository)
-  protected val remoteBranch = hiltEntryPoint.gitSettings().branch
   private val authActivity
     get() = callingActivity as AppCompatActivity
 
@@ -240,11 +230,5 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
     /** Timeout in seconds before [TransportCommand] will abort a stalled IO operation. */
     private const val CONNECT_TIMEOUT = 10
-  }
-
-  @EntryPoint
-  @InstallIn(SingletonComponent::class)
-  interface GitOperationEntryPoint {
-    fun gitSettings(): GitSettings
   }
 }

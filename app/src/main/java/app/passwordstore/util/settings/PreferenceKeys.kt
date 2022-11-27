@@ -25,8 +25,10 @@ object PreferenceKeys {
   const val GIT_CONFIG = "git_config"
   const val GIT_CONFIG_AUTHOR_EMAIL = "git_config_user_email"
   const val GIT_CONFIG_AUTHOR_NAME = "git_config_user_name"
+
   @Deprecated(message = "We're removing support for external storage")
   const val GIT_EXTERNAL = "git_external"
+
   @Deprecated(message = "We're removing support for external storage")
   const val GIT_EXTERNAL_REPO = "git_external_repo"
   const val GIT_EXTERNAL_MIGRATED = "git_external_migrated"
@@ -46,6 +48,8 @@ object PreferenceKeys {
 
   @Deprecated("Use GIT_REMOTE_URL instead") const val GIT_REMOTE_USERNAME = "git_remote_username"
   const val GIT_SERVER_INFO = "git_server_info"
+
+  @Deprecated("Git branch is no longer stored in preferences")
   const val GIT_BRANCH_NAME = "git_branch"
   const val HTTPS_PASSWORD = "https_password"
   const val LENGTH = "length"

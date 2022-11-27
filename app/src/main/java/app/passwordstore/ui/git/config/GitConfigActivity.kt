@@ -99,13 +99,14 @@ class GitConfigActivity : BaseGitActivity() {
         launchGitOperation(GitOp.BREAK_OUT_OF_DETACHED)
           .fold(
             success = {
+              val branch = PasswordRepository.getCurrentBranch()
               MaterialAlertDialogBuilder(this@GitConfigActivity).run {
                 setTitle(resources.getString(R.string.git_abort_and_push_title))
                 setMessage(
                   resources.getString(
                     R.string.git_break_out_of_detached_success,
-                    gitSettings.branch,
-                    "conflicting-${gitSettings.branch}-...",
+                    branch,
+                    "conflicting-$branch-...",
                   )
                 )
                 setOnDismissListener { finish() }

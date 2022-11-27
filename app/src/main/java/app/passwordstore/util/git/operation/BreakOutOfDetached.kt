@@ -6,6 +6,7 @@ package app.passwordstore.util.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
 import app.passwordstore.R
+import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.util.extensions.unsafeLazy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.eclipse.jgit.api.RebaseCommand
@@ -15,17 +16,18 @@ import org.eclipse.jgit.lib.RepositoryState
 class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
   private val merging = repository.repositoryState == RepositoryState.MERGING
+  private val localBranch = PasswordRepository.getCurrentBranch()
   private val resetCommands =
     arrayOf(
       // git checkout -b conflict-branch
       git
         .checkout()
         .setCreateBranch(true)
-        .setName("conflicting-$remoteBranch-${System.currentTimeMillis()}"),
+        .setName("conflicting-$localBranch-${System.currentTimeMillis()}"),
       // push the changes
       git.push().setRemote("origin"),
       // switch back to ${gitBranch}
-      git.checkout().setName(remoteBranch),
+      git.checkout().setName(localBranch),
     )
 
   override val commands by unsafeLazy {

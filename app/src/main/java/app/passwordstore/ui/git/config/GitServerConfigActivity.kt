@@ -141,8 +141,7 @@ class GitServerConfigActivity : BaseGitActivity() {
         val updateResult =
           gitSettings.updateConnectionSettingsIfValid(
             newAuthMode = newAuthMode,
-            newUrl = binding.serverUrl.text.toString().trim(),
-            newBranch = binding.serverBranch.text.toString().trim()
+            newUrl = binding.serverUrl.text.toString().trim()
           )
       ) {
         GitSettings.UpdateConnectionSettingsResult.FailedToParseUrl -> {
