@@ -10,7 +10,6 @@
   android:layout_height="match_parent"
   android:background="?android:attr/windowBackground"
   android:padding="@dimen/activity_horizontal_margin"
-  tools:background="@color/white"
   tools:context="app.passwordstore.ui.git.config.GitServerConfigActivity">
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,26 +32,7 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionNext"
         android:inputType="textWebEmailAddress"
-        android:nextFocusForward="@id/server_branch" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/label_server_branch"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:hint="@string/server_branch"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/label_server_url">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/server_branch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:imeOptions="actionDone"
-        android:inputType="textNoSuggestions" />
+        android:nextFocusForward="@id/auth_mode_group" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,7 +45,7 @@
       android:layout_marginBottom="16dp"
       android:text="@string/connection_mode"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/label_server_branch" />
+      app:layout_constraintTop_toBottomOf="@id/label_server_url" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
       android:id="@+id/auth_mode_group"

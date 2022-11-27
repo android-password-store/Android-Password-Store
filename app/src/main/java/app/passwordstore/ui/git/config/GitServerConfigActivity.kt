@@ -83,7 +83,6 @@ class GitServerConfigActivity : BaseGitActivity() {
         setAuthModes(it.startsWith("http://") || it.startsWith("https://"))
       }
     )
-    binding.serverBranch.setText(gitSettings.branch)
 
     binding.serverUrl.doOnTextChanged { text, _, _, _ ->
       if (text.isNullOrEmpty()) return@doOnTextChanged

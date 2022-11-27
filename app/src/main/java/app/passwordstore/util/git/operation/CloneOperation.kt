@@ -19,6 +19,6 @@ class CloneOperation(callingActivity: AppCompatActivity, uri: String) :
 
   override val commands: Array<GitCommand<out Any>> =
     arrayOf(
-      Git.cloneRepository().setBranch(remoteBranch).setDirectory(repository.workTree).setURI(uri),
+      Git.cloneRepository().setDirectory(repository.workTree).setURI(uri),
     )
 }
