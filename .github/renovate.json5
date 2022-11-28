@@ -18,7 +18,16 @@
         "gradle"
       ],
       "matchPackagePatterns": [
-        "^androidx.appcompat"
+        // Upgrading breaks the fastscroll dependency
+        "^androidx.appcompat",
+        // Later versions require newer JDKs
+        "^org.eclipse.jgit",
+        // AGP dictates the version we can use
+        "^com.android.tools:desugar_jdk_libs",
+        // Later versions require newer JDKs
+        "^commons-codec:commons-codec",
+        // https://github.com/android-password-store/Android-Password-Store/issues/2247
+        "^androidx.security:security-crypto",
       ],
       "enabled": false
     },
