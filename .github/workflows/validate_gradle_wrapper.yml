@@ -1,5 +1,8 @@
 name: Validate Gradle Wrapper
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     paths:
       - ".github/workflows/validate_gradle_wrapper.yml"
