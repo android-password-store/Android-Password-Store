@@ -7,6 +7,10 @@ permissions:
   contents: write
   actions: write
 
+# There should only be one instance of this
+concurrency:
+  group: ${{ github.workflow }}
+
 name: Deploy snapshot builds
 jobs:
   deploy-release-snapshot:
