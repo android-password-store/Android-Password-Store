@@ -61,9 +61,3 @@ dependencyResolutionManagement {
     }
   }
 }
-
-include("android-plugins")
-
-include("automation-plugins")
-
-include("kotlin-plugins")
