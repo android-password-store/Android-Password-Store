@@ -7,15 +7,16 @@ import nl.littlerobots.vcu.plugin.VersionCatalogUpdatePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 
 @Suppress("Unused")
 class DependencyUpdatesPlugin : Plugin<Project> {
+
   override fun apply(project: Project) {
     project.pluginManager.apply(VersionsPlugin::class)
     project.pluginManager.apply(VersionCatalogUpdatePlugin::class)
-    project.tasks.withType<DependencyUpdatesTask>().configureEach {
+    project.tasks.withType<DependencyUpdatesTask> {
       rejectVersionIf {
         when (candidate.group) {
           "commons-codec",
@@ -26,7 +27,7 @@ class DependencyUpdatesPlugin : Plugin<Project> {
       }
       checkForGradleUpdate = false
     }
-    project.extensions.getByType<VersionCatalogUpdateExtension>().run {
+    project.extensions.configure<VersionCatalogUpdateExtension> {
       keep.keepUnusedLibraries.set(true)
     }
   }

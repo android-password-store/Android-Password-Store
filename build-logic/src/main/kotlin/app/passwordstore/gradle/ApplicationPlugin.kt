@@ -11,8 +11,8 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.the
 
 @Suppress("Unused")
@@ -21,7 +21,7 @@ class ApplicationPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     project.pluginManager.apply(AppPlugin::class)
     AndroidCommon.configure(project)
-    project.extensions.getByType<BaseAppModuleExtension>().run {
+    project.extensions.configure<BaseAppModuleExtension> {
       val minifySwitch = project.providers.environmentVariable("DISABLE_MINIFY")
 
       adbOptions.installOptions("--user 0")

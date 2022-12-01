@@ -8,7 +8,7 @@ package app.passwordstore.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
@@ -22,7 +22,7 @@ class KotlinKaptPlugin : Plugin<Project> {
       apply(Kapt3GradleSubplugin::class)
     }
     project.afterEvaluate {
-      project.extensions.getByType<KaptExtension>().run {
+      project.extensions.configure<KaptExtension> {
         javacOptions {
           if (hasDaggerCompilerDependency()) {
             // https://dagger.dev/dev-guide/compiler-options#fastinit-mode

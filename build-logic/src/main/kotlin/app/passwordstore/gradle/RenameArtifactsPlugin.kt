@@ -7,7 +7,7 @@ import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.VariantOutputConfiguration
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 
 @Suppress("Unused")
@@ -15,7 +15,7 @@ class RenameArtifactsPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     project.pluginManager.withPlugin("com.android.application") {
-      project.extensions.getByType<ApplicationAndroidComponentsExtension>().run {
+      project.extensions.configure<ApplicationAndroidComponentsExtension> {
         onVariants { variant ->
           project.tasks.register<CollectApksTask>("collect${variant.name.capitalize()}Apks") {
             variantName.set(variant.name)

@@ -10,7 +10,7 @@ import me.tylerbwong.gradle.metalava.extension.MetalavaExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
@@ -25,18 +25,18 @@ class PublishedAndroidLibraryPlugin : Plugin<Project> {
       apply(SigningPlugin::class)
       apply("me.tylerbwong.gradle.metalava")
     }
-    project.extensions.getByType<MavenPublishBaseExtension>().run {
+    project.extensions.configure<MavenPublishBaseExtension> {
       publishToMavenCentral(SonatypeHost.DEFAULT, true)
       signAllPublications()
     }
     project.afterEvaluate {
-      project.extensions.getByType<SigningExtension>().run {
+      project.extensions.configure<SigningExtension> {
         val signingKey: String? by project
         val signingPassword: String? by project
         useInMemoryPgpKeys(signingKey, signingPassword)
       }
     }
-    project.extensions.getByType<MetalavaExtension>().run {
+    project.extensions.configure<MetalavaExtension> {
       documentation.set(Documentation.PUBLIC)
       inputKotlinNulls.set(true)
       outputKotlinNulls.set(true)

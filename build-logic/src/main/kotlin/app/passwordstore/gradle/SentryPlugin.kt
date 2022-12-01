@@ -8,14 +8,14 @@ import io.sentry.android.gradle.extensions.SentryPluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
 
 @Suppress("Unused")
 class SentryPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     project.pluginManager.withPlugin("com.android.application") {
-      project.extensions.getByType<ApplicationAndroidComponentsExtension>().run {
+      project.extensions.configure<ApplicationAndroidComponentsExtension> {
         onVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
           variant ->
           val sentryDsn = project.providers.environmentVariable(SENTRY_DSN_PROPERTY)
@@ -25,7 +25,7 @@ class SentryPlugin : Plugin<Project> {
         }
       }
       project.plugins.apply(SentryPlugin::class)
-      project.extensions.getByType<SentryPluginExtension>().run {
+      project.extensions.configure<SentryPluginExtension> {
         autoUploadProguardMapping.set(
           project.providers.gradleProperty(SENTRY_UPLOAD_MAPPINGS_PROPERTY).isPresent
         )
@@ -38,6 +38,7 @@ class SentryPlugin : Plugin<Project> {
   }
 
   private companion object {
+
     private const val SENTRY_DSN_PROPERTY = "SENTRY_DSN"
     private const val SENTRY_UPLOAD_MAPPINGS_PROPERTY = "sentryUploadMappings"
   }

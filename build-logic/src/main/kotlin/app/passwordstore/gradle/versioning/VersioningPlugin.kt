@@ -13,7 +13,7 @@ import java.util.Properties
 import java.util.concurrent.atomic.AtomicBoolean
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 
@@ -45,11 +45,15 @@ class VersioningPlugin : Plugin<Project> {
         }
       project.plugins.withType<AppPlugin> {
         androidAppPluginApplied.set(true)
-        extensions.getByType<ApplicationAndroidComponentsExtension>().onVariants { variant ->
-          val mainOutput =
-            variant.outputs.single { it.outputType == VariantOutputConfiguration.OutputType.SINGLE }
-          mainOutput.versionName.set(versionName)
-          mainOutput.versionCode.set(versionCode)
+        extensions.configure<ApplicationAndroidComponentsExtension> {
+          onVariants { variant ->
+            val mainOutput =
+              variant.outputs.single {
+                it.outputType == VariantOutputConfiguration.OutputType.SINGLE
+              }
+            mainOutput.versionName.set(versionName)
+            mainOutput.versionCode.set(versionCode)
+          }
         }
       }
       val version = Semver(versionName)
