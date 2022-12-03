@@ -108,7 +108,7 @@ dependencies {
     debugImplementation(libs.thirdparty.whatthestack)
   }
 
-  debugImplementation(libs.thirdparty.leakcanary)
+  implementation(libs.thirdparty.leakcanary.core)
   nonFreeImplementation(libs.thirdparty.nonfree.googlePlayAuthApiPhone)
   nonFreeImplementation(libs.thirdparty.nonfree.sentry)
   freeImplementation(projects.sentryStub)
