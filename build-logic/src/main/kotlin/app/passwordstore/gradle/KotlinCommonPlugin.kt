@@ -61,8 +61,6 @@ class KotlinCommonPlugin : Plugin<Project> {
     private val ADDITIONAL_COMPILER_ARGS =
       listOf(
         "-opt-in=kotlin.RequiresOptIn",
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=1.7.22",
       )
   }
 }
