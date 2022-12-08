@@ -4,6 +4,7 @@
  */
 package app.passwordstore.util.services
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -116,6 +117,7 @@ class ClipboardService : Service() {
     }
   }
 
+  @SuppressLint("UnspecifiedImmutableFlag") // The offending code path cannot be hit on S
   private fun createNotification(clearTime: Int) {
     val clearTimeMs = clearTime * 1000L
     val clearIntent = Intent(this, ClipboardService::class.java).apply { action = ACTION_CLEAR }
@@ -136,11 +138,7 @@ class ClipboardService : Service() {
           this,
           0,
           clearIntent,
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-          } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-          },
+          PendingIntent.FLAG_UPDATE_CURRENT,
         )
       }
     val notification =

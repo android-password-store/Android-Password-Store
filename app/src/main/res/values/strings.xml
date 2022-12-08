@@ -65,7 +65,6 @@
   <!-- Clone fragment -->
 
   <string name="server_url">Repository URL</string>
-  <string name="server_branch">Branch</string>
 
   <string name="connection_mode">Authentication Mode</string>
 

@@ -49,7 +49,6 @@
   <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
   <!-- Clone fragment -->
   <string name="server_url">Repository-URL</string>
-  <string name="server_branch">Branch</string>
   <string name="connection_mode">Authentifizierungsmethode</string>
   <!-- Git Config fragment -->
   <string name="git_user_name_hint">Nutzername</string>

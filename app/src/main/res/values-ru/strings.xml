@@ -57,7 +57,6 @@
   <string name="password_dialog_text">Пожалуйста, введите пароль для репозитория</string>
   <!-- Clone fragment -->
   <string name="server_url">URL репозитория</string>
-  <string name="server_branch">Ветка</string>
   <string name="connection_mode">Тип авторизации</string>
   <!-- Git Config fragment -->
   <string name="git_user_name_hint">Имя пользователя</string>

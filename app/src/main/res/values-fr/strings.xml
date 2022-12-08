@@ -53,7 +53,6 @@
   <string name="password_dialog_text">Renseignez le mot de passe pour ce dépôt</string>
   <!-- Clone fragment -->
   <string name="server_url">URL du dépôt</string>
-  <string name="server_branch">Branche</string>
   <string name="connection_mode">Méthode d\'authentification</string>
   <!-- Git Config fragment -->
   <string name="git_user_name_hint">Nom d\'utilisateur</string>

@@ -52,7 +52,6 @@
   <string name="password_dialog_text">请提供此存储库的密码</string>
   <!-- Clone fragment -->
   <string name="server_url">仓库URL</string>
-  <string name="server_branch">分支</string>
   <string name="connection_mode">认证方式</string>
   <!-- Git Config fragment -->
   <string name="git_user_name_hint">用户名</string>
@@ -139,7 +138,7 @@
   <string name="ssh_keygen_message">%1$s
 
 将此公钥提设置到您的 Git 服务器</string>
-  <string name="ssh_key_gen_generating_progress">生成密钥...</string>
+  <string name="ssh_key_gen_generating_progress">生成密钥…</string>
   <string name="ssh_keygen_require_authentication">使用屏幕锁定进行保护</string>
   <string name="ssh_keygen_label_rsa">RSA</string>
   <string name="ssh_keygen_label_ecdsa">ECDSA</string>
@@ -173,7 +172,7 @@
   <string name="show_password_pref_summary">控制密码解密后的可见性,这不会禁用复制到剪贴板</string>
   <string name="pwd_generate_button">生成</string>
   <string name="refresh_list">刷新列表</string>
-  <string name="send_plaintext_password_to">使用明文发送密码...</string>
+  <string name="send_plaintext_password_to">使用明文发送密码…</string>
   <string name="app_icon_hint">应用图标</string>
   <!-- Oreo Autofill -->
   <string name="oreo_autofill_select_and_fill_into">选择要填写的条目</string>
@@ -181,11 +180,11 @@
   <string name="oreo_autofill_match_with">与%1$s匹配</string>
   <string name="oreo_autofill_matches_clear_existing">清除现有匹配</string>
   <string name="oreo_autofill_filter_no_results">无返回值</string>
-  <string name="oreo_autofill_search_in_store">在存储库搜索...</string>
+  <string name="oreo_autofill_search_in_store">在存储库搜索…</string>
   <string name="oreo_autofill_save_internal_error">由于内部错误 保存失败</string>
   <string name="oreo_autofill_save_app_not_supported">目前不支持此应用</string>
   <string name="oreo_autofill_save_passwords_dont_match">密码不匹配</string>
-  <string name="oreo_autofill_generate_password">生成密码...</string>
+  <string name="oreo_autofill_generate_password">生成密码…</string>
   <string name="oreo_autofill_fill_otp_from_sms">从短信中提取代码…</string>
   <string name="oreo_autofill_max_matches_reached">已达到最大匹配数(%1$d) 在添加新匹配之前清除匹配</string>
   <string name="oreo_autofill_warning_publisher_header">自从您首次将密码存储条目与其关联后,此应用的发布者已更改:</string>
@@ -196,7 +195,7 @@
   <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">保持禁用自动填充</string>
   <string name="oreo_autofill_warning_publisher_reenable_button">重新启用自动填充</string>
   <string name="oreo_autofill_warning_publisher_warning_sign_description">警告</string>
-  <string name="oreo_autofill_warning_publisher_dataset_summary">点击了解详情...</string>
+  <string name="oreo_autofill_warning_publisher_dataset_summary">点击了解详情…</string>
   <string name="oreo_autofill_warning_publisher_dataset_title">疑似网络钓鱼攻击</string>
   <string name="oreo_autofill_general_fill_and_save_support">填写并保存凭据</string>
   <string name="oreo_autofill_general_fill_support">填写凭据</string>
@@ -248,8 +247,8 @@
   <string name="connection_mode_basic_authentication">密码</string>
   <string name="git_server_config_save_success">已成功保存配置</string>
   <string name="git_server_config_save_error">提供的存储库URL无效</string>
-  <string name="git_server_config_save_missing_username_https">请以https://username@example.com/...的形式指定HTTPS用户名</string>
-  <string name="git_server_config_save_missing_username_ssh">请以username@example.com:...的形式指定SSH用户名</string>
+  <string name="git_server_config_save_missing_username_https">请以https://username@example.com/…的形式指定HTTPS用户名</string>
+  <string name="git_server_config_save_missing_username_ssh">请以username@example.com:…的形式指定SSH用户名</string>
   <string name="git_server_config_save_auth_mode_mismatch">%1$s的有效身份验证模式:%2$s</string>
   <string name="git_operation_wrong_passphrase">密码错误</string>
   <string name="git_operation_wrong_password">密码错误</string>
@@ -284,7 +283,7 @@ personal.com</string>
   <string name="git_pull_merge_fail_error">合并失败，你处于冲突状态。TODO：添加恢复方法。</string>
   <string name="git_push_generic_error">推送被远程拒绝,原因: %1$s</string>
   <string name="git_unknown_host">未知主机: %1$s</string>
-  <string name="git_operation_running">运行Git操作...</string>
+  <string name="git_operation_running">运行Git操作…</string>
   <string name="git_break_out_of_detached_success">尝试变更时发生冲突,您的本地%1$s分支被推送到另一个名为%2$s的分支
 使用此分支解决计算机上的冲突</string>
   <string name="git_break_out_of_detached_unneeded">存储库没有变更,无需推送到另一个分支</string>
