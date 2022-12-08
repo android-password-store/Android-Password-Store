@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 12 * * 1'
 
 env:
   SENTRY_DSN: 'https://public_key@example.com/project_id'
@@ -14,8 +14,8 @@ jobs:
       matrix:
         agp-version:
           - 7.3.1
-          - 7.4.0-beta03
-          - 8.0.0-alpha06
+          - 7.4.0-rc01
+          - 8.0.0-alpha09
         gradle-version:
           - wrapper
           - nightly
@@ -38,6 +38,10 @@ jobs:
     - name: Copy CI gradle.properties
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
+    - name: Workaround AGP 8.x deprecations
+      if: startsWith(matrix.agp-version, '8.0.0')
+      run: sed -i 's/android.disableAutomaticComponentCreation=true//' gradle.properties
+
     - name: Run checks
       uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
       env:
@@ -46,3 +50,19 @@ jobs:
       with:
         arguments: check
         gradle-home-cache-cleanup: true
+
+    - name: Report failure to healthchecks.io
+      if: ${{ failure() }}
+      env:
+        HC_PING_SLUG: ${{ secrets.HC_PING_SLUG }}
+        AGP_VERSION: ${{ matrix.agp-version }}
+      run: |
+        curl --retry 3 --data-raw "AGP: ${AGP_VERSION}" "https://hc-ping.com/${HC_PING_SLUG}/fail"
+
+    - name: Report success to healthchecks.io
+      if: ${{ success() }}
+      env:
+        HC_PING_SLUG: ${{ secrets.HC_PING_SLUG }}
+        AGP_VERSION: ${{ matrix.agp-version }}
+      run: |
+        curl --retry 3 --data-raw "AGP: ${AGP_VERSION}" "https://hc-ping.com/${HC_PING_SLUG}"
