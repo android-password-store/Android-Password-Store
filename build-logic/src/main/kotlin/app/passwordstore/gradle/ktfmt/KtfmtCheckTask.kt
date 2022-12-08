@@ -9,6 +9,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
+import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.IgnoreEmptyDirectories
@@ -36,10 +37,12 @@ abstract class KtfmtCheckTask : SourceTask() {
       coroutineScope {
         val results = inputFiles.map { async { checkFile(it) } }.awaitAll()
         if (results.any { (notFormatted, _) -> notFormatted }) {
-          results
-            .map { (_, diffs) -> diffs }
-            .forEach { diffs -> KtfmtDiffer.printDiff(diffs, logger) }
-          error("[ktfmt] Found unformatted files")
+          val prettyDiff =
+            results
+              .map { (_, diffs) -> diffs }
+              .flatten()
+              .joinToString(separator = "\n") { diff -> diff.toString() }
+          throw GradleException("[ktfmt] Found unformatted files\n${prettyDiff}")
         }
       }
     }

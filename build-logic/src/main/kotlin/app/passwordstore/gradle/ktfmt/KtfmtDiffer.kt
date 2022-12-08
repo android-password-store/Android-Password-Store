@@ -5,7 +5,6 @@ import com.github.difflib.patch.ChangeDelta
 import com.github.difflib.patch.DeleteDelta
 import com.github.difflib.patch.InsertDelta
 import java.io.File
-import org.gradle.api.logging.Logger
 
 object KtfmtDiffer {
   fun computeDiff(
@@ -24,12 +23,6 @@ object KtfmtDiffer {
           else -> ""
         }
       KtfmtDiffEntry(pathNormalizer(inputFile), line, message)
-    }
-  }
-
-  fun printDiff(entries: List<KtfmtDiffEntry>, logger: Logger) {
-    entries.forEach { entry ->
-      logger.error("${entry.input}:${entry.lineNumber} - ${entry.message}")
     }
   }
 }
