@@ -10,6 +10,7 @@ permissions:
 # There should only be one instance of this
 concurrency:
   group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 name: Deploy snapshot builds
 jobs:
