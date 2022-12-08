@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - develop
+    paths:
+      - ".github/workflows/validate_gradle_wrapper.yml"
+      - "gradle/**"
+      - "gradlew"
+      - "gradlew.bat"
   pull_request:
     paths:
       - ".github/workflows/validate_gradle_wrapper.yml"
