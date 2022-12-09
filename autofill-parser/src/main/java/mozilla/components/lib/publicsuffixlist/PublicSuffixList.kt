@@ -17,10 +17,9 @@ import kotlinx.coroutines.async
 
 /**
  * API for reading and accessing the public suffix list.
- *
  * > A "public suffix" is one under which Internet users can (or historically could) directly
- * register names. Some > examples of public suffixes are .com, .co.uk and pvt.k12.ma.us. The Public
- * Suffix List is a list of all known > public suffixes.
+ * > register names. Some > examples of public suffixes are .com, .co.uk and pvt.k12.ma.us. The
+ * > Public Suffix List is a list of all known > public suffixes.
  *
  * Note that this implementation applies the rules of the public suffix list only and does not
  * validate domains.
@@ -51,8 +50,8 @@ internal class PublicSuffixList(
    * ```
    *
    * @param [domain] _must_ be a valid domain. [PublicSuffixList] performs no validation, and if any
-   * unexpected values are passed (e.g., a full URL, a domain with a trailing '/', etc) this may
-   * return an incorrect result.
+   *   unexpected values are passed (e.g., a full URL, a domain with a trailing '/', etc) this may
+   *   return an incorrect result.
    */
   fun getPublicSuffixPlusOneAsync(domain: String): Deferred<String?> =
     scope.async {

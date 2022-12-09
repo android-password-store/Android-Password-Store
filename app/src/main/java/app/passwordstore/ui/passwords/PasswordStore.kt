@@ -463,9 +463,8 @@ class PasswordStore : BaseGitActivity() {
    *
    * @param oldCategory The category to change its name
    * @param error Determines whether to show an error to the user in the alert dialog, this error
-   * may be due to the new category the user entered already exists or the field was empty or the
-   * destination path is outside the repository
-   *
+   *   may be due to the new category the user entered already exists or the field was empty or the
+   *   destination path is outside the repository
    * @see [CategoryRenameError]
    * @see [isInsideRepository]
    */

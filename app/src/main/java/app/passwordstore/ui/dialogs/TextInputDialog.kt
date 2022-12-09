@@ -16,7 +16,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
  * General purpose [DialogFragment] that can be used to accept a single text input. It provides a
  * configurable title and text input hint through the instantiation helper at
  * [TextInputDialog.newInstance]. Typical usage would look something like this:
- *
  * ```kotlin
  * val dialog = TextInputDialog.newInstance(getString(R.string.dialog_title), getString(R.string.dialog_hint))
  * dialog.show(supportFragmentManager, "text_input_dialog")

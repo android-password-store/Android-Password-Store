@@ -31,7 +31,7 @@ public class OpenPgpServiceConnection(context: Context, providerPackageName: Str
    *
    * @param context
    * @param providerPackageName specify package name of OpenPGP provider, e.g.,
-   * "org.sufficientlysecure.keychain"
+   *   "org.sufficientlysecure.keychain"
    * @param onBoundListener callback, executed when connection to service has been established
    */
   public constructor(

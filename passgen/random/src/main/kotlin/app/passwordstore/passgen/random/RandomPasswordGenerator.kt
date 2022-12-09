@@ -11,17 +11,16 @@ internal object RandomPasswordGenerator {
   /**
    * Generates a random password of length [targetLength], taking the following flags in [pwFlags]
    * into account, or fails to do so and returns null:
-   *
    * - [PasswordGenerator.DIGITS]: If set, the password will contain at least one digit; if not set,
-   * the password will not contain any digits.
+   *   the password will not contain any digits.
    * - [PasswordGenerator.UPPERS]: If set, the password will contain at least one uppercase letter;
-   * if not set, the password will not contain any uppercase letters.
+   *   if not set, the password will not contain any uppercase letters.
    * - [PasswordGenerator.LOWERS]: If set, the password will contain at least one lowercase letter;
-   * if not set, the password will not contain any lowercase letters.
+   *   if not set, the password will not contain any lowercase letters.
    * - [PasswordGenerator.SYMBOLS]: If set, the password will contain at least one symbol; if not
-   * set, the password will not contain any symbols.
+   *   set, the password will not contain any symbols.
    * - [PasswordGenerator.NO_AMBIGUOUS]: If set, the password will not contain any ambiguous
-   * characters.
+   *   characters.
    */
   fun generate(targetLength: Int, pwFlags: Int): String? {
     val bank =

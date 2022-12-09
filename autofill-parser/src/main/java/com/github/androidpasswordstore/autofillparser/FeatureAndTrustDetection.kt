@@ -16,17 +16,14 @@ import androidx.annotation.RequiresApi
 
 /**
  * In order to add a new browser, do the following:
- *
  * 1. Obtain the .apk from a trusted source. For example, download it from the Play Store on your
- * phone and use adb pull to get it onto your computer. We will assume that it is called
- * browser.apk.
- *
+ *    phone and use adb pull to get it onto your computer. We will assume that it is called
+ *    browser.apk.
  * 2. Run
  *
  * aapt dump badging browser.apk | grep package: | grep -Eo " name='[a-zA-Z0-9_\.]*" | cut -c8-
  *
  * to obtain the package name (actually, the application ID) of the app in the .apk.
- *
  * 3. Run
  *
  * apksigner verify --print-certs browser.apk | grep "#1 certificate SHA-256" | grep -Eo
@@ -36,19 +33,15 @@ import androidx.annotation.RequiresApi
  * the apk has a single signing certificate. Apps with multiple signers are very rare, so there is
  * probably no need to add them. Refer to computeCertificatesHash to learn how the hash would be
  * computed in this case.
- *
  * 4. Verify the package name and the hash, for example by asking other people to repeat the steps
- * above.
- *
+ *    above.
  * 5. Add an entry with the browser apps's package name and the hash to
- * TRUSTED_BROWSER_CERTIFICATE_HASH.
- *
+ *    TRUSTED_BROWSER_CERTIFICATE_HASH.
  * 6. Optionally, try adding the browser's package name to BROWSERS_WITH_SAVE_SUPPORT and check
- * whether a save request to Password Store is triggered when you submit a registration form.
- *
+ *    whether a save request to Password Store is triggered when you submit a registration form.
  * 7. Optionally, try adding the browser's package name to BROWSERS_WITH_MULTI_ORIGIN_SUPPORT and
- * check whether it correctly distinguishes web origins even if iframes are present on the page. You
- * can use https://fabianhenneke.github.io/Android-Password-Store/ as a test form.
+ *    check whether it correctly distinguishes web origins even if iframes are present on the page.
+ *    You can use https://fabianhenneke.github.io/Android-Password-Store/ as a test form.
  *
  * **Security assumption**: Browsers on this list correctly report the web origin of the top-level
  * window as part of their AssistStructure.
@@ -112,9 +105,9 @@ internal enum class BrowserMultiOriginMethod {
  *
  * There are two methods used by browsers:
  * - Browsers based on Android's WebView report web domains on each WebView view node, which then
- * needs to be propagated to the child nodes ( [BrowserMultiOriginMethod.WebView]).
+ *   needs to be propagated to the child nodes ( [BrowserMultiOriginMethod.WebView]).
  * - Browsers with custom Autofill implementations report web domains on each input field (
- * [BrowserMultiOriginMethod.Field]).
+ *   [BrowserMultiOriginMethod.Field]).
  */
 private val BROWSER_MULTI_ORIGIN_METHOD =
   mapOf(

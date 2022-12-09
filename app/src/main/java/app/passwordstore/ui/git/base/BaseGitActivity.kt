@@ -65,6 +65,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
 
   /**
    * Attempt to launch the requested Git operation.
+   *
    * @param operation The type of git operation to launch
    */
   suspend fun launchGitOperation(operation: GitOp): Result<Unit, Throwable> {
