@@ -11,7 +11,7 @@
   <!-- Activity names -->
   <string name="action_settings">Axustes</string>
   <string name="dialog_delete_title">Xa existe o directorio</string>
-  <string name="dialog_delete_msg">O directorio escollido xa existe. A versión actual só admite un almacenaxe. Desexas eliminar o directorio actual de password store?\n(%1$s)</string>
+  <string name="dialog_delete_msg">O directorio elexido xa existe. A versión actual só admite unha almacenaxe. Desexas eliminar o directorio actual de password store?\n(%1$s)</string>
   <string name="dialog_delete">Eliminar directorio</string>
   <string name="dialog_do_not_delete">Cancelar</string>
   <string name="title_activity_git_clone">Información do repositorio</string>
@@ -37,7 +37,7 @@
   <string name="git_commit_move_text">Mudar nome %1$s a %2$s.</string>
   <string name="git_commit_move_multiple_text">Mover varios contrasinais a %1$s.</string>
   <!-- PGPHandler -->
-  <string name="clipboard_copied_text">Copiada ao portapapeis</string>
+  <string name="clipboard_copied_text">Copiado ao portapapeis</string>
   <string name="file_toast_text">Debes proporcionar un nome de ficheiro</string>
   <string name="path_toast_text">Por favor indica a ruta ao ficheiro</string>
   <string name="empty_toast_text">Non podes deixar baleiro o contrasinal ou o contido extra</string>
@@ -50,15 +50,15 @@
   <string name="ssh_preferences_dialog_generate">Crear</string>
   <string name="passphrase_dialog_title">Autenticar</string>
   <string name="passphrase_dialog_text">Escribe a frase de paso para a chave SSH</string>
-  <string name="password_dialog_text">Escribe o contrasinal de este repositorio</string>
+  <string name="password_dialog_text">Escribe o contrasinal para este repositorio</string>
   <!-- Clone fragment -->
-  <string name="server_url">URL do servidor</string>
+  <string name="server_url">URL do repositorio</string>
   <string name="connection_mode">Modo de autenticación</string>
   <!-- Git Config fragment -->
   <string name="git_user_name_hint">Identificador</string>
   <string name="git_user_email">Email</string>
   <string name="invalid_email_dialog_text">Escribe un enderezo de email válido</string>
-  <string name="clone_button">Clonar!</string>
+  <string name="clone_button">Clonar</string>
   <!-- PGP Handler -->
   <string name="crypto_name_hint">Nome</string>
   <string name="crypto_pass_label">Contrasinal</string>
@@ -77,12 +77,12 @@
   <!-- Preferences -->
   <string name="pref_category_repository_title">Repositorio</string>
   <string name="pref_edit_git_server_settings">Editar axustes do servidor git</string>
-  <string name="pref_edit_git_config">Utilidades Git</string>
+  <string name="pref_edit_git_config">Configuración e Utilidades locais Git</string>
   <string name="pref_import_ssh_key_title">Importar chave SSH</string>
   <string name="pref_ssh_keygen_title">Crear par de chaves SSH</string>
   <string name="pref_ssh_see_key_title">Ver a chave pública SSH creada</string>
   <string name="pref_git_delete_repo_title">Eliminar repositorio</string>
-  <string name="pref_dialog_delete_title">Baleirar repositorio</string>
+  <string name="pref_dialog_delete_title">Limpar repositorio</string>
   <string name="pref_category_general_title">Xeral</string>
   <string name="pref_category_passwords_title">Contrasinais</string>
   <string name="pref_clipboard_timeout_title">Caducidade do copiado do contrasinal</string>
@@ -144,11 +144,11 @@
   <string name="ssh_keygen_label_rsa">RSA</string>
   <string name="ssh_keygen_label_ecdsa">ECDSA</string>
   <string name="ssh_keygen_label_ed25519">Ed25519</string>
-  <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSoportado por tódolos servidores, mais a autenticación é algo máis lenta.</string>
+  <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSoportado por tódolos servidores, pero a autenticación é algo máis lenta.</string>
   <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nAutenticación rápida e soportado pola maioría dos servidores que estén actualizados.</string>
   <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\nAutenticación rápida, pero só soportado polos servidores máis modernos.</string>
   <string name="ssh_keygen_existing_title">Chave SSH</string>
-  <string name="ssh_keygen_existing_message">¿Substituír a chave SSH actual? Poderías perder o acceso ó servidor.</string>
+  <string name="ssh_keygen_existing_message">Substituír a chave SSH actual? Poderías perder o acceso ao servidor.</string>
   <string name="ssh_keygen_existing_replace">Substituír</string>
   <string name="ssh_keygen_existing_keep">Manter</string>
   <!-- SSH Android Keystore auth -->
@@ -160,11 +160,11 @@
   <string name="dialog_yes">Si</string>
   <string name="dialog_no">Non</string>
   <string name="dialog_cancel">Cancelar</string>
-  <string name="dialog_skip">Saltar</string>
+  <string name="dialog_skip">Omitir</string>
   <string name="git_sync">Sincronizar repositorio</string>
   <string name="git_pull">Traer desde remoto</string>
   <string name="git_push">Enviar a remoto</string>
-  <string name="git_push_up_to_date">Todo ó día</string>
+  <string name="git_push_up_to_date">Está ao día</string>
   <string name="git_log">Mostrar rexistro dos cambios</string>
   <string name="show_password_pref_title">Mostrar contrasinal</string>
   <string name="show_password_pref_summary">Controlar a visibilidade do contrasinal unha vez descifrado, esto non desactiva o copiado do contrasinal</string>
@@ -174,9 +174,9 @@
   <string name="app_icon_hint">Icona da app</string>
   <!-- Oreo Autofill -->
   <string name="oreo_autofill_select_and_fill_into">Elixe o elemento a completar</string>
-  <string name="oreo_autofill_strict_domain_search">Busca resistente ó phishing</string>
+  <string name="oreo_autofill_strict_domain_search">Busca resistente ao phishing</string>
   <string name="oreo_autofill_match_with">Coincidencia con %1$s</string>
-  <string name="oreo_autofill_matches_clear_existing">Baleirar coincidencias existentes</string>
+  <string name="oreo_autofill_matches_clear_existing">Limpar coincidencias existentes</string>
   <string name="oreo_autofill_filter_no_results">Sen resultados.</string>
   <string name="oreo_autofill_search_in_store">Buscar elemento</string>
   <string name="oreo_autofill_save_internal_error">Non se puido gardar por un fallo interno</string>
@@ -237,7 +237,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="pref_search_on_start_title">Abrir busca ao inicio</string>
   <string name="pref_search_on_start_summary">Abrir a barra de busca cando se inicia a app</string>
   <string name="tap_clear_clipboard">Toca aquí para baleirar o portapapeis</string>
-  <string name="clone_git_repo">Clonar un repositorio git para sincronizar os cambios</string>
+  <string name="clone_git_repo">Hai que clonar o repositorio antes de sincronizar os cambios.</string>
   <string name="pref_app_theme_title">Decorado da App</string>
   <string name="pref_app_theme_value_light">Claro</string>
   <string name="pref_app_theme_value_dark">Escuro</string>
@@ -331,4 +331,6 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="pwgen_some_error_occurred">Houbo un fallo</string>
   <string name="git_run_gc_job">Recolle o lixo</string>
   <string name="activity_label_pgp_key_manager">Xestor de Chaves PGP</string>
+  <string name="pgp_key_manager_delete_confirmation_dialog_title">Eliminar chave?</string>
+  <string name="git_utils_reset_remote_branch_title">Nome da rama remota</string>
 </resources>
