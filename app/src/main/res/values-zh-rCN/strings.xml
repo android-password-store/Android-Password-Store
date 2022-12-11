@@ -110,6 +110,8 @@
   <string name="pref_rebase_on_pull_title">拉取时进行变基</string>
   <string name="pref_rebase_on_pull_summary">拉取或同步时，创建一个带上游更改的合并提交</string>
   <string name="pref_rebase_on_pull_summary_on">拉取或同步时，对远程存储库中不存在的提交进行变基操作</string>
+  <string name="pref_disable_sync_on_pull_title">禁用下拉同步操作</string>
+  <string name="pref_disable_sync_on_pull_summary">防止下拉密码列表触发 Git 同步</string>
   <string name="pref_import_pgp_key_title">导入 PGP 密钥</string>
   <string name="pref_pgp_key_manager_title">密钥管理器</string>
   <string name="pref_pgp_ascii_armor_title">以 ASCII 装甲模式加密</string>
@@ -216,6 +218,7 @@
   <string name="abort_rebase">放弃变更并推送新的分支</string>
   <string name="reset_to_remote">强制重置远程分支</string>
   <string name="git_head_on_branch">在分支 %1$s</string>
+  <string name="git_head_missing">无法定位 HEAD</string>
   <string name="git_abort_and_push_title">中止并推送</string>
   <string name="biometric_prompt_title">生物识别提示</string>
   <string name="biometric_auth_error_reason">验证失败: %s</string>
@@ -333,4 +336,6 @@ GPG
   <string name="pwgen_some_error_occurred">发生某些错误</string>
   <string name="git_run_gc_job">运行垃圾收集作业</string>
   <string name="activity_label_pgp_key_manager">PGP 密钥管理器</string>
+  <string name="pgp_key_manager_delete_confirmation_dialog_title">删除密钥？</string>
+  <string name="git_utils_reset_remote_branch_title">远程分支名称</string>
 </resources>
