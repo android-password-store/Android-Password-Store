@@ -106,7 +106,11 @@ constructor(
       val inlinePresentation = makeInlinePresentation(context, imeSpec, metadata)
       if (inlinePresentation != null) {
         presentationsBuilder.setInlinePresentation(inlinePresentation)
+      } else {
+        presentationsBuilder.setMenuPresentation(makeRemoteView(context, metadata))
       }
+    } else {
+      presentationsBuilder.setMenuPresentation(makeRemoteView(context, metadata))
     }
     val presentations = presentationsBuilder.build()
     return Dataset.Builder(presentations).run {
