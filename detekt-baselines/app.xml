@@ -96,6 +96,5 @@
     <ID>UseCheckOrError:SshKey.kt$SshKey$throw IllegalStateException("SSH key does not exist in Keystore")</ID>
     <ID>UseCheckOrError:SshKeyGenActivity.kt$SshKeyGenActivity$throw IllegalStateException("Impossible key type selection")</ID>
     <ID>UtilityClassWithPublicConstructor:AutofillMatcher.kt$AutofillMatcher</ID>
-    <ID>WildcardImport:Application.kt$import androidx.appcompat.app.AppCompatDelegate.*</ID>
   </CurrentIssues>
 </SmellBaseline>

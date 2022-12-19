@@ -1,7 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues/>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
+    <ID>ForbiddenComment:CachingPublicKeyDataDecryptorFactory.kt$CachingPublicKeyDataDecryptorFactory$* Implementation of the [PublicKeyDataDecryptorFactory] which caches decrypted session keys. That * way, if a message needs to be decrypted multiple times, expensive private key operations can be * omitted. * * This implementation changes the behavior or [.recoverSessionData] to first return any cache hits. * If no hit is found, the method call is delegated to the underlying * [PublicKeyDataDecryptorFactory]. The result of that is then placed in the cache and returned. * * TODO: Do we also cache invalid session keys?</ID>
     <ID>ForbiddenComment:PGPKeyManager.kt$PGPKeyManager$// TODO: This is a temp hack for now and in future it should check that the GPGKeyManager can</ID>
+    <ID>MatchingDeclarationName:PGPSessionKey.kt$PGPEncryptedSessionKey</ID>
   </CurrentIssues>
 </SmellBaseline>
