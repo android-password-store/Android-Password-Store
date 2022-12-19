@@ -5,6 +5,7 @@
 
 package app.passwordstore.data.passfile
 
+import app.cash.turbine.Event
 import app.cash.turbine.test
 import app.passwordstore.test.CoroutineTestRule
 import app.passwordstore.util.time.TestUserClock
@@ -19,6 +20,7 @@ import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -174,6 +176,17 @@ class PasswordEntryTest {
       assertEquals("818800", otp.value)
       assertEquals(30.seconds, otp.remainingTime)
       cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun emitsTotpEverySecond() = runTest {
+    val entry = makeEntry(TOTP_URI)
+    entry.totp.test {
+      delay(3000L)
+      val events = cancelAndConsumeRemainingEvents()
+      assertEquals(3, events.size)
+      assertTrue { events.all { event -> event is Event.Item<Totp> } }
     }
   }
 
