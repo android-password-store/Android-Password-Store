@@ -168,18 +168,9 @@ dependencyResolutionManagement {
 
 gitRepositories {
   checkoutsDirectory.set(rootProject.projectDir.resolve("build/checkouts"))
-  include("pgpainless") {
-    uri.set("https://github.com/pgpainless/pgpainless.git")
-    branch.set("hardwareDecryption")
-    includeBuild {
-      dependencySubstitution {
-        substitute(module("org.pgpainless:pgpainless-core")).using(project(":pgpainless-core"))
-      }
-    }
-  }
   include("hwsecurity") {
-    uri.set("https://github.com/tadfisher/hwsecurity.git")
-    branch.set("pendingintent-mutability")
+    uri.set("https://github.com/android-password-store/hwsecurity.git")
+    branch.set("main")
     includeBuild {
       dependencySubstitution {
         for (module in
