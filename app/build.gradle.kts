@@ -58,7 +58,7 @@ dependencies {
   implementation(projects.autofillParser)
   implementation(projects.coroutineUtils)
   implementation(projects.cryptoPgpainless)
-  implementation(projects.formatCommonImpl)
+  implementation(projects.formatCommon)
   implementation(projects.passgen.diceware)
   implementation(projects.passgen.random)
   implementation(projects.uiCompose)

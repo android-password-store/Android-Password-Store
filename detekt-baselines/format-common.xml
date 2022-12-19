@@ -1,5 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues/>
-  <CurrentIssues/>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>MaxLineLength:UriTotpFinderTest.kt$UriTotpFinderTest.Companion$"otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&amp;issuer=ACME%20Co&amp;algorithm=SHA256&amp;digits=12&amp;period=25"</ID>
+    <ID>ReturnCount:UriTotpFinder.kt$UriTotpFinder$override fun findSecret(content: String): String?</ID>
+  </CurrentIssues>
 </SmellBaseline>

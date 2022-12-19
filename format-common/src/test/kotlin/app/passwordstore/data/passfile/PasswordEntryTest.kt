@@ -153,7 +153,7 @@ class PasswordEntryTest {
   /**
    * Same as [generatesOtpFromTotpUri], but advances the clock by 5 seconds. This exercises the
    * [Totp.remainingTime] calculation logic, and acts as a regression test to resolve the bug which
-   * blocked https://msfjarvis.dev/aps/issue/1550.
+   * blocked https://github.com/Android-Password-Store/Android-Password-Store/issues/1550.
    */
   @Test
   fun generatedOtpHasCorrectRemainingTime() = runTest {
