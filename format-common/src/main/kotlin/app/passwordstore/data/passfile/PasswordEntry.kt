@@ -15,6 +15,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlin.collections.set
 import kotlin.coroutines.coroutineContext
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.awaitCancellation
@@ -63,7 +64,7 @@ constructor(
       do {
         val otp = calculateTotp()
         emit(otp)
-        delay(ONE_SECOND.seconds)
+        delay(ONE_SECOND.milliseconds)
       } while (coroutineContext.isActive)
     } else {
       awaitCancellation()
