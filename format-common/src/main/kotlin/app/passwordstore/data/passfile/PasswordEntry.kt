@@ -18,7 +18,6 @@ import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -60,15 +59,12 @@ constructor(
    * collection to check if it is valid to collect this [Flow].
    */
   public val totp: Flow<Totp> = flow {
-    if (totpSecret != null) {
-      do {
-        val otp = calculateTotp()
-        emit(otp)
-        delay(ONE_SECOND.milliseconds)
-      } while (coroutineContext.isActive)
-    } else {
-      awaitCancellation()
-    }
+    require(totpSecret != null) { "Cannot collect this flow without a TOTP secret" }
+    do {
+      val otp = calculateTotp()
+      emit(otp)
+      delay(THOUSAND_MILLIS.milliseconds)
+    } while (coroutineContext.isActive)
   }
 
   /** Obtain the [Totp.value] for this [PasswordEntry] at the current time. */
@@ -187,10 +183,10 @@ constructor(
     val totpAlgorithm = totpFinder.findAlgorithm(content)
     val issuer = totpFinder.findIssuer(content)
     val millis = clock.millis()
-    val remainingTime = (totpPeriod - ((millis / ONE_SECOND) % totpPeriod)).seconds
+    val remainingTime = (totpPeriod - ((millis / THOUSAND_MILLIS) % totpPeriod)).seconds
     Otp.calculateCode(
         totpSecret!!,
-        millis / (ONE_SECOND * totpPeriod),
+        millis / (THOUSAND_MILLIS * totpPeriod),
         totpAlgorithm,
         digits,
         issuer
@@ -232,6 +228,6 @@ constructor(
         "secret:",
         "pass:",
       )
-    private const val ONE_SECOND = 1000
+    private const val THOUSAND_MILLIS = 1000L
   }
 }
