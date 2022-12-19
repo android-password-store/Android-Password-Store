@@ -4,6 +4,8 @@
  */
 @file:Suppress("UnstableApiUsage")
 
+import me.champeau.gradle.igp.gitRepositories
+
 rootProject.name = "APS"
 
 // Plugin repositories
@@ -41,6 +43,8 @@ pluginManagement {
         includeModule("com.github.ben-manes", "gradle-versions-plugin")
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
         includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
+        includeModule("me.champeau.includegit", "me.champeau.includegit.gradle.plugin")
+        includeModule("me.champeau.gradle.includegit", "plugin")
         includeModule("me.tylerbwong.gradle.metalava", "plugin")
       }
     }
@@ -52,7 +56,10 @@ pluginManagement {
   }
 }
 
-plugins { id("com.gradle.enterprise") version "3.12" }
+plugins {
+  id("com.gradle.enterprise") version "3.12"
+  id("me.champeau.includegit") version "0.1.5"
+}
 
 gradleEnterprise {
   buildScan {
@@ -159,6 +166,35 @@ dependencyResolutionManagement {
   }
 }
 
+gitRepositories {
+  checkoutsDirectory.set(rootProject.projectDir.resolve("build/checkouts"))
+  include("hwsecurity") {
+    uri.set("https://github.com/android-password-store/hwsecurity.git")
+    branch.set("main")
+    includeBuild {
+      dependencySubstitution {
+        for (module in
+          listOf(
+            "core",
+            "intent-usb",
+            "intent-nfc",
+            "provider",
+            "fido",
+            "fido2",
+            "openpgp",
+            "piv",
+            "sshj",
+            "ssh",
+            "ui",
+          )) {
+          substitute(module("com.github.android-password-store.hwsecurity:hwsecurity-$module"))
+            .using(project(":hwsecurity:$module"))
+        }
+      }
+    }
+  }
+}
+
 // Experimental features
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
@@ -174,6 +210,8 @@ include("coroutine-utils")
 include("coroutine-utils-testing")
 
 include("crypto-common")
+
+include("crypto-hwsecurity")
 
 include("crypto-pgpainless")
 

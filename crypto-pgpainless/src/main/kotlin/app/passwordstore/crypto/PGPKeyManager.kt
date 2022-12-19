@@ -9,12 +9,12 @@ package app.passwordstore.crypto
 import androidx.annotation.VisibleForTesting
 import app.passwordstore.crypto.KeyUtils.tryGetId
 import app.passwordstore.crypto.KeyUtils.tryParseKeyring
-import app.passwordstore.crypto.errors.InvalidKeyException
 import app.passwordstore.crypto.errors.KeyAlreadyExistsException
 import app.passwordstore.crypto.errors.KeyDeletionFailedException
 import app.passwordstore.crypto.errors.KeyDirectoryUnavailableException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
+import app.passwordstore.crypto.errors.NoSecretKeyException
 import app.passwordstore.util.coroutines.runSuspendCatching
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.unwrap
@@ -40,12 +40,16 @@ constructor(
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
-        val incomingKeyRing = tryParseKeyring(key) ?: throw InvalidKeyException
+        val incomingKeyRing = tryParseKeyring(key)
+
+        if (incomingKeyRing is PGPPublicKeyRing) {
+          throw NoSecretKeyException(tryGetId(key)?.toString() ?: "Failed to retrieve key ID")
+        }
+
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
         if (keyFile.exists()) {
           val existingKeyBytes = keyFile.readBytes()
-          val existingKeyRing =
-            tryParseKeyring(PGPKey(existingKeyBytes)) ?: throw InvalidKeyException
+          val existingKeyRing = tryParseKeyring(PGPKey(existingKeyBytes))
           when {
             existingKeyRing is PGPPublicKeyRing && incomingKeyRing is PGPSecretKeyRing -> {
               keyFile.writeBytes(key.contents)

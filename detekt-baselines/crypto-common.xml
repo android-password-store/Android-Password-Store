@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>LongParameterList:CryptoHandler.kt$CryptoHandler$( keys: List&lt;Key&gt;, passphrase: String, ciphertextStream: InputStream, outputStream: OutputStream, options: DecryptOpts, onDecryptSessionKey: (EncryptedSessionKey) -&gt; DecryptedSessionKey, )</ID>
+  </CurrentIssues>
+</SmellBaseline>
