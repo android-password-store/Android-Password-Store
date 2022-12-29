@@ -32,6 +32,11 @@
       "enabled": false
     },
     {
+      // Breaks configuration caching https://github.com/getsentry/sentry-android-gradle-plugin/issues/407
+      "matchPackageNames": ["io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin"],
+      "allowedVersions": ">3.3.0"
+    },
+    {
       "matchDatasources": [
         "maven"
       ],
