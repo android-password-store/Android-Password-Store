@@ -91,13 +91,13 @@ abstract class PSLUpdateTask : DefaultTask() {
       sink.writeInt(data.totalRuleBytes)
 
       for (domain in data.sortedRules) {
-        sink.write(domain).writeByte('\n'.toInt())
+        sink.write(domain).writeByte('\n'.code)
       }
 
       sink.writeInt(data.totalExceptionRuleBytes)
 
       for (domain in data.sortedExceptionRules) {
-        sink.write(domain).writeByte('\n'.toInt())
+        sink.write(domain).writeByte('\n'.code)
       }
     }
   }

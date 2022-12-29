@@ -17,13 +17,17 @@ class RenameArtifactsPlugin : Plugin<Project> {
     project.pluginManager.withPlugin("com.android.application") {
       project.extensions.configure<ApplicationAndroidComponentsExtension> {
         onVariants { variant ->
-          project.tasks.register<CollectApksTask>("collect${variant.name.capitalize()}Apks") {
+          project.tasks.register<CollectApksTask>(
+            "collect${variant.name.replaceFirstChar { it.uppercase() }}Apks"
+          ) {
             variantName.set(variant.name)
             apkFolder.set(variant.artifacts.get(SingleArtifact.APK))
             builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
             outputDirectory.set(project.layout.projectDirectory.dir("outputs"))
           }
-          project.tasks.register<CollectBundleTask>("collect${variant.name.capitalize()}Bundle") {
+          project.tasks.register<CollectBundleTask>(
+            "collect${variant.name.replaceFirstChar { it.uppercase() }}Bundle"
+          ) {
             val mainOutput =
               variant.outputs.single {
                 it.outputType == VariantOutputConfiguration.OutputType.SINGLE
