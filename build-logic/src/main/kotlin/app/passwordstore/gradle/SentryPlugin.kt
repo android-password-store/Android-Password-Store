@@ -33,7 +33,6 @@ class SentryPlugin : Plugin<Project> {
         ignoredFlavors.set(setOf(ProductFlavors.FREE))
         tracingInstrumentation { enabled.set(false) }
         autoInstallation.enabled.set(false)
-        includeDependenciesReport.set(false)
       }
     }
   }
