@@ -146,7 +146,6 @@ private fun migrateToDiceware(sharedPrefs: SharedPreferences) {
 }
 
 private fun removeExternalStorageProperties(prefs: SharedPreferences) {
-  logcat(TAG, INFO) { "Removing preferences related to external storage" }
   prefs.edit {
     if (prefs.contains(PreferenceKeys.GIT_EXTERNAL)) {
       if (prefs.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
