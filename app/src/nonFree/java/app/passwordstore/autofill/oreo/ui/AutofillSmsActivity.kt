@@ -120,6 +120,7 @@ class AutofillSmsActivity : AppCompatActivity() {
   }
 
   // Retry starting the SMS code retriever after a permission request.
+  @Deprecated("Deprecated in Java")
   @Suppress("DEPRECATION")
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
