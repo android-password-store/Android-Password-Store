@@ -70,7 +70,10 @@ constructor(
     }
   }
 
-  /** Helper for creating an Autofill [Dataset]s for Android R and above. */
+  /**
+   * Helper for creating an Autofill [Dataset]s for [Build.VERSION_CODES.R] <=
+   * [Build.VERSION.SDK_INT] < [Build.VERSION_CODES.TIRAMISU].
+   */
   @Suppress("DEPRECATION")
   private fun makeIntentDataSetR(
     context: Context,
@@ -92,7 +95,10 @@ constructor(
     }
   }
 
-  /** Helper for creating Autofill [Dataset]s for Android Tiramisu and above. */
+  /**
+   * Helper for creating Autofill [Dataset]s for [Build.VERSION.SDK_INT] >=
+   * [Build.VERSION_CODES.TIRAMISU] and above.
+   */
   @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   private fun makeIntentDataSetTiramisu(
     context: Context,
