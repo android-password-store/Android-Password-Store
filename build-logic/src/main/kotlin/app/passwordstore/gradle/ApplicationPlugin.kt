@@ -23,9 +23,6 @@ class ApplicationPlugin : Plugin<Project> {
     AndroidCommon.configure(project)
     project.extensions.configure<BaseAppModuleExtension> {
       val minifySwitch = project.providers.environmentVariable("DISABLE_MINIFY")
-
-      adbOptions.installOptions("--user 0")
-
       dependenciesInfo {
         includeInBundle = false
         includeInApk = false
