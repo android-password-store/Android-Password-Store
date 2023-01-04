@@ -137,3 +137,17 @@
 -dontwarn org.slf4j.impl.StaticMDCBinder
 -dontwarn org.slf4j.impl.StaticMarkerBinder
 -dontwarn sun.security.x509.X509Key
+-dontwarn android.support.v4.app.FragmentActivity
+-dontwarn android.support.v4.app.FragmentManager$FragmentLifecycleCallbacks
+-dontwarn android.support.v4.app.FragmentManager
+-dontwarn androidx.work.Data$Builder
+-dontwarn androidx.work.Data
+-dontwarn androidx.work.OneTimeWorkRequest$Builder
+-dontwarn androidx.work.OneTimeWorkRequest
+-dontwarn androidx.work.Operation
+-dontwarn androidx.work.OutOfQuotaPolicy
+-dontwarn androidx.work.WorkManager
+-dontwarn androidx.work.WorkRequest$Builder
+-dontwarn androidx.work.WorkRequest
+-dontwarn androidx.work.Worker
+-dontwarn androidx.work.multiprocess.RemoteListenableWorker
