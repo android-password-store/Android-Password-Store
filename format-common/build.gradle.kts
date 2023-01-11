@@ -18,9 +18,9 @@ android {
 dependencies {
   api(libs.kotlin.coroutines.core)
   api(libs.thirdparty.kotlinResult)
-  compileOnly(libs.androidx.annotation)
   coreLibraryDesugaring(libs.android.desugarJdkLibs)
   implementation(projects.coroutineUtils)
+  implementation(libs.androidx.annotation)
   implementation(libs.dagger.hilt.core)
   implementation(libs.thirdparty.commons.codec)
   testImplementation(projects.coroutineUtilsTesting)
