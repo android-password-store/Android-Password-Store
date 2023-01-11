@@ -39,7 +39,7 @@
         "androidx.compose.compiler:compiler"
       ],
       "registryUrls": [
-        "https://maven.google.com/"
+        "https://androidx.dev/storage/compose-compiler/repository/"
       ]
     }
   ],
