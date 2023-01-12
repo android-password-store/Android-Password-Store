@@ -184,7 +184,7 @@ class PasswordStore : BaseGitActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_pwdstore)
 
-    lifecycleScope.launchWhenCreated {
+    lifecycleScope.launch {
       model.currentDir.flowWithLifecycle(lifecycle).collect { dir ->
         val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
         supportActionBar?.apply {
