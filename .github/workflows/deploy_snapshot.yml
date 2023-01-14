@@ -44,7 +44,7 @@ jobs:
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       with:
-        arguments: collectFreeReleaseApks collectNonFreeReleaseApks collectFreeReleaseBundle collectNonFreeReleaseBundle -PsentryUploadMappings
+        arguments: collectFreeReleaseApks collectNonFreeReleaseApks assembleFreeReleaseBundle assembleNonFreeReleaseBundle -PsentryUploadMappings
         gradle-home-cache-cleanup: true
 
     - name: Clean secrets
