@@ -29,17 +29,6 @@
       ],
       "enabled": false
     },
-    {
-      "matchDatasources": [
-        "maven"
-      ],
-      "matchPackageNames": [
-        "androidx.compose.compiler:compiler"
-      ],
-      "registryUrls": [
-        "https://androidx.dev/storage/compose-compiler/repository/"
-      ]
-    }
   ],
   "regexManagers": [
     {
