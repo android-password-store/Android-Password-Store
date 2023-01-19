@@ -56,8 +56,8 @@ body:
       description: Provide details about your device, OS, app version, etc.
       value: |
         - Device: [e.g. Google Pixel 2]
-        - OS: [e.g. stock ROM Android version 9.0]
-        - App version [e.g. 3.1.0]
+        - OS: [e.g. Android R]
+        - App version: [e.g. 1.13.5]
     validations:
       required: true
 
