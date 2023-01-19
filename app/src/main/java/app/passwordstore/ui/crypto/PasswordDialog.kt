@@ -12,22 +12,20 @@ import android.view.KeyEvent
 import android.view.WindowManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import app.passwordstore.R
 import app.passwordstore.databinding.DialogPasswordEntryBinding
 import app.passwordstore.util.extensions.finish
 import app.passwordstore.util.extensions.unsafeLazy
+import app.passwordstore.util.viewmodel.PasswordViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
 /** [DialogFragment] to request a password from the user and forward it along. */
 class PasswordDialog : DialogFragment() {
 
+  private val viewModel: PasswordViewModel by activityViewModels()
   private val binding by unsafeLazy { DialogPasswordEntryBinding.inflate(layoutInflater) }
   private var isError: Boolean = false
-  private val _password = MutableStateFlow<String?>(null)
-  val password = _password.asStateFlow()
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val builder = MaterialAlertDialogBuilder(requireContext())
@@ -66,7 +64,7 @@ class PasswordDialog : DialogFragment() {
   }
 
   private fun setPasswordAndDismiss() {
-    _password.update { binding.passwordEditText.text.toString() }
+    viewModel.setPassword(binding.passwordEditText.text.toString())
     dismissAllowingStateLoss()
   }
 }
