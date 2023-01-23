@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - [Vivaldi](https://play.google.com/store/apps/details?id=com.vivaldi.browser) is now supported as an Autofill-capable browser.
+- `mail` is now included in the heuristics for username fields
 
 ## [1.1.1]
 
