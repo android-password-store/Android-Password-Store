@@ -138,6 +138,7 @@ internal class FormField(
         "benutzername",
         "e-mail",
         "email",
+        "mail",
         "login",
         "user",
       )
