@@ -1,6 +1,6 @@
 [versions]
 agp = "7.4.0"
-androidxActivity = "1.7.0-alpha03"
+androidxActivity = "1.7.0-alpha04"
 bouncycastle = "1.72"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.4.0"
