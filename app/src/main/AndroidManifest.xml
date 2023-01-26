@@ -46,6 +46,7 @@
     <activity
       android:name=".ui.proxy.ProxySelectorActivity"
       android:exported="false"
+      android:label="@string/activity_proxy_label"
       android:windowSoftInputMode="adjustResize" />
 
     <activity

@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Patterns
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.os.postDelayed
@@ -27,8 +28,6 @@ import app.passwordstore.util.settings.PreferenceKeys
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-private val WEB_ADDRESS_REGEX = Patterns.WEB_URL.toRegex()
-
 @AndroidEntryPoint
 class ProxySelectorActivity : AppCompatActivity() {
 
@@ -36,9 +35,11 @@ class ProxySelectorActivity : AppCompatActivity() {
   @ProxyPreferences @Inject lateinit var proxyPrefs: SharedPreferences
   @Inject lateinit var proxyUtils: ProxyUtils
   private val binding by viewBinding(ActivityProxySelectorBinding::inflate)
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
     with(binding) {
       proxyHost.setText(proxyPrefs.getString(PreferenceKeys.PROXY_HOST))
       proxyUser.setText(proxyPrefs.getString(PreferenceKeys.PROXY_USERNAME))
@@ -59,6 +60,16 @@ class ProxySelectorActivity : AppCompatActivity() {
         }
       }
     }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      android.R.id.home -> {
+        onBackPressedDispatcher.onBackPressed()
+      }
+      else -> return super.onOptionsItemSelected(item)
+    }
+    return true
   }
 
   private fun isNumericAddress(text: CharSequence): Boolean {
@@ -90,5 +101,9 @@ class ProxySelectorActivity : AppCompatActivity() {
     }
     proxyUtils.setDefaultProxy()
     Handler(Looper.getMainLooper()).postDelayed(500) { finish() }
+  }
+
+  private companion object {
+    private val WEB_ADDRESS_REGEX = Patterns.WEB_URL.toRegex()
   }
 }
