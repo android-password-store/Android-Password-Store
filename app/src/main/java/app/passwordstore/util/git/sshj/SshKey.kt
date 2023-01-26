@@ -232,18 +232,15 @@ object SshKey {
     type = if (isGenerated) Type.LegacyGenerated else Type.Imported
   }
 
-  @Suppress("BlockingMethodInNonBlockingContext")
   private suspend fun getOrCreateWrappingMasterKey(requireAuthentication: Boolean) =
     withContext(Dispatchers.IO) {
-      MasterKey.Builder(context, KEYSTORE_ALIAS).run {
-        setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        setRequestStrongBoxBacked(true)
-        setUserAuthenticationRequired(requireAuthentication, 15)
-        build()
-      }
+      MasterKey.Builder(context, KEYSTORE_ALIAS)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .setRequestStrongBoxBacked(true)
+        .setUserAuthenticationRequired(requireAuthentication, 15)
+        .build()
     }
 
-  @Suppress("BlockingMethodInNonBlockingContext")
   private suspend fun getOrCreateWrappedPrivateKeyFile(requireAuthentication: Boolean) =
     withContext(Dispatchers.IO) {
       EncryptedFile.Builder(
@@ -252,13 +249,10 @@ object SshKey {
           getOrCreateWrappingMasterKey(requireAuthentication),
           EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         )
-        .run {
-          setKeysetPrefName(ANDROIDX_SECURITY_KEYSET_PREF_NAME)
-          build()
-        }
+        .setKeysetPrefName(ANDROIDX_SECURITY_KEYSET_PREF_NAME)
+        .build()
     }
 
-  @Suppress("BlockingMethodInNonBlockingContext")
   suspend fun generateKeystoreWrappedEd25519Key(requireAuthentication: Boolean) =
     withContext(Dispatchers.IO) {
       delete()
