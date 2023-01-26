@@ -14,16 +14,13 @@ jobs:
       matrix:
         agp-version:
           - 7.4.0
-          - 8.0.0-alpha11
+          - 8.0.0-beta01
+          - 8.1.0-alpha01
         gradle-version:
           - wrapper
           - nightly
         java-version:
-          - 11
           - 18
-        exclude:
-          - agp-version: 8.0.0-alpha11
-            java-version: 11
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -41,7 +38,7 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Workaround AGP 8.x deprecations
-      if: startsWith(matrix.agp-version, '8.0.0')
+      if: startsWith(matrix.agp-version, '8.')
       run: sed -i 's/android.disableAutomaticComponentCreation=true//' gradle.properties
 
     - name: Run checks
