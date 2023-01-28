@@ -81,8 +81,8 @@
     <ID>SpreadOperator:ErrorMessages.kt$GitException.PushException$(res, *fmt)</ID>
     <ID>ThrowsCount:GitCommandExecutor.kt$GitCommandExecutor$suspend fun execute(): Result&lt;Unit, Throwable&gt;</ID>
     <ID>ThrowsCount:SshKey.kt$SshKey$fun import(uri: Uri)</ID>
+    <ID>TooManyFunctions:AbstractLogger.kt$AbstractLogger : Logger</ID>
     <ID>TooManyFunctions:PasswordStore.kt$PasswordStore : BaseGitActivity</ID>
-    <ID>TooManyFunctions:SshjConfig.kt$AbstractLogger : Logger</ID>
     <ID>TopLevelPropertyNaming:AutofillMatcher.kt$private const val PREFERENCES_AUTOFILL_APP_MATCHES = "oreo_autofill_app_matches"</ID>
     <ID>TopLevelPropertyNaming:AutofillMatcher.kt$private const val PREFERENCES_AUTOFILL_WEB_MATCHES = "oreo_autofill_web_matches"</ID>
     <ID>TopLevelPropertyNaming:PasswordStore.kt$const val PASSWORD_FRAGMENT_TAG = "PasswordsList"</ID>
