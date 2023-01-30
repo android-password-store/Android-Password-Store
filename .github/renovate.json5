@@ -37,7 +37,8 @@
         "composeCompiler = \"(?<currentValue>.*)\""
       ],
       "datasourceTemplate": "maven",
-      "depNameTemplate": "androidx.compose.compiler:compiler"
+      "depNameTemplate": "androidx.compose.compiler:compiler",
+      "registryUrlTemplate": "https://maven.google.com",
     }    
   ]
 }
