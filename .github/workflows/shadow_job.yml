@@ -15,7 +15,7 @@ jobs:
         agp-version:
           - 7.4.0
           - 8.0.0-beta01
-          - 8.1.0-alpha01
+          - 8.1.0-alpha02
         gradle-version:
           - wrapper
           - nightly
