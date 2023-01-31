@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.crypto.CryptoRepository
@@ -23,7 +22,6 @@ import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
-import app.passwordstore.util.viewmodel.PasswordViewModel
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.runCatching
@@ -47,7 +45,6 @@ import logcat.logcat
 @AndroidEntryPoint
 class DecryptActivity : BasePgpActivity() {
 
-  private val viewModel: PasswordViewModel by viewModels()
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
@@ -70,7 +67,7 @@ class DecryptActivity : BasePgpActivity() {
         true
       }
     }
-    askPassphrase()
+    askPassphrase(isError = false)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -141,35 +138,33 @@ class DecryptActivity : BasePgpActivity() {
     )
   }
 
-  private fun askPassphrase() {
+  private fun askPassphrase(isError: Boolean) {
     if (retries < MAX_RETRIES) {
       retries += 1
     } else {
       finish()
     }
-    showPasswordDialog(isError = false)
-    lifecycleScope.launch(dispatcherProvider.main()) {
-      viewModel.password.collectLatest { value ->
-        when (val result = decryptWithPassphrase(value)) {
-          is Ok -> {
-            val entry = passwordEntryFactory.create(result.value.toByteArray())
-            passwordEntry = entry
-            createPasswordUI(entry)
-            startAutoDismissTimer()
-          }
-          is Err -> {
-            logcat(ERROR) { result.error.stackTraceToString() }
-            showPasswordDialog(isError = true)
-          }
-        }
-      }
-    }
-  }
-
-  private fun showPasswordDialog(isError: Boolean) {
     val dialog = PasswordDialog()
     if (isError) {
       dialog.setError()
+    }
+    lifecycleScope.launch(dispatcherProvider.main()) {
+      dialog.password.collectLatest { value ->
+        if (value != null) {
+          when (val result = decryptWithPassphrase(value)) {
+            is Ok -> {
+              val entry = passwordEntryFactory.create(result.value.toByteArray())
+              passwordEntry = entry
+              createPasswordUI(entry)
+              startAutoDismissTimer()
+            }
+            is Err -> {
+              logcat(ERROR) { result.error.stackTraceToString() }
+              askPassphrase(isError = true)
+            }
+          }
+        }
+      }
     }
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }

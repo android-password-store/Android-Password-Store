@@ -11,7 +11,6 @@ import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +21,6 @@ import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
 import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.asLog
-import app.passwordstore.util.viewmodel.PasswordViewModel
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.michaelbull.result.getOrElse
@@ -79,7 +77,6 @@ class AutofillDecryptActivity : AppCompatActivity() {
     }
   }
 
-  private val viewModel: PasswordViewModel by viewModels()
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var repository: CryptoRepository
 
@@ -108,8 +105,10 @@ class AutofillDecryptActivity : AppCompatActivity() {
     val dialog = PasswordDialog()
     lifecycleScope.launch {
       withContext(Dispatchers.Main) {
-        viewModel.password.collectLatest { value ->
-          decrypt(File(filePath), clientState, action, value)
+        dialog.password.collectLatest { value ->
+          if (value != null) {
+            decrypt(File(filePath), clientState, action, value)
+          }
         }
       }
     }
