@@ -17,10 +17,16 @@ jobs:
           - 8.0.0-beta01
           - 8.1.0-alpha02
         gradle-version:
+          - current
           - wrapper
+          - release-nightly
           - nightly
         java-version:
           - 18
+        # Gradle 8.x is currently incompatible with AGP 8.x
+        exclude:
+          - agp-version: 8.0.0-beta01
+          - agp-version: 8.1.0-alpha02
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
