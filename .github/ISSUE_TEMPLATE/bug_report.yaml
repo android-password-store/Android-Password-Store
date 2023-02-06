@@ -10,6 +10,7 @@ body:
         1. Make sure you're on the latest version of the app. The current release can be found here: https://github.com/android-password-store/android-password-store/releases/latest.
         2. Search through **both** open and closed issues for your bug: https://github.com/android-password-store/Android-Password-Store/issues?q=is%3Aissue+sort%3Aupdated-desc+.
         3. ALWAYS fill this template. If you fail to do so, your issue will be immediately closed with no response. Maintaining open source projects for free is hard work, and we expect users to respect that time and effort by putting in a little bit of their own. That helps us fix these problems faster and in return you get a better app — everybody wins.
+        4. Please record a device log, and attach it to the issue. You can follow the steps here for it: https://docs.passwordstore.app/docs/users/reporting-bugs
 
   - type: textarea
     id: bug-description
