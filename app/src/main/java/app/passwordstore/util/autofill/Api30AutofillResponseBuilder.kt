@@ -96,8 +96,8 @@ constructor(
   }
 
   /**
-   * Helper for creating Autofill [Dataset]s for [Build.VERSION.SDK_INT] >=
-   * [Build.VERSION_CODES.TIRAMISU] and above.
+   * Helper for creating Autofill [Dataset]s for
+   * [Build.VERSION.SDK_INT] >= [Build.VERSION_CODES.TIRAMISU] and above.
    */
   @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   private fun makeIntentDataSetTiramisu(

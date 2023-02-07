@@ -40,7 +40,7 @@ build-detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0"
 build-diffutils = "io.github.java-diff-utils:java-diff-utils:4.12"
 build-download = "de.undercouch:gradle-download-task:5.3.1"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-build-ktfmt = "com.facebook:ktfmt:0.42"
+build-ktfmt = "com.facebook:ktfmt:0.43"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"
 build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.3"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.10.0"
