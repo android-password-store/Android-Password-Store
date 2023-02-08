@@ -4,6 +4,7 @@
     ":dependencyDashboard",
     "helpers:pinGitHubActionDigests",
   ],
+  "branchConcurrentLimit": 15,
   "packageRules": [
     {
       matchDatasources: [
