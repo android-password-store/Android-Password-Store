@@ -271,7 +271,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="password_creation_duplicate_error">Xa existe o ficheiro, usa un nome diferente</string>
   <string name="add_otp">Engade OTP</string>
   <string name="otp_import_success">Importouse correctamente a configuración TOTP</string>
-  <string name="otp_import_failure">Fallou a importación da configuración TOTP</string>
+  <string name="otp_import_failure_generic">Fallou a importación da configuración TOTP</string>
   <string name="exporting_passwords">Exportando contrasinais…</string>
   <string name="invalid_gpg_id">Atopouse .gpg-id, pero contén un ID de chave, impresión dixital ou ID de usuaria non válidos</string>
   <string name="invalid_filename_text">O nome do ficheiro non pode conter \'/\', establece un directorio superior</string>

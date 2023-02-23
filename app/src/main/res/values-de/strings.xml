@@ -261,7 +261,7 @@
   <string name="password_creation_duplicate_error">Datei existiert bereits, bitte benutzen Sie einen anderen Dateinamen</string>
   <string name="add_otp">OTP hinzufügen</string>
   <string name="otp_import_success">TOTP-Konfiguration erfolgreich importiert</string>
-  <string name="otp_import_failure">Import der TOTP-Konfiguration fehlgeschlagen</string>
+  <string name="otp_import_failure_generic">Import der TOTP-Konfiguration fehlgeschlagen</string>
   <string name="exporting_passwords">Exportiere Passwörter…</string>
   <string name="invalid_filename_text">Dateiname darf nicht \'/\' enthalten, Verzeichnis oben setzen</string>
   <string name="directory_hint">Ordner</string>

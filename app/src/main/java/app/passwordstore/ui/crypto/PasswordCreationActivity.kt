@@ -96,14 +96,14 @@ class PasswordCreationActivity : BasePgpActivity() {
         else binding.extraContent.append(contents)
         snackbar(message = getString(R.string.otp_import_success))
       } else {
-        snackbar(message = getString(R.string.otp_import_failure))
+        snackbar(message = getString(R.string.otp_import_failure_generic))
       }
     }
 
   private val imageImportAction =
     registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
       if (imageUri == null) {
-        snackbar(message = getString(R.string.otp_import_failure))
+        snackbar(message = getString(R.string.otp_import_failure_no_selection))
         return@registerForActivityResult
       }
       val bitmap =
@@ -130,7 +130,7 @@ class PasswordCreationActivity : BasePgpActivity() {
           snackbar(message = getString(R.string.otp_import_success))
           binding.otpImportButton.isVisible = false
         }
-        .onFailure { snackbar(message = getString(R.string.otp_import_failure)) }
+        .onFailure { snackbar(message = getString(R.string.otp_import_failure_generic)) }
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {

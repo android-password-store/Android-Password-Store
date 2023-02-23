@@ -275,7 +275,7 @@ personal.com</string>
   <string name="password_creation_duplicate_error">文件已存在,请使用其他名称</string>
   <string name="add_otp">添加 OTP</string>
   <string name="otp_import_success">导入TOTP配置成功</string>
-  <string name="otp_import_failure">导入TOTP配置失败</string>
+  <string name="otp_import_failure_generic">导入TOTP配置失败</string>
   <string name="exporting_passwords">正在导出密码…</string>
   <string name="invalid_gpg_id">找到了 .gpg-id，但它包含无效的密钥ID、指纹或用户ID</string>
   <string name="invalid_filename_text">文件名不能包含\'/\'</string>

@@ -263,7 +263,7 @@
   <string name="password_creation_duplicate_error">Файл с таким названием уже существует! Используйте другое имя</string>
   <string name="add_otp">Добавить OTP</string>
   <string name="otp_import_success">Конфигурация TOTP успешно импортирована</string>
-  <string name="otp_import_failure">Не удалось импортировать конфигурацию TOTP</string>
+  <string name="otp_import_failure_generic">Не удалось импортировать конфигурацию TOTP</string>
   <string name="exporting_passwords">Экспорт паролей…</string>
   <string name="invalid_filename_text">Имя файла не должно содержать \'/\', укажите директорию выше</string>
   <string name="directory_hint">Директория</string>

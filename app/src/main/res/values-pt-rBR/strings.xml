@@ -270,7 +270,7 @@
   <string name="password_creation_duplicate_error">O arquivo já existe, por favor use um nome diferente</string>
   <string name="add_otp">Adicionar OTP</string>
   <string name="otp_import_success">Configuração TOTP importada com sucesso</string>
-  <string name="otp_import_failure">Falha ao importar a configuração TOTP</string>
+  <string name="otp_import_failure_generic">Falha ao importar a configuração TOTP</string>
   <string name="exporting_passwords">Exportando senhas…</string>
   <string name="invalid_gpg_id">Encontrado .gpg-id, mas contém um ID de chave, fingerprint ou ID de usuário inválidos</string>
   <string name="invalid_filename_text">Nome do arquivo não deve conter \'/\', defina o diretório acima</string>
