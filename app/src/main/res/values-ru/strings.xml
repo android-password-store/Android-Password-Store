@@ -255,7 +255,6 @@
   <string name="preference_custom_public_suffixes_title">Пользовательские домены</string>
   <string name="preference_custom_public_suffixes_summary">Автозаполнение будет разделять поддомены этих доменов</string>
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
-  <!-- OpenKeychain errors -->
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Ошибка</string>
   <string name="password_creation_file_write_fail_message">Не удалось записать файл пароля в хранилище, пожалуйста, повторите попытку.</string>

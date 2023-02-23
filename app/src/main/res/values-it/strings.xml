@@ -252,7 +252,6 @@
   <string name="preference_custom_public_suffixes_title">Domini personalizzati</string>
   <string name="preference_custom_public_suffixes_summary">L\'auto-completamento distinguerà i sottodomini di questi domini</string>
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
-  <!-- OpenKeychain errors -->
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Errore</string>
   <string name="password_creation_file_write_fail_message">Impossibile scrivere il file delle password al negozio, sei pregato di riprovare.</string>

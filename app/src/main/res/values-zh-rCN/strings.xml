@@ -267,7 +267,6 @@
   <string name="preference_custom_public_suffixes_summary">自动填充将区分这些域名的子域名</string>
   <string name="preference_custom_public_suffixes_hint">company.com
 personal.com</string>
-  <!-- OpenKeychain errors -->
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">错误</string>
   <string name="password_creation_file_write_fail_message">将密码文件写入存储失败,请重试</string>

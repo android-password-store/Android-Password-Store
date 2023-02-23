@@ -253,7 +253,6 @@
   <string name="preference_custom_public_suffixes_title">Benutzerdefinierte Domains</string>
   <string name="preference_custom_public_suffixes_summary">Autofill wird Subdomains dieser Domains unterscheiden</string>
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
-  <!-- OpenKeychain errors -->
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Fehler</string>
   <string name="password_creation_file_write_fail_message">Fehler beim Speichern der Passwortdatei auf dem Speicher, bitte versuchen Sie es erneut.</string>

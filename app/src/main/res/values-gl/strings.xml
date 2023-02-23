@@ -263,7 +263,6 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="preference_custom_public_suffixes_title">Dominios personalizados</string>
   <string name="preference_custom_public_suffixes_summary">Autofill distinguirá entre subdominios nestes dominios</string>
   <string name="preference_custom_public_suffixes_hint">empresa.com\npersoal.com</string>
-  <!-- OpenKeychain errors -->
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Fallo</string>
   <string name="password_creation_file_write_fail_message">Fallo ó escribir o ficheiro de contrasinal no almacén, inténtao outra vez.</string>
