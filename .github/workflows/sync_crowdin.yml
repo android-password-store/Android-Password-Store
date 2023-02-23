@@ -27,8 +27,8 @@ jobs:
           CROWDIN_PROJECT_KEY: ${{ secrets.CROWDIN_PROJECT_KEY }}
           CROWDIN_PROJECT_IDENTIFIER: ${{ secrets.CROWDIN_PROJECT_IDENTIFIER }}
 
-      - name: Compare list changes
-        run: if [[ $(git diff --stat) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
+      - name: Check if PR is required
+        run: if [[ $(git status -s) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
 
       - name: Create Pull Request
         id: cpr
