@@ -271,6 +271,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="add_otp">Engade OTP</string>
   <string name="otp_import_success">Importouse correctamente a configuración TOTP</string>
   <string name="otp_import_failure_generic">Fallou a importación da configuración TOTP</string>
+  <string name="otp_import_failure_no_selection">Non se seleccionou ningún ficheiro de imaxe</string>
   <string name="exporting_passwords">Exportando contrasinais…</string>
   <string name="invalid_gpg_id">Atopouse .gpg-id, pero contén un ID de chave, impresión dixital ou ID de usuaria non válidos</string>
   <string name="invalid_filename_text">O nome do ficheiro non pode conter \'/\', establece un directorio superior</string>
@@ -308,6 +309,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="git_scheme_disallowed_title">Non se recomenda utilizar o protocolo git://</string>
   <string name="git_scheme_disallowed_message">O protocolo git proporcionado polo git-daemon non realiza o transporte cifrado e non é válido para operacións seguras.</string>
   <!-- Proxy configuration activity -->
+  <string name="activity_proxy_label">Axustes do Proxy</string>
   <string name="proxy_hostname">Servidor proxy</string>
   <string name="port">Porto</string>
   <string name="pref_edit_proxy_settings">Axustes do proxy HTTP(S)</string>

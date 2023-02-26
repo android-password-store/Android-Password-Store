@@ -270,6 +270,7 @@
   <string name="add_otp">Adicionar OTP</string>
   <string name="otp_import_success">Configuração TOTP importada com sucesso</string>
   <string name="otp_import_failure_generic">Falha ao importar a configuração TOTP</string>
+  <string name="otp_import_failure_no_selection">Nenhum arquivo de imagem foi selecionado</string>
   <string name="exporting_passwords">Exportando senhas…</string>
   <string name="invalid_gpg_id">Encontrado .gpg-id, mas contém um ID de chave, fingerprint ou ID de usuário inválidos</string>
   <string name="invalid_filename_text">Nome do arquivo não deve conter \'/\', defina o diretório acima</string>
@@ -307,6 +308,7 @@
   <string name="git_scheme_disallowed_title">Usa o protocolo git:// não é recomendado</string>
   <string name="git_scheme_disallowed_message">O protocolo git fornecido pelo git-daemon não produz qualquer encriptação de transporte e não é adequado para operações seguras.</string>
   <!-- Proxy configuration activity -->
+  <string name="activity_proxy_label">Configurações de proxy</string>
   <string name="proxy_hostname">Nome do Host de proxy</string>
   <string name="port">Porta</string>
   <string name="pref_edit_proxy_settings">Configurações de proxy HTTP(S)</string>
