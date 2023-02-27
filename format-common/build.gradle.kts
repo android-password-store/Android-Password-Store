@@ -5,27 +5,20 @@
 @file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 
 plugins {
-  id("com.github.android-password-store.android-library")
-  id("com.github.android-password-store.kotlin-android")
+  kotlin("jvm")
   id("com.github.android-password-store.kotlin-library")
-}
-
-android {
-  namespace = "app.passwordstore.format.common"
-  compileOptions { isCoreLibraryDesugaringEnabled = true }
 }
 
 dependencies {
   api(libs.kotlin.coroutines.core)
   api(libs.thirdparty.kotlinResult)
-  coreLibraryDesugaring(libs.android.desugarJdkLibs)
   implementation(projects.coroutineUtils)
   implementation(libs.androidx.annotation)
   implementation(libs.dagger.hilt.core)
   implementation(libs.thirdparty.commons.codec)
+  implementation(libs.thirdparty.uri)
   testImplementation(projects.coroutineUtilsTesting)
   testImplementation(libs.bundles.testDependencies)
   testImplementation(libs.kotlin.coroutines.test)
-  testImplementation(libs.testing.robolectric)
   testImplementation(libs.testing.turbine)
 }

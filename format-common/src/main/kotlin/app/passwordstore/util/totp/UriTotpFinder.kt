@@ -1,6 +1,6 @@
 package app.passwordstore.util.totp
 
-import android.net.Uri
+import com.eygraber.uri.Uri
 import javax.inject.Inject
 
 /** [Uri] backed TOTP URL parser. */
