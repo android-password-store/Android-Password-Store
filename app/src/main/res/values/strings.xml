@@ -128,6 +128,8 @@
     <string name="ssh_key_success_dialog_title">SSH-key imported</string>
     <string name="ssh_key_error_dialog_title">Key import error</string>
     <string name="ssh_key_error_dialog_text">Message : \n</string>
+    <string name="pref_disable_sync_action">Disable pull-to-sync</string>
+    <string name="pref_disable_sync_action_hint">Prevents git syncing when swiping down</string>
     <string name="pref_recursive_filter">Recursive filtering</string>
     <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
     <string name="pref_sort_order_title">Password sort order</string>

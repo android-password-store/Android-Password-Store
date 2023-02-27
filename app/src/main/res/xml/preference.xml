@@ -119,6 +119,11 @@
             app:summary="%s"
             app:title="@string/pref_sort_order_title" />
         <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="disable_sync_action"
+            app:summary="@string/pref_disable_sync_action_hint"
+            app:title="@string/pref_disable_sync_action" />
+        <CheckBoxPreference
             app:defaultValue="true"
             app:key="filter_recursively"
             app:summary="@string/pref_recursive_filter_hint"

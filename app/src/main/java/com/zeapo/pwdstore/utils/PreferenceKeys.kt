@@ -62,6 +62,7 @@ object PreferenceKeys {
     const val REPO_CHANGED = "repo_changed"
     const val SEARCH_ON_START = "search_on_start"
     const val SHOW_EXTRA_CONTENT = "show_extra_content"
+    const val DISABLE_SYNC_ACTION = "disable_sync_action"
 
     @Deprecated(
         message = "Use SHOW_HIDDEN_CONTENTS instead",

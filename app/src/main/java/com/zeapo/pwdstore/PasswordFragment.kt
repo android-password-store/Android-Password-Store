@@ -258,6 +258,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         }
     }
 
+    override fun onResume() {
+	super.onResume()
+        binding.swipeRefresher.isEnabled = !settings.getBoolean(PreferenceKeys.DISABLE_SYNC_ACTION, false)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         runCatching {
