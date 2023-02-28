@@ -52,18 +52,21 @@ jobs:
         arguments: check
         gradle-home-cache-cleanup: true
 
+  results:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Final Results
+    needs: [shadow-job]
+    steps:
     - name: Report failure to healthchecks.io
-      if: ${{ failure() }}
+      # see https://stackoverflow.com/a/67532120/4907315
+      if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+      run: curl --retry 3 "https://hc-ping.com/${HC_PING_SLUG}/fail"
       env:
         HC_PING_SLUG: ${{ secrets.HC_PING_SLUG }}
-        AGP_VERSION: ${{ matrix.agp-version }}
-      run: |
-        curl --retry 3 --data-raw "AGP: ${AGP_VERSION}" "https://hc-ping.com/${HC_PING_SLUG}/fail"
 
     - name: Report success to healthchecks.io
-      if: ${{ success() }}
+      if: ${{ contains(needs.*.result, 'success') }}
       env:
         HC_PING_SLUG: ${{ secrets.HC_PING_SLUG }}
-        AGP_VERSION: ${{ matrix.agp-version }}
-      run: |
-        curl --retry 3 --data-raw "AGP: ${AGP_VERSION}" "https://hc-ping.com/${HC_PING_SLUG}"
+      run: curl --retry 3 "https://hc-ping.com/${HC_PING_SLUG}"
