@@ -13,9 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         agp-version:
-          - 7.4.0
-          - 8.0.0-beta01
-          - 8.1.0-alpha02
+          - 7.4.2
+          - 8.0.0-beta03
+          - 8.1.0-alpha07
         gradle-version:
           - current
           - wrapper
@@ -25,8 +25,8 @@ jobs:
           - 18
         # Gradle 8.x is currently incompatible with AGP 8.x
         exclude:
-          - agp-version: 8.0.0-beta01
-          - agp-version: 8.1.0-alpha02
+          - agp-version: 8.0.0-beta03
+          - agp-version: 8.1.0-alpha07
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
