@@ -1,11 +1,15 @@
 package app.passwordstore.gradle
 
 import app.passwordstore.gradle.flavors.configureSlimTests
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.dsl.Lint
 import com.android.build.gradle.TestedExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.withType
 
 @Suppress("UnstableApiUsage")
@@ -51,5 +55,14 @@ object AndroidCommon {
 
       project.configureSlimTests()
     }
+    project.extensions.findByType<ApplicationExtension>()?.run { lint.configureLint(project) }
+    project.extensions.findByType<LibraryExtension>()?.run { lint.configureLint(project) }
   }
+}
+
+private fun Lint.configureLint(project: Project) {
+  abortOnError = false
+  checkReleaseBuilds = false
+  warningsAsErrors = false
+  baseline = project.file("lint-baseline.xml")
 }
