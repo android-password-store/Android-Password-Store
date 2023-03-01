@@ -26,5 +26,22 @@
   <issue id="UnusedResources">
     <ignore path="src/main/res/values/bools.xml" />
     <ignore path="src/main/res/values/colors_material3.xml" />
+    <ignore path="src/main/res/layout/map_preference_widget_switch.xml" />
   </issue>
+  <issue id="PrivateResource">
+    <ignore path="src/main/res/layout/map_preference_widget_switch.xml" />
+  </issue>
+  <issue id="Deprecated">
+    <ignore path="src/main/res/layout/item_field.xml" />
+  </issue>
+  <issue id="VectorPath">
+    <ignore path="src/main/res/drawable/app_settings_alt_24px.xml" />
+    <ignore path="src/main/res/drawable/ic_launcher_foreground_monochrome.xml" />
+    <ignore path="src/main/res/drawable/ic_miscellaneous_services_24px.xml" />
+    <ignore path="src/main/res/drawable/ic_miscellaneous_services_24px.xml" />
+  </issue>
+  <issue id="GradleDependency" severity="ignore" />
+  <issue id="ReportShortcutUsage" severity="ignore" />
+  <issue id="MissingTranslation" severity="ignore" />
+  <issue id="ImpliedQuantity" severity="ignore" />
 </lint>

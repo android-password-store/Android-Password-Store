@@ -37,17 +37,6 @@ android {
   }
 
   namespace = "app.passwordstore"
-
-  lint {
-    abortOnError = true
-    checkReleaseBuilds = false
-    warningsAsErrors = true
-    disable.add("MissingTranslation")
-    disable.add("PluralsCandidate")
-    disable.add("ImpliedQuantity")
-    disable.add("DialogFragmentCallbacksDetector")
-    baseline = file("lint-baseline.xml")
-  }
 }
 
 dependencies {

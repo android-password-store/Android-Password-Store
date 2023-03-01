@@ -1,7 +1,5 @@
 [versions]
 agp = "7.4.2"
-# 1.8.x is being built against current DP releases
-# noinspection GradleDependency
 androidxActivity = "1.7.0-beta02"
 bouncycastle = "1.72"
 # @keep used for kotlinCompilerExtensionVersion
@@ -14,8 +12,6 @@ leakcanary = "2.10"
 lifecycle = "2.6.0-rc01"
 
 [libraries]
-# 2.x releases for desugar_jdk_libs are weird and broken
-# noinspection GradleDependency
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.2"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
