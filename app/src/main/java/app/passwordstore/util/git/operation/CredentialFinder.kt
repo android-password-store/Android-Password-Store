@@ -29,8 +29,10 @@ import dagger.hilt.components.SingletonComponent
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-class CredentialFinder(val callingActivity: FragmentActivity, val authMode: AuthMode) :
-  InteractivePasswordFinder() {
+class CredentialFinder(
+  private val callingActivity: FragmentActivity,
+  private val authMode: AuthMode,
+) : InteractivePasswordFinder() {
 
   private val hiltEntryPoint =
     EntryPointAccessors.fromApplication(
