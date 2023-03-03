@@ -103,7 +103,7 @@ class GitCommandExecutor(
                     RemoteRefUpdate.Status.UP_TO_DATE -> {
                       withContext(Dispatchers.Main) {
                         Toast.makeText(
-                            activity.applicationContext,
+                            activity,
                             activity.applicationContext.getString(R.string.git_push_up_to_date),
                             Toast.LENGTH_SHORT
                           )
