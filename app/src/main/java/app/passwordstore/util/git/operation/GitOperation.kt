@@ -15,6 +15,7 @@ import app.passwordstore.ui.sshkeygen.SshKeyImportActivity
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Cancelled
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Failure
+import app.passwordstore.util.auth.BiometricAuthenticator.Result.Retry
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Success
 import app.passwordstore.util.git.GitCommandExecutor
 import app.passwordstore.util.git.sshj.SshAuthMethod
@@ -172,7 +173,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                     callingActivity,
                     R.string.biometric_prompt_title_ssh_auth
                   ) { result ->
-                    if (result !is Failure) cont.resume(result)
+                    if (result !is Failure && result !is Retry) cont.resume(result)
                   }
                 }
               }
