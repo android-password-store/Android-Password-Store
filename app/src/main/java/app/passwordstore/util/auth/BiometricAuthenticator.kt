@@ -60,7 +60,7 @@ object BiometricAuthenticator {
       object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
           super.onAuthenticationError(errorCode, errString)
-          logcat(TAG) { "BiometricAuthentication error: errorCode=$errorCode, msg=$errString" }
+          logcat(TAG) { "onAuthenticationError(errorCode=$errorCode, msg=$errString)" }
           callback(
             when (errorCode) {
               BiometricPrompt.ERROR_CANCELED,
@@ -103,11 +103,13 @@ object BiometricAuthenticator {
 
         override fun onAuthenticationFailed() {
           super.onAuthenticationFailed()
+          logcat(TAG) { "onAuthenticationFailed()" }
           callback(Result.Retry)
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
           super.onAuthenticationSucceeded(result)
+          logcat(TAG) { "onAuthenticationSucceeded()" }
           callback(Result.Success(result.cryptoObject))
         }
       }
