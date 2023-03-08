@@ -192,7 +192,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                 // users though, who might deduce that the screen lock
                 // protection is not effective. Hence, we fail with an error.
                 Toast.makeText(
-                    callingActivity.applicationContext,
+                    callingActivity,
                     R.string.biometric_auth_generic_failure,
                     Toast.LENGTH_LONG
                   )

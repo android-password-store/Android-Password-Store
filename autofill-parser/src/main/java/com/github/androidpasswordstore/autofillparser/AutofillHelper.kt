@@ -88,7 +88,7 @@ internal val AssistStructure.ViewNode.webOrigin: String?
     }
 
 @RequiresApi(Build.VERSION_CODES.O)
-public class FixedSaveCallback(context: Context, private val callback: SaveCallback) {
+public class FixedSaveCallback(private val context: Context, private val callback: SaveCallback) {
 
   private val applicationContext = context.applicationContext
 
@@ -98,7 +98,7 @@ public class FixedSaveCallback(context: Context, private val callback: SaveCallb
     // See
     // https://developer.android.com/reference/android/service/autofill/SaveCallback#onFailure(java.lang.CharSequence)
     if (applicationContext.applicationInfo.targetSdkVersion >= 29) {
-      Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+      Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
   }
 
