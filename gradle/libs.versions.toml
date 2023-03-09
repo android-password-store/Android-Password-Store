@@ -9,7 +9,7 @@ flowbinding = "1.2.0"
 hilt = "2.45"
 kotlin = "1.8.10"
 leakcanary = "2.10"
-lifecycle = "2.6.0-rc01"
+lifecycle = "2.6.0"
 
 [libraries]
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.2"
