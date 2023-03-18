@@ -46,15 +46,19 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
   override fun onCreate() {
     super.onCreate()
     instance = this
-    LeakCanary.config =
-      LeakCanary.config.copy(eventListeners = LeakCanary.config.eventListeners + SentryLeakUploader)
+    val eventListeners = LeakCanary.config.eventListeners + SentryLeakUploader
     if (
       BuildConfig.ENABLE_DEBUG_FEATURES ||
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
       LogcatLogger.install(AndroidLogcatLogger(DEBUG))
-      AppWatcher.manualInstall(this)
       setVmPolicy()
+      LeakCanary.config.copy(dumpHeap = true, eventListeners = eventListeners)
+      LeakCanary.showLeakDisplayActivityLauncherIcon(true)
+      AppWatcher.manualInstall(this)
+    } else {
+      LeakCanary.config.copy(dumpHeap = false, eventListeners = eventListeners)
+      LeakCanary.showLeakDisplayActivityLauncherIcon(false)
     }
     prefs.registerOnSharedPreferenceChangeListener(this)
     setNightMode()
