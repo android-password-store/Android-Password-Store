@@ -27,7 +27,6 @@ The source code is split across 12 modules and 1 subproject.
 - `crypto-common` is the foundation of our new, extensible cryptography APIs that adds the ability to introduce new cryptographic backends to APS with minimal effort.
 - `crypto-pgpainless` is the first of our new backends that utilises `crypto-common` to offer PGP cryptography through the [PGPainless](https://gh.pgpainless.org/) library.
 - `format-common` handles parsing the `pass` file format.
-- `format-common-impl` contains the tests for `format-common` and some Android-specific functionality.
 - `passgen/random` contains the default password generator.
 - `passgen/diceware` is our new password generator that implements the [Diceware](https://theworld.com/~reinhold/diceware.html) algorithm.
 - `sentry-stub` contains no-op variants of [Sentry](https://sentry.io/) APIs that we use to ensure the FOSS-only, telemetry-free variant of APS continues to compile in absence of Sentry dependencies.
