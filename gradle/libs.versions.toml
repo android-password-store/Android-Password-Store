@@ -38,7 +38,7 @@ aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embe
 build-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 build-detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0"
 build-diffutils = "io.github.java-diff-utils:java-diff-utils:4.12"
-build-download = "de.undercouch:gradle-download-task:5.3.1"
+build-download = "de.undercouch:gradle-download-task:5.4.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 build-ktfmt = "com.facebook:ktfmt:0.43"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"
