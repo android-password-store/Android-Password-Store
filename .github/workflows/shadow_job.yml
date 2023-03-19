@@ -50,6 +50,7 @@ jobs:
       with:
         arguments: check
         gradle-home-cache-cleanup: true
+        cache-read-only: true
 
   results:
     if: ${{ always() }}
