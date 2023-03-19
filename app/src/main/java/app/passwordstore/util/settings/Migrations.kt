@@ -31,7 +31,7 @@ fun runMigrations(filesDirPath: String, sharedPrefs: SharedPreferences, gitSetti
 }
 
 fun removeCurrentBranchValue(sharedPrefs: SharedPreferences) {
-  if (sharedPrefs.contains(PreferenceKeys.GIT_BRANCH_NAME)) {
+  if (!sharedPrefs.contains(PreferenceKeys.GIT_BRANCH_NAME)) {
     return
   }
   logcat(TAG, INFO) { "Deleting now unused branch name preference" }
