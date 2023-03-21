@@ -5,16 +5,18 @@
 
 package app.passwordstore.gradle.crowdin
 
+import org.gradle.api.provider.Property
+
 /** Extension for configuring [CrowdinDownloadPlugin] */
 interface CrowdinExtension {
 
   /** Configure the project name on Crowdin */
-  var projectName: String
+  val crowdinIdentifier: Property<String>
 
   /**
    * Don't delete downloaded and extracted translation archives from build directory.
    *
    * Useful for debugging.
    */
-  var skipCleanup: Boolean
+  val skipCleanup: Property<Boolean>
 }

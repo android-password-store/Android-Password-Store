@@ -16,7 +16,7 @@ plugins {
 }
 
 crowdin {
-  projectName = "android-password-store"
+  crowdinIdentifier = "android-password-store"
   skipCleanup = false
 }
 
