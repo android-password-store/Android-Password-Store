@@ -18,7 +18,6 @@ tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
     jvmTarget = JavaVersion.VERSION_11.toString()
     freeCompilerArgs = freeCompilerArgs + listOf(
-      "-Xsam-conversions=class",
       "-opt-in=kotlin.RequiresOptIn",
     )
   }
