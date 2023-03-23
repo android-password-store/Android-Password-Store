@@ -58,6 +58,7 @@ jobs:
         DEP_OVERRIDE_agp: ${{ matrix.agp-version }}
       with:
         arguments: check
+        gradle-version: ${{ matrix.gradle-version }}
         gradle-home-cache-cleanup: true
         cache-read-only: true
 
