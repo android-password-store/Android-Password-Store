@@ -19,7 +19,7 @@ jobs:
         run: echo 'agp-versions=["${{ steps.agp-version-finder.outputs.latest-stable }}", "${{ steps.agp-version-finder.outputs.latest-beta }}","${{ steps.agp-version-finder.outputs.latest-alpha }}"]' >> $GITHUB_OUTPUT
 
   shadow-job:
-    needs: [provide-agp-versions]
+    needs: [provide-agp-version-matrix]
     strategy:
       fail-fast: false
       matrix:
