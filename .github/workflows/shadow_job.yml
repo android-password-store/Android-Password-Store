@@ -8,14 +8,22 @@ env:
 
 name: Shadow job
 jobs:
+  provide-agp-version-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      agp-versions: ${{ steps.build-agp-matrix.outputs.agp-versions }}
+    steps:
+      - id: agp-version-finder
+        uses: usefulness/agp-version-finder-action@v1
+      - id: build-agp-matrix
+        run: echo 'agp-versions=["${{ steps.agp-version-finder.outputs.latest-stable }}", "${{ steps.agp-version-finder.outputs.latest-beta }}","${{ steps.agp-version-finder.outputs.latest-alpha }}"]' >> $GITHUB_OUTPUT
+
   shadow-job:
+    needs: [provide-agp-versions]
     strategy:
       fail-fast: false
       matrix:
-        agp-version:
-          - 7.4.2
-          - 8.0.0-beta03
-          - 8.1.0-alpha07
+        agp-version: ${{ fromJSON(needs.provide-agp-version-matrix.outputs.agp-versions) }}
         gradle-version:
           - wrapper
           - release-nightly
@@ -23,6 +31,7 @@ jobs:
         java-version:
           - 18
     runs-on: ubuntu-latest
+    name: Run Gradle-${{ matrix.gradle-version }}, AGP-${{ matrix.agp-version }}, Java-${{ matrix.java-version }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
