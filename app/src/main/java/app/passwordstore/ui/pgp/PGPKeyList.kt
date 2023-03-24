@@ -45,7 +45,7 @@ fun KeyList(
         painter = painterResource(id = R.drawable.ic_launcher_foreground),
         contentDescription = "Password Store logo"
       )
-      Text("Import a key using the add button below")
+      Text(stringResource(R.string.pgp_key_manager_no_keys_guidance))
     }
   } else {
     LazyColumn(modifier = modifier) {
