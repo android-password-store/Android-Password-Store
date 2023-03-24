@@ -53,12 +53,11 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     ) {
       LogcatLogger.install(AndroidLogcatLogger(DEBUG))
       setVmPolicy()
+      AppWatcher.manualInstall(this)
       LeakCanary.config.copy(dumpHeap = true, eventListeners = eventListeners)
       LeakCanary.showLeakDisplayActivityLauncherIcon(true)
-      AppWatcher.manualInstall(this)
     } else {
       LeakCanary.config.copy(dumpHeap = false, eventListeners = eventListeners)
-      LeakCanary.showLeakDisplayActivityLauncherIcon(false)
     }
     prefs.registerOnSharedPreferenceChangeListener(this)
     setNightMode()
