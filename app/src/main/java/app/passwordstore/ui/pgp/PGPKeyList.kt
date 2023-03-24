@@ -1,7 +1,10 @@
 package app.passwordstore.ui.pgp
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.ui.compose.theme.APSThemePreview
 
 @Composable
 fun KeyList(
@@ -31,8 +35,24 @@ fun KeyList(
   onItemClick: (identifier: GpgIdentifier) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  LazyColumn(modifier = modifier) {
-    items(identifiers) { identifier -> KeyItem(identifier = identifier, onItemClick = onItemClick) }
+  if (identifiers.isEmpty()) {
+    Column(
+      modifier = modifier.fillMaxSize(),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      Image(
+        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+        contentDescription = "Password Store logo"
+      )
+      Text("Import a key using the add button below")
+    }
+  } else {
+    LazyColumn(modifier = modifier) {
+      items(identifiers) { identifier ->
+        KeyItem(identifier = identifier, onItemClick = onItemClick)
+      }
+    }
   }
 }
 
@@ -97,12 +117,20 @@ private inline fun DeleteConfirmationDialog(
 @Preview
 @Composable
 private fun KeyListPreview() {
-  KeyList(
-    identifiers =
-      listOfNotNull(
-        GpgIdentifier.fromString("john.doe@example.com"),
-        GpgIdentifier.fromString("0xB950AE2813841585")
-      ),
-    onItemClick = {}
-  )
+  APSThemePreview {
+    KeyList(
+      identifiers =
+        listOfNotNull(
+          GpgIdentifier.fromString("john.doe@example.com"),
+          GpgIdentifier.fromString("0xB950AE2813841585")
+        ),
+      onItemClick = {}
+    )
+  }
+}
+
+@Preview
+@Composable
+fun EmptyKeyListPreview() {
+  APSThemePreview { KeyList(identifiers = emptyList(), onItemClick = {}) }
 }
