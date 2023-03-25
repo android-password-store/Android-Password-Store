@@ -13,6 +13,7 @@ import app.passwordstore.crypto.PGPKeyManager
 import app.passwordstore.crypto.PGPainlessCryptoHandler
 import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.injection.prefs.SettingsPreferences
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getAll
@@ -20,7 +21,6 @@ import com.github.michaelbull.result.unwrap
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CryptoRepository
@@ -28,6 +28,7 @@ class CryptoRepository
 constructor(
   private val pgpKeyManager: PGPKeyManager,
   private val pgpCryptoHandler: PGPainlessCryptoHandler,
+  private val dispatcherProvider: DispatcherProvider,
   @SettingsPreferences private val settings: SharedPreferences,
 ) {
 
@@ -35,13 +36,13 @@ constructor(
     password: String,
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
-  ) = withContext(Dispatchers.IO) { decryptPgp(password, message, out) }
+  ) = withContext(dispatcherProvider.io()) { decryptPgp(password, message, out) }
 
   suspend fun encrypt(
     identities: List<GpgIdentifier>,
     content: ByteArrayInputStream,
     out: ByteArrayOutputStream,
-  ) = withContext(Dispatchers.IO) { encryptPgp(identities, content, out) }
+  ) = withContext(dispatcherProvider.io()) { encryptPgp(identities, content, out) }
 
   private suspend fun decryptPgp(
     password: String,
