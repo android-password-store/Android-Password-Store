@@ -7,7 +7,6 @@ package app.passwordstore.crypto
 
 import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.crypto.errors.IncorrectPassphraseException
-import app.passwordstore.crypto.errors.NoKeysProvided
 import app.passwordstore.crypto.errors.UnknownError
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
@@ -38,7 +37,7 @@ public class PGPainlessCryptoHandler @Inject constructor() :
     options: PGPDecryptOptions,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
+        require(keys.isNotEmpty())
         val keyringCollection =
           keys
             .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
@@ -68,7 +67,7 @@ public class PGPainlessCryptoHandler @Inject constructor() :
     options: PGPEncryptOptions,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        if (keys.isEmpty()) throw NoKeysProvided("No keys provided for encryption")
+        require(keys.isNotEmpty())
         val publicKeyRings =
           keys.mapNotNull(KeyUtils::tryParseKeyring).mapNotNull { keyRing ->
             when (keyRing) {

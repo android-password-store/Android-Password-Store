@@ -37,8 +37,5 @@ public sealed class CryptoHandlerException(message: String? = null, cause: Throw
 /** The passphrase provided for decryption was incorrect. */
 public class IncorrectPassphraseException(cause: Throwable) : CryptoHandlerException(null, cause)
 
-/** No keys were provided for encryption. */
-public class NoKeysProvided(message: String?) : CryptoHandlerException(message, null)
-
 /** An unexpected error that cannot be mapped to a known type. */
 public class UnknownError(cause: Throwable) : CryptoHandlerException(null, cause)
