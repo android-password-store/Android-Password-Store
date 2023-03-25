@@ -242,7 +242,10 @@ class GitServerConfigActivity : BaseGitActivity() {
                     message = getString(R.string.delete_directory_progress_text),
                     length = Snackbar.LENGTH_INDEFINITE
                   )
-                withContext(Dispatchers.IO) { localDir.deleteRecursively() }
+                withContext(Dispatchers.IO) {
+                  localDir.deleteRecursively()
+                  localDir.mkdirs()
+                }
                 snackbar.dismiss()
                 launchGitOperation(GitOp.CLONE)
                   .fold(

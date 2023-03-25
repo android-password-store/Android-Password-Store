@@ -162,8 +162,11 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
             .setCancelable(false)
             .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
               runCatching {
-                  PasswordRepository.getRepositoryDirectory().deleteRecursively()
                   PasswordRepository.closeRepository()
+                  PasswordRepository.getRepositoryDirectory().let { dir ->
+                    dir.deleteRecursively()
+                    dir.mkdirs()
+                  }
                 }
                 .onFailure { it.message?.let { message -> activity.snackbar(message = message) } }
 
