@@ -42,7 +42,7 @@
   <!-- Git Handler -->
   <string name="ssh_preferences_dialog_text">Bitte importieren oder generieren Sie Ihre SSH-Schlüsseldatei in den Einstellungen</string>
   <string name="ssh_preferences_dialog_title">Kein SSH-Key angegeben</string>
-  <string name="ssh_preferences_dialog_import">Importieren</string>
+  <string name="button_label_import">Importieren</string>
   <string name="ssh_preferences_dialog_generate">Generieren</string>
   <string name="passphrase_dialog_title">Authentifizieren</string>
   <string name="passphrase_dialog_text">Bitte setze ein Passwort für deinen SSH-Key. Lasse das Feld leer, wenn kein Passwort vergeben werden soll.</string>

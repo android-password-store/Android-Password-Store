@@ -45,7 +45,7 @@
   <!-- Git Handler -->
   <string name="ssh_preferences_dialog_text">请在首选项中导入或生成您的SSH密钥文件</string>
   <string name="ssh_preferences_dialog_title">没有SSH密钥</string>
-  <string name="ssh_preferences_dialog_import">导入</string>
+  <string name="button_label_import">导入</string>
   <string name="ssh_preferences_dialog_generate">生成</string>
   <string name="passphrase_dialog_title">认证</string>
   <string name="passphrase_dialog_text">请提供您的SSH密钥的密码</string>

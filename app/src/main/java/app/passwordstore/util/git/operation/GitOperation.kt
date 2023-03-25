@@ -144,9 +144,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     MaterialAlertDialogBuilder(callingActivity)
       .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
       .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
-      .setPositiveButton(
-        callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)
-      ) { _, _ ->
+      .setPositiveButton(callingActivity.resources.getString(R.string.button_label_import)) { _, _
+        ->
         getSshKey(false)
       }
       .setNegativeButton(

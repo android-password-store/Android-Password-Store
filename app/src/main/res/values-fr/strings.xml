@@ -46,7 +46,7 @@
   <!-- Git Handler -->
   <string name="ssh_preferences_dialog_text">Vous devez importer ou générer votre fichier de clef SSH dans les préférences</string>
   <string name="ssh_preferences_dialog_title">Absence de clef SSH</string>
-  <string name="ssh_preferences_dialog_import">Importer</string>
+  <string name="button_label_import">Importer</string>
   <string name="ssh_preferences_dialog_generate">Générer</string>
   <string name="passphrase_dialog_title">Authentification</string>
   <string name="passphrase_dialog_text">Saisissez le mot de passe associé à votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>

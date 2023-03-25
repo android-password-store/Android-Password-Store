@@ -46,7 +46,7 @@
   <!-- Git Handler -->
   <string name="ssh_preferences_dialog_text">Sei pregato di importare o generare il tuo file della chiave SSH nelle preferenze</string>
   <string name="ssh_preferences_dialog_title">Nessuna chiave SSH</string>
-  <string name="ssh_preferences_dialog_import">Importa</string>
+  <string name="button_label_import">Importa</string>
   <string name="ssh_preferences_dialog_generate">Genera</string>
   <string name="passphrase_dialog_title">Autentica</string>
   <string name="passphrase_dialog_text">Sei pregato di fornire una frase segreta per la tua chiave SSH</string>

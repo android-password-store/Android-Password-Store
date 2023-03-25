@@ -50,7 +50,7 @@
   <!-- Git Handler -->
   <string name="ssh_preferences_dialog_text">Пожалуйста, импортируйте или сгенерируйте новый SSH ключ в настройках</string>
   <string name="ssh_preferences_dialog_title">Нет SSH ключа</string>
-  <string name="ssh_preferences_dialog_import">Импортировать</string>
+  <string name="button_label_import">Импортировать</string>
   <string name="ssh_preferences_dialog_generate">Сгенерировать</string>
   <string name="passphrase_dialog_title">Авторизоваться</string>
   <string name="passphrase_dialog_text">Пожалуйста, введите пароль от SSH ключа. Оставьте поле пустым, если пароль отсутствует.</string>

@@ -45,7 +45,7 @@
   <!-- Git Handler -->
   <string name="ssh_preferences_dialog_text">Zaimportuj lub wygeneruj plik klucza SSH w preferencjach</string>
   <string name="ssh_preferences_dialog_title">Brak klucza SSH</string>
-  <string name="ssh_preferences_dialog_import">Importuj</string>
+  <string name="button_label_import">Importuj</string>
   <string name="ssh_preferences_dialog_generate">Wygeneruj</string>
   <string name="passphrase_dialog_title">Uwierzytelnij</string>
   <string name="passphrase_dialog_text">Podaj hasło dla klucza SSH</string>
