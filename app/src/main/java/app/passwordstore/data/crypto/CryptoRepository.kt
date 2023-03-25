@@ -17,6 +17,7 @@ import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getAll
+import com.github.michaelbull.result.mapBoth
 import com.github.michaelbull.result.unwrap
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -31,6 +32,12 @@ constructor(
   private val dispatcherProvider: DispatcherProvider,
   @SettingsPreferences private val settings: SharedPreferences,
 ) {
+
+  suspend fun hasKeys(): Boolean {
+    return withContext(dispatcherProvider.io()) {
+      pgpKeyManager.getAllKeys().mapBoth(success = { it.isNotEmpty() }, failure = { false })
+    }
+  }
 
   suspend fun decrypt(
     password: String,

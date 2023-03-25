@@ -25,7 +25,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.crypto.GpgIdentifier
-import app.passwordstore.data.crypto.CryptoRepository
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.databinding.PasswordCreationActivityBinding
@@ -71,7 +70,6 @@ class PasswordCreationActivity : BasePgpActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-  @Inject lateinit var repository: CryptoRepository
 
   private val suggestedName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
   private val suggestedPass by unsafeLazy { intent.getStringExtra(EXTRA_PASSWORD) }
@@ -268,11 +266,11 @@ class PasswordCreationActivity : BasePgpActivity() {
       }
       R.id.save_password -> {
         copy = false
-        encrypt()
+        requireKeysExist { encrypt() }
       }
       R.id.save_and_copy_password -> {
         copy = true
-        encrypt()
+        requireKeysExist { encrypt() }
       }
       else -> return super.onOptionsItemSelected(item)
     }

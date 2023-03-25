@@ -12,10 +12,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import app.passwordstore.data.crypto.CryptoRepository
 import app.passwordstore.data.passfile.PasswordEntry
+import app.passwordstore.ui.crypto.BasePgpActivity
 import app.passwordstore.ui.crypto.PasswordDialog
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
@@ -40,7 +39,7 @@ import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
-class AutofillDecryptActivity : AppCompatActivity() {
+class AutofillDecryptActivity : BasePgpActivity() {
 
   companion object {
 
@@ -78,7 +77,6 @@ class AutofillDecryptActivity : AppCompatActivity() {
   }
 
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-  @Inject lateinit var repository: CryptoRepository
 
   private lateinit var directoryStructure: DirectoryStructure
 
@@ -102,17 +100,19 @@ class AutofillDecryptActivity : AppCompatActivity() {
     val action = if (isSearchAction) AutofillAction.Search else AutofillAction.Match
     directoryStructure = AutofillPreferences.directoryStructure(this)
     logcat { action.toString() }
-    val dialog = PasswordDialog()
-    lifecycleScope.launch {
-      withContext(Dispatchers.Main) {
-        dialog.password.collectLatest { value ->
-          if (value != null) {
-            decrypt(File(filePath), clientState, action, value)
+    requireKeysExist {
+      val dialog = PasswordDialog()
+      lifecycleScope.launch {
+        withContext(Dispatchers.Main) {
+          dialog.password.collectLatest { value ->
+            if (value != null) {
+              decrypt(File(filePath), clientState, action, value)
+            }
           }
         }
       }
+      dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     }
-    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
   private suspend fun decrypt(

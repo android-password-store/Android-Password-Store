@@ -11,12 +11,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
-import app.passwordstore.data.crypto.CryptoRepository
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
 import app.passwordstore.ui.adapters.FieldItemAdapter
-import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
@@ -48,8 +46,6 @@ class DecryptActivity : BasePgpActivity() {
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-  @Inject lateinit var repository: CryptoRepository
-  @Inject lateinit var dispatcherProvider: DispatcherProvider
 
   private var passwordEntry: PasswordEntry? = null
   private var retries = 0
@@ -67,7 +63,7 @@ class DecryptActivity : BasePgpActivity() {
         true
       }
     }
-    askPassphrase(isError = false)
+    requireKeysExist { askPassphrase(isError = false) }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
