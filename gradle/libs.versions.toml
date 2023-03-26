@@ -43,6 +43,8 @@ build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.r
 build-ktfmt = "com.facebook:ktfmt:0.43"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.25.1"
 build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.3"
+build-moshi = "com.squareup.moshi:moshi:1.14.0"
+build-moshi-kotlin = "com.squareup.moshi:moshi-kotlin:1.14.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.10.0"
 build-r8 = "com.android.tools:r8:8.0.34"
 build-semver = "com.vdurmont:semver4j:3.1.0"

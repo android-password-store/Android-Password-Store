@@ -13,11 +13,6 @@ import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.register
 
-private const val EXCEPTION_MESSAGE =
-  """Applying `crowdin-plugin` requires a projectName to be configured via the "crowdin" extension."""
-private const val CROWDIN_BUILD_API_URL =
-  "https://api.crowdin.com/api/project/%s/export?login=%s&account-key=%s"
-
 @Suppress("Unused")
 class CrowdinDownloadPlugin : Plugin<Project> {
 

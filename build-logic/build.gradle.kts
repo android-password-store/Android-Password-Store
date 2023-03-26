@@ -98,6 +98,8 @@ dependencies {
   implementation(libs.build.ktfmt)
   implementation(libs.build.mavenpublish)
   implementation(libs.build.metalava)
+  implementation(libs.build.moshi)
+  implementation(libs.build.moshi.kotlin)
   implementation(libs.build.okhttp)
   implementation(libs.build.r8)
   implementation(libs.build.semver)

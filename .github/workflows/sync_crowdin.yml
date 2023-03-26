@@ -25,7 +25,6 @@ jobs:
         env:
           CROWDIN_LOGIN: ${{ secrets.CROWDIN_LOGIN }}
           CROWDIN_PROJECT_KEY: ${{ secrets.CROWDIN_PROJECT_KEY }}
-          CROWDIN_PROJECT_IDENTIFIER: ${{ secrets.CROWDIN_PROJECT_IDENTIFIER }}
 
       - name: Check if PR is required
         run: if [[ $(git status -s) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
