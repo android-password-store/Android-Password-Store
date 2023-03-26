@@ -275,6 +275,7 @@ personal.com</string>
   <string name="add_otp">添加 OTP</string>
   <string name="otp_import_success">导入TOTP配置成功</string>
   <string name="otp_import_failure_generic">导入TOTP配置失败</string>
+  <string name="otp_import_failure_no_selection">没有选择镜像文件</string>
   <string name="exporting_passwords">正在导出密码…</string>
   <string name="invalid_gpg_id">找到了 .gpg-id，但它包含无效的密钥ID、指纹或用户ID</string>
   <string name="invalid_filename_text">文件名不能包含\'/\'</string>
@@ -313,6 +314,7 @@ GPG
   <string name="git_scheme_disallowed_title">不鼓励使用 git:// 协议</string>
   <string name="git_scheme_disallowed_message">Git-daemon 提供的 git 协议不执行传输加密，不适合安全操作。</string>
   <!-- Proxy configuration activity -->
+  <string name="activity_proxy_label">代理设置</string>
   <string name="proxy_hostname">代理主机名</string>
   <string name="port">端口</string>
   <string name="pref_edit_proxy_settings">HTTP(S) 代理设置</string>
@@ -337,4 +339,7 @@ GPG
   <string name="activity_label_pgp_key_manager">PGP 密钥管理器</string>
   <string name="pgp_key_manager_delete_confirmation_dialog_title">删除密钥？</string>
   <string name="git_utils_reset_remote_branch_title">远程分支名称</string>
+  <string name="pgp_key_manager_no_keys_guidance">使用下面的添加按钮导入密钥</string>
+  <string name="no_keys_imported_dialog_title">未导入密钥</string>
+  <string name="no_keys_imported_dialog_message">应用中还没有导入PGP密钥，按下下面的按钮选择一个密钥文件</string>
 </resources>
