@@ -178,6 +178,9 @@ public sealed class AutofillScenario<out T : Any> {
   public val hasFieldsToSave: Boolean
     get() = fieldsToSave.isNotEmpty()
 
+  @Suppress(
+    "ConvertArgumentToSet"
+  ) // This is a single item List, Set conversion only adds overhead.
   public val hasPasswordFieldsToSave: Boolean
     get() = fieldsToSave.minus(listOfNotNull(username)).isNotEmpty()
 
