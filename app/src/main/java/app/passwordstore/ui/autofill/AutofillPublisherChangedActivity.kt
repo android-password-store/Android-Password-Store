@@ -17,6 +17,7 @@ import android.text.format.DateUtils
 import android.view.View
 import android.view.autofill.AutofillManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.IntentCompat
 import app.passwordstore.R
 import app.passwordstore.databinding.ActivityOreoAutofillPublisherChangedBinding
 import app.passwordstore.util.autofill.AutofillMatcher
@@ -24,7 +25,6 @@ import app.passwordstore.util.autofill.AutofillPublisherChangedException
 import app.passwordstore.util.extensions.asLog
 import app.passwordstore.util.extensions.getApplicationInfoCompat
 import app.passwordstore.util.extensions.getPackageInfoCompat
-import app.passwordstore.util.extensions.getParcelableExtraCompat
 import app.passwordstore.util.extensions.viewBinding
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import com.github.androidpasswordstore.autofillparser.computeCertificatesHash
@@ -97,7 +97,11 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
           FormOrigin.App(appPackage)
         )
         val fillResponse =
-          intent.getParcelableExtraCompat<FillResponse>(EXTRA_FILL_RESPONSE_AFTER_RESET)
+          IntentCompat.getParcelableExtra(
+            intent,
+            EXTRA_FILL_RESPONSE_AFTER_RESET,
+            FillResponse::class.java
+          )
         setResult(
           RESULT_OK,
           Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse) }

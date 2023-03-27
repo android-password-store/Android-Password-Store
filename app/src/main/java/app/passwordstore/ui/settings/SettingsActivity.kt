@@ -8,9 +8,9 @@ package app.passwordstore.ui.settings
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BundleCompat
 import app.passwordstore.R
 import app.passwordstore.databinding.ActivityPreferenceRecyclerviewBinding
-import app.passwordstore.util.extensions.getParcelableCompat
 import app.passwordstore.util.extensions.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.Maxr1998.modernpreferences.Preference
@@ -84,9 +84,14 @@ class SettingsActivity : AppCompatActivity() {
             getString(subScreen.titleRes)
           }
       }
-    savedInstanceState
-      ?.getParcelableCompat<PreferencesAdapter.SavedState>("adapter")
-      ?.let(adapter::loadSavedState)
+    if (savedInstanceState != null) {
+      BundleCompat.getParcelable(
+          savedInstanceState,
+          "adapter",
+          PreferencesAdapter.SavedState::class.java
+        )
+        ?.let(adapter::loadSavedState)
+    }
     binding.preferenceRecyclerView.adapter = adapter
   }
 

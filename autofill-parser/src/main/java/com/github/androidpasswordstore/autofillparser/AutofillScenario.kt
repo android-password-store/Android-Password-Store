@@ -7,12 +7,12 @@ package com.github.androidpasswordstore.autofillparser
 import android.app.assist.AssistStructure
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.service.autofill.Dataset
 import android.service.autofill.Field
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import androidx.annotation.RequiresApi
+import androidx.core.os.BundleCompat
 import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
@@ -57,18 +57,36 @@ public sealed class AutofillScenario<out T : Any> {
       return try {
         Builder<AutofillId>()
           .apply {
-            username = clientState.getParcelableCompat(BUNDLE_KEY_USERNAME_ID)
+            username =
+              BundleCompat.getParcelable(
+                clientState,
+                BUNDLE_KEY_USERNAME_ID,
+                AutofillId::class.java
+              )
             fillUsername = clientState.getBoolean(BUNDLE_KEY_FILL_USERNAME)
-            otp = clientState.getParcelableCompat(BUNDLE_KEY_OTP_ID)
+            otp = BundleCompat.getParcelable(clientState, BUNDLE_KEY_OTP_ID, AutofillId::class.java)
             currentPassword.addAll(
-              clientState.getParcelableArrayListCompat(BUNDLE_KEY_CURRENT_PASSWORD_IDS)
+              BundleCompat.getParcelableArrayList(
+                clientState,
+                BUNDLE_KEY_CURRENT_PASSWORD_IDS,
+                AutofillId::class.java
+              )
                 ?: emptyList()
             )
             newPassword.addAll(
-              clientState.getParcelableArrayListCompat(BUNDLE_KEY_NEW_PASSWORD_IDS) ?: emptyList()
+              BundleCompat.getParcelableArrayList(
+                clientState,
+                BUNDLE_KEY_NEW_PASSWORD_IDS,
+                AutofillId::class.java
+              )
+                ?: emptyList()
             )
             genericPassword.addAll(
-              clientState.getParcelableArrayListCompat(BUNDLE_KEY_GENERIC_PASSWORD_IDS)
+              BundleCompat.getParcelableArrayList(
+                clientState,
+                BUNDLE_KEY_GENERIC_PASSWORD_IDS,
+                AutofillId::class.java
+              )
                 ?: emptyList()
             )
           }
@@ -76,24 +94,6 @@ public sealed class AutofillScenario<out T : Any> {
       } catch (e: Throwable) {
         logcat(ERROR) { e.asLog() }
         null
-      }
-    }
-
-    private inline fun <reified T> Bundle.getParcelableCompat(key: String): T? {
-      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getParcelable(key, T::class.java)
-      } else {
-        @Suppress("DEPRECATION") getParcelable(key)
-      }
-    }
-
-    private inline fun <reified T : Parcelable> Bundle.getParcelableArrayListCompat(
-      key: String
-    ): ArrayList<T>? {
-      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getParcelableArrayList(key, T::class.java)
-      } else {
-        @Suppress("DEPRECATION") getParcelableArrayList(key)
       }
     }
   }
