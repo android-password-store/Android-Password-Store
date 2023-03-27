@@ -334,4 +334,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="activity_label_pgp_key_manager">Xestor de Chaves PGP</string>
   <string name="pgp_key_manager_delete_confirmation_dialog_title">Eliminar chave?</string>
   <string name="git_utils_reset_remote_branch_title">Nome da rama remota</string>
+  <string name="pgp_key_manager_no_keys_guidance">Importar unha chave usando o botón inferior Engadir</string>
+  <string name="no_keys_imported_dialog_title">Non se importaron chaves</string>
+  <string name="no_keys_imported_dialog_message">Aínda non hai chaves PGP importadas na app, preme no botón inferior para seleccionar un ficheiro de chave</string>
 </resources>
