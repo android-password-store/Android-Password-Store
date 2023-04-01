@@ -1,11 +1,11 @@
-package dev.msfjarvis.aps.ssh.utils
+package app.passwordstore.ssh.utils
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import dev.msfjarvis.aps.ssh.utils.Constants.KEYSTORE_ALIAS
+import app.passwordstore.ssh.utils.Constants.KEYSTORE_ALIAS
 import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.PublicKey

@@ -1,4 +1,4 @@
-package dev.msfjarvis.aps.ssh.utils
+package app.passwordstore.ssh.utils
 
 import android.content.Context
 import androidx.security.crypto.EncryptedFile

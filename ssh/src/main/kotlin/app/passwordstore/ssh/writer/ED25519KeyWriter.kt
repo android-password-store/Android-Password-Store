@@ -1,9 +1,9 @@
-package dev.msfjarvis.aps.ssh.writer
+package app.passwordstore.ssh.writer
 
 import android.content.Context
-import dev.msfjarvis.aps.ssh.SSHKey
-import dev.msfjarvis.aps.ssh.utils.SSHKeyUtils.getOrCreateWrappedPrivateKeyFile
-import dev.msfjarvis.aps.ssh.utils.createStringPublicKey
+import app.passwordstore.ssh.SSHKey
+import app.passwordstore.ssh.utils.SSHKeyUtils.getOrCreateWrappedPrivateKeyFile
+import app.passwordstore.ssh.utils.createStringPublicKey
 import java.io.File
 import java.security.KeyPair
 import java.security.PrivateKey

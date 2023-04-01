@@ -1,4 +1,4 @@
-package dev.msfjarvis.aps.ssh
+package app.passwordstore.ssh
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -7,21 +7,21 @@ import android.os.Build
 import android.provider.OpenableColumns
 import android.security.keystore.KeyInfo
 import androidx.core.content.edit
-import dev.msfjarvis.aps.ssh.generator.ECDSAKeyGenerator
-import dev.msfjarvis.aps.ssh.generator.ED25519KeyGenerator
-import dev.msfjarvis.aps.ssh.generator.RSAKeyGenerator
-import dev.msfjarvis.aps.ssh.provider.KeystoreNativeKeyProvider
-import dev.msfjarvis.aps.ssh.provider.KeystoreWrappedEd25519KeyProvider
-import dev.msfjarvis.aps.ssh.utils.Constants
-import dev.msfjarvis.aps.ssh.utils.Constants.ANDROIDX_SECURITY_KEYSET_PREF_NAME
-import dev.msfjarvis.aps.ssh.utils.Constants.KEYSTORE_ALIAS
-import dev.msfjarvis.aps.ssh.utils.Constants.PROVIDER_ANDROID_KEY_STORE
-import dev.msfjarvis.aps.ssh.utils.SSHKeyUtils
-import dev.msfjarvis.aps.ssh.utils.getEncryptedGitPrefs
-import dev.msfjarvis.aps.ssh.utils.sharedPrefs
-import dev.msfjarvis.aps.ssh.writer.ED25519KeyWriter
-import dev.msfjarvis.aps.ssh.writer.ImportedKeyWriter
-import dev.msfjarvis.aps.ssh.writer.KeystoreNativeKeyWriter
+import app.passwordstore.ssh.generator.ECDSAKeyGenerator
+import app.passwordstore.ssh.generator.ED25519KeyGenerator
+import app.passwordstore.ssh.generator.RSAKeyGenerator
+import app.passwordstore.ssh.provider.KeystoreNativeKeyProvider
+import app.passwordstore.ssh.provider.KeystoreWrappedEd25519KeyProvider
+import app.passwordstore.ssh.utils.Constants
+import app.passwordstore.ssh.utils.Constants.ANDROIDX_SECURITY_KEYSET_PREF_NAME
+import app.passwordstore.ssh.utils.Constants.KEYSTORE_ALIAS
+import app.passwordstore.ssh.utils.Constants.PROVIDER_ANDROID_KEY_STORE
+import app.passwordstore.ssh.utils.SSHKeyUtils
+import app.passwordstore.ssh.utils.getEncryptedGitPrefs
+import app.passwordstore.ssh.utils.sharedPrefs
+import app.passwordstore.ssh.writer.ED25519KeyWriter
+import app.passwordstore.ssh.writer.ImportedKeyWriter
+import app.passwordstore.ssh.writer.KeystoreNativeKeyWriter
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -72,27 +72,41 @@ public class SSHKeyManager(private val applicationContext: Context) {
     }
   }
 
-  public fun canShowPublicKey(): Boolean = runCatching { keyType() in listOf(SSHKeyType.LegacyGenerated, SSHKeyType.KeystoreNative, SSHKeyType.KeystoreWrappedEd25519) }.getOrElse { false }
+  public fun canShowPublicKey(): Boolean =
+    runCatching {
+        keyType() in
+          listOf(
+            SSHKeyType.LegacyGenerated,
+            SSHKeyType.KeystoreNative,
+            SSHKeyType.KeystoreWrappedEd25519
+          )
+      }
+      .getOrElse { false }
 
-  public fun publicKey(): String? = runCatching { createNewSSHKey(keyType = keyType()).publicKey.readText() }.getOrElse { return null }
+  public fun publicKey(): String? =
+    runCatching { createNewSSHKey(keyType = keyType()).publicKey.readText() }
+      .getOrElse {
+        return null
+      }
 
   public fun needsAuthentication(): Boolean {
     return runCatching {
-      val keyType = keyType()
-      if (keyType == SSHKeyType.KeystoreNative || keyType == SSHKeyType.KeystoreWrappedEd25519) return false
+        val keyType = keyType()
+        if (keyType == SSHKeyType.KeystoreNative || keyType == SSHKeyType.KeystoreWrappedEd25519)
+          return false
 
-      when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
-        is PrivateKey -> {
-          val factory = KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
-          return factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
+        when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
+          is PrivateKey -> {
+            val factory = KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
+            return factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
+          }
+          is SecretKey -> {
+            val factory = SecretKeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
+            (factory.getKeySpec(key, KeyInfo::class.java) as KeyInfo).isUserAuthenticationRequired
+          }
+          else -> throw IllegalStateException("SSH key does not exist in Keystore")
         }
-        is SecretKey -> {
-          val factory = SecretKeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
-          (factory.getKeySpec(key, KeyInfo::class.java) as KeyInfo).isUserAuthenticationRequired
-        }
-        else -> throw IllegalStateException("SSH key does not exist in Keystore")
       }
-    }
       .getOrElse { error ->
         // It is fine to swallow the exception here since it will reappear when the key
         // is used for SSH authentication and can then be shown in the UI.
@@ -204,9 +218,13 @@ public class SSHKeyManager(private val applicationContext: Context) {
       .getSharedPreferences(ANDROIDX_SECURITY_KEYSET_PREF_NAME, Context.MODE_PRIVATE)
       .edit { clear() }
 
-    // If there's no keyType(), we'll just use SSHKeyType.Imported, since they key is going to be deleted, it does not really matter what the key type is.
+    // If there's no keyType(), we'll just use SSHKeyType.Imported, since they key is going to be
+    // deleted, it does not really matter what the key type is.
     // The other way to handle this is to return if the keyType() throws an exception.
-    val sshKey = kotlin.runCatching { createNewSSHKey(keyType = keyType()) }.getOrElse { createNewSSHKey(keyType = SSHKeyType.Imported) }
+    val sshKey =
+      kotlin
+        .runCatching { createNewSSHKey(keyType = keyType()) }
+        .getOrElse { createNewSSHKey(keyType = SSHKeyType.Imported) }
     if (sshKey.privateKey.isFile) {
       sshKey.privateKey.delete()
     }
@@ -217,20 +235,20 @@ public class SSHKeyManager(private val applicationContext: Context) {
     clearSSHKeyPreferences()
   }
 
-  public fun keyProvider(
-    client: SSHClient,
-    passphraseFinder: PasswordFinder
-  ): KeyProvider? {
+  public fun keyProvider(client: SSHClient, passphraseFinder: PasswordFinder): KeyProvider? {
     val sshKeyFile =
       kotlin
         .runCatching { createNewSSHKey(keyType = keyType()) }
-        .getOrElse { return null }
+        .getOrElse {
+          return null
+        }
 
     return when (sshKeyFile.type) {
       SSHKeyType.LegacyGenerated,
       SSHKeyType.Imported -> client.loadKeys(sshKeyFile.privateKey.absolutePath, passphraseFinder)
       SSHKeyType.KeystoreNative -> KeystoreNativeKeyProvider(androidKeystore)
-      SSHKeyType.KeystoreWrappedEd25519 -> KeystoreWrappedEd25519KeyProvider(applicationContext, sshKeyFile)
+      SSHKeyType.KeystoreWrappedEd25519 ->
+        KeystoreWrappedEd25519KeyProvider(applicationContext, sshKeyFile)
     }
   }
 

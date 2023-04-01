@@ -1,4 +1,4 @@
-package dev.msfjarvis.aps.ssh
+package app.passwordstore.ssh
 
 public enum class SSHKeyAlgorithm {
   RSA,

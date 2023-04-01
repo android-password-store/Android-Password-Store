@@ -17,6 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.databinding.ActivitySshKeygenBinding
 import app.passwordstore.injection.prefs.GitPreferences
+import app.passwordstore.ssh.SSHKeyAlgorithm
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.extensions.keyguardManager
@@ -25,8 +27,6 @@ import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import dev.msfjarvis.aps.ssh.SSHKeyAlgorithm
-import dev.msfjarvis.aps.ssh.SSHKeyManager
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -63,7 +63,7 @@ class SshKeyGenActivity : AppCompatActivity() {
               show()
             }
           } else {
-             generate()
+            generate()
           }
         }
       }

@@ -13,10 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.injection.prefs.GitPreferences
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.ui.git.config.GitConfigActivity
 import app.passwordstore.ui.git.config.GitServerConfigActivity
 import app.passwordstore.ui.proxy.ProxySelectorActivity
@@ -28,7 +28,6 @@ import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.extensions.sharedPrefs
 import app.passwordstore.util.extensions.snackbar
 import app.passwordstore.util.extensions.unsafeLazy
-import app.passwordstore.util.git.sshj.SshKey
 import app.passwordstore.util.settings.GitSettings
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.onFailure
@@ -44,12 +43,13 @@ import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import de.Maxr1998.modernpreferences.helpers.switch
 
-class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
-
+class RepositorySettings(
+  private val activity: FragmentActivity,
+  private val sshKeyManager: SSHKeyManager
+) : SettingsProvider {
   private val generateSshKey =
     activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-      // TODO: use assisted inject to get SSHKeyManager and use it here
-      showSshKeyPref?.visible = SshKey.canShowSshPublicKey
+      showSshKeyPref?.visible = sshKeyManager.canShowPublicKey()
     }
 
   private val hiltEntryPoint by unsafeLazy {
@@ -114,7 +114,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
       showSshKeyPref =
         pref(PreferenceKeys.SSH_SEE_KEY) {
           titleRes = R.string.pref_ssh_see_key_title
-          visible = PasswordRepository.isGitRepo() && SshKey.canShowSshPublicKey
+          visible = PasswordRepository.isGitRepo() && sshKeyManager.canShowPublicKey()
           onClick {
             ShowSshKeyFragment().show(activity.supportFragmentManager, "public_key")
             true

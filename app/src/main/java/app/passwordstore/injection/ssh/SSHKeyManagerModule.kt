@@ -1,13 +1,13 @@
 package app.passwordstore.injection.ssh
 
 import android.content.Context
+import app.passwordstore.ssh.SSHKeyManager
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.msfjarvis.aps.ssh.SSHKeyManager
 
 @Module
 @InstallIn(SingletonComponent::class)

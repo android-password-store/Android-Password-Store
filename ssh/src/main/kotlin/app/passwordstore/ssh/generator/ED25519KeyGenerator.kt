@@ -1,4 +1,4 @@
-package dev.msfjarvis.aps.ssh.generator
+package app.passwordstore.ssh.generator
 
 import java.security.KeyPair
 import net.i2p.crypto.eddsa.KeyPairGenerator

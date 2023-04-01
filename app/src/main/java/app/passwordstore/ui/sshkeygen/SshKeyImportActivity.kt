@@ -12,12 +12,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
-import app.passwordstore.util.git.sshj.SshKey
+import app.passwordstore.ssh.SSHKeyManager
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import dev.msfjarvis.aps.ssh.SSHKeyManager
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -36,10 +35,10 @@ class SshKeyImportActivity : AppCompatActivity() {
           lifecycleScope.launch {
             sshKeyManager.importKey(uri)
             Toast.makeText(
-              this@SshKeyImportActivity,
-              resources.getString(R.string.ssh_key_success_dialog_title),
-              Toast.LENGTH_LONG
-            )
+                this@SshKeyImportActivity,
+                resources.getString(R.string.ssh_key_success_dialog_title),
+                Toast.LENGTH_LONG
+              )
               .show()
             setResult(RESULT_OK)
             finish()
@@ -54,6 +53,7 @@ class SshKeyImportActivity : AppCompatActivity() {
         }
     }
 
+  @Suppress("DEPRECATION")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     lifecycleScope.launchWhenStarted {

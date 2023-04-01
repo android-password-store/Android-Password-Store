@@ -1,7 +1,7 @@
-package dev.msfjarvis.aps.ssh.writer
+package app.passwordstore.ssh.writer
 
-import dev.msfjarvis.aps.ssh.SSHKey
-import dev.msfjarvis.aps.ssh.utils.createStringPublicKey
+import app.passwordstore.ssh.SSHKey
+import app.passwordstore.ssh.utils.createStringPublicKey
 import java.security.KeyPair
 
 public class KeystoreNativeKeyWriter : SSHKeyWriter {

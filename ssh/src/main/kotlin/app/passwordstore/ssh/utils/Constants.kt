@@ -1,4 +1,4 @@
-package dev.msfjarvis.aps.ssh.utils
+package app.passwordstore.ssh.utils
 
 internal object Constants {
   const val ANDROIDX_SECURITY_KEYSET_PREF_NAME = "androidx_sshkey_keyset_prefs"

@@ -1,8 +1,8 @@
-package dev.msfjarvis.aps.ssh.provider
+package app.passwordstore.ssh.provider
 
-import dev.msfjarvis.aps.ssh.utils.Constants.KEYSTORE_ALIAS
-import dev.msfjarvis.aps.ssh.utils.sshPrivateKey
-import dev.msfjarvis.aps.ssh.utils.sshPublicKey
+import app.passwordstore.ssh.utils.Constants.KEYSTORE_ALIAS
+import app.passwordstore.ssh.utils.sshPrivateKey
+import app.passwordstore.ssh.utils.sshPublicKey
 import java.io.IOException
 import java.security.KeyStore
 import java.security.PrivateKey

@@ -6,11 +6,11 @@ package app.passwordstore.util.git.sshj
 
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.settings.AuthMode
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
-import dev.msfjarvis.aps.ssh.SSHKeyManager
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -68,8 +68,11 @@ abstract class InteractivePasswordFinder : PasswordFinder {
   final override fun shouldRetry(resource: Resource<*>?) = true
 }
 
-class SshjSessionFactory(private val authMethod: SshAuthMethod, private val hostKeyFile: File, private val sshKeyManager: SSHKeyManager) :
-  SshSessionFactory() {
+class SshjSessionFactory(
+  private val authMethod: SshAuthMethod,
+  private val hostKeyFile: File,
+  private val sshKeyManager: SSHKeyManager
+) : SshSessionFactory() {
 
   private var currentSession: SshjSession? = null
 
@@ -161,7 +164,10 @@ private class SshjSession(
         ssh.auth(username, passwordAuth)
       }
       is SshAuthMethod.SshKey -> {
-        val pubkeyAuth = AuthPublickey(sshKeyManager.keyProvider(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey)))
+        val pubkeyAuth =
+          AuthPublickey(
+            sshKeyManager.keyProvider(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey))
+          )
         ssh.auth(username, pubkeyAuth, passwordAuth)
       }
     }
