@@ -15,7 +15,7 @@ public class RSAKeyGenerator : SSHKeyGenerator {
     // Generate Keystore-backed private key.
     val parameterSpec =
       KeyGenParameterSpec.Builder(KEYSTORE_ALIAS, KeyProperties.PURPOSE_SIGN).run {
-        setKeySize(3072)
+        setKeySize(RSA_KEY_SIZE)
         setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
         setDigests(
           KeyProperties.DIGEST_SHA1,
@@ -25,9 +25,15 @@ public class RSAKeyGenerator : SSHKeyGenerator {
         if (requiresAuthentication) {
           setUserAuthenticationRequired(true)
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            setUserAuthenticationParameters(30, KeyProperties.AUTH_DEVICE_CREDENTIAL)
+            setUserAuthenticationParameters(
+              SSHKeyGenerator.USER_AUTHENTICATION_TIMEOUT,
+              KeyProperties.AUTH_DEVICE_CREDENTIAL
+            )
           } else {
-            @Suppress("DEPRECATION") setUserAuthenticationValidityDurationSeconds(30)
+            @Suppress("DEPRECATION")
+            setUserAuthenticationValidityDurationSeconds(
+              SSHKeyGenerator.USER_AUTHENTICATION_TIMEOUT
+            )
           }
         }
         build()
@@ -40,5 +46,9 @@ public class RSAKeyGenerator : SSHKeyGenerator {
       }
 
     return keyPair
+  }
+
+  private companion object {
+    private const val RSA_KEY_SIZE = 3072
   }
 }

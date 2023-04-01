@@ -12,7 +12,6 @@ import java.security.PublicKey
 import net.schmizz.sshj.common.Buffer
 import net.schmizz.sshj.common.KeyType
 
-// TODO: remove hardcoded application id
 /** Get the default [SharedPreferences] instance */
 internal val Context.sharedPrefs: SharedPreferences
   get() = getSharedPreferences("app.passwordstore_preferences", 0)
@@ -32,7 +31,7 @@ internal fun PublicKey.createStringPublicKey(): String {
   val keyType = KeyType.fromKey(this)
   return "$keyType ${Base64.encodeToString(rawPublicKey, Base64.NO_WRAP)}"
 }
-// TODO: make a separate utils module for common extensions
+
 /** Wrapper for [getEncryptedPrefs] to avoid open-coding the file name at each call site */
 internal fun Context.getEncryptedGitPrefs() = getEncryptedPrefs("git_operation")
 

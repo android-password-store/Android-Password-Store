@@ -15,7 +15,6 @@ object SSHKeyManagerModule {
 
   @Provides
   @Reusable
-  // TODO: verify that SSHKeyManager is stateless else use Singleton
   fun provideSSHKeyManager(@ApplicationContext context: Context): SSHKeyManager {
     return SSHKeyManager(context)
   }

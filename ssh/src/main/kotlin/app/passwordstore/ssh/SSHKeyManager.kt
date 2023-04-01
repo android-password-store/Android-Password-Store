@@ -16,6 +16,8 @@ import app.passwordstore.ssh.utils.Constants
 import app.passwordstore.ssh.utils.Constants.ANDROIDX_SECURITY_KEYSET_PREF_NAME
 import app.passwordstore.ssh.utils.Constants.KEYSTORE_ALIAS
 import app.passwordstore.ssh.utils.Constants.PROVIDER_ANDROID_KEY_STORE
+import app.passwordstore.ssh.utils.NullKeyException
+import app.passwordstore.ssh.utils.SSHKeyNotFoundException
 import app.passwordstore.ssh.utils.SSHKeyUtils
 import app.passwordstore.ssh.utils.getEncryptedGitPrefs
 import app.passwordstore.ssh.utils.sharedPrefs
@@ -39,7 +41,6 @@ import net.schmizz.sshj.userauth.password.PasswordFinder
 
 public class SSHKeyManager(private val applicationContext: Context) {
 
-  // TODO: start using unsafeLazy here
   private val androidKeystore: KeyStore by
     lazy(LazyThreadSafetyMode.NONE) {
       KeyStore.getInstance(PROVIDER_ANDROID_KEY_STORE).apply { load(null) }
@@ -55,15 +56,13 @@ public class SSHKeyManager(private val applicationContext: Context) {
 
   // Let's make this suspend so that we can use datastore's non-blocking apis
   public fun keyType(): SSHKeyType {
-    // TODO: throw a custom exception here
     return SSHKeyType.fromValue(
       applicationContext.sharedPrefs.getString(Constants.GIT_REMOTE_KEY_TYPE, null)
     )
-      ?: throw IllegalStateException("keyType was null")
+      ?: throw NullKeyException()
   }
 
-  public suspend fun keyExists(): Boolean {
-    // TODO: use run suspend catching here?
+  public fun keyExists(): Boolean {
     return try {
       keyType()
       true
@@ -95,16 +94,16 @@ public class SSHKeyManager(private val applicationContext: Context) {
         if (keyType == SSHKeyType.KeystoreNative || keyType == SSHKeyType.KeystoreWrappedEd25519)
           return false
 
-        when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
+        return when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
           is PrivateKey -> {
             val factory = KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
-            return factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
+            factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
           }
           is SecretKey -> {
             val factory = SecretKeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
             (factory.getKeySpec(key, KeyInfo::class.java) as KeyInfo).isUserAuthenticationRequired
           }
-          else -> throw IllegalStateException("SSH key does not exist in Keystore")
+          else -> throw SSHKeyNotFoundException()
         }
       }
       .getOrElse { error ->
@@ -126,13 +125,10 @@ public class SSHKeyManager(private val applicationContext: Context) {
           cursor.getInt(0)
         }
         ?: throw IOException(applicationContext.getString(R.string.ssh_key_does_not_exist))
-
     // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
-    if (fileSize > 100_000 || fileSize == 0)
-      throw IllegalArgumentException(
-        applicationContext.getString(R.string.ssh_key_import_error_not_an_ssh_key_message)
-      )
-
+    require(fileSize in 1 until SSH_KEY_MAX_FILE_SIZE) {
+      applicationContext.getString(R.string.ssh_key_import_error_not_an_ssh_key_message)
+    }
     val sshKeyInputStream =
       applicationContext.contentResolver.openInputStream(uri)
         ?: throw IOException(applicationContext.getString(R.string.ssh_key_does_not_exist))
@@ -140,18 +136,16 @@ public class SSHKeyManager(private val applicationContext: Context) {
     importKey(sshKeyInputStream)
   }
 
-  public suspend fun importKey(sshKeyInputStream: InputStream) {
+  private suspend fun importKey(sshKeyInputStream: InputStream) {
     val lines = sshKeyInputStream.bufferedReader().readLines()
     // The file must have more than 2 lines, and the first and last line must have private key
     // markers.
-    if (!SSHKeyUtils.isValid(lines))
-      throw IllegalArgumentException(
-        applicationContext.getString(R.string.ssh_key_import_error_not_an_ssh_key_message)
-      )
+    check(SSHKeyUtils.isValid(lines)) {
+      applicationContext.getString(R.string.ssh_key_import_error_not_an_ssh_key_message)
+    }
     // At this point, we are reasonably confident that we have actually been provided a private
     // key and delete the old key.
     deleteKey()
-
     val sshKey = createNewSSHKey(keyType = SSHKeyType.Imported)
     saveImportedKey(lines.joinToString("\n"), sshKey)
   }
@@ -165,7 +159,6 @@ public class SSHKeyManager(private val applicationContext: Context) {
           Pair(ECDSAKeyGenerator(isStrongBoxSupported), SSHKeyType.KeystoreNative)
         SSHKeyAlgorithm.ED25519 -> Pair(ED25519KeyGenerator(), SSHKeyType.KeystoreWrappedEd25519)
       }
-
     val keyPair = sshKeyGenerator.generateKey(requiresAuthentication)
     val sshKeyFile = createNewSSHKey(keyType = sshKeyType)
     saveGeneratedKey(keyPair, sshKeyFile, requiresAuthentication)
@@ -217,7 +210,6 @@ public class SSHKeyManager(private val applicationContext: Context) {
     applicationContext
       .getSharedPreferences(ANDROIDX_SECURITY_KEYSET_PREF_NAME, Context.MODE_PRIVATE)
       .edit { clear() }
-
     // If there's no keyType(), we'll just use SSHKeyType.Imported, since they key is going to be
     // deleted, it does not really matter what the key type is.
     // The other way to handle this is to return if the keyType() throws an exception.
@@ -272,5 +264,10 @@ public class SSHKeyManager(private val applicationContext: Context) {
     val publicKeyFile = File(applicationContext.filesDir, publicKeyFileName)
 
     return SSHKey(privateKeyFile, publicKeyFile, keyType)
+  }
+
+  private companion object {
+
+    private const val SSH_KEY_MAX_FILE_SIZE = 100_000
   }
 }

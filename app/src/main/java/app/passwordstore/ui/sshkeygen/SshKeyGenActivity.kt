@@ -131,7 +131,7 @@ class SshKeyGenActivity : AppCompatActivity() {
         sshKeyManager.generateKey(sshKeyAlgorithm, requireAuthentication)
       }
     }
-    // TODO: Check if we still need this
+    // Check if we still need this
     gitPrefs.edit { remove("ssh_key_local_passphrase") }
     binding.generate.apply {
       text = getString(R.string.ssh_keygen_generate)

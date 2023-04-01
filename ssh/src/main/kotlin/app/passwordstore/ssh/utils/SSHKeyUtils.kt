@@ -9,6 +9,8 @@ import kotlinx.coroutines.withContext
 
 internal object SSHKeyUtils {
 
+  private const val USER_AUTHENTICATION_VALIDITY_DURATION = 15
+
   fun isValid(lines: List<String>): Boolean {
     return lines.size > 2 &&
       Regex("BEGIN .* PRIVATE KEY").containsMatchIn(lines.first()) &&
@@ -43,7 +45,7 @@ internal object SSHKeyUtils {
       MasterKey.Builder(context, Constants.KEYSTORE_ALIAS).run {
         setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         setRequestStrongBoxBacked(true)
-        setUserAuthenticationRequired(requireAuthentication, 15)
+        setUserAuthenticationRequired(requireAuthentication, USER_AUTHENTICATION_VALIDITY_DURATION)
         build()
       }
     }

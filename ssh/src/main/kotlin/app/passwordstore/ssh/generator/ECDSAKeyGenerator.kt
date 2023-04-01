@@ -15,7 +15,7 @@ public class ECDSAKeyGenerator(private val isStrongBoxSupported: Boolean) : SSHK
 
     val parameterSpec =
       KeyGenParameterSpec.Builder(KEYSTORE_ALIAS, KeyProperties.PURPOSE_SIGN).run {
-        setKeySize(256)
+        setKeySize(ECDSA_KEY_SIZE)
         setAlgorithmParameterSpec(java.security.spec.ECGenParameterSpec("secp256r1"))
         setDigests(KeyProperties.DIGEST_SHA256)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -24,9 +24,15 @@ public class ECDSAKeyGenerator(private val isStrongBoxSupported: Boolean) : SSHK
         if (requiresAuthentication) {
           setUserAuthenticationRequired(true)
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            setUserAuthenticationParameters(30, KeyProperties.AUTH_DEVICE_CREDENTIAL)
+            setUserAuthenticationParameters(
+              SSHKeyGenerator.USER_AUTHENTICATION_TIMEOUT,
+              KeyProperties.AUTH_DEVICE_CREDENTIAL
+            )
           } else {
-            @Suppress("DEPRECATION") setUserAuthenticationValidityDurationSeconds(30)
+            @Suppress("DEPRECATION")
+            setUserAuthenticationValidityDurationSeconds(
+              SSHKeyGenerator.USER_AUTHENTICATION_TIMEOUT
+            )
           }
         }
         build()
@@ -39,5 +45,9 @@ public class ECDSAKeyGenerator(private val isStrongBoxSupported: Boolean) : SSHK
       }
 
     return keyPair
+  }
+
+  private companion object {
+    private const val ECDSA_KEY_SIZE = 256
   }
 }
