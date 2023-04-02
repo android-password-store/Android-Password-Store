@@ -17,11 +17,12 @@ import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.databinding.ActivitySshKeygenBinding
 import app.passwordstore.injection.prefs.GitPreferences
+import app.passwordstore.ssh.SSHKeyAlgorithm
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.extensions.keyguardManager
 import app.passwordstore.util.extensions.viewBinding
-import app.passwordstore.util.git.sshj.SshKey
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,24 +34,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private enum class KeyGenType(val generateKey: suspend (requireAuthentication: Boolean) -> Unit) {
-  Rsa({ requireAuthentication ->
-    SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Rsa, requireAuthentication)
-  }),
-  Ecdsa({ requireAuthentication ->
-    SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Ecdsa, requireAuthentication)
-  }),
-  Ed25519({ requireAuthentication ->
-    SshKey.generateKeystoreWrappedEd25519Key(requireAuthentication)
-  }),
-}
-
 @AndroidEntryPoint
 class SshKeyGenActivity : AppCompatActivity() {
 
-  private var keyGenType = KeyGenType.Ecdsa
+  private var sshKeyAlgorithm = SSHKeyAlgorithm.ECDSA
   private val binding by viewBinding(ActivitySshKeygenBinding::inflate)
   @GitPreferences @Inject lateinit var gitPrefs: SharedPreferences
+  @Inject lateinit var sshKeyManager: SSHKeyManager
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -58,7 +48,7 @@ class SshKeyGenActivity : AppCompatActivity() {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     with(binding) {
       generate.setOnClickListener {
-        if (SshKey.exists) {
+        if (sshKeyManager.keyExists()) {
           MaterialAlertDialogBuilder(this@SshKeyGenActivity).run {
             setTitle(R.string.ssh_keygen_existing_title)
             setMessage(R.string.ssh_keygen_existing_message)
@@ -79,18 +69,18 @@ class SshKeyGenActivity : AppCompatActivity() {
       keyTypeExplanation.setText(R.string.ssh_keygen_explanation_ecdsa)
       keyTypeGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
         if (isChecked) {
-          keyGenType =
+          sshKeyAlgorithm =
             when (checkedId) {
-              R.id.key_type_ed25519 -> KeyGenType.Ed25519
-              R.id.key_type_ecdsa -> KeyGenType.Ecdsa
-              R.id.key_type_rsa -> KeyGenType.Rsa
+              R.id.key_type_ed25519 -> SSHKeyAlgorithm.ED25519
+              R.id.key_type_ecdsa -> SSHKeyAlgorithm.ECDSA
+              R.id.key_type_rsa -> SSHKeyAlgorithm.RSA
               else -> throw IllegalStateException("Impossible key type selection")
             }
           keyTypeExplanation.setText(
-            when (keyGenType) {
-              KeyGenType.Ed25519 -> R.string.ssh_keygen_explanation_ed25519
-              KeyGenType.Ecdsa -> R.string.ssh_keygen_explanation_ecdsa
-              KeyGenType.Rsa -> R.string.ssh_keygen_explanation_rsa
+            when (sshKeyAlgorithm) {
+              SSHKeyAlgorithm.ED25519 -> R.string.ssh_keygen_explanation_ed25519
+              SSHKeyAlgorithm.ECDSA -> R.string.ssh_keygen_explanation_ecdsa
+              SSHKeyAlgorithm.RSA -> R.string.ssh_keygen_explanation_rsa
             }
           )
         }
@@ -136,9 +126,10 @@ class SshKeyGenActivity : AppCompatActivity() {
           if (result !is Result.Success)
             throw UserNotAuthenticatedException(getString(R.string.biometric_auth_generic_failure))
         }
-        keyGenType.generateKey(requireAuthentication)
+        sshKeyManager.generateKey(sshKeyAlgorithm, requireAuthentication)
       }
     }
+    // Check if we still need this
     gitPrefs.edit { remove("ssh_key_local_passphrase") }
     binding.generate.apply {
       text = getString(R.string.ssh_keygen_generate)

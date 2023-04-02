@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="ssh_key_does_not_exist">Unable to open the ssh private key, please check that the file exists</string>
+  <string name="ssh_key_import_error_not_an_ssh_key_message">Selected file does not appear to be an SSH private key.</string>
+</resources>
