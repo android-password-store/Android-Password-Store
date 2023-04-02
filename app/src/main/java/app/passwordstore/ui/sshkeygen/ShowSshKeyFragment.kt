@@ -18,6 +18,7 @@ import javax.inject.Inject
 class ShowSshKeyFragment : DialogFragment() {
 
   @Inject lateinit var sshKeyManager: SSHKeyManager
+
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val activity = requireActivity()
     val publicKey = sshKeyManager.publicKey()

@@ -4,6 +4,8 @@ import android.content.Context
 import app.passwordstore.ssh.SSHKey
 import app.passwordstore.ssh.utils.SSHKeyUtils.getOrCreateWrappedPrivateKeyFile
 import app.passwordstore.ssh.utils.parseStringPublicKey
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import java.io.IOException
 import java.security.PrivateKey
 import java.security.PublicKey

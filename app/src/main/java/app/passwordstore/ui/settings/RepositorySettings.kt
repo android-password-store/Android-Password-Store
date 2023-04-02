@@ -9,7 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
 import android.os.Build
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -45,10 +45,10 @@ import de.Maxr1998.modernpreferences.helpers.switch
 
 class RepositorySettings(
   private val activity: FragmentActivity,
-  private val sshKeyManager: SSHKeyManager
+  private val sshKeyManager: SSHKeyManager,
 ) : SettingsProvider {
   private val generateSshKey =
-    activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    activity.registerForActivityResult(StartActivityForResult()) {
       showSshKeyPref?.visible = sshKeyManager.canShowPublicKey()
     }
 

@@ -20,9 +20,7 @@ import java.util.Collections
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority.WARN
 import logcat.logcat
@@ -71,7 +69,7 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 class SshjSessionFactory(
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
-  private val sshKeyManager: SSHKeyManager
+  private val sshKeyManager: SSHKeyManager,
 ) : SshSessionFactory() {
 
   private var currentSession: SshjSession? = null
@@ -127,11 +125,9 @@ private class SshjSession(
   private val username: String,
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
-  private val sshKeyManager: SSHKeyManager
+  private val sshKeyManager: SSHKeyManager,
 ) : RemoteSession {
 
-  private lateinit var job: Job
-  private lateinit var coroutineScope: CoroutineScope
   private lateinit var ssh: SSHClient
   private var currentCommand: Session? = null
 
@@ -152,8 +148,6 @@ private class SshjSession(
     }
 
   fun connect(): SshjSession {
-    job = Job()
-    coroutineScope = CoroutineScope(job + Dispatchers.Main)
     ssh = SSHClient(SshjConfig())
     ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
     ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)

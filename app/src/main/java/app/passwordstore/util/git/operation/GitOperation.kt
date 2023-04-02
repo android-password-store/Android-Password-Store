@@ -22,7 +22,6 @@ import app.passwordstore.util.git.GitCommandExecutor
 import app.passwordstore.util.git.sshj.SshAuthMethod
 import app.passwordstore.util.git.sshj.SshjSessionFactory
 import app.passwordstore.util.settings.AuthMode
-import app.passwordstore.util.settings.GitSettings
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
@@ -246,7 +245,6 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   @EntryPoint
   @InstallIn(SingletonComponent::class)
   interface GitOperationEntryPoint {
-    fun gitSettings(): GitSettings
     fun sshKeyManager(): SSHKeyManager
   }
 }

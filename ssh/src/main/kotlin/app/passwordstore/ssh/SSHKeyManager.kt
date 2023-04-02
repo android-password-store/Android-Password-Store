@@ -24,6 +24,8 @@ import app.passwordstore.ssh.utils.sharedPrefs
 import app.passwordstore.ssh.writer.ED25519KeyWriter
 import app.passwordstore.ssh.writer.ImportedKeyWriter
 import app.passwordstore.ssh.writer.KeystoreNativeKeyWriter
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -55,7 +57,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
     }
 
   // Let's make this suspend so that we can use datastore's non-blocking apis
-  public fun keyType(): SSHKeyType {
+  private fun keyType(): SSHKeyType {
     return SSHKeyType.fromValue(
       applicationContext.sharedPrefs.getString(Constants.GIT_REMOTE_KEY_TYPE, null)
     )
@@ -94,7 +96,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
         if (keyType == SSHKeyType.KeystoreNative || keyType == SSHKeyType.KeystoreWrappedEd25519)
           return false
 
-        return when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
+        when (val key = androidKeystore.getKey(KEYSTORE_ALIAS, null)) {
           is PrivateKey -> {
             val factory = KeyFactory.getInstance(key.algorithm, PROVIDER_ANDROID_KEY_STORE)
             factory.getKeySpec(key, KeyInfo::class.java).isUserAuthenticationRequired
@@ -204,7 +206,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
     setSSHKeyType(SSHKeyType.Imported)
   }
 
-  public fun deleteKey() {
+  private fun deleteKey() {
     androidKeystore.deleteEntry(KEYSTORE_ALIAS)
     // Remove Tink key set used by AndroidX's EncryptedFile.
     applicationContext
@@ -214,8 +216,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
     // deleted, it does not really matter what the key type is.
     // The other way to handle this is to return if the keyType() throws an exception.
     val sshKey =
-      kotlin
-        .runCatching { createNewSSHKey(keyType = keyType()) }
+      runCatching { createNewSSHKey(keyType = keyType()) }
         .getOrElse { createNewSSHKey(keyType = SSHKeyType.Imported) }
     if (sshKey.privateKey.isFile) {
       sshKey.privateKey.delete()
@@ -229,8 +230,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
 
   public fun keyProvider(client: SSHClient, passphraseFinder: PasswordFinder): KeyProvider? {
     val sshKeyFile =
-      kotlin
-        .runCatching { createNewSSHKey(keyType = keyType()) }
+      runCatching { createNewSSHKey(keyType = keyType()) }
         .getOrElse {
           return null
         }

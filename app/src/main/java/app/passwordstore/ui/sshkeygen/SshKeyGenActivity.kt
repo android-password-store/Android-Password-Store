@@ -48,23 +48,21 @@ class SshKeyGenActivity : AppCompatActivity() {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     with(binding) {
       generate.setOnClickListener {
-        lifecycleScope.launch {
-          if (sshKeyManager.keyExists()) {
-            MaterialAlertDialogBuilder(this@SshKeyGenActivity).run {
-              setTitle(R.string.ssh_keygen_existing_title)
-              setMessage(R.string.ssh_keygen_existing_message)
-              setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ ->
-                lifecycleScope.launch { generate() }
-              }
-              setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ ->
-                setResult(RESULT_CANCELED)
-                finish()
-              }
-              show()
+        if (sshKeyManager.keyExists()) {
+          MaterialAlertDialogBuilder(this@SshKeyGenActivity).run {
+            setTitle(R.string.ssh_keygen_existing_title)
+            setMessage(R.string.ssh_keygen_existing_message)
+            setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ ->
+              lifecycleScope.launch { generate() }
             }
-          } else {
-            generate()
+            setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ ->
+              setResult(RESULT_CANCELED)
+              finish()
+            }
+            show()
           }
+        } else {
+          lifecycleScope.launch { generate() }
         }
       }
       keyTypeGroup.check(R.id.key_type_ecdsa)

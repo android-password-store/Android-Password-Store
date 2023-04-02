@@ -53,22 +53,19 @@ class SshKeyImportActivity : AppCompatActivity() {
         }
     }
 
-  @Suppress("DEPRECATION")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    lifecycleScope.launchWhenStarted {
-      if (sshKeyManager.keyExists()) {
-        MaterialAlertDialogBuilder(this@SshKeyImportActivity).run {
-          setTitle(R.string.ssh_keygen_existing_title)
-          setMessage(R.string.ssh_keygen_existing_message)
-          setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ -> importSshKey() }
-          setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> finish() }
-          setOnCancelListener { finish() }
-          show()
-        }
-      } else {
-        importSshKey()
+    if (sshKeyManager.keyExists()) {
+      MaterialAlertDialogBuilder(this@SshKeyImportActivity).run {
+        setTitle(R.string.ssh_keygen_existing_title)
+        setMessage(R.string.ssh_keygen_existing_message)
+        setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ -> importSshKey() }
+        setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> finish() }
+        setOnCancelListener { finish() }
+        show()
       }
+    } else {
+      importSshKey()
     }
   }
 
