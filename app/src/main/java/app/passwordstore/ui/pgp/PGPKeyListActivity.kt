@@ -1,5 +1,6 @@
 package app.passwordstore.ui.pgp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,12 +13,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import app.passwordstore.R
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.theme.APSTheme
@@ -39,6 +38,7 @@ class PGPKeyListActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    val isSelecting = intent.extras?.getBoolean(EXTRA_KEY_SELECTION) ?: false
     setContent {
       val context = LocalContext.current
       APSTheme(colors = decideColorScheme(context)) {
@@ -62,21 +62,33 @@ class PGPKeyListActivity : ComponentActivity() {
             }
           }
         ) { paddingValues ->
-          PGPKeyList(viewModel = viewModel, modifier = Modifier.padding(paddingValues))
+          KeyList(
+            identifiers = viewModel.keys,
+            onItemClick = viewModel::deleteKey,
+            modifier = Modifier.padding(paddingValues),
+            onKeySelected =
+              if (isSelecting) {
+                { identifier ->
+                  val result = Intent()
+                  result.putExtra(EXTRA_SELECTED_KEY, identifier.toString())
+                  setResult(RESULT_OK, result)
+                  finish()
+                }
+              } else null,
+          )
         }
       }
     }
   }
-}
 
-@Composable
-fun PGPKeyList(
-  modifier: Modifier = Modifier,
-  viewModel: PGPKeyListViewModel = viewModel(),
-) {
-  KeyList(
-    identifiers = viewModel.keys,
-    onItemClick = viewModel::deleteKey,
-    modifier = modifier,
-  )
+  companion object {
+    const val EXTRA_SELECTED_KEY = "SELECTED_KEY"
+    private const val EXTRA_KEY_SELECTION = "KEY_SELECTION_MODE"
+
+    fun newSelectionActivity(context: Context): Intent {
+      val intent = Intent(context, PGPKeyListActivity::class.java)
+      intent.putExtra(EXTRA_KEY_SELECTION, true)
+      return intent
+    }
+  }
 }

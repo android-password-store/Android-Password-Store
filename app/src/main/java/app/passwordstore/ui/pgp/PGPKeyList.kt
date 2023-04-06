@@ -1,6 +1,7 @@
 package app.passwordstore.ui.pgp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,12 +29,14 @@ import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.crypto.GpgIdentifier
 import app.passwordstore.ui.compose.theme.APSThemePreview
+import app.passwordstore.util.extensions.conditional
 
 @Composable
 fun KeyList(
   identifiers: List<GpgIdentifier>,
   onItemClick: (identifier: GpgIdentifier) -> Unit,
   modifier: Modifier = Modifier,
+  onKeySelected: ((identifier: GpgIdentifier) -> Unit)? = null,
 ) {
   if (identifiers.isEmpty()) {
     Column(
@@ -50,7 +53,7 @@ fun KeyList(
   } else {
     LazyColumn(modifier = modifier) {
       items(identifiers) { identifier ->
-        KeyItem(identifier = identifier, onItemClick = onItemClick)
+        KeyItem(identifier = identifier, onItemClick = onItemClick, onKeySelected = onKeySelected)
       }
     }
   }
@@ -61,6 +64,7 @@ private fun KeyItem(
   identifier: GpgIdentifier,
   onItemClick: (identifier: GpgIdentifier) -> Unit,
   modifier: Modifier = Modifier,
+  onKeySelected: ((identifier: GpgIdentifier) -> Unit)? = null,
 ) {
   var isDeleting by remember { mutableStateOf(false) }
   DeleteConfirmationDialog(
@@ -77,16 +81,21 @@ private fun KeyItem(
       is GpgIdentifier.UserId -> identifier.email
     }
   Row(
-    modifier = modifier.padding(16.dp).fillMaxWidth(),
+    modifier =
+      modifier.padding(16.dp).fillMaxWidth().conditional(onKeySelected != null) {
+        clickable { onKeySelected?.invoke(identifier) }
+      },
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Text(text = label)
-    IconButton(onClick = { isDeleting = true }) {
-      Icon(
-        painter = painterResource(R.drawable.ic_delete_24dp),
-        stringResource(id = R.string.delete)
-      )
+    if (onKeySelected == null) {
+      IconButton(onClick = { isDeleting = true }) {
+        Icon(
+          painter = painterResource(R.drawable.ic_delete_24dp),
+          stringResource(id = R.string.delete)
+        )
+      }
     }
   }
 }

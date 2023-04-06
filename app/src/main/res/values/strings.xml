@@ -43,6 +43,7 @@
   <string name="git_commit_remove_text">Remove %1$s from store.</string>
   <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
   <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
+  <string name="git_commit_gpg_id">Initialize GPG IDs in %1$s.</string>
 
   <!-- PGPHandler -->
   <string name="clipboard_copied_text">Copied to clipboard</string>
@@ -318,9 +319,8 @@
   <string name="git_break_out_of_detached_success">There was a conflict when trying to rebase. Your local %1$s branch was pushed to another branch named %2$s\n Use this branch to resolve conflict on your computer</string>
   <string name="git_break_out_of_detached_unneeded">The repository is not rebasing, no need to push to another branch</string>
 
-  <!-- OpenKeychain not installed -->
-
   <!-- GPG key selection in folder creation -->
+  <string name="gpg_key_select_mandatory">Selecting a GPG key is necessary to proceed</string>
   <string name="folder_creation_err_file_exists">A file by that name already exists</string>
   <string name="folder_creation_err_folder_exists">A folder by that name already exists</string>
 

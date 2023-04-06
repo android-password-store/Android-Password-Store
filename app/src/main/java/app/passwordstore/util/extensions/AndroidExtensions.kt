@@ -22,6 +22,7 @@ import android.view.View
 import android.view.autofill.AutofillManager
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -151,5 +152,14 @@ fun PackageManager.getApplicationInfoCompat(packageName: String, flags: Int): Ap
     getApplicationInfo(packageName, ApplicationInfoFlags.of(flags.toLong()))
   } else {
     @Suppress("DEPRECATION") getApplicationInfo(packageName, flags)
+  }
+}
+
+/** Allows conditionally applying the given [modifier] if [isEnabled] is `true`. */
+fun Modifier.conditional(isEnabled: Boolean, modifier: Modifier.() -> Modifier): Modifier {
+  return if (isEnabled) {
+    then(modifier())
+  } else {
+    this
   }
 }

@@ -9,7 +9,9 @@ import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import app.passwordstore.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity(R.layout.activity_onboarding) {
 
   override fun onCreate(savedInstanceState: Bundle?) {
