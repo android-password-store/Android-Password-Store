@@ -52,8 +52,7 @@ object PasswordRepository {
 
   fun createRepository(repositoryDir: File) {
     repositoryDir.delete()
-    Git.init().setDirectory(repositoryDir).call()
-    initializeRepository(repositoryDir)
+    repository = Git.init().setDirectory(repositoryDir).call().repository
   }
 
   // TODO add multiple remotes support for pull/push
