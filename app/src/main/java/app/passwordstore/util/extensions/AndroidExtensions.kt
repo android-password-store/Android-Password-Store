@@ -83,7 +83,7 @@ fun Context.resolveAttribute(attr: Int): Int {
 suspend fun FragmentActivity.commitChange(
   message: String,
 ): Result<Unit, Throwable> {
-  if (!PasswordRepository.isGitRepo()) {
+  if (!PasswordRepository.isInitialized) {
     return Ok(Unit)
   }
   return object : GitOperation(this@commitChange) {
