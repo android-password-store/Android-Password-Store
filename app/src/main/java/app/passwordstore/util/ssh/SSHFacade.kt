@@ -8,7 +8,6 @@ import app.passwordstore.util.features.Features
 import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.git.sshj.SshKey
 import javax.inject.Inject
-import javax.inject.Provider
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
 
@@ -16,12 +15,12 @@ import net.schmizz.sshj.userauth.keyprovider.KeyProvider
 class SSHFacade
 @Inject
 constructor(
-  private val features: Provider<Features>,
+  private val features: Features,
   private val sshKeyManager: SSHKeyManager,
 ) {
 
   private val useNewSSH
-    get() = features.get().isEnabled(Feature.EnableNewSSHLayer)
+    get() = features.isEnabled(Feature.EnableNewSSHLayer)
 
   fun canShowPublicKey(): Boolean {
     return if (useNewSSH) {
