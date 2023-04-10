@@ -16,6 +16,8 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("Unused")
@@ -43,11 +45,13 @@ class KotlinCommonPlugin : Plugin<Project> {
         targetCompatibility = JavaVersion.VERSION_11.toString()
       }
       withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-          allWarningsAsErrors = true
-          jvmTarget = JavaVersion.VERSION_11.toString()
-          freeCompilerArgs = freeCompilerArgs + ADDITIONAL_COMPILER_ARGS
-          languageVersion = "1.5"
+        kotlinOptions { jvmTarget = JavaVersion.VERSION_11.toString() }
+      }
+      withType<KotlinCompilationTask<*>>().configureEach {
+        compilerOptions {
+          allWarningsAsErrors.set(true)
+          languageVersion.set(KotlinVersion.KOTLIN_1_5)
+          freeCompilerArgs.addAll(ADDITIONAL_COMPILER_ARGS)
         }
       }
       withType<Test>().configureEach {
@@ -61,6 +65,7 @@ class KotlinCommonPlugin : Plugin<Project> {
     private val ADDITIONAL_COMPILER_ARGS =
       listOf(
         "-opt-in=kotlin.RequiresOptIn",
+        "-Xsuppress-version-warnings",
       )
   }
 }
