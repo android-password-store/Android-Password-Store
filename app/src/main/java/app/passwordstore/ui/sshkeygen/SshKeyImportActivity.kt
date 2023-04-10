@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
-import app.passwordstore.ssh.SSHKeyManager
+import app.passwordstore.util.ssh.SSHFacade
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SshKeyImportActivity : AppCompatActivity() {
 
-  @Inject lateinit var sshKeyManager: SSHKeyManager
+  @Inject lateinit var sshFacade: SSHFacade
 
   private val sshKeyImportAction =
     registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -33,7 +33,7 @@ class SshKeyImportActivity : AppCompatActivity() {
       }
       runCatching {
           lifecycleScope.launch {
-            sshKeyManager.importKey(uri)
+            sshFacade.importKey(uri)
             Toast.makeText(
                 this@SshKeyImportActivity,
                 resources.getString(R.string.ssh_key_success_dialog_title),
@@ -55,7 +55,7 @@ class SshKeyImportActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    if (sshKeyManager.keyExists()) {
+    if (sshFacade.keyExists()) {
       MaterialAlertDialogBuilder(this@SshKeyImportActivity).run {
         setTitle(R.string.ssh_keygen_existing_title)
         setMessage(R.string.ssh_keygen_existing_message)

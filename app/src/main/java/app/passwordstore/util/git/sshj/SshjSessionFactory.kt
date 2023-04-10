@@ -6,9 +6,9 @@ package app.passwordstore.util.git.sshj
 
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
-import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.settings.AuthMode
+import app.passwordstore.util.ssh.SSHFacade
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import java.io.File
@@ -69,7 +69,7 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 class SshjSessionFactory(
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
-  private val sshKeyManager: SSHKeyManager,
+  private val sshFacade: SSHFacade,
 ) : SshSessionFactory() {
 
   private var currentSession: SshjSession? = null
@@ -81,7 +81,7 @@ class SshjSessionFactory(
     tms: Int
   ): RemoteSession {
     return currentSession
-      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, sshKeyManager).connect().also {
+      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, sshFacade).connect().also {
         logcat { "New SSH connection created" }
         currentSession = it
       }
@@ -125,7 +125,7 @@ private class SshjSession(
   private val username: String,
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
-  private val sshKeyManager: SSHKeyManager,
+  private val sshFacade: SSHFacade,
 ) : RemoteSession {
 
   private lateinit var ssh: SSHClient
@@ -160,7 +160,7 @@ private class SshjSession(
       is SshAuthMethod.SshKey -> {
         val pubkeyAuth =
           AuthPublickey(
-            sshKeyManager.keyProvider(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey))
+            sshFacade.keyProvider(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey))
           )
         ssh.auth(username, pubkeyAuth, passwordAuth)
       }

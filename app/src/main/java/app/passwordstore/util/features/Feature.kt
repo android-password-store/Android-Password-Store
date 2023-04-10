@@ -19,6 +19,9 @@ enum class Feature(
     level = DeprecationLevel.ERROR
   )
   EnablePGPainlessBackend(true, "enable_pgp_v2_backend"),
+
+  /** Opt into the new SSH layer implemented as a freestanding module. */
+  EnableNewSSHLayer(false, "enable_new_ssh"),
   ;
 
   companion object {
