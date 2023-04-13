@@ -47,10 +47,6 @@ jobs:
     - name: Copy CI gradle.properties
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-    - name: Workaround AGP 8.x deprecations
-      if: startsWith(matrix.agp-version, '8.')
-      run: sed -i 's/android.disableAutomaticComponentCreation=true//' gradle.properties
-
     - name: Run checks
       uses: gradle/gradle-build-action@5056fa9d50478a14af3c9925c12ca02318659d3e # v2.4.1
       env:
