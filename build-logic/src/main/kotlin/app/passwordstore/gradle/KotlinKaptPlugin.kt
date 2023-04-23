@@ -11,16 +11,12 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 
 @Suppress("Unused")
 class KotlinKaptPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
-    project.pluginManager.run {
-      apply(KotlinAndroidPluginWrapper::class)
-      apply(Kapt3GradleSubplugin::class)
-    }
+    project.pluginManager.apply(Kapt3GradleSubplugin::class)
     project.afterEvaluate {
       project.extensions.configure<KaptExtension> {
         javacOptions {
