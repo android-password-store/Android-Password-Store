@@ -16,10 +16,10 @@ class KotlinLibraryPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     project.pluginManager.apply(KotlinCommonPlugin::class)
-    project.tasks.withType<KotlinCompile>().configureEach {
-      kotlinOptions {
-        if (!name.contains("test", ignoreCase = true)) {
-          freeCompilerArgs = freeCompilerArgs + listOf("-Xexplicit-api=strict")
+    project.tasks.withType<KotlinCompile>().configureEach task@{
+      compilerOptions {
+        if (!this@task.name.contains("test", ignoreCase = true)) {
+          freeCompilerArgs.add("-Xexplicit-api=strict")
         }
       }
     }
