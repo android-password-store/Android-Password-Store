@@ -11,9 +11,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.plugins.signing.SigningExtension
-import org.gradle.plugins.signing.SigningPlugin
 
 @Suppress("Unused")
 class PublishedAndroidLibraryPlugin : Plugin<Project> {
@@ -22,19 +19,11 @@ class PublishedAndroidLibraryPlugin : Plugin<Project> {
     project.plugins.run {
       apply(LibraryPlugin::class)
       apply(MavenPublishPlugin::class)
-      apply(SigningPlugin::class)
       apply("me.tylerbwong.gradle.metalava")
     }
     project.extensions.configure<MavenPublishBaseExtension> {
       publishToMavenCentral(SonatypeHost.DEFAULT, true)
       signAllPublications()
-    }
-    project.afterEvaluate {
-      project.extensions.configure<SigningExtension> {
-        val signingKey: String? by project
-        val signingPassword: String? by project
-        useInMemoryPgpKeys(signingKey, signingPassword)
-      }
     }
     project.extensions.configure<MetalavaExtension> {
       documentation.set(Documentation.PUBLIC)
