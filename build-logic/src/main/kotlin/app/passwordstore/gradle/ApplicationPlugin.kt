@@ -6,8 +6,8 @@ import app.passwordstore.gradle.flavors.FlavorDimensions
 import app.passwordstore.gradle.flavors.ProductFlavors
 import app.passwordstore.gradle.signing.configureBuildSigning
 import app.passwordstore.gradle.snapshot.SnapshotExtension
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -21,8 +21,8 @@ class ApplicationPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     project.pluginManager.apply(AppPlugin::class)
     AndroidCommon.configure(project)
-    project.extensions.configure<BaseAppModuleExtension> {
-      val minifySwitch = project.providers.environmentVariable("DISABLE_MINIFY")
+    val minifySwitch = project.providers.environmentVariable("DISABLE_MINIFY")
+    project.extensions.configure<ApplicationExtension> {
       dependenciesInfo {
         includeInBundle = false
         includeInApk = false
@@ -69,7 +69,7 @@ class ApplicationPlugin : Plugin<Project> {
   }
 
   private fun Project.isSnapshot(): Boolean {
-    with(project.providers) {
+    with(providers) {
       val workflow = environmentVariable("GITHUB_WORKFLOW")
       val snapshot = environmentVariable("SNAPSHOT")
       return workflow.isPresent || snapshot.isPresent

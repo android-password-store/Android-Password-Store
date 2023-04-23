@@ -20,7 +20,6 @@ class DependencyUpdatesPlugin : Plugin<Project> {
       rejectVersionIf {
         when (candidate.group) {
           "commons-codec",
-          "com.android.tools.build",
           "org.eclipse.jgit" -> true
           else -> false
         }
