@@ -16,8 +16,8 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("Unused")
@@ -45,10 +45,8 @@ class KotlinCommonPlugin : Plugin<Project> {
         targetCompatibility = JavaVersion.VERSION_11.toString()
       }
       withType<KotlinCompile>().configureEach {
-        kotlinOptions { jvmTarget = JavaVersion.VERSION_11.toString() }
-      }
-      withType<KotlinCompilationTask<*>>().configureEach {
         compilerOptions {
+          jvmTarget.set(JvmTarget.JVM_11)
           allWarningsAsErrors.set(true)
           languageVersion.set(KotlinVersion.KOTLIN_1_5)
           freeCompilerArgs.addAll(ADDITIONAL_COMPILER_ARGS)

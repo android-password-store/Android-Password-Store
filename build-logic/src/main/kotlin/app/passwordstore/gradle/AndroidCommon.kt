@@ -12,7 +12,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.withType
 
-@Suppress("UnstableApiUsage")
 object AndroidCommon {
   fun configure(project: Project) {
     project.extensions.configure<TestedExtension> {
