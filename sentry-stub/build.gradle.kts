@@ -3,6 +3,5 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 plugins {
-  kotlin("jvm")
-  id("com.github.android-password-store.kotlin-library")
+  id("com.github.android-password-store.kotlin-jvm-library")
 }

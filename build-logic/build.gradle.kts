@@ -53,9 +53,9 @@ gradlePlugin {
       id = "com.github.android-password-store.kotlin-kapt"
       implementationClass = "app.passwordstore.gradle.KotlinKaptPlugin"
     }
-    register("kotlin-library") {
-      id = "com.github.android-password-store.kotlin-library"
-      implementationClass = "app.passwordstore.gradle.KotlinLibraryPlugin"
+    register("kotlin-jvm-library") {
+      id = "com.github.android-password-store.kotlin-jvm-library"
+      implementationClass = "app.passwordstore.gradle.KotlinJVMLibrary"
     }
     register("ktfmt") {
       id = "com.github.android-password-store.ktfmt"
