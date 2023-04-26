@@ -8,20 +8,11 @@ package app.passwordstore.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("Unused")
 class KotlinLibraryPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     project.pluginManager.apply(KotlinCommonPlugin::class)
-    project.tasks.withType<KotlinCompile>().configureEach task@{
-      compilerOptions {
-        if (!this@task.name.contains("test", ignoreCase = true)) {
-          freeCompilerArgs.add("-Xexplicit-api=strict")
-        }
-      }
-    }
   }
 }

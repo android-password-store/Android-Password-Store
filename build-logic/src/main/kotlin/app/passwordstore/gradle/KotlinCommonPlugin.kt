@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 class KotlinCommonPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
+    val isAppModule = project.pluginManager.hasPlugin("com.android.application")
     project.pluginManager.apply(DetektPlugin::class.java)
     project.extensions.configure<DetektExtension> {
       parallel = true
@@ -44,12 +45,15 @@ class KotlinCommonPlugin : Plugin<Project> {
         sourceCompatibility = JavaVersion.VERSION_11.toString()
         targetCompatibility = JavaVersion.VERSION_11.toString()
       }
-      withType<KotlinCompile>().configureEach {
+      withType<KotlinCompile>().configureEach task@{
         compilerOptions {
           jvmTarget.set(JvmTarget.JVM_11)
           allWarningsAsErrors.set(true)
           languageVersion.set(KotlinVersion.KOTLIN_1_5)
           freeCompilerArgs.addAll(ADDITIONAL_COMPILER_ARGS)
+          if (!this@task.name.contains("test", ignoreCase = true) && !isAppModule) {
+            freeCompilerArgs.add("-Xexplicit-api=strict")
+          }
         }
       }
       withType<Test>().configureEach {

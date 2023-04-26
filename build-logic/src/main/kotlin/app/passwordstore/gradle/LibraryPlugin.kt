@@ -9,7 +9,10 @@ import org.gradle.kotlin.dsl.apply
 class LibraryPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
-    project.pluginManager.apply(LibraryPlugin::class)
+    project.pluginManager.run {
+      apply(LibraryPlugin::class)
+      apply(KotlinCommonPlugin::class)
+    }
     AndroidCommon.configure(project)
   }
 }
