@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 7.4.2" type="baseline" client="gradle" dependencies="false" name="AGP (7.4.2)" variant="all" version="7.4.2">
+<issues format="6" by="lint 8.0.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.0.0)" variant="all" version="8.0.0">
 
     <issue
         id="UnknownIssueId"
@@ -10,6 +10,155 @@
             file="lint.xml"
             line="44"
             column="3"/>
+    </issue>
+
+    <issue
+        id="StopShip"
+        message="`TODO` call found; points to code which must be fixed prior to release"
+        errorLine1="        is Err -> TODO()"
+        errorLine2="                  ~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/viewmodel/PGPKeyListViewModel.kt"
+            line="35"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="InvalidPackage"
+        message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming.directory`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory`.">
+        <location
+            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.73/7673fe0f3510e88232c4bd98d027e9e0a3d0af6d/bcpkix-jdk15to18-1.73.jar"/>
+    </issue>
+
+    <issue
+        id="InvalidPackage"
+        message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory.1`.">
+        <location
+            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.73/7673fe0f3510e88232c4bd98d027e9e0a3d0af6d/bcpkix-jdk15to18-1.73.jar"/>
+    </issue>
+
+    <issue
+        id="ConvertToWebp"
+        message="One or more images in this project can be converted to the WebP format which typically results in smaller file sizes, even for lossless conversion">
+        <location
+            file="src/debug/res/mipmap-xxxhdpi/ic_launcher.png"/>
+    </issue>
+
+    <issue
+        id="ConvertToWebp"
+        message="One or more images in this project can be converted to the WebP format which typically results in smaller file sizes, even for lossless conversion">
+        <location
+            file="src/main/res/mipmap-xxxhdpi/ic_launcher.png"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_oreo_autofill_filter.xml"
+            line="27"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_oreo_autofill_publisher_changed.xml"
+            line="66"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_oreo_autofill_publisher_changed.xml"
+            line="81"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/oreo_autofill_dataset.xml"
+            line="37"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/oreo_autofill_dataset.xml"
+            line="46"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src/main/res/layout/oreo_autofill_filter_row.xml"
+            line="29"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src/main/res/layout/oreo_autofill_filter_row.xml"
+            line="43"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Should explicitly declare type here since implicit type does not specify nullness (Lazy&lt;Array&lt;(GitCommand&lt;out (Any or Any?)> or GitCommand&lt;out (Any or Any?)>?)>>)"
+        errorLine1="  override val commands by unsafeLazy {"
+        errorLine2="               ~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/operation/BreakOutOfDetached.kt"
+            line="33"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Should explicitly declare type here since implicit type does not specify nullness (Array&lt;(GitCommand&lt;out (Any or Any?)> or GitCommand&lt;out (Any or Any?)>?)>)"
+        errorLine1="  override val commands ="
+        errorLine2="               ~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/operation/ResetToRemoteOperation.kt"
+            line="14"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Should explicitly declare type here since implicit type does not specify nullness (Array&lt;(GitCommand&lt;out (Any or Any?)> or GitCommand&lt;out (Any or Any?)>?)>)"
+        errorLine1="  override val commands ="
+        errorLine2="               ~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/operation/SyncOperation.kt"
+            line="14"
+            column="16"/>
     </issue>
 
 </issues>
