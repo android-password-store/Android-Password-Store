@@ -85,7 +85,6 @@ dependencyResolutionManagement {
         includeGroup("androidx.compose.ui")
         includeGroup("androidx.concurrent")
         includeGroup("androidx.constraintlayout")
-        includeGroup("androidx.compose.compiler")
         includeGroup("androidx.coordinatorlayout")
         includeGroup("androidx.core")
         includeGroup("androidx.cursoradapter")
@@ -154,6 +153,10 @@ dependencyResolutionManagement {
     exclusiveContent {
       forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }
       filter { includeModule("com.android.tools", "r8") }
+    }
+    exclusiveContent {
+      forRepository { maven("https://androidx.dev/storage/compose-compiler/repository") }
+      filter { includeGroup("androidx.compose.compiler") }
     }
     mavenCentral()
   }
