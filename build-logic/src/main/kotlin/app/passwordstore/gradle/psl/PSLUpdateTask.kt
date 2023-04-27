@@ -5,8 +5,8 @@
 
 package app.passwordstore.gradle.psl
 
+import app.passwordstore.gradle.OkHttp
 import java.util.TreeSet
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.ByteString
 import okio.ByteString.Companion.encodeUtf8
@@ -32,12 +32,10 @@ abstract class PSLUpdateTask : DefaultTask() {
   }
 
   private fun fetchPublicSuffixList(): PublicSuffixListData {
-    val client = OkHttpClient.Builder().build()
-
     val request =
       Request.Builder().url("https://publicsuffix.org/list/public_suffix_list.dat").build()
 
-    client.newCall(request).execute().use { response ->
+    OkHttp.CLIENT.newCall(request).execute().use { response ->
       val source = requireNotNull(response.body).source()
 
       val data = PublicSuffixListData()
