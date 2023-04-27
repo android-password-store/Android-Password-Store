@@ -91,7 +91,6 @@ gradlePlugin {
 dependencies {
   implementation(platform(libs.kotlin.bom))
   implementation(libs.build.agp)
-  implementation(libs.build.detekt)
   implementation(libs.build.diffutils)
   implementation(libs.build.download)
   implementation(libs.build.kotlin)

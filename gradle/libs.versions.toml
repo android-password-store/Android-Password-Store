@@ -36,7 +36,6 @@ androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:2.3.2"
 aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
 build-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-build-detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0"
 build-diffutils = "io.github.java-diff-utils:java-diff-utils:4.12"
 build-download = "de.undercouch:gradle-download-task:5.4.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

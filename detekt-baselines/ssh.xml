@@ -1,9 +1,0 @@
-<?xml version="1.0" ?>
-<SmellBaseline>
-  <ManuallySuppressedIssues></ManuallySuppressedIssues>
-  <CurrentIssues>
-    <ID>ReturnCount:SSHKeyManager.kt$SSHKeyManager$public fun needsAuthentication(): Boolean</ID>
-    <ID>SwallowedException:SSHKeyManager.kt$SSHKeyManager$e: IllegalStateException</ID>
-    <ID>TooManyFunctions:SSHKeyManager.kt$SSHKeyManager</ID>
-  </CurrentIssues>
-</SmellBaseline>

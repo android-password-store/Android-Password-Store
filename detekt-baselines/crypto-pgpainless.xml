@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<SmellBaseline>
-  <ManuallySuppressedIssues/>
-  <CurrentIssues>
-    <ID>ForbiddenComment:PGPKeyManager.kt$PGPKeyManager$// TODO: This is a temp hack for now and in future it should check that the GPGKeyManager can</ID>
-  </CurrentIssues>
-</SmellBaseline>

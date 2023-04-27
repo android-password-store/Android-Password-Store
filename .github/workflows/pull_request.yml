@@ -194,7 +194,7 @@ jobs:
           name: Build report
           path: build/reports/kotlin-build/
 
-  detekt:
+  lint:
     needs: [ "check-changed-files" ]
     runs-on: ubuntu-latest
     steps:
@@ -212,10 +212,10 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Run detekt
+      - name: Run Lint
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
         with:
-          arguments: detekt
+          arguments: lint
           gradle-home-cache-cleanup: true
 
       - name: Upload Kotlin build report
