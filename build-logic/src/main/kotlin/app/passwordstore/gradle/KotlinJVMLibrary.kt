@@ -23,6 +23,6 @@ class KotlinJVMLibrary : Plugin<Project> {
       apply(LintPlugin::class)
       apply(KotlinCommonPlugin::class)
     }
-    project.extensions.configure<Lint> { configureLint(project) }
+    project.extensions.configure<Lint> { configureLint(project, isJVM = true) }
   }
 }

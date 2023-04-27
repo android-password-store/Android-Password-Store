@@ -129,6 +129,17 @@
     </issue>
 
     <issue
+        id="ComposeUnstableCollections"
+        message="The Compose Compiler cannot infer the stability of a parameter if a List&lt;GpgIdentifier> is used in it, even if the item type is stable.&#xA;You should use Kotlinx Immutable Collections instead: `identifiers: ImmutableList&lt;GpgIdentifier>` or create an `@Immutable` wrapper for this class: `@Immutable data class IdentifiersList(val items: List&lt;GpgIdentifier>)`&#xA;See https://slackhq.github.io/compose-lints/rules/#avoid-using-unstable-collections for more information."
+        errorLine1="  identifiers: List&lt;GpgIdentifier>,"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/pgp/PGPKeyList.kt"
+            line="36"
+            column="16"/>
+    </issue>
+
+    <issue
         id="UnknownNullness"
         message="Should explicitly declare type here since implicit type does not specify nullness (Lazy&lt;Array&lt;(GitCommand&lt;out (Any or Any?)> or GitCommand&lt;out (Any or Any?)>?)>>)"
         errorLine1="  override val commands by unsafeLazy {"

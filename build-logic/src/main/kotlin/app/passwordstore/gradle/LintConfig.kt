@@ -4,7 +4,7 @@ import com.android.build.api.dsl.Lint
 import org.gradle.api.Project
 
 object LintConfig {
-  fun Lint.configureLint(project: Project) {
+  fun Lint.configureLint(project: Project, isJVM: Boolean = false) {
     quiet = project.providers.environmentVariable("CI").isPresent
     abortOnError = true
     checkReleaseBuilds = true
@@ -28,6 +28,10 @@ object LintConfig {
     disable += "TypographyQuotes"
     // False-positives abound due to use of ViewBinding
     disable += "UnusedIds"
+    if (!isJVM) {
+      enable += "ComposeM2Api"
+      error += "ComposeM2Api"
+    }
     baseline = project.file("lint-baseline.xml")
   }
 }
