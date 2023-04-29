@@ -77,10 +77,13 @@ object SshKey {
 
   val sshPublicKey
     get() = if (publicKeyFile.exists()) publicKeyFile.readText() else null
+
   val canShowSshPublicKey
     get() = type in listOf(Type.LegacyGenerated, Type.KeystoreNative, Type.KeystoreWrappedEd25519)
+
   val exists
     get() = type != null
+
   val mustAuthenticate: Boolean
     get() {
       return runCatching {
@@ -111,6 +114,7 @@ object SshKey {
 
   private val privateKeyFile
     get() = File(context.filesDir, ".ssh_key")
+
   private val publicKeyFile
     get() = File(context.filesDir, ".ssh_key.pub")
 

@@ -29,6 +29,7 @@ sealed class GitException(@StringRes res: Int, vararg fmt: String) :
   sealed class PullException(@StringRes res: Int, vararg fmt: String) : GitException(res, *fmt) {
 
     object PullRebaseFailed : PullException(R.string.git_pull_rebase_fail_error)
+
     object PullMergeFailed : PullException(R.string.git_pull_merge_fail_error)
   }
 
@@ -36,7 +37,9 @@ sealed class GitException(@StringRes res: Int, vararg fmt: String) :
   sealed class PushException(@StringRes res: Int, vararg fmt: String) : GitException(res, *fmt) {
 
     object NonFastForward : PushException(R.string.git_push_nff_error)
+
     object RemoteRejected : PushException(R.string.git_push_other_error)
+
     class Generic(message: String) : PushException(R.string.git_push_generic_error, message)
   }
 }

@@ -600,6 +600,7 @@ class PasswordStore : BaseGitActivity() {
   companion object {
 
     const val REQUEST_ARG_PATH = "PATH"
+
     private fun isPrintable(c: Char): Boolean {
       val block = UnicodeBlock.of(c)
       return (!Character.isISOControl(c) && block != null && block !== UnicodeBlock.SPECIALS)

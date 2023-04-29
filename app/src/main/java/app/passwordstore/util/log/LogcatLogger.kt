@@ -8,9 +8,13 @@ import logcat.logcat
 class LogcatLogger(name: String) : AbstractLogger(name) {
 
   override fun isTraceEnabled() = true
+
   override fun isDebugEnabled() = true
+
   override fun isInfoEnabled() = true
+
   override fun isWarnEnabled() = true
+
   override fun isErrorEnabled() = true
 
   // Replace slf4j's "{}" format string style with standard Java's "%s".

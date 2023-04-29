@@ -41,6 +41,7 @@ class GitCommandExecutor(
       GitCommandExecutorEntryPoint::class.java
     )
   }
+
   suspend fun execute(): Result<Unit, Throwable> {
     val gitSettings = hiltEntryPoint.gitSettings()
     val snackbar =

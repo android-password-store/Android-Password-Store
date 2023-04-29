@@ -11,6 +11,7 @@ import org.slf4j.Logger
 class LogcatLoggerFactory : ILoggerFactory {
 
   private val loggers = ConcurrentHashMap<String, Logger>()
+
   override fun getLogger(name: String): Logger {
     return loggers.getOrPut(name) { LogcatLogger(name) }
   }

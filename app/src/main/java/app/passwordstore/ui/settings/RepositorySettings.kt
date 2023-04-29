@@ -195,6 +195,7 @@ class RepositorySettings(
   @InstallIn(SingletonComponent::class)
   interface RepositorySettingsEntryPoint {
     fun gitSettings(): GitSettings
+
     @GitPreferences fun encryptedPreferences(): SharedPreferences
   }
 }

@@ -20,6 +20,7 @@ import java.io.File
 class FolderCreationDialogFragment : DialogFragment() {
 
   private lateinit var newFolder: File
+
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
     alertDialogBuilder.setTitle(R.string.title_create_folder)
@@ -65,6 +66,7 @@ class FolderCreationDialogFragment : DialogFragment() {
   companion object {
 
     private const val CURRENT_DIR_EXTRA = "CURRENT_DIRECTORY"
+
     fun newInstance(startingDirectory: String): FolderCreationDialogFragment {
       val extras = bundleOf(CURRENT_DIR_EXTRA to startingDirectory)
       val fragment = FolderCreationDialogFragment()

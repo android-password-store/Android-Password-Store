@@ -49,6 +49,7 @@ class TextInputDialog : DialogFragment() {
     super.onCancel(dialog)
     finish()
   }
+
   companion object {
     const val REQUEST_KEY = "text_input_dialog"
     const val BUNDLE_KEY_TEXT = "text"

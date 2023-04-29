@@ -78,6 +78,7 @@ open class PasswordItemRecyclerAdapter(coroutineScope: CoroutineScope) :
       itemDetails =
         object : ItemDetailsLookup.ItemDetails<String>() {
           override fun getPosition() = absoluteAdapterPosition
+
           override fun getSelectionKey() = item.stableId
         }
     }

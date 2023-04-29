@@ -27,6 +27,7 @@ enum class Protocol(val pref: String) {
   companion object {
 
     private val map = values().associateBy(Protocol::pref)
+
     fun fromString(type: String?): Protocol {
       return map[type ?: return Ssh]
         ?: throw IllegalArgumentException("$type is not a valid Protocol")
@@ -43,6 +44,7 @@ enum class AuthMode(val pref: String) {
   companion object {
 
     private val map = values().associateBy(AuthMode::pref)
+
     fun fromString(type: String?): AuthMode {
       return map[type ?: return SshKey]
         ?: throw IllegalArgumentException("$type is not a valid AuthMode")
@@ -66,6 +68,7 @@ constructor(
     private set(value) {
       settings.edit { putString(PreferenceKeys.GIT_REMOTE_AUTH, value.pref) }
     }
+
   var url
     get() = settings.getString(PreferenceKeys.GIT_REMOTE_URL)
     private set(value) {
@@ -79,41 +82,49 @@ constructor(
       encryptedSettings.edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
       clearSavedHostKey()
     }
+
   var authorName
     get() = settings.getString(PreferenceKeys.GIT_CONFIG_AUTHOR_NAME) ?: ""
     set(value) {
       settings.edit { putString(PreferenceKeys.GIT_CONFIG_AUTHOR_NAME, value) }
     }
+
   var authorEmail
     get() = settings.getString(PreferenceKeys.GIT_CONFIG_AUTHOR_EMAIL) ?: ""
     set(value) {
       settings.edit { putString(PreferenceKeys.GIT_CONFIG_AUTHOR_EMAIL, value) }
     }
+
   var useMultiplexing
     get() = settings.getBoolean(PreferenceKeys.GIT_REMOTE_USE_MULTIPLEXING, true)
     set(value) {
       settings.edit { putBoolean(PreferenceKeys.GIT_REMOTE_USE_MULTIPLEXING, value) }
     }
+
   var proxyHost
     get() = proxySettings.getString(PreferenceKeys.PROXY_HOST)
     set(value) {
       proxySettings.edit { putString(PreferenceKeys.PROXY_HOST, value) }
     }
+
   var proxyPort
     get() = proxySettings.getInt(PreferenceKeys.PROXY_PORT, -1)
     set(value) {
       proxySettings.edit { putInt(PreferenceKeys.PROXY_PORT, value) }
     }
+
   var proxyUsername
     get() = settings.getString(PreferenceKeys.PROXY_USERNAME)
     set(value) {
       proxySettings.edit { putString(PreferenceKeys.PROXY_USERNAME, value) }
     }
+
   var proxyPassword
     get() = proxySettings.getString(PreferenceKeys.PROXY_PASSWORD)
     set(value) {
       proxySettings.edit { putString(PreferenceKeys.PROXY_PASSWORD, value) }
     }
+
   var rebaseOnPull
     get() = settings.getBoolean(PreferenceKeys.REBASE_ON_PULL, true)
     set(value) {
@@ -122,9 +133,12 @@ constructor(
 
   sealed class UpdateConnectionSettingsResult {
     class MissingUsername(val newProtocol: Protocol) : UpdateConnectionSettingsResult()
+
     class AuthModeMismatch(val newProtocol: Protocol, val validModes: List<AuthMode>) :
       UpdateConnectionSettingsResult()
+
     object Valid : UpdateConnectionSettingsResult()
+
     object FailedToParseUrl : UpdateConnectionSettingsResult()
   }
 

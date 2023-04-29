@@ -45,6 +45,7 @@ import org.eclipse.jgit.util.FS
 
 sealed class SshAuthMethod(val activity: AppCompatActivity) {
   class Password(activity: AppCompatActivity) : SshAuthMethod(activity)
+
   class SshKey(activity: AppCompatActivity) : SshAuthMethod(activity)
 }
 

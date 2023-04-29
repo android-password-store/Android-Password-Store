@@ -52,10 +52,12 @@ class AutofillMatcher {
     private const val MAX_NUM_MATCHES = 10
 
     private const val PREFERENCE_PREFIX_TOKEN = "token;"
+
     private fun tokenKey(formOrigin: FormOrigin.App) =
       "$PREFERENCE_PREFIX_TOKEN${formOrigin.identifier}"
 
     private const val PREFERENCE_PREFIX_MATCHES = "matches;"
+
     private fun matchesKey(formOrigin: FormOrigin) =
       "$PREFERENCE_PREFIX_MATCHES${formOrigin.identifier}"
 

@@ -17,9 +17,11 @@ tasks.withType<JavaCompile>().configureEach {
 tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
     jvmTarget = JavaVersion.VERSION_11.toString()
-    freeCompilerArgs = freeCompilerArgs + listOf(
-      "-opt-in=kotlin.RequiresOptIn",
-    )
+    freeCompilerArgs =
+      freeCompilerArgs +
+        listOf(
+          "-opt-in=kotlin.RequiresOptIn",
+        )
   }
 }
 

@@ -17,12 +17,14 @@ public class OpenPgpServiceConnection(context: Context, providerPackageName: Str
   public interface OnBound {
 
     public fun onBound(service: IOpenPgpService2)
+
     public fun onError(e: Exception)
   }
 
   private val mApplicationContext: Context = context.applicationContext
   public var service: IOpenPgpService2? = null
     private set
+
   private val mProviderPackageName: String? = providerPackageName
   private var mOnBoundListener: OnBound? = null
 

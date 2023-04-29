@@ -163,10 +163,8 @@ open class BasePgpActivity : AppCompatActivity() {
     fun getParentPath(fullPath: String, repositoryPath: String): String {
       val relativePath = getRelativePath(fullPath, repositoryPath)
       val index = relativePath.lastIndexOf("/")
-      return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace(
-        "/+".toRegex(),
-        "/"
-      )
+      return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/"
+        .replace("/+".toRegex(), "/")
     }
 
     /** /path/to/store/social/facebook.gpg -> social/facebook */
