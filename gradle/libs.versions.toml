@@ -39,7 +39,7 @@ build-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 build-diffutils = "io.github.java-diff-utils:java-diff-utils:4.12"
 build-download = "de.undercouch:gradle-download-task:5.4.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-build-ktfmt = "com.facebook:ktfmt:0.43"
+build-ktfmt = "com.facebook:ktfmt:0.44"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.25.2"
 build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.3"
 build-moshi = "com.squareup.moshi:moshi:1.14.0"
