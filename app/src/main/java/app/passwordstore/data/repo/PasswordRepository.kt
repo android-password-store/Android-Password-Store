@@ -29,6 +29,7 @@ object PasswordRepository {
   private val settings by unsafeLazy { Application.instance.sharedPrefs }
   private val filesDir
     get() = Application.instance.filesDir
+
   val isInitialized: Boolean
     get() = repository != null
 

@@ -21,6 +21,7 @@ import logcat.logcat
 public sealed class FormOrigin(public open val identifier: String) {
 
   public data class Web(override val identifier: String) : FormOrigin(identifier)
+
   public data class App(override val identifier: String) : FormOrigin(identifier)
 
   public companion object {

@@ -156,6 +156,8 @@ internal class PublicSuffixListData(
 
 internal sealed class PublicSuffixOffset {
   data class Offset(val value: Int) : PublicSuffixOffset()
+
   object PublicSuffix : PublicSuffixOffset()
+
   object PrevailingRule : PublicSuffixOffset()
 }

@@ -75,6 +75,7 @@ constructor(
       SshKey.mustAuthenticate
     }
   }
+
   fun keyProvider(client: SSHClient, credentialFinder: CredentialFinder): KeyProvider? {
     return if (useNewSSH) {
       sshKeyManager.keyProvider(client, credentialFinder)

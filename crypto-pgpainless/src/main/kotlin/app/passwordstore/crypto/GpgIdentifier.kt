@@ -31,6 +31,7 @@ public sealed class GpgIdentifier {
       return hexString
     }
   }
+
   public data class UserId(val email: String) : GpgIdentifier() {
     override fun toString(): String {
       return email

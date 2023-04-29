@@ -14,6 +14,7 @@ class DicewarePassphraseGeneratorTest {
   private val random = Random(1_00_000)
 
   private val intGenerator = RandomIntGenerator { it.random(random) }
+
   @Test
   fun generatePassphrase() {
     val die = Die(6, intGenerator)

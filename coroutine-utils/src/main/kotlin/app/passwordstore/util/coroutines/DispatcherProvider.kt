@@ -13,8 +13,11 @@ import kotlinx.coroutines.Dispatchers
 public interface DispatcherProvider {
 
   public fun main(): CoroutineDispatcher = Dispatchers.Main
+
   public fun default(): CoroutineDispatcher = Dispatchers.Default
+
   public fun io(): CoroutineDispatcher = Dispatchers.IO
+
   public fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
 }
 

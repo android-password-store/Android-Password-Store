@@ -199,12 +199,16 @@ internal data class ClassifiedAutofillScenario<T : Any>(
 
   override val allPasswordFields
     get() = currentPassword + newPassword
+
   override val passwordFieldsToFillOnMatch
     get() = currentPassword
+
   override val passwordFieldsToFillOnSearch
     get() = currentPassword
+
   override val passwordFieldsToFillOnGenerate
     get() = newPassword
+
   override val passwordFieldsToSave
     get() = newPassword.ifEmpty { currentPassword }
 }
@@ -219,12 +223,16 @@ internal data class GenericAutofillScenario<T : Any>(
 
   override val allPasswordFields
     get() = genericPassword
+
   override val passwordFieldsToFillOnMatch
     get() = if (genericPassword.size == 1) genericPassword else emptyList()
+
   override val passwordFieldsToFillOnSearch
     get() = if (genericPassword.size == 1) genericPassword else emptyList()
+
   override val passwordFieldsToFillOnGenerate
     get() = genericPassword
+
   override val passwordFieldsToSave
     get() = genericPassword
 }

@@ -130,8 +130,10 @@ constructor(
 
   private val root
     get() = PasswordRepository.getRepositoryDirectory()
+
   private val showHiddenContents
     get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
+
   private val defaultSearchMode
     get() =
       if (settings.getBoolean(PreferenceKeys.FILTER_RECURSIVELY, true)) {
@@ -142,8 +144,10 @@ constructor(
 
   private val typeSortOrder
     get() = PasswordSortOrder.getSortOrder(settings)
+
   private val directoryStructure
     get() = AutofillPreferences.directoryStructure(getApplication())
+
   private val itemComparator
     get() = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
 
@@ -428,6 +432,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   }
 
   private var onItemClickedListener: ((holder: T, item: PasswordItem) -> Unit)? = null
+
   open fun onItemClicked(
     listener: (holder: T, item: PasswordItem) -> Unit
   ): SearchableRepositoryAdapter<T> {
@@ -439,6 +444,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   }
 
   private var onSelectionChangedListener: ((selection: Selection<String>) -> Unit)? = null
+
   open fun onSelectionChanged(
     listener: (selection: Selection<String>) -> Unit
   ): SearchableRepositoryAdapter<T> {
@@ -458,6 +464,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
     }
 
   private var selectionTracker: SelectionTracker<String>? = null
+
   fun requireSelectionTracker() = selectionTracker!!
 
   private val selectedFiles
@@ -483,6 +490,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
       }
     }
   }
+
   final override fun getPopupText(position: Int): String {
     return getItem(position).name[0].toString().uppercase(Locale.getDefault())
   }

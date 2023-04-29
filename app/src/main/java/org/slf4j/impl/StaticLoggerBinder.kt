@@ -13,6 +13,7 @@ class StaticLoggerBinder : LoggerFactoryBinder {
   override fun getLoggerFactory(): ILoggerFactory {
     return loggerFactory
   }
+
   override fun getLoggerFactoryClassStr(): String {
     return loggerFactoryClassStr
   }

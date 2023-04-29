@@ -76,6 +76,7 @@ internal class FormField(
         "com.google.android.material.textfield.TextInputEditText",
       )
     private const val ANDROID_WEB_VIEW_CLASS_NAME = "android.webkit.WebView"
+
     private fun isPasswordInputType(inputType: Int): Boolean {
       val typeClass = inputType and InputType.TYPE_MASK_CLASS
       val typeVariation = inputType and InputType.TYPE_MASK_VARIATION
@@ -116,6 +117,7 @@ internal class FormField(
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun isSupportedHint(hint: String?) = hint in HINTS_FILLABLE
+
     private val EXCLUDED_TERMS =
       listOf(
         "url_bar", // Chrome/Edge/Firefox address bar
@@ -157,6 +159,7 @@ internal class FormField(
 
   private val List<String>.anyMatchesFieldInfo
     get() = any { fieldId.contains(it) || hint.contains(it) || htmlName.contains(it) }
+
   val autofillId: AutofillId = node.autofillId!!
 
   // Information for heuristics and exclusion rules based only on the current field
