@@ -3,7 +3,7 @@ agp = "8.0.1"
 androidxActivity = "1.7.1"
 bouncycastle = "1.73"
 # @keep used for kotlinCompilerExtensionVersion
-composeCompiler = "1.4.6-dev-k1.8.21-290a127309e"
+composeCompiler = "1.4.7"
 coroutines = "1.6.4"
 flowbinding = "1.2.0"
 hilt = "2.46"
