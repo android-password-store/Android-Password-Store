@@ -17,10 +17,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 class PreferenceModule {
 
-  private fun provideBaseEncryptedPreferences(
-    context: Context,
-    fileName: String
-  ): SharedPreferences {
+  private fun createEncryptedPreferences(context: Context, fileName: String): SharedPreferences {
     val masterKeyAlias =
       MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
     return EncryptedSharedPreferences.create(
@@ -34,27 +31,21 @@ class PreferenceModule {
 
   @[Provides PasswordGeneratorPreferences Reusable]
   fun providePwgenPreferences(@ApplicationContext context: Context): SharedPreferences {
-    return provideBaseEncryptedPreferences(context, "pwgen_preferences")
+    return createEncryptedPreferences(context, "pwgen_preferences")
   }
 
-  @Provides
-  @SettingsPreferences
-  @Reusable
+  @[Provides SettingsPreferences Reusable]
   fun provideSettingsPreferences(@ApplicationContext context: Context): SharedPreferences {
     return context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", MODE_PRIVATE)
   }
 
-  @Provides
-  @GitPreferences
-  @Reusable
-  fun provideEncryptedPreferences(@ApplicationContext context: Context): SharedPreferences {
-    return provideBaseEncryptedPreferences(context, "git_operation")
+  @[Provides GitPreferences Reusable]
+  fun provideGitPreferences(@ApplicationContext context: Context): SharedPreferences {
+    return createEncryptedPreferences(context, "git_operation")
   }
 
-  @Provides
-  @ProxyPreferences
-  @Reusable
+  @[Provides ProxyPreferences Reusable]
   fun provideProxyPreferences(@ApplicationContext context: Context): SharedPreferences {
-    return provideBaseEncryptedPreferences(context, "http_proxy")
+    return createEncryptedPreferences(context, "http_proxy")
   }
 }
