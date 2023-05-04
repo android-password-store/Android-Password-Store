@@ -17,7 +17,6 @@ internal object SSHKeyUtils {
       Regex("END .* PRIVATE KEY").containsMatchIn(lines.last())
   }
 
-  @Suppress("BlockingMethodInNonBlockingContext")
   suspend fun getOrCreateWrappedPrivateKeyFile(
     context: Context,
     requiresAuthentication: Boolean,
@@ -36,7 +35,6 @@ internal object SSHKeyUtils {
         }
     }
 
-  @Suppress("BlockingMethodInNonBlockingContext")
   private suspend fun getOrCreateWrappingMasterKey(
     context: Context,
     requireAuthentication: Boolean
