@@ -11,7 +11,6 @@ import app.passwordstore.R
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.editText
-import de.Maxr1998.modernpreferences.helpers.onSelectionChange
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.helpers.switch
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
@@ -27,9 +26,8 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
         PreferenceKeys.PREF_KEY_PWGEN_TYPE,
         items,
       ) {
-        initialSelection = "classic"
+        initialSelection = "diceware"
         titleRes = R.string.pref_password_generator_type_title
-        onSelectionChange { true }
       }
       editText(PreferenceKeys.GENERAL_SHOW_TIME) {
         titleRes = R.string.pref_clipboard_timeout_title

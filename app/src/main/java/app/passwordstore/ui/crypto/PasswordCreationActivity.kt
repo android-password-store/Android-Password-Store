@@ -285,7 +285,7 @@ class PasswordCreationActivity : BasePgpActivity() {
         binding.password.setText(bundle.getString(RESULT))
       }
     }
-    when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) ?: KEY_PWGEN_TYPE_CLASSIC) {
+    when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) ?: KEY_PWGEN_TYPE_DICEWARE) {
       KEY_PWGEN_TYPE_CLASSIC ->
         PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
       KEY_PWGEN_TYPE_DICEWARE ->
