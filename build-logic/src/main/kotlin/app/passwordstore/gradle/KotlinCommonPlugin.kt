@@ -30,7 +30,7 @@ class KotlinCommonPlugin : Plugin<Project> {
         compilerOptions {
           jvmTarget.set(JvmTarget.JVM_11)
           allWarningsAsErrors.set(true)
-          languageVersion.set(KotlinVersion.KOTLIN_1_5)
+          languageVersion.set(KotlinVersion.KOTLIN_1_8)
           freeCompilerArgs.addAll(ADDITIONAL_COMPILER_ARGS)
           if (!this@task.name.contains("test", ignoreCase = true) && !isAppModule) {
             freeCompilerArgs.add("-Xexplicit-api=strict")
