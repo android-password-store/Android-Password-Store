@@ -18,7 +18,7 @@ constructor(
   private val dispatcherProvider: DispatcherProvider,
 ) {
 
-  private suspend fun cachePassphrase(
+  suspend fun cachePassphrase(
     context: Context,
     identifier: GpgIdentifier,
     passphrase: String,
@@ -28,7 +28,7 @@ constructor(
     }
   }
 
-  private suspend fun retrieveCachedPassphrase(
+  suspend fun retrieveCachedPassphrase(
     context: Context,
     identifier: GpgIdentifier,
   ): String? {
