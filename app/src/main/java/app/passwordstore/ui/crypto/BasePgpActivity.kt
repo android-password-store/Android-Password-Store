@@ -18,7 +18,9 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
+import app.passwordstore.crypto.GpgIdentifier
 import app.passwordstore.data.crypto.CryptoRepository
+import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.ui.pgp.PGPKeyImportActivity
 import app.passwordstore.util.coroutines.DispatcherProvider
@@ -147,6 +149,57 @@ open class BasePgpActivity : AppCompatActivity() {
       } else {
         startService(service)
       }
+    }
+  }
+
+  /**
+   * Get a list of available [GpgIdentifier]s for the current password repository. This method
+   * throws when no identifiers were able to be parsed. If this method returns null, it means that
+   * an invalid identifier was encountered and further execution must stop to let the user correct
+   * the problem.
+   */
+  fun getGpgIdentifiers(subDir: String): List<GpgIdentifier>? {
+    val repoRoot = PasswordRepository.getRepositoryDirectory()
+    val gpgIdentifierFile =
+      File(repoRoot, subDir).findTillRoot(".gpg-id", repoRoot)
+        ?: File(repoRoot, ".gpg-id").apply { createNewFile() }
+    val gpgIdentifiers =
+      gpgIdentifierFile
+        .readLines()
+        .filter { it.isNotBlank() }
+        .map { line ->
+          GpgIdentifier.fromString(line)
+            ?: run {
+              // The line being empty means this is most likely an empty `.gpg-id`
+              // file we created. Skip the validation so we can make the user add a
+              // real ID.
+              if (line.isEmpty()) return@run
+              if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex()).not()) {
+                snackbar(message = resources.getString(R.string.invalid_gpg_id))
+              }
+              return null
+            }
+        }
+        .filterIsInstance<GpgIdentifier>()
+    if (gpgIdentifiers.isEmpty()) {
+      error("Failed to parse identifiers from .gpg-id: ${gpgIdentifierFile.readText()}")
+    }
+    return gpgIdentifiers
+  }
+
+  @Suppress("ReturnCount")
+  private fun File.findTillRoot(fileName: String, rootPath: File): File? {
+    val gpgFile = File(this, fileName)
+    if (gpgFile.exists()) return gpgFile
+
+    if (this.absolutePath == rootPath.absolutePath) {
+      return null
+    }
+    val parent = parentFile
+    return if (parent != null && parent.exists()) {
+      parent.findTillRoot(fileName, rootPath)
+    } else {
+      null
     }
   }
 

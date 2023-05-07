@@ -24,9 +24,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
-import app.passwordstore.crypto.GpgIdentifier
 import app.passwordstore.data.passfile.PasswordEntry
-import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.databinding.PasswordCreationActivityBinding
 import app.passwordstore.ui.dialogs.DicewarePasswordGeneratorDialogFragment
 import app.passwordstore.ui.dialogs.OtpImportDialogFragment
@@ -333,31 +331,7 @@ class PasswordCreationActivity : BasePgpActivity() {
       }
 
       // pass enters the key ID into `.gpg-id`.
-      val repoRoot = PasswordRepository.getRepositoryDirectory()
-      val gpgIdentifierFile =
-        File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
-          ?: File(repoRoot, ".gpg-id").apply { createNewFile() }
-      val gpgIdentifiers =
-        gpgIdentifierFile
-          .readLines()
-          .filter { it.isNotBlank() }
-          .map { line ->
-            GpgIdentifier.fromString(line)
-              ?: run {
-                // The line being empty means this is most likely an empty `.gpg-id`
-                // file we created. Skip the validation so we can make the user add a
-                // real ID.
-                if (line.isEmpty()) return@run
-                if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex()).not()) {
-                  snackbar(message = resources.getString(R.string.invalid_gpg_id))
-                }
-                return@with
-              }
-          }
-          .filterIsInstance<GpgIdentifier>()
-      if (gpgIdentifiers.isEmpty()) {
-        error("Failed to parse identifiers from .gpg-id: ${gpgIdentifierFile.readText()}")
-      }
+      val gpgIdentifiers = getGpgIdentifiers(directory.text.toString()) ?: return@with
       val content = "$editPass\n$editExtra"
       val path =
         when {
@@ -480,23 +454,6 @@ class PasswordCreationActivity : BasePgpActivity() {
             }
           }
       }
-    }
-  }
-
-  @Suppress("ReturnCount")
-  private fun File.findTillRoot(fileName: String, rootPath: File): File? {
-    val gpgFile = File(this, fileName)
-    if (gpgFile.exists()) return gpgFile
-
-    if (this.absolutePath == rootPath.absolutePath) {
-      return null
-    }
-
-    val parent = parentFile
-    return if (parent != null && parent.exists()) {
-      parent.findTillRoot(fileName, rootPath)
-    } else {
-      null
     }
   }
 
