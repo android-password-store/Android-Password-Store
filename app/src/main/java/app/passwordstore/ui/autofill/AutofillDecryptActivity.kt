@@ -13,13 +13,17 @@ import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
+import app.passwordstore.data.crypto.GPGPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.crypto.BasePgpActivity
 import app.passwordstore.ui.crypto.PasswordDialog
+import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
 import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.asLog
+import app.passwordstore.util.features.Feature.EnableGPGPassphraseCache
+import app.passwordstore.util.features.Features
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.michaelbull.result.getOrElse
@@ -77,6 +81,8 @@ class AutofillDecryptActivity : BasePgpActivity() {
   }
 
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
+  @Inject lateinit var features: Features
+  @Inject lateinit var passphraseCache: GPGPassphraseCache
 
   private lateinit var directoryStructure: DirectoryStructure
 
@@ -101,18 +107,46 @@ class AutofillDecryptActivity : BasePgpActivity() {
     directoryStructure = AutofillPreferences.directoryStructure(this)
     logcat { action.toString() }
     requireKeysExist {
-      val dialog = PasswordDialog()
-      lifecycleScope.launch {
-        withContext(Dispatchers.Main) {
-          dialog.password.collectLatest { value ->
-            if (value != null) {
-              decrypt(File(filePath), clientState, action, value)
+      val gpgIdentifiers = getGpgIdentifiers("") ?: return@requireKeysExist
+      if (
+        BiometricAuthenticator.canAuthenticate(this) && features.isEnabled(EnableGPGPassphraseCache)
+      ) {
+        BiometricAuthenticator.authenticate(this) { authResult ->
+          if (authResult is BiometricAuthenticator.Result.Success) {
+            lifecycleScope.launch {
+              val cachedPassphrase =
+                passphraseCache.retrieveCachedPassphrase(
+                  this@AutofillDecryptActivity,
+                  gpgIdentifiers.first()
+                )
+              if (cachedPassphrase != null) {
+                decrypt(File(filePath), clientState, action, cachedPassphrase)
+              } else {
+                askPassphrase(filePath, clientState, action)
+              }
             }
+          } else {
+            askPassphrase(filePath, clientState, action)
+          }
+        }
+      } else {
+        askPassphrase(filePath, clientState, action)
+      }
+    }
+  }
+
+  private fun askPassphrase(filePath: String, clientState: Bundle, action: AutofillAction) {
+    val dialog = PasswordDialog()
+    lifecycleScope.launch {
+      withContext(Dispatchers.Main) {
+        dialog.password.collectLatest { value ->
+          if (value != null) {
+            decrypt(File(filePath), clientState, action, value)
           }
         }
       }
-      dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     }
+    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
   private suspend fun decrypt(
@@ -143,6 +177,7 @@ class AutofillDecryptActivity : BasePgpActivity() {
   }
 
   private suspend fun decryptCredential(file: File, password: String): Credentials? {
+    val gpgIdentifiers = getGpgIdentifiers("") ?: return null
     runCatching { file.readBytes().inputStream() }
       .onFailure { e ->
         logcat(ERROR) { e.asLog("File to decrypt not found") }
@@ -154,6 +189,7 @@ class AutofillDecryptActivity : BasePgpActivity() {
               val outputStream = ByteArrayOutputStream()
               repository.decrypt(
                 password,
+                gpgIdentifiers,
                 encryptedInput,
                 outputStream,
               )

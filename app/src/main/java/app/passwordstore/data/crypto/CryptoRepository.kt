@@ -18,7 +18,6 @@ import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getAll
 import com.github.michaelbull.result.mapBoth
-import com.github.michaelbull.result.unwrap
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
@@ -41,9 +40,10 @@ constructor(
 
   suspend fun decrypt(
     password: String,
+    identities: List<GpgIdentifier>,
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
-  ) = withContext(dispatcherProvider.io()) { decryptPgp(password, message, out) }
+  ) = withContext(dispatcherProvider.io()) { decryptPgp(password, identities, message, out) }
 
   suspend fun encrypt(
     identities: List<GpgIdentifier>,
@@ -53,11 +53,12 @@ constructor(
 
   private suspend fun decryptPgp(
     password: String,
+    identities: List<GpgIdentifier>,
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
+    val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.getAll()
     val decryptionOptions = PGPDecryptOptions.Builder().build()
-    val keys = pgpKeyManager.getAllKeys().unwrap()
     return pgpCryptoHandler.decrypt(keys, password, message, out, decryptionOptions)
   }
 

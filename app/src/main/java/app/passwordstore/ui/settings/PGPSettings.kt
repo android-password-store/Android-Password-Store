@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
 import app.passwordstore.ui.pgp.PGPKeyListActivity
 import app.passwordstore.util.extensions.launchActivity
+import app.passwordstore.util.features.Feature
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.onClick
@@ -30,6 +31,10 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
       switch(PreferenceKeys.ASCII_ARMOR) {
         titleRes = R.string.pref_pgp_ascii_armor_title
         persistent = true
+      }
+      switch(Feature.EnableGPGPassphraseCache.configKey) {
+        titleRes = R.string.pref_title_passphrase_cache
+        defaultValue = false
       }
     }
   }

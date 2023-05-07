@@ -22,6 +22,9 @@ enum class Feature(
 
   /** Opt into the new SSH layer implemented as a freestanding module. */
   EnableNewSSHLayer(false, "enable_new_ssh"),
+
+  /** Opt into a cache layer for GPG passphrases. */
+  EnableGPGPassphraseCache(false, "enable_gpg_passphrase_cache"),
   ;
 
   companion object {

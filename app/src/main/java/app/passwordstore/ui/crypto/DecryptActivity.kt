@@ -11,13 +11,18 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
+import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.data.crypto.GPGPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
 import app.passwordstore.ui.adapters.FieldItemAdapter
+import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
+import app.passwordstore.util.features.Feature.EnableGPGPassphraseCache
+import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Err
@@ -28,7 +33,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
@@ -39,14 +43,14 @@ import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@OptIn(ExperimentalTime::class)
 @AndroidEntryPoint
 class DecryptActivity : BasePgpActivity() {
 
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-
+  @Inject lateinit var passphraseCache: GPGPassphraseCache
+  @Inject lateinit var features: Features
   private var passwordEntry: PasswordEntry? = null
   private var retries = 0
 
@@ -63,7 +67,16 @@ class DecryptActivity : BasePgpActivity() {
         true
       }
     }
-    requireKeysExist { askPassphrase(isError = false) }
+    if (
+      BiometricAuthenticator.canAuthenticate(this@DecryptActivity) &&
+        features.isEnabled(EnableGPGPassphraseCache)
+    ) {
+      BiometricAuthenticator.authenticate(this@DecryptActivity) { authResult ->
+        requireKeysExist { decrypt(isError = false, authResult) }
+      }
+    } else {
+      requireKeysExist { decrypt(isError = false, BiometricAuthenticator.Result.Cancelled) }
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -134,7 +147,28 @@ class DecryptActivity : BasePgpActivity() {
     )
   }
 
-  private fun askPassphrase(isError: Boolean) {
+  private fun decrypt(isError: Boolean, authResult: BiometricAuthenticator.Result) {
+    val gpgIdentifiers = getGpgIdentifiers("") ?: return
+    lifecycleScope.launch(dispatcherProvider.main()) {
+      if (authResult is BiometricAuthenticator.Result.Success) {
+        val cachedPassphrase =
+          passphraseCache.retrieveCachedPassphrase(this@DecryptActivity, gpgIdentifiers.first())
+        if (cachedPassphrase != null) {
+          decryptWithCachedPassphrase(cachedPassphrase, gpgIdentifiers, authResult)
+        } else {
+          askPassphrase(isError, gpgIdentifiers, authResult)
+        }
+      } else {
+        askPassphrase(isError, gpgIdentifiers, authResult)
+      }
+    }
+  }
+
+  private fun askPassphrase(
+    isError: Boolean,
+    gpgIdentifiers: List<GpgIdentifier>,
+    authResult: BiometricAuthenticator.Result,
+  ) {
     if (retries < MAX_RETRIES) {
       retries += 1
     } else {
@@ -147,16 +181,19 @@ class DecryptActivity : BasePgpActivity() {
     lifecycleScope.launch(dispatcherProvider.main()) {
       dialog.password.collectLatest { value ->
         if (value != null) {
-          when (val result = decryptWithPassphrase(value)) {
+          when (val result = decryptWithPassphrase(value, gpgIdentifiers)) {
             is Ok -> {
               val entry = passwordEntryFactory.create(result.value.toByteArray())
               passwordEntry = entry
               createPasswordUI(entry)
               startAutoDismissTimer()
+              if (authResult is BiometricAuthenticator.Result.Success) {
+                passphraseCache.cachePassphrase(this@DecryptActivity, gpgIdentifiers.first(), value)
+              }
             }
             is Err -> {
               logcat(ERROR) { result.error.stackTraceToString() }
-              askPassphrase(isError = true)
+              askPassphrase(isError = true, gpgIdentifiers, authResult)
             }
           }
         }
@@ -165,12 +202,35 @@ class DecryptActivity : BasePgpActivity() {
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
-  private suspend fun decryptWithPassphrase(password: String) = runCatching {
+  private suspend fun decryptWithCachedPassphrase(
+    passphrase: String,
+    identifiers: List<GpgIdentifier>,
+    authResult: BiometricAuthenticator.Result,
+  ) {
+    when (val result = decryptWithPassphrase(passphrase, identifiers)) {
+      is Ok -> {
+        val entry = passwordEntryFactory.create(result.value.toByteArray())
+        passwordEntry = entry
+        createPasswordUI(entry)
+        startAutoDismissTimer()
+      }
+      is Err -> {
+        logcat(ERROR) { result.error.stackTraceToString() }
+        decrypt(isError = true, authResult = authResult)
+      }
+    }
+  }
+
+  private suspend fun decryptWithPassphrase(
+    password: String,
+    gpgIdentifiers: List<GpgIdentifier>,
+  ) = runCatching {
     val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
     val outputStream = ByteArrayOutputStream()
     val result =
       repository.decrypt(
         password,
+        gpgIdentifiers,
         message,
         outputStream,
       )
