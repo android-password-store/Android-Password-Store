@@ -18,7 +18,7 @@ import logcat.logcat
 object BiometricAuthenticator {
 
   private const val TAG = "BiometricAuthenticator"
-  private const val validAuthenticators =
+  private const val VALID_AUTHENTICATORS =
     Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
 
   /**
@@ -47,7 +47,7 @@ object BiometricAuthenticator {
   }
 
   fun canAuthenticate(activity: FragmentActivity): Boolean {
-    return BiometricManager.from(activity).canAuthenticate(validAuthenticators) ==
+    return BiometricManager.from(activity).canAuthenticate(VALID_AUTHENTICATORS) ==
       BiometricManager.BIOMETRIC_SUCCESS
   }
 
@@ -88,9 +88,7 @@ object BiometricAuthenticator {
                 Result.Retry
               }
               // We cover all guaranteed values above, but [errorCode] is still an Int
-              // at the end of
-              // the day so a
-              // catch-all else will always be required.
+              // at the end of the day so a catch-all else will always be required.
               else -> {
                 Result.Failure(
                   errorCode,
@@ -118,7 +116,7 @@ object BiometricAuthenticator {
       val promptInfo =
         BiometricPrompt.PromptInfo.Builder()
           .setTitle(activity.getString(dialogTitleRes))
-          .setAllowedAuthenticators(validAuthenticators)
+          .setAllowedAuthenticators(VALID_AUTHENTICATORS)
           .build()
       BiometricPrompt(
           activity,
