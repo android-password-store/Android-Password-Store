@@ -33,7 +33,8 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
         persistent = true
       }
       switch(Feature.EnableGPGPassphraseCache.configKey) {
-        titleRes = R.string.pref_title_passphrase_cache
+        titleRes = R.string.pref_passphrase_cache_title
+        summaryRes = R.string.pref_passphrase_cache_summary
         defaultValue = false
       }
     }
