@@ -46,11 +46,12 @@ import logcat.logcat
 @AndroidEntryPoint
 class DecryptActivity : BasePgpActivity() {
 
-  private val binding by viewBinding(DecryptLayoutBinding::inflate)
-  private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var passphraseCache: GPGPassphraseCache
   @Inject lateinit var features: Features
+
+  private val binding by viewBinding(DecryptLayoutBinding::inflate)
+  private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   private var passwordEntry: PasswordEntry? = null
   private var retries = 0
 

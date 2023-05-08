@@ -45,41 +45,6 @@ import logcat.logcat
 @AndroidEntryPoint
 class AutofillDecryptActivity : BasePgpActivity() {
 
-  companion object {
-
-    private const val EXTRA_FILE_PATH = "app.passwordstore.autofill.oreo.EXTRA_FILE_PATH"
-    private const val EXTRA_SEARCH_ACTION = "app.passwordstore.autofill.oreo.EXTRA_SEARCH_ACTION"
-
-    private var decryptFileRequestCode = 1
-
-    fun makeDecryptFileIntent(file: File, forwardedExtras: Bundle, context: Context): Intent {
-      return Intent(context, AutofillDecryptActivity::class.java).apply {
-        putExtras(forwardedExtras)
-        putExtra(EXTRA_SEARCH_ACTION, true)
-        putExtra(EXTRA_FILE_PATH, file.absolutePath)
-      }
-    }
-
-    fun makeDecryptFileIntentSender(file: File, context: Context): IntentSender {
-      val intent =
-        Intent(context, AutofillDecryptActivity::class.java).apply {
-          putExtra(EXTRA_SEARCH_ACTION, false)
-          putExtra(EXTRA_FILE_PATH, file.absolutePath)
-        }
-      return PendingIntent.getActivity(
-          context,
-          decryptFileRequestCode++,
-          intent,
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
-          } else {
-            PendingIntent.FLAG_CANCEL_CURRENT
-          },
-        )
-        .intentSender
-    }
-  }
-
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var features: Features
   @Inject lateinit var passphraseCache: GPGPassphraseCache
@@ -212,5 +177,40 @@ class AutofillDecryptActivity : BasePgpActivity() {
           }
       }
     return null
+  }
+
+  companion object {
+
+    private const val EXTRA_FILE_PATH = "app.passwordstore.autofill.oreo.EXTRA_FILE_PATH"
+    private const val EXTRA_SEARCH_ACTION = "app.passwordstore.autofill.oreo.EXTRA_SEARCH_ACTION"
+
+    private var decryptFileRequestCode = 1
+
+    fun makeDecryptFileIntent(file: File, forwardedExtras: Bundle, context: Context): Intent {
+      return Intent(context, AutofillDecryptActivity::class.java).apply {
+        putExtras(forwardedExtras)
+        putExtra(EXTRA_SEARCH_ACTION, true)
+        putExtra(EXTRA_FILE_PATH, file.absolutePath)
+      }
+    }
+
+    fun makeDecryptFileIntentSender(file: File, context: Context): IntentSender {
+      val intent =
+        Intent(context, AutofillDecryptActivity::class.java).apply {
+          putExtra(EXTRA_SEARCH_ACTION, false)
+          putExtra(EXTRA_FILE_PATH, file.absolutePath)
+        }
+      return PendingIntent.getActivity(
+          context,
+          decryptFileRequestCode++,
+          intent,
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+          } else {
+            PendingIntent.FLAG_CANCEL_CURRENT
+          },
+        )
+        .intentSender
+    }
   }
 }
