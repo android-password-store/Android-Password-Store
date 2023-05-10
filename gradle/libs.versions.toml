@@ -20,7 +20,7 @@ androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha02"
 androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha09"
-androidx-core-ktx = "androidx.core:core-ktx:1.10.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.10.1"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.0-beta01"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
