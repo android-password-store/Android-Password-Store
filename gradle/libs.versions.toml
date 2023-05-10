@@ -22,7 +22,7 @@ androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha09"
 androidx-core-ktx = "androidx.core:core-ktx:1.10.1"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.0-beta01"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.0-rc01"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
@@ -51,7 +51,7 @@ build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.0"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.46.0"
 compose-animation = { module = "androidx.compose.animation:animation" }
-compose-bom = "androidx.compose:compose-bom:2023.05.00"
+compose-bom = "androidx.compose:compose-bom:2023.05.01"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-hilt = "androidx.hilt:hilt-navigation-compose:1.0.0"
