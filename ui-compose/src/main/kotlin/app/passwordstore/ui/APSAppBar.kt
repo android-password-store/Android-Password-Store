@@ -34,7 +34,7 @@ public fun APSAppBar(
         }
       }
     },
-    colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = backgroundColor),
+    colors = TopAppBarDefaults.topAppBarColors(containerColor = backgroundColor),
     modifier = modifier.shadow(8.dp),
   )
 }
