@@ -12,7 +12,6 @@ dependencies {
   implementation(libs.dagger.hilt.core)
   implementation(libs.thirdparty.commons.codec)
   implementation(libs.thirdparty.uri)
-  testImplementation(projects.coroutineUtilsTesting)
   testImplementation(libs.bundles.testDependencies)
   testImplementation(libs.kotlin.coroutines.test)
   testImplementation(libs.testing.turbine)

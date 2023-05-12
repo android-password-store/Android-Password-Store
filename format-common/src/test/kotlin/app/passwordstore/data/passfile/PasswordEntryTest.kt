@@ -7,7 +7,6 @@ package app.passwordstore.data.passfile
 
 import app.cash.turbine.Event
 import app.cash.turbine.test
-import app.passwordstore.test.CoroutineTestRule
 import app.passwordstore.util.time.TestUserClock
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.UriTotpFinder
@@ -18,16 +17,11 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
 class PasswordEntryTest {
 
-  @get:Rule val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
   private val totpFinder = UriTotpFinder()
 
   private fun makeEntry(content: String, clock: UserClock = fakeClock) =

@@ -171,8 +171,6 @@ include("autofill-parser")
 
 include("coroutine-utils")
 
-include("coroutine-utils-testing")
-
 include("crypto-common")
 
 include("crypto-pgpainless")
