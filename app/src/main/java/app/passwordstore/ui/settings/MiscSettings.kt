@@ -8,7 +8,6 @@ package app.passwordstore.ui.settings
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentActivity
@@ -47,11 +46,7 @@ class MiscSettings(activity: FragmentActivity) : SettingsProvider {
             putExtra("uri", uri)
           }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          activity.startForegroundService(service)
-        } else {
-          activity.startService(service)
-        }
+        activity.startForegroundService(service)
       }
     }
 

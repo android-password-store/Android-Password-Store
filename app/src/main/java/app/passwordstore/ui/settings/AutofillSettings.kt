@@ -8,9 +8,7 @@ package app.passwordstore.ui.settings
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -35,11 +33,9 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
 
   private val isAutofillServiceEnabled: Boolean
     get() {
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
       return activity.autofillManager?.hasEnabledAutofillServices() == true
     }
 
-  @RequiresApi(Build.VERSION_CODES.O)
   private fun showAutofillDialog(pref: SwitchPreference) {
     val observer = LifecycleEventObserver { _, event ->
       when (event) {
@@ -95,10 +91,8 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
     builder.apply {
       switch(PreferenceKeys.AUTOFILL_ENABLE) {
         titleRes = R.string.pref_autofill_enable_title
-        visible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
         defaultValue = isAutofillServiceEnabled
         onClick {
-          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return@onClick true
           if (isAutofillServiceEnabled) {
             activity.autofillManager?.disableAutofillServices()
           } else {

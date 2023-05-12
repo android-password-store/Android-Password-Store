@@ -10,7 +10,6 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.IntentCompat
@@ -20,8 +19,6 @@ import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.TimeZone
 import logcat.logcat
 
 class PasswordExportService : Service() {
@@ -65,13 +62,7 @@ class PasswordExportService : Service() {
 
     logcat { "Copying ${repositoryDirectory.path} to $targetDirectory" }
 
-    val dateString =
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
-      } else {
-        String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")))
-      }
-
+    val dateString = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
     val passDir = targetDirectory.createDirectory("password_store_$dateString")
 
     if (passDir != null) {
@@ -136,19 +127,17 @@ class PasswordExportService : Service() {
   }
 
   private fun createNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val serviceChannel =
-        NotificationChannel(
-          CHANNEL_ID,
-          getString(R.string.app_name),
-          NotificationManager.IMPORTANCE_LOW
-        )
-      val manager = getSystemService<NotificationManager>()
-      if (manager != null) {
-        manager.createNotificationChannel(serviceChannel)
-      } else {
-        logcat { "Failed to create notification channel" }
-      }
+    val serviceChannel =
+      NotificationChannel(
+        CHANNEL_ID,
+        getString(R.string.app_name),
+        NotificationManager.IMPORTANCE_LOW
+      )
+    val manager = getSystemService<NotificationManager>()
+    if (manager != null) {
+      manager.createNotificationChannel(serviceChannel)
+    } else {
+      logcat { "Failed to create notification channel" }
     }
   }
 

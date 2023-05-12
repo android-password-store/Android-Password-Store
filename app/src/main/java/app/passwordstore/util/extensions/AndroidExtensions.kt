@@ -21,7 +21,6 @@ import android.util.TypedValue
 import android.view.View
 import android.view.autofill.AutofillManager
 import androidx.activity.ComponentActivity
-import androidx.annotation.RequiresApi
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -39,7 +38,7 @@ import logcat.logcat
 
 /** Get an instance of [AutofillManager]. Only available on Android Oreo and above */
 val Context.autofillManager: AutofillManager?
-  @RequiresApi(Build.VERSION_CODES.O) get() = getSystemService()
+  get() = getSystemService()
 
 /** Get an instance of [ClipboardManager] */
 val Context.clipboard

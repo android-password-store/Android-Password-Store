@@ -14,7 +14,6 @@ import android.content.ClipData
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import app.passwordstore.R
@@ -40,11 +39,7 @@ class ClipboardService : Service() {
       when (intent.action) {
         ACTION_CLEAR -> {
           clearClipboard()
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(STOP_FOREGROUND_REMOVE)
-          } else {
-            @Suppress("DEPRECATION") stopForeground(true)
-          }
+          stopForeground(STOP_FOREGROUND_REMOVE)
           stopSelf()
           return super.onStartCommand(intent, flags, startId)
         }
@@ -60,11 +55,7 @@ class ClipboardService : Service() {
             withContext(Dispatchers.IO) { startTimer(time) }
             withContext(Dispatchers.Main) {
               clearClipboard()
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                stopForeground(STOP_FOREGROUND_REMOVE)
-              } else {
-                @Suppress("DEPRECATION") stopForeground(true)
-              }
+              stopForeground(STOP_FOREGROUND_REMOVE)
               stopSelf()
             }
           }
@@ -122,52 +113,23 @@ class ClipboardService : Service() {
     val clearTimeMs = clearTime * 1000L
     val clearIntent = Intent(this, ClipboardService::class.java).apply { action = ACTION_CLEAR }
     val pendingIntent =
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        PendingIntent.getForegroundService(
-          this,
-          0,
-          clearIntent,
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-          } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-          }
-        )
-      } else {
-        PendingIntent.getService(
-          this,
-          0,
-          clearIntent,
-          PendingIntent.FLAG_UPDATE_CURRENT,
-        )
-      }
-    val notification =
-      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
-        createNotificationApi23(pendingIntent)
-      } else {
-        createNotificationApi24(pendingIntent, clearTimeMs)
-      }
+      PendingIntent.getForegroundService(
+        this,
+        0,
+        clearIntent,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        } else {
+          PendingIntent.FLAG_UPDATE_CURRENT
+        }
+      )
+    val notification = createNotification(pendingIntent, clearTimeMs)
 
     createNotificationChannel()
     startForeground(1, notification)
   }
 
-  private fun createNotificationApi23(pendingIntent: PendingIntent): Notification {
-    return NotificationCompat.Builder(this, CHANNEL_ID)
-      .setContentTitle(getString(R.string.app_name))
-      .setContentText(getString(R.string.tap_clear_clipboard))
-      .setSmallIcon(R.drawable.ic_action_secure_24dp)
-      .setContentIntent(pendingIntent)
-      .setUsesChronometer(true)
-      .setPriority(NotificationCompat.PRIORITY_LOW)
-      .build()
-  }
-
-  @RequiresApi(Build.VERSION_CODES.N)
-  private fun createNotificationApi24(
-    pendingIntent: PendingIntent,
-    clearTimeMs: Long
-  ): Notification {
+  private fun createNotification(pendingIntent: PendingIntent, clearTimeMs: Long): Notification {
     return NotificationCompat.Builder(this, CHANNEL_ID)
       .setContentTitle(getString(R.string.app_name))
       .setContentText(getString(R.string.tap_clear_clipboard))
@@ -182,19 +144,17 @@ class ClipboardService : Service() {
   }
 
   private fun createNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val serviceChannel =
-        NotificationChannel(
-          CHANNEL_ID,
-          getString(R.string.app_name),
-          NotificationManager.IMPORTANCE_LOW
-        )
-      val manager = getSystemService<NotificationManager>()
-      if (manager != null) {
-        manager.createNotificationChannel(serviceChannel)
-      } else {
-        logcat { "Failed to create notification channel" }
-      }
+    val serviceChannel =
+      NotificationChannel(
+        CHANNEL_ID,
+        getString(R.string.app_name),
+        NotificationManager.IMPORTANCE_LOW
+      )
+    val manager = getSystemService<NotificationManager>()
+    if (manager != null) {
+      manager.createNotificationChannel(serviceChannel)
+    } else {
+      logcat { "Failed to create notification channel" }
     }
   }
 

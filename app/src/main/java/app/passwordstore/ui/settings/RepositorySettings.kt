@@ -8,7 +8,6 @@ package app.passwordstore.ui.settings
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
-import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -172,10 +171,8 @@ class RepositorySettings(
                 }
                 .onFailure { it.message?.let { message -> activity.snackbar(message = message) } }
 
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                activity.getSystemService<ShortcutManager>()?.apply {
-                  removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
-                }
+              activity.getSystemService<ShortcutManager>()?.apply {
+                removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
               }
               activity.sharedPrefs.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false) }
               dialogInterface.cancel()

@@ -10,8 +10,6 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import app.passwordstore.R
 import app.passwordstore.data.password.PasswordItem
@@ -42,7 +40,6 @@ constructor(
    * [MAX_SHORTCUT_COUNT] and older items are removed by a simple LRU sweep.
    */
   fun addDynamicShortcut(item: PasswordItem, intent: Intent) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
     val shortcutManager: ShortcutManager = context.getSystemService() ?: return
     val shortcut = buildShortcut(item, intent)
     val shortcuts = shortcutManager.dynamicShortcuts
@@ -67,7 +64,6 @@ constructor(
    * a no-op if the user's default launcher does not support pinned shortcuts.
    */
   fun addPinnedShortcut(item: PasswordItem, intent: Intent) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
     val shortcutManager: ShortcutManager = context.getSystemService() ?: return
     if (!shortcutManager.isRequestPinShortcutSupported) {
       logcat { "addPinnedShortcut: pin shortcuts unsupported" }
@@ -78,7 +74,6 @@ constructor(
   }
 
   /** Creates a [ShortcutInfo] from [item] and assigns [intent] to it. */
-  @RequiresApi(Build.VERSION_CODES.N_MR1)
   private fun buildShortcut(item: PasswordItem, intent: Intent): ShortcutInfo {
     return ShortcutInfo.Builder(context, item.fullPathToParent)
       .setShortLabel(item.toString())
@@ -93,7 +88,6 @@ constructor(
    * data, which ensures that the get/set dance in [addDynamicShortcut] does not cause invalidation
    * of icon assets, resulting in invisible icons in all but the newest launcher shortcut.
    */
-  @RequiresApi(Build.VERSION_CODES.N_MR1)
   private fun rebuildShortcut(shortcut: ShortcutInfo): ShortcutInfo {
     // Non-null assertions are fine since we know these values aren't null.
     return ShortcutInfo.Builder(context, shortcut.id)

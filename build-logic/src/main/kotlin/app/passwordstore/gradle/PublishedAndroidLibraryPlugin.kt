@@ -23,7 +23,9 @@ class PublishedAndroidLibraryPlugin : Plugin<Project> {
     }
     project.extensions.configure<MavenPublishBaseExtension> {
       publishToMavenCentral(SonatypeHost.DEFAULT, true)
-      signAllPublications()
+      if (project.providers.environmentVariable("CI").isPresent) {
+        signAllPublications()
+      }
     }
     project.extensions.configure<MetalavaExtension> {
       documentation.set(Documentation.PUBLIC)

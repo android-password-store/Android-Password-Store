@@ -8,11 +8,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import app.passwordstore.data.repo.PasswordRepository
@@ -29,7 +27,6 @@ import java.io.File
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class AutofillSaveActivity : AppCompatActivity() {
 

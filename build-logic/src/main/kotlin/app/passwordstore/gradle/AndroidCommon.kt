@@ -19,14 +19,8 @@ object AndroidCommon {
     project.extensions.configure<TestedExtension> {
       setCompileSdkVersion(33)
       defaultConfig {
-        minSdk = 23
-        targetSdk = 31
-      }
-
-      sourceSets {
-        named("main") { java.srcDirs("src/main/kotlin") }
-        named("test") { java.srcDirs("src/test/kotlin") }
-        named("androidTest") { java.srcDirs("src/androidTest/kotlin") }
+        minSdk = 26
+        targetSdk = 33
       }
 
       packagingOptions {
@@ -47,7 +41,8 @@ object AndroidCommon {
         animationsDisabled = true
         unitTests.isReturnDefaultValues = true
       }
-      project.tasks.withType<Test> {
+
+      project.tasks.withType<Test>().configureEach {
         jvmArgs(
           "--add-opens=java.base/java.lang=ALL-UNNAMED",
           "--add-opens=java.base/java.util=ALL-UNNAMED",

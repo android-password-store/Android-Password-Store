@@ -35,7 +35,8 @@ All notable changes to this project will be documented in this file.
 -   **BREAKING**: The app's package name has been changed to `app.passwordstore` so users are aware that this is a new project with no compatibility guarantees with Password Store 1.x.y.
 -   **BREAKING**: Introduce a new PGP backend powered by [PGPainless](https://github.com/pgpainless/pgpainless) which completely replaces OpenKeychain
 -   **BREAKING**: Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
--   **BREAKING***: Support for stores outside the hidden app directory has been removed due to technical restrictions, see [this issue](https://github.com/Android-Password-Store/Android-Password-Store/issues/1849) for details.
+-   **BREAKING**: Support for stores outside the hidden app directory has been removed due to technical restrictions, see [this issue](https://github.com/Android-Password-Store/Android-Password-Store/issues/1849) for details.
+-   **BREAKING**: The app's minimum supported Android version has been raised to Android Oreo (API level 26).
 -   The settings UI has been completely re-done to dramatically improve discoverability and navigation for users
 -   Using the `git://` protocol in the server URL now presents an explicit discouragement rather than a generic error
 -   Encrypted data is no longer ASCII armored, bringing it in line with `pass`

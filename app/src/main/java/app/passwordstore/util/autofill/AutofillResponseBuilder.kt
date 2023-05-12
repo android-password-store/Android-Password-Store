@@ -12,7 +12,6 @@ import android.service.autofill.Dataset
 import android.service.autofill.FillCallback
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
-import androidx.annotation.RequiresApi
 import app.passwordstore.autofill.oreo.ui.AutofillSmsActivity
 import app.passwordstore.ui.autofill.AutofillDecryptActivity
 import app.passwordstore.ui.autofill.AutofillFilterView
@@ -32,7 +31,6 @@ import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
 
-@RequiresApi(Build.VERSION_CODES.O)
 class AutofillResponseBuilder
 @AssistedInject
 constructor(

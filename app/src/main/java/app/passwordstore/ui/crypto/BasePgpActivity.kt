@@ -57,7 +57,7 @@ open class BasePgpActivity : AppCompatActivity() {
   val name: String by unsafeLazy { File(fullPath).nameWithoutExtension }
 
   /** Action to invoke if [keyImportAction] succeeds. */
-  var onKeyImport: (() -> Unit)? = null
+  private var onKeyImport: (() -> Unit)? = null
   private val keyImportAction =
     registerForActivityResult(StartActivityForResult()) {
       if (it.resultCode == RESULT_OK) {
@@ -94,10 +94,8 @@ open class BasePgpActivity : AppCompatActivity() {
   ) {
     val clipboard = clipboard ?: return
     val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      clip.description.extras =
-        PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
-    }
+    clip.description.extras =
+      PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
     clipboard.setPrimaryClip(clip)
     if (showSnackbar && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
       snackbar(message = resources.getString(snackbarTextRes))
@@ -144,11 +142,7 @@ open class BasePgpActivity : AppCompatActivity() {
           action = ClipboardService.ACTION_START
           putExtra(ClipboardService.EXTRA_NOTIFICATION_TIME, clearAfter)
         }
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        startForegroundService(service)
-      } else {
-        startService(service)
-      }
+      startForegroundService(service)
     }
   }
 

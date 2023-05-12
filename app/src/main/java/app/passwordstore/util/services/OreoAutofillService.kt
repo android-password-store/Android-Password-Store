@@ -13,7 +13,6 @@ import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
-import androidx.annotation.RequiresApi
 import app.passwordstore.BuildConfig
 import app.passwordstore.R
 import app.passwordstore.ui.autofill.AutofillSaveActivity
@@ -37,7 +36,6 @@ import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class OreoAutofillService : AutofillService() {
 

@@ -11,7 +11,6 @@ import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.data.crypto.GPGPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
@@ -41,7 +40,6 @@ import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class AutofillDecryptActivity : BasePgpActivity() {
 

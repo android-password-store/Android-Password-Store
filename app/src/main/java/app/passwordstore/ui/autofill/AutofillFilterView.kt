@@ -4,7 +4,6 @@
  */
 package app.passwordstore.ui.autofill
 
-import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -43,7 +42,6 @@ import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
-@TargetApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class AutofillFilterView : AppCompatActivity() {
 

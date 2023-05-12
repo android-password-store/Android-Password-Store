@@ -14,7 +14,6 @@ import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.databinding.ActivityOreoAutofillSmsBinding
@@ -52,7 +51,6 @@ suspend fun <T> Task<T>.suspendableAwait() =
     }
   }
 
-@RequiresApi(Build.VERSION_CODES.O)
 class AutofillSmsActivity : AppCompatActivity() {
 
   companion object {

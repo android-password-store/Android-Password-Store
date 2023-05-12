@@ -6,11 +6,8 @@ package app.passwordstore.autofill.oreo.ui
 
 import android.content.Context
 import android.content.IntentSender
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Suppress("UNUSED_PARAMETER")
 class AutofillSmsActivity : AppCompatActivity() {
 

@@ -6,7 +6,6 @@
 package app.passwordstore.ui.settings
 
 import android.content.pm.ShortcutManager
-import android.os.Build
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -97,10 +96,8 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
               }
             }
           }
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            activity.getSystemService<ShortcutManager>()?.apply {
-              removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
-            }
+          activity.getSystemService<ShortcutManager>()?.apply {
+            removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
           }
           false
         }
