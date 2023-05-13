@@ -72,7 +72,7 @@ class AutofillDecryptActivity : BasePgpActivity() {
     requireKeysExist {
       val gpgIdentifiers = getGpgIdentifiers("") ?: return@requireKeysExist
       if (
-        BiometricAuthenticator.canAuthenticate(this) && features.isEnabled(EnableGPGPassphraseCache)
+        features.isEnabled(EnableGPGPassphraseCache) && BiometricAuthenticator.canAuthenticate(this)
       ) {
         BiometricAuthenticator.authenticate(this) { authResult ->
           if (authResult is BiometricAuthenticator.Result.Success) {

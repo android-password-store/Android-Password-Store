@@ -69,8 +69,8 @@ class DecryptActivity : BasePgpActivity() {
       }
     }
     if (
-      BiometricAuthenticator.canAuthenticate(this@DecryptActivity) &&
-        features.isEnabled(EnableGPGPassphraseCache)
+      features.isEnabled(EnableGPGPassphraseCache) &&
+        BiometricAuthenticator.canAuthenticate(this@DecryptActivity)
     ) {
       BiometricAuthenticator.authenticate(this@DecryptActivity) { authResult ->
         requireKeysExist { decrypt(isError = false, authResult) }
