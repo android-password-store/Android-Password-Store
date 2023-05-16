@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.0.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.0.0)" variant="all" version="8.0.0">
-
-    <issue
-        id="UnknownIssueId"
-        message="Unknown issue id &quot;ReportShortcutUsage&quot;"
-        errorLine1="  &lt;issue id=&quot;ReportShortcutUsage&quot; severity=&quot;ignore&quot; />"
-        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="lint.xml"
-            line="44"
-            column="3"/>
-    </issue>
+<issues format="6" by="lint 8.1.0-beta02" type="baseline" client="gradle" dependencies="false" name="AGP (8.1.0-beta02)" variant="all" version="8.1.0-beta02">
 
     <issue
         id="StopShip"
@@ -35,6 +24,50 @@
         message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory.1`.">
         <location
             file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.73/7673fe0f3510e88232c4bd98d027e9e0a3d0af6d/bcpkix-jdk15to18-1.73.jar"/>
+    </issue>
+
+    <issue
+        id="MissingQuantity"
+        message="For locale &quot;it&quot; (Italian) the following quantity should also be defined: `many`"
+        errorLine1="  &lt;plurals name=&quot;delete_title&quot;>"
+        errorLine2="  ^">
+        <location
+            file="src/main/res/values-it/strings.xml"
+            line="7"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="MissingQuantity"
+        message="For locale &quot;pt&quot; (Portuguese) the following quantity should also be defined: `many`"
+        errorLine1="  &lt;plurals name=&quot;delete_title&quot;>"
+        errorLine2="  ^">
+        <location
+            file="src/main/res/values-pt-rBR/strings.xml"
+            line="7"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="MissingQuantity"
+        message="For locale &quot;it&quot; (Italian) the following quantity should also be defined: `many`"
+        errorLine1="  &lt;plurals name=&quot;delete_dialog_text&quot;>"
+        errorLine2="  ^">
+        <location
+            file="src/main/res/values-it/strings.xml"
+            line="21"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="MissingQuantity"
+        message="For locale &quot;pt&quot; (Portuguese) the following quantity should also be defined: `many`"
+        errorLine1="  &lt;plurals name=&quot;delete_dialog_text&quot;>"
+        errorLine2="  ^">
+        <location
+            file="src/main/res/values-pt-rBR/strings.xml"
+            line="21"
+            column="3"/>
     </issue>
 
     <issue
