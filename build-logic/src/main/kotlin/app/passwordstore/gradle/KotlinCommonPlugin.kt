@@ -23,12 +23,12 @@ class KotlinCommonPlugin : Plugin<Project> {
     val isAppModule = project.pluginManager.hasPlugin("com.android.application")
     project.tasks.run {
       withType<JavaCompile>().configureEach {
-        sourceCompatibility = JavaVersion.VERSION_11.toString()
-        targetCompatibility = JavaVersion.VERSION_11.toString()
+        sourceCompatibility = JavaVersion.VERSION_17.toString()
+        targetCompatibility = JavaVersion.VERSION_17.toString()
       }
       withType<KotlinCompile>().configureEach task@{
         compilerOptions {
-          jvmTarget.set(JvmTarget.JVM_11)
+          jvmTarget.set(JvmTarget.JVM_17)
           allWarningsAsErrors.set(true)
           languageVersion.set(KotlinVersion.KOTLIN_1_8)
           freeCompilerArgs.addAll(ADDITIONAL_COMPILER_ARGS)
