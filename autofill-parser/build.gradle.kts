@@ -23,7 +23,6 @@ dependencies {
   implementation(libs.androidx.annotation)
   implementation(libs.androidx.autofill)
   implementation(libs.androidx.core.ktx)
-  implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
   implementation(libs.thirdparty.logcat)
   testImplementation(libs.bundles.testDependencies)

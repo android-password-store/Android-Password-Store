@@ -6,8 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+## [1.1.2]
+
 - [Vivaldi](https://play.google.com/store/apps/details?id=com.vivaldi.browser) is now supported as an Autofill-capable browser.
+- [Vanadium](https://github.com/GrapheneOS/Vanadium) is now supported as an Autofill-capable browser.
 - `mail` is now included in the heuristics for username fields
+- Dependency updates
+    - `androidx.core:core-ktx:1.10.1`
+    - `androidx.autofill:autofill:1.2.0-beta01`
 
 ## [1.1.1]
 
@@ -53,3 +59,5 @@ All notable changes to this project will be documented in this file.
 [1.1.0]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.1.0/autofill-parser
 
 [1.1.1]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.1.1/autofill-parser
+
+[1.1.2]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.1.2/autofill-parser
