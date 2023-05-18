@@ -28,6 +28,10 @@ public object KeyUtils {
     return KeyId(keyRing.publicKey.keyID)
   }
 
+  /**
+   * Attempts to parse the given [PGPKey] into a [PGPKeyRing] and obtains the [UserId] of the
+   * corresponding public key.
+   */
   public fun tryGetEmail(key: PGPKey): UserId? {
     val keyRing = tryParseKeyring(key) ?: return null
     return UserId(keyRing.publicKey.userIDs.next())

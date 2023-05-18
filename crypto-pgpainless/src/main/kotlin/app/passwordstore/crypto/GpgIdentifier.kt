@@ -8,7 +8,10 @@ package app.passwordstore.crypto
 import java.util.Locale
 import java.util.regex.Pattern
 
+/** Supertype for valid identifiers of GPG keys. */
 public sealed class GpgIdentifier {
+
+  /** A [GpgIdentifier] that represents either a long key ID or a fingerprint. */
   public data class KeyId(val id: Long) : GpgIdentifier() {
     override fun toString(): String {
       return convertKeyIdToHex(id)
@@ -32,6 +35,10 @@ public sealed class GpgIdentifier {
     }
   }
 
+  /**
+   * A [GpgIdentifier] that represents the textual name/email combination corresponding to a key.
+   * Despite the [email] property in this class, the value is not guaranteed to be a valid email.
+   */
   public data class UserId(val email: String) : GpgIdentifier() {
     override fun toString(): String {
       return email
@@ -45,6 +52,9 @@ public sealed class GpgIdentifier {
     private const val HEX_32_STRING_LENGTH = 8
     private const val TRUNCATED_FINGERPRINT_LENGTH = 16
 
+    /**
+     * Attempts to parse an untyped String identifier into a concrete subtype of [GpgIdentifier].
+     */
     @Suppress("ReturnCount")
     public fun fromString(identifier: String): GpgIdentifier? {
       if (identifier.isEmpty()) return null

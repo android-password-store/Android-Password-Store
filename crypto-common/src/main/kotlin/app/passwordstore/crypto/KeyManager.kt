@@ -38,7 +38,4 @@ public interface KeyManager<Key, KeyIdentifier> {
    * as an identifier for the cryptographic identity tied to this key.
    */
   public suspend fun getKeyId(key: Key): KeyIdentifier?
-
-  /** Given a [fileName], return whether this instance can handle it. */
-  public fun canHandle(fileName: String): Boolean
 }

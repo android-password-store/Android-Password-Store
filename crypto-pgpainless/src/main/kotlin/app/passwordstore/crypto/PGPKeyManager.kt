@@ -36,6 +36,7 @@ constructor(
 
   private val keyDir = File(filesDir, KEY_DIR_NAME)
 
+  /** @see KeyManager.addKey */
   override suspend fun addKey(key: PGPKey, replace: Boolean): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
@@ -72,6 +73,7 @@ constructor(
       }
     }
 
+  /** @see KeyManager.removeKey */
   override suspend fun removeKey(identifier: GpgIdentifier): Result<Unit, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
@@ -84,6 +86,7 @@ constructor(
       }
     }
 
+  /** @see KeyManager.getKeyById */
   override suspend fun getKeyById(id: GpgIdentifier): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
@@ -119,6 +122,7 @@ constructor(
       }
     }
 
+  /** @see KeyManager.getAllKeys */
   override suspend fun getAllKeys(): Result<List<PGPKey>, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
@@ -129,13 +133,8 @@ constructor(
       }
     }
 
+  /** @see KeyManager.getKeyById */
   override suspend fun getKeyId(key: PGPKey): GpgIdentifier? = tryGetId(key)
-
-  // TODO: This is a temp hack for now and in future it should check that the GPGKeyManager can
-  // decrypt the file.
-  override fun canHandle(fileName: String): Boolean {
-    return fileName.endsWith(KEY_EXTENSION)
-  }
 
   /** Checks if [keyDir] exists and attempts to create it if not. */
   private fun keyDirExists(): Boolean {

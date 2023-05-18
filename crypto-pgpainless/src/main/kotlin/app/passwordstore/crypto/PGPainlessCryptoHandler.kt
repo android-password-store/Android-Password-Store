@@ -7,6 +7,7 @@ package app.passwordstore.crypto
 
 import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.crypto.errors.IncorrectPassphraseException
+import app.passwordstore.crypto.errors.NoKeysProvidedException
 import app.passwordstore.crypto.errors.UnknownError
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
@@ -29,6 +30,13 @@ import org.pgpainless.util.Passphrase
 public class PGPainlessCryptoHandler @Inject constructor() :
   CryptoHandler<PGPKey, PGPEncryptOptions, PGPDecryptOptions> {
 
+  /**
+   * Decrypts the given [ciphertextStream] using [PGPainless] and writes the decrypted output to
+   * [outputStream]. The provided [passphrase] is wrapped in a [SecretKeyRingProtector] and the
+   * [keys] argument is defensively checked to ensure it has at least one key present.
+   *
+   * @see CryptoHandler.decrypt
+   */
   public override fun decrypt(
     keys: List<PGPKey>,
     passphrase: String,
@@ -37,7 +45,9 @@ public class PGPainlessCryptoHandler @Inject constructor() :
     options: PGPDecryptOptions,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        require(keys.isNotEmpty())
+        if (keys.isEmpty()) {
+          throw NoKeysProvidedException
+        }
         val keyringCollection =
           keys
             .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
@@ -56,10 +66,17 @@ public class PGPainlessCryptoHandler @Inject constructor() :
       .mapError { error ->
         when (error) {
           is WrongPassphraseException -> IncorrectPassphraseException(error)
+          is CryptoHandlerException -> error
           else -> UnknownError(error)
         }
       }
 
+  /**
+   * Encrypts the provided [plaintextStream] and writes the encrypted output to [outputStream]. The
+   * [keys] argument is defensively checked to contain at least one key.
+   *
+   * @see CryptoHandler.encrypt
+   */
   public override fun encrypt(
     keys: List<PGPKey>,
     plaintextStream: InputStream,
@@ -67,7 +84,9 @@ public class PGPainlessCryptoHandler @Inject constructor() :
     options: PGPEncryptOptions,
   ): Result<Unit, CryptoHandlerException> =
     runCatching {
-        require(keys.isNotEmpty())
+        if (keys.isEmpty()) {
+          throw NoKeysProvidedException
+        }
         val publicKeyRings =
           keys.mapNotNull(KeyUtils::tryParseKeyring).mapNotNull { keyRing ->
             when (keyRing) {
@@ -77,9 +96,11 @@ public class PGPainlessCryptoHandler @Inject constructor() :
             }
           }
         require(keys.size == publicKeyRings.size) {
-          "Failed to parse all keys: keys=${keys.size},parsed=${publicKeyRings.size}"
+          "Failed to parse all keys: ${keys.size} keys were provided but only ${publicKeyRings.size} were valid"
         }
-        require(publicKeyRings.isNotEmpty()) { "No public keys to encrypt message to" }
+        if (publicKeyRings.isEmpty()) {
+          throw NoKeysProvidedException
+        }
         val publicKeyRingCollection = PGPPublicKeyRingCollection(publicKeyRings)
         val encryptionOptions = EncryptionOptions().addRecipients(publicKeyRingCollection)
         val producerOptions =
@@ -103,7 +124,8 @@ public class PGPainlessCryptoHandler @Inject constructor() :
         }
       }
 
+  /** Runs a naive check on the extension for the given [fileName] to check if it is a PGP file. */
   public override fun canHandle(fileName: String): Boolean {
-    return fileName.split('.').lastOrNull() == "gpg"
+    return fileName.substringAfterLast('.', "") == "gpg"
   }
 }
