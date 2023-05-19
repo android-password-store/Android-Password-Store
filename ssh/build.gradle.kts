@@ -11,6 +11,7 @@ plugins {
 
 android {
   namespace = "app.passwordstore.ssh"
+  buildFeatures { androidResources = true }
   sourceSets { getByName("test") { resources.srcDir("src/main/res/raw") } }
 }
 

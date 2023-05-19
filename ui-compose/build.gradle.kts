@@ -10,10 +10,11 @@ plugins {
 android {
   buildFeatures {
     compose = true
-    composeOptions {
-      useLiveLiterals = false
-      kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
+    androidResources = true
+  }
+  composeOptions {
+    useLiveLiterals = false
+    kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
   }
   namespace = "app.passwordstore.ui.compose"
 }

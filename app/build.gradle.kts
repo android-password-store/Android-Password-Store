@@ -22,6 +22,7 @@ crowdin {
 
 android {
   compileOptions { isCoreLibraryDesugaringEnabled = true }
+  namespace = "app.passwordstore"
 
   defaultConfig {
     applicationId = "app.passwordstore"
@@ -30,13 +31,11 @@ android {
 
   buildFeatures {
     compose = true
-    composeOptions {
-      useLiveLiterals = false
-      kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
   }
-
-  namespace = "app.passwordstore"
+  composeOptions {
+    useLiveLiterals = false
+    kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+  }
 }
 
 dependencies {
