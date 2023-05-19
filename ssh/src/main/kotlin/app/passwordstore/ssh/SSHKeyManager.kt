@@ -25,6 +25,7 @@ import app.passwordstore.ssh.writer.ED25519KeyWriter
 import app.passwordstore.ssh.writer.ImportedKeyWriter
 import app.passwordstore.ssh.writer.KeystoreNativeKeyWriter
 import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.mapBoth
 import com.github.michaelbull.result.runCatching
 import java.io.File
 import java.io.IOException
@@ -65,12 +66,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
   }
 
   public fun keyExists(): Boolean {
-    return try {
-      keyType()
-      true
-    } catch (e: IllegalStateException) {
-      false
-    }
+    return runCatching { keyType() }.mapBoth(success = { true }, failure = { false })
   }
 
   public fun canShowPublicKey(): Boolean =
