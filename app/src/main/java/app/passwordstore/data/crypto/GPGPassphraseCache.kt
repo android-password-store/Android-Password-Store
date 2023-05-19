@@ -37,6 +37,19 @@ constructor(
     }
   }
 
+  suspend fun clearCachedPassphrase(
+    context: Context,
+    identifier: GpgIdentifier,
+  ) {
+    withContext(dispatcherProvider.io()) {
+      getPreferences(context).edit { remove(identifier.toString()) }
+    }
+  }
+
+  suspend fun clearAllCachedPassphrases(context: Context) {
+    withContext(dispatcherProvider.io()) { getPreferences(context).edit { clear() } }
+  }
+
   private suspend fun getPreferences(context: Context) =
     withContext(dispatcherProvider.io()) {
       EncryptedSharedPreferences.create(
