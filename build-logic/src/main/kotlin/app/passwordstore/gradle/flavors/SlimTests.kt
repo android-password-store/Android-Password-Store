@@ -6,10 +6,10 @@
 package app.passwordstore.gradle.flavors
 
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.HasUnitTestBuilder
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.findByType
-import org.gradle.language.nativeplatform.internal.BuildType
 
 /**
  * When the "slimTests" project property is provided, disable the unit test tasks on `release` build
@@ -21,20 +21,22 @@ import org.gradle.language.nativeplatform.internal.BuildType
  */
 internal fun Project.configureSlimTests() {
   if (providers.gradleProperty(SLIM_TESTS_PROPERTY).isPresent) {
-    // disable unit test tasks on the release build type for Android Library projects
+    // Disable unit test tasks on the release build type for Android Library projects
     extensions.findByType<LibraryAndroidComponentsExtension>()?.run {
-      beforeVariants(selector().withBuildType(BuildType.RELEASE.name)) {
-        it.enableUnitTest = false
+      beforeVariants(selector().withBuildType(BUILD_TYPE_RELEASE)) {
+        (it as HasUnitTestBuilder).enableUnitTest = false
         it.enableAndroidTest = false
       }
     }
 
-    // disable unit test tasks on the release build type and free flavor for Android Application
+    // Disable unit test tasks on the release build type and free flavor for Android Application
     // projects.
     extensions.findByType<ApplicationAndroidComponentsExtension>()?.run {
-      beforeVariants(selector().withBuildType(BuildType.RELEASE.name)) { it.enableUnitTest = false }
+      beforeVariants(selector().withBuildType(BUILD_TYPE_RELEASE)) {
+        (it as HasUnitTestBuilder).enableUnitTest = false
+      }
       beforeVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
-        it.enableUnitTest = false
+        (it as HasUnitTestBuilder).enableUnitTest = false
         it.enableAndroidTest = false
       }
     }
@@ -42,3 +44,4 @@ internal fun Project.configureSlimTests() {
 }
 
 private const val SLIM_TESTS_PROPERTY = "slimTests"
+private const val BUILD_TYPE_RELEASE = "release"

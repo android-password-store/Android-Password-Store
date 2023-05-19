@@ -1,5 +1,5 @@
 [versions]
-agp = "8.0.1"
+agp = "8.2.0-alpha04"
 androidxActivity = "1.7.1"
 bouncycastle = "1.73"
 # @keep used for kotlinCompilerExtensionVersion
@@ -45,7 +45,7 @@ build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.3"
 build-moshi = "com.squareup.moshi:moshi:1.15.0"
 build-moshi-kotlin = "com.squareup.moshi:moshi-kotlin:1.15.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.11.0"
-build-r8 = "com.android.tools:r8:8.0.40"
+build-r8 = "com.android.tools:r8:8.2.7-dev"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.7.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.0"
