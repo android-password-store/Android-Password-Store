@@ -52,6 +52,11 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
+      - name: Accept all SDK licenses
+        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
+        shell: bash
+        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
       - name: Initialize git config and commit changes
         shell: bash
         run: |
