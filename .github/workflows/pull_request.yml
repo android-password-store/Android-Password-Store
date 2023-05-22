@@ -51,9 +51,8 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Accept all SDK licenses
-        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
         shell: bash
-        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Check codestyle
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -87,9 +86,8 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Accept all SDK licenses
-        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
         shell: bash
-        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Run unit tests
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -130,9 +128,8 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Accept all SDK licenses
-        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
         shell: bash
-        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Build debug APKs
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -166,9 +163,8 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Accept all SDK licenses
-        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
         shell: bash
-        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Check library API
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -202,9 +198,8 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Accept all SDK licenses
-        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
         shell: bash
-        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Run Lint on debug variants
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -238,9 +233,8 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Accept all SDK licenses
-        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
         shell: bash
-        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Run Lint
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2

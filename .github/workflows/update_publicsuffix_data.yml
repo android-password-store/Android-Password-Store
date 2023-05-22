@@ -18,9 +18,8 @@ jobs:
           java-version: 18
 
       - name: Accept all SDK licenses
-        continue-on-error: true # GitHub Actions' stdout handling causes a harmless 'broken pipe' error
         shell: bash
-        run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Download new publicsuffix data
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
