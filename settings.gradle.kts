@@ -8,6 +8,7 @@ rootProject.name = "APS"
 
 // Plugin repositories
 pluginManagement {
+  plugins { id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0" }
   repositories {
     includeBuild("build-logic")
     exclusiveContent {

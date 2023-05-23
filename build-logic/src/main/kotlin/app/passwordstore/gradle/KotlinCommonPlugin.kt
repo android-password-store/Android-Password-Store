@@ -5,14 +5,15 @@
 
 package app.passwordstore.gradle
 
-import org.gradle.api.JavaVersion
+import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.jvm.toolchain.JavaToolchainSpec
+import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -22,13 +23,8 @@ class KotlinCommonPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     val isAppModule = project.pluginManager.hasPlugin("com.android.application")
     project.tasks.run {
-      withType<JavaCompile>().configureEach {
-        sourceCompatibility = JavaVersion.VERSION_17.toString()
-        targetCompatibility = JavaVersion.VERSION_17.toString()
-      }
       withType<KotlinCompile>().configureEach task@{
         compilerOptions {
-          jvmTarget.set(JvmTarget.JVM_17)
           allWarningsAsErrors.set(true)
           languageVersion.set(KotlinVersion.KOTLIN_1_8)
           freeCompilerArgs.addAll(ADDITIONAL_COMPILER_ARGS)
@@ -44,11 +40,17 @@ class KotlinCommonPlugin : Plugin<Project> {
     }
   }
 
-  private companion object {
+  companion object {
     private val ADDITIONAL_COMPILER_ARGS =
       listOf(
         "-opt-in=kotlin.RequiresOptIn",
         "-Xsuppress-version-warnings",
       )
+
+    val JVM_TOOLCHAIN_ACTION =
+      Action<JavaToolchainSpec> {
+        languageVersion.set(JavaLanguageVersion.of(17))
+        vendor.set(JvmVendorSpec.ADOPTIUM)
+      }
   }
 }

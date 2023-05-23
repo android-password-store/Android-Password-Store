@@ -5,7 +5,6 @@ import app.passwordstore.gradle.flavors.configureSlimTests
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.gradle.TestedExtension
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.tasks.testing.Test
@@ -30,11 +29,6 @@ object AndroidCommon {
         resources.excludes.add("**/plugin.properties")
         resources.excludes.add("**/META-INF/AL2.0")
         resources.excludes.add("**/META-INF/LGPL2.1")
-      }
-
-      compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
       }
 
       testOptions {
