@@ -86,7 +86,7 @@ thirdparty-flowbinding-android = { module = "io.github.reactivecircus.flowbindin
 # JGit upgrades also raise its minimum Java runtime requirements that we cannot satisfy on Android
 # noinspection GradleDependency
 thirdparty-jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
-thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.17"
+thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.18"
 thirdparty-leakcanary-core = { module = "com.squareup.leakcanary:leakcanary-android-core", version.ref = "leakcanary" }
 thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.2"
