@@ -41,6 +41,7 @@
     <ignore path="src/main/res/drawable/ic_miscellaneous_services_24px.xml" />
   </issue>
   <issue id="GradleDependency" severity="ignore" />
+  <issue id="ReportShortcutUsage" severity="ignore" />
   <issue id="MissingTranslation" severity="ignore" />
   <issue id="ImpliedQuantity" severity="ignore" />
 </lint>
