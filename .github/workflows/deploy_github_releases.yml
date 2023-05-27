@@ -22,7 +22,7 @@ jobs:
       run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0-rc3" >> "${GITHUB_OUTPUT}"
 
     - name: Cache build-tools
-      uses: actions/cache@v3
+      uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
       with:
         path: ${{ steps.build-tools-path.outputs.dir }}
         key: ${{ runner.os }}-34.0.0-rc3
