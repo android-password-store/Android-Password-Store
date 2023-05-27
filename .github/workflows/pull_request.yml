@@ -41,6 +41,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Accept all SDK licenses
+        shell: bash
+        run: printf 'y\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+      - name: Get build-tools directory
+        id: build-tools-path
+        shell: bash
+        run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0-rc3" >> "${GITHUB_OUTPUT}"
+
+      - name: Cache build-tools
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.build-tools-path.outputs.dir }}
+          key: ${{ runner.os }}-34.0.0-rc3
+
       - name: Set up JDK
         uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
         with:
@@ -49,10 +64,6 @@ jobs:
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Accept all SDK licenses
-        shell: bash
-        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Check codestyle
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -76,6 +87,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Accept all SDK licenses
+        shell: bash
+        run: printf 'y\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+      - name: Get build-tools directory
+        id: build-tools-path
+        shell: bash
+        run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0-rc3" >> "${GITHUB_OUTPUT}"
+
+      - name: Cache build-tools
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.build-tools-path.outputs.dir }}
+          key: ${{ runner.os }}-34.0.0-rc3
+
       - name: Set up JDK
         uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
         with:
@@ -84,10 +110,6 @@ jobs:
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Accept all SDK licenses
-        shell: bash
-        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Run unit tests
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -118,6 +140,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Accept all SDK licenses
+        shell: bash
+        run: printf 'y\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+      - name: Get build-tools directory
+        id: build-tools-path
+        shell: bash
+        run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0-rc3" >> "${GITHUB_OUTPUT}"
+
+      - name: Cache build-tools
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.build-tools-path.outputs.dir }}
+          key: ${{ runner.os }}-34.0.0-rc3
+
       - name: Set up JDK
         uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
         with:
@@ -126,10 +163,6 @@ jobs:
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Accept all SDK licenses
-        shell: bash
-        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Build debug APKs
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -153,6 +186,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Accept all SDK licenses
+        shell: bash
+        run: printf 'y\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+      - name: Get build-tools directory
+        id: build-tools-path
+        shell: bash
+        run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0-rc3" >> "${GITHUB_OUTPUT}"
+
+      - name: Cache build-tools
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.build-tools-path.outputs.dir }}
+          key: ${{ runner.os }}-34.0.0-rc3
+
       - name: Set up JDK
         uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
         with:
@@ -161,10 +209,6 @@ jobs:
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Accept all SDK licenses
-        shell: bash
-        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Check library API
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -188,6 +232,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Accept all SDK licenses
+        shell: bash
+        run: printf 'y\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+      - name: Get build-tools directory
+        id: build-tools-path
+        shell: bash
+        run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0-rc3" >> "${GITHUB_OUTPUT}"
+
+      - name: Cache build-tools
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.build-tools-path.outputs.dir }}
+          key: ${{ runner.os }}-34.0.0-rc3
+
       - name: Set up JDK
         uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
         with:
@@ -196,10 +255,6 @@ jobs:
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Accept all SDK licenses
-        shell: bash
-        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Run Lint on debug variants
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
@@ -223,6 +278,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Accept all SDK licenses
+        shell: bash
+        run: printf 'y\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+      - name: Get build-tools directory
+        id: build-tools-path
+        shell: bash
+        run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0-rc3" >> "${GITHUB_OUTPUT}"
+
+      - name: Cache build-tools
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.build-tools-path.outputs.dir }}
+          key: ${{ runner.os }}-34.0.0-rc3
+
       - name: Set up JDK
         uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
         with:
@@ -231,10 +301,6 @@ jobs:
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Accept all SDK licenses
-        shell: bash
-        run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Run Lint
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2.4.2
