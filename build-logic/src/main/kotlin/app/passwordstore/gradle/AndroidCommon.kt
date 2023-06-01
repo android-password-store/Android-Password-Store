@@ -47,11 +47,11 @@ object AndroidCommon {
     }
     project.extensions.findByType<ApplicationExtension>()?.run { lint.configureLint(project) }
     project.extensions.findByType<LibraryExtension>()?.run { lint.configureLint(project) }
+    val lintDepKeys = listOf("thirdparty-compose-lints", "thirdparty-slack-lints")
     val catalog = project.extensions.getByType<VersionCatalogsExtension>()
     val libs = catalog.named("libs")
-    project.dependencies.addProvider(
-      "lintChecks",
-      libs.findLibrary("thirdparty-compose-lints").get()
-    )
+    lintDepKeys.forEach { key ->
+      project.dependencies.addProvider("lintChecks", libs.findLibrary(key).get())
+    }
   }
 }

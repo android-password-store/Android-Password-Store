@@ -29,8 +29,15 @@ object LintConfig {
     // False-positives abound due to use of ViewBinding
     disable += "UnusedIds"
     if (!isJVM) {
+      // Enable compose-lint-checks' Material 2 detector
       enable += "ComposeM2Api"
       error += "ComposeM2Api"
+      // slack-lint-checks' checker for deprecations is useless to me
+      disable += "DeprecatedCall"
+      // Hilt only does field injection for fragments
+      disable += "FragmentFieldInjection"
+      // Too pedantic
+      disable += "ArgInFormattedQuantityStringRes"
     }
     baseline = project.file("lint-baseline.xml")
   }
