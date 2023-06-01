@@ -8,6 +8,7 @@ package app.passwordstore.injection.pwgen
 import android.content.Context
 import app.passwordstore.passgen.diceware.DicewarePassphraseGenerator
 import app.passwordstore.passgen.diceware.Die
+import app.passwordstore.passgen.diceware.R as dicewareR
 import app.passwordstore.passgen.diceware.RandomIntGenerator
 import dagger.Module
 import dagger.Provides
@@ -46,9 +47,7 @@ object DicewareModule {
 
   @[Provides WordlistQualifier]
   fun provideDefaultWordList(@ApplicationContext context: Context): InputStream {
-    return context.resources.openRawResource(
-      app.passwordstore.passgen.diceware.R.raw.diceware_wordlist
-    )
+    return context.resources.openRawResource(dicewareR.raw.diceware_wordlist)
   }
 }
 

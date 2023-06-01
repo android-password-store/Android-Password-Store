@@ -13,17 +13,6 @@
     </issue>
 
     <issue
-        id="FullyQualifiedResource"
-        message="Use an import alias instead"
-        errorLine1="      app.passwordstore.passgen.diceware.R.raw.diceware_wordlist"
-        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/injection/pwgen/DicewareModule.kt"
-            line="50"
-            column="7"/>
-    </issue>
-
-    <issue
         id="InvalidPackage"
         message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming.directory`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory`.">
         <location
