@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import app.passwordstore.R
 import app.passwordstore.injection.prefs.GitPreferences
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.sharedPrefs
 import app.passwordstore.util.git.ErrorMessages
 import app.passwordstore.util.git.operation.BreakOutOfDetached
@@ -27,7 +28,6 @@ import com.github.michaelbull.result.mapError
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import logcat.asLog
 import logcat.logcat
@@ -55,6 +55,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
   }
 
   @Inject lateinit var gitSettings: GitSettings
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
   @GitPreferences @Inject lateinit var gitPrefs: SharedPreferences
 
   /**
@@ -105,7 +106,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
       gitPrefs.edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
       sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
       logcat { error.asLog() }
-      withContext(Dispatchers.Main) {
+      withContext(dispatcherProvider.main()) {
         MaterialAlertDialogBuilder(this@BaseGitActivity).run {
           setTitle(resources.getString(R.string.jgit_error_dialog_title))
           setMessage(ErrorMessages[error])

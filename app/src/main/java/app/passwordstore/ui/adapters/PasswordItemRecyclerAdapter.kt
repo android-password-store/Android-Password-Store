@@ -15,17 +15,21 @@ import androidx.recyclerview.selection.Selection
 import androidx.recyclerview.widget.RecyclerView
 import app.passwordstore.R
 import app.passwordstore.data.password.PasswordItem
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.viewmodel.SearchableRepositoryAdapter
 import app.passwordstore.util.viewmodel.stableId
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-open class PasswordItemRecyclerAdapter(coroutineScope: CoroutineScope) :
+open class PasswordItemRecyclerAdapter(
+  coroutineScope: CoroutineScope,
+  dispatcherProvider: DispatcherProvider,
+) :
   SearchableRepositoryAdapter<PasswordItemRecyclerAdapter.PasswordItemViewHolder>(
     R.layout.password_row_layout,
     ::PasswordItemViewHolder,
     coroutineScope,
+    dispatcherProvider,
     PasswordItemViewHolder::bind,
   ) {
 
@@ -52,7 +56,7 @@ open class PasswordItemRecyclerAdapter(coroutineScope: CoroutineScope) :
     private val folderIndicator: AppCompatImageView = itemView.findViewById(R.id.folder_indicator)
     var itemDetails: ItemDetailsLookup.ItemDetails<String>? = null
 
-    suspend fun bind(item: PasswordItem) {
+    suspend fun bind(item: PasswordItem, dispatcherProvider: DispatcherProvider) {
       val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
       val source =
         if (parentPath.isNotEmpty()) {
@@ -66,7 +70,7 @@ open class PasswordItemRecyclerAdapter(coroutineScope: CoroutineScope) :
       if (item.type == PasswordItem.TYPE_CATEGORY) {
         folderIndicator.visibility = View.VISIBLE
         val count =
-          withContext(Dispatchers.IO) {
+          withContext(dispatcherProvider.io()) {
             item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
           }
         childCount.visibility = if (count > 0) View.VISIBLE else View.GONE

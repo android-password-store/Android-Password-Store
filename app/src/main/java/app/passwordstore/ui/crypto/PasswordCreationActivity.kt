@@ -56,7 +56,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -355,10 +354,10 @@ class PasswordCreationActivity : BasePgpActivity() {
           else -> "$fullPath/$editName.gpg"
         }
 
-      lifecycleScope.launch(Dispatchers.Main) {
+      lifecycleScope.launch(dispatcherProvider.main()) {
         runCatching {
             val result =
-              withContext(Dispatchers.IO) {
+              withContext(dispatcherProvider.io()) {
                 val outputStream = ByteArrayOutputStream()
                 repository.encrypt(gpgIdentifiers, content.byteInputStream(), outputStream)
                 outputStream
@@ -380,7 +379,7 @@ class PasswordCreationActivity : BasePgpActivity() {
               return@runCatching
             }
 
-            withContext(Dispatchers.IO) { file.writeBytes(result.toByteArray()) }
+            withContext(dispatcherProvider.io()) { file.writeBytes(result.toByteArray()) }
 
             // associate the new password name with the last name's timestamp in
             // history

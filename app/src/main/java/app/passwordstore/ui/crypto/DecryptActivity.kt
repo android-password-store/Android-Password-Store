@@ -36,8 +36,6 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -268,7 +266,7 @@ class DecryptActivity : BasePgpActivity() {
       binding.recyclerView.itemAnimator = null
 
       if (entry.hasTotp()) {
-        entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)
+        entry.totp.collect(adapter::updateOTPCode)
       }
     }
 

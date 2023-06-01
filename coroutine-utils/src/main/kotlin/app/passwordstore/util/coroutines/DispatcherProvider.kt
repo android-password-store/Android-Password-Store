@@ -14,6 +14,8 @@ public interface DispatcherProvider {
 
   public fun main(): CoroutineDispatcher = Dispatchers.Main
 
+  public fun mainImmediate(): CoroutineDispatcher = Dispatchers.Main.immediate
+
   public fun default(): CoroutineDispatcher = Dispatchers.Default
 
   public fun io(): CoroutineDispatcher = Dispatchers.IO

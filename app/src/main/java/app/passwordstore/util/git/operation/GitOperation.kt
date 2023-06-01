@@ -17,6 +17,7 @@ import app.passwordstore.util.auth.BiometricAuthenticator.Result.Cancelled
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Failure
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Retry
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Success
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.git.GitCommandExecutor
 import app.passwordstore.util.git.sshj.SshAuthMethod
 import app.passwordstore.util.git.sshj.SshjSessionFactory
@@ -34,7 +35,6 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
 import logcat.asLog
@@ -176,8 +176,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         if (sshFacade.keyExists()) {
           if (sshFacade.needsAuthentication()) {
             val result =
-              withContext(Dispatchers.Main) {
-                suspendCoroutine<BiometricAuthenticator.Result> { cont ->
+              withContext(hiltEntryPoint.dispatcherProvider().main()) {
+                suspendCoroutine { cont ->
                   BiometricAuthenticator.authenticate(
                     callingActivity,
                     R.string.biometric_prompt_title_ssh_auth
@@ -233,7 +233,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   open fun preExecute() = true
 
   private suspend fun postExecute() {
-    withContext(Dispatchers.IO) { sshSessionFactory?.close() }
+    withContext(hiltEntryPoint.dispatcherProvider().io()) { sshSessionFactory?.close() }
   }
 
   companion object {
@@ -246,5 +246,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   @InstallIn(SingletonComponent::class)
   interface GitOperationEntryPoint {
     fun sshFacade(): SSHFacade
+
+    fun dispatcherProvider(): DispatcherProvider
   }
 }

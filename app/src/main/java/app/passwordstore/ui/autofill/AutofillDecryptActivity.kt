@@ -33,7 +33,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -101,7 +100,7 @@ class AutofillDecryptActivity : BasePgpActivity() {
   private fun askPassphrase(filePath: String, clientState: Bundle, action: AutofillAction) {
     val dialog = PasswordDialog()
     lifecycleScope.launch {
-      withContext(Dispatchers.Main) {
+      withContext(dispatcherProvider.main()) {
         dialog.password.collectLatest { value ->
           if (value != null) {
             decrypt(File(filePath), clientState, action, value)
@@ -129,14 +128,14 @@ class AutofillDecryptActivity : BasePgpActivity() {
           clientState,
           action
         )
-      withContext(Dispatchers.Main) {
+      withContext(dispatcherProvider.main()) {
         setResult(
           RESULT_OK,
           Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
         )
       }
     }
-    withContext(Dispatchers.Main) { finish() }
+    withContext(dispatcherProvider.main()) { finish() }
   }
 
   private suspend fun decryptCredential(file: File, password: String): Credentials? {
@@ -148,7 +147,7 @@ class AutofillDecryptActivity : BasePgpActivity() {
       }
       .onSuccess { encryptedInput ->
         runCatching {
-            withContext(Dispatchers.IO) {
+            withContext(dispatcherProvider.io()) {
               val outputStream = ByteArrayOutputStream()
               repository.decrypt(
                 password,

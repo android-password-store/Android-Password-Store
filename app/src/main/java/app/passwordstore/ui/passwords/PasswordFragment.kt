@@ -33,6 +33,7 @@ import app.passwordstore.ui.dialogs.ItemCreationBottomSheet
 import app.passwordstore.ui.git.base.BaseGitActivity
 import app.passwordstore.ui.git.config.GitServerConfigActivity
 import app.passwordstore.ui.util.OnOffItemAnimator
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.base64
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.sharedPrefs
@@ -59,6 +60,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
   @Inject lateinit var gitSettings: GitSettings
   @Inject lateinit var shortcutHandler: ShortcutHandler
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
   @Inject @SettingsPreferences lateinit var prefs: SharedPreferences
   private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
   private lateinit var listener: OnFragmentInteractionListener
@@ -139,7 +141,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
 
     recyclerAdapter =
-      PasswordItemRecyclerAdapter(lifecycleScope)
+      PasswordItemRecyclerAdapter(lifecycleScope, dispatcherProvider)
         .onItemClicked { _, item -> listener.onFragmentInteraction(item) }
         .onSelectionChanged { selection ->
           // In order to not interfere with drag selection, we disable the

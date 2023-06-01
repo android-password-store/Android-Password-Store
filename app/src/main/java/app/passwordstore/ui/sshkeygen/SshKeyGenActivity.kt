@@ -20,6 +20,7 @@ import app.passwordstore.injection.prefs.GitPreferences
 import app.passwordstore.ssh.SSHKeyAlgorithm
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.keyguardManager
 import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.ssh.SSHFacade
@@ -30,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -41,6 +41,7 @@ class SshKeyGenActivity : AppCompatActivity() {
   private val binding by viewBinding(ActivitySshKeygenBinding::inflate)
   @GitPreferences @Inject lateinit var gitPrefs: SharedPreferences
   @Inject lateinit var sshFacade: SSHFacade
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -107,12 +108,12 @@ class SshKeyGenActivity : AppCompatActivity() {
     }
     binding.generate.text = getString(R.string.ssh_key_gen_generating_progress)
     val result = runCatching {
-      withContext(Dispatchers.IO) {
+      withContext(dispatcherProvider.io()) {
         val requireAuthentication = binding.keyRequireAuthentication.isChecked
         if (requireAuthentication) {
           val result =
-            withContext(Dispatchers.Main) {
-              suspendCoroutine<Result> { cont ->
+            withContext(dispatcherProvider.main()) {
+              suspendCoroutine { cont ->
                 BiometricAuthenticator.authenticate(
                   this@SshKeyGenActivity,
                   R.string.biometric_prompt_title_ssh_keygen

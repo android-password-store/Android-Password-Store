@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.databinding.ActivityOreoAutofillSmsBinding
 import app.passwordstore.util.autofill.AutofillResponseBuilder
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.viewBinding
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
@@ -29,11 +30,12 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.tasks.Task
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.ExecutionException
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -51,7 +53,10 @@ suspend fun <T> Task<T>.suspendableAwait() =
     }
   }
 
+@AndroidEntryPoint
 class AutofillSmsActivity : AppCompatActivity() {
+
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
 
   companion object {
 
@@ -129,14 +134,16 @@ class AutofillSmsActivity : AppCompatActivity() {
   private suspend fun waitForSms() {
     val smsClient = SmsCodeRetriever.getAutofillClient(this@AutofillSmsActivity)
     runCatching {
-        withContext(Dispatchers.IO) { smsClient.startSmsCodeRetriever().suspendableAwait() }
+        withContext(dispatcherProvider.io()) {
+          smsClient.startSmsCodeRetriever().suspendableAwait()
+        }
       }
       .onFailure { e ->
         if (e is ResolvableApiException) {
           e.startResolutionForResult(this@AutofillSmsActivity, 1)
         } else {
           logcat(ERROR) { e.asLog() }
-          withContext(Dispatchers.Main) { finish() }
+          withContext(dispatcherProvider.main()) { finish() }
         }
       }
   }

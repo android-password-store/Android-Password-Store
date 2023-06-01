@@ -17,11 +17,13 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import app.passwordstore.R
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.clipboard
 import app.passwordstore.util.extensions.sharedPrefs
 import app.passwordstore.util.settings.PreferenceKeys
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -30,9 +32,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.logcat
 
+@AndroidEntryPoint
 class ClipboardService : Service() {
 
-  private val scope = CoroutineScope(Job() + Dispatchers.Main)
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
+  private val scope = CoroutineScope(Job())
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     if (intent != null) {
@@ -52,8 +56,8 @@ class ClipboardService : Service() {
 
           createNotification(time)
           scope.launch {
-            withContext(Dispatchers.IO) { startTimer(time) }
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.io()) { startTimer(time) }
+            withContext(dispatcherProvider.main()) {
               clearClipboard()
               stopForeground(STOP_FOREGROUND_REMOVE)
               stopSelf()
@@ -86,7 +90,7 @@ class ClipboardService : Service() {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
         clipboard.setPrimaryClip(clip)
         if (deepClear) {
-          withContext(Dispatchers.IO) {
+          withContext(dispatcherProvider.io()) {
             repeat(CLIPBOARD_CLEAR_COUNT) {
               val count = (it * 500).toString()
               clipboard.setPrimaryClip(ClipData.newPlainText(count, count))

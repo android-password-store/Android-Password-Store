@@ -55,7 +55,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.lang.Character.UnicodeBlock
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -94,7 +93,7 @@ class PasswordStore : BaseGitActivity() {
       logcat { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
       logcat { filesToMove.joinToString(", ") }
 
-      lifecycleScope.launch(Dispatchers.IO) {
+      lifecycleScope.launch(dispatcherProvider.io()) {
         for (file in filesToMove) {
           val source = File(file)
           if (!source.exists()) {
@@ -107,7 +106,7 @@ class PasswordStore : BaseGitActivity() {
           val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
           if (destinationFile.exists()) {
             logcat(ERROR) { "Trying to move a file that already exists." }
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main()) {
               MaterialAlertDialogBuilder(this@PasswordStore)
                 .setTitle(resources.getString(R.string.password_exists_title))
                 .setMessage(
@@ -118,13 +117,13 @@ class PasswordStore : BaseGitActivity() {
                   )
                 )
                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                  launch(Dispatchers.IO) { moveFile(source, destinationFile) }
+                  launch(dispatcherProvider.io()) { moveFile(source, destinationFile) }
                 }
                 .setNegativeButton(R.string.dialog_cancel, null)
                 .show()
             }
           } else {
-            launch(Dispatchers.IO) { moveFile(source, destinationFile) }
+            launch(dispatcherProvider.io()) { moveFile(source, destinationFile) }
           }
         }
         when (filesToMove.size) {
@@ -134,7 +133,7 @@ class PasswordStore : BaseGitActivity() {
             val sourceLongName =
               getLongName(requireNotNull(source.parent), repositoryPath, basename)
             val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main()) {
               commitChange(
                 resources.getString(
                   R.string.git_commit_move_text,
@@ -147,7 +146,7 @@ class PasswordStore : BaseGitActivity() {
           else -> {
             val repoDir = PasswordRepository.getRepositoryDirectory().absolutePath
             val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main()) {
               commitChange(
                 resources.getString(R.string.git_commit_move_multiple_text, relativePath),
               )
@@ -493,7 +492,7 @@ class PasswordStore : BaseGitActivity() {
             !newCategory.isInsideRepository() ->
               renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
             else ->
-              lifecycleScope.launch(Dispatchers.IO) {
+              lifecycleScope.launch(dispatcherProvider.io()) {
                 moveFile(oldCategory.file, newCategory)
 
                 // associate the new category with the last category's timestamp in
@@ -508,7 +507,7 @@ class PasswordStore : BaseGitActivity() {
                   }
                 }
 
-                withContext(Dispatchers.Main) {
+                withContext(dispatcherProvider.main()) {
                   commitChange(
                     resources.getString(
                       R.string.git_commit_move_text,
@@ -573,7 +572,7 @@ class PasswordStore : BaseGitActivity() {
       }
     if (!source.renameTo(destinationFile)) {
       logcat(ERROR) { "Something went wrong while moving $source to $destinationFile." }
-      withContext(Dispatchers.Main) {
+      withContext(dispatcherProvider.main()) {
         MaterialAlertDialogBuilder(this@PasswordStore)
           .setTitle(R.string.password_move_error_title)
           .setMessage(getString(R.string.password_move_error_message, source, destinationFile))

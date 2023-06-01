@@ -29,183 +29,7 @@
     <issue
         id="RawDispatchersUse"
         message="Use SlackDispatchers."
-        errorLine1="      withContext(Dispatchers.Main) {"
-        errorLine2="                  ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/autofill/AutofillDecryptActivity.kt"
-            line="104"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="      withContext(Dispatchers.Main) {"
-        errorLine2="                  ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/autofill/AutofillDecryptActivity.kt"
-            line="132"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="    withContext(Dispatchers.Main) { finish() }"
-        errorLine2="                ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/autofill/AutofillDecryptActivity.kt"
-            line="139"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="      withContext(Dispatchers.Main) {"
-        errorLine2="                  ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/git/base/BaseGitActivity.kt"
-            line="108"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="  private val scope = CoroutineScope(Job() + Dispatchers.Main)"
-        errorLine2="                                             ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/services/ClipboardService.kt"
-            line="35"
-            column="46"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="            withContext(Dispatchers.Main) {"
-        errorLine2="                        ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/services/ClipboardService.kt"
-            line="56"
-            column="25"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="                      withContext(Dispatchers.Main) {"
-        errorLine2="                                  ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/git/GitCommandExecutor.kt"
-            line="105"
-            column="35"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="              withContext(Dispatchers.Main) {"
-        errorLine2="                          ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/git/operation/GitOperation.kt"
-            line="179"
-            column="27"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="      lifecycleScope.launch(Dispatchers.Main) {"
-        errorLine2="                            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/crypto/PasswordCreationActivity.kt"
-            line="358"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="            withContext(Dispatchers.Main) {"
-        errorLine2="                        ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
-            line="110"
-            column="25"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="            withContext(Dispatchers.Main) {"
-        errorLine2="                        ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
-            line="137"
-            column="25"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="            withContext(Dispatchers.Main) {"
-        errorLine2="                        ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
-            line="150"
-            column="25"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="                withContext(Dispatchers.Main) {"
-        errorLine2="                            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
-            line="511"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="      withContext(Dispatchers.Main) {"
-        errorLine2="                  ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
-            line="576"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="      coroutineScope.launch(Dispatchers.Main.immediate) { viewHolderBinder.invoke(holder, item) }"
-        errorLine2="                            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/viewmodel/SearchableRepositoryViewModel.kt"
-            line="485"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="            withContext(Dispatchers.Main) {"
-        errorLine2="                        ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/sshkeygen/SshKeyGenActivity.kt"
-            line="114"
-            column="25"/>
-    </issue>
-
-    <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="      runBlocking(Dispatchers.Main) {"
+        errorLine1="      runBlocking(Dispatchers.Main) { suspendCoroutine { cont -> askForPassword(cont, isRetry) } }"
         errorLine2="                  ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/passwordstore/util/git/sshj/SshjSessionFactory.kt"
@@ -220,7 +44,7 @@
         errorLine2="      ^">
         <location
             file="src/main/java/app/passwordstore/ui/autofill/AutofillFilterView.kt"
-            line="194"
+            line="199"
             column="7"/>
     </issue>
 
@@ -275,7 +99,7 @@
         errorLine2="    ^">
         <location
             file="src/main/java/app/passwordstore/ui/passwords/PasswordFragment.kt"
-            line="180"
+            line="182"
             column="5"/>
     </issue>
 
@@ -297,7 +121,7 @@
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/passwordstore/util/viewmodel/SearchableRepositoryViewModel.kt"
-            line="298"
+            line="297"
             column="33"/>
     </issue>
 
@@ -308,7 +132,7 @@
         errorLine2="    ^">
         <location
             file="src/main/java/app/passwordstore/ui/folderselect/SelectFolderFragment.kt"
-            line="59"
+            line="62"
             column="5"/>
     </issue>
 

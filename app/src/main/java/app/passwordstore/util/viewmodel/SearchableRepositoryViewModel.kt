@@ -38,7 +38,6 @@ import java.util.Locale
 import java.util.Stack
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -401,7 +400,9 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   private val layoutRes: Int,
   private val viewHolderCreator: (view: View) -> T,
   private val coroutineScope: CoroutineScope,
-  private val viewHolderBinder: suspend T.(item: PasswordItem) -> Unit,
+  private val dispatcherProvider: DispatcherProvider,
+  private val viewHolderBinder:
+    suspend T.(item: PasswordItem, dispatcherProvider: DispatcherProvider) -> Unit,
 ) : ListAdapter<PasswordItem, T>(PasswordItemDiffCallback), PopupTextProvider {
 
   fun <T : ItemDetailsLookup<String>> makeSelectable(
@@ -482,7 +483,9 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   final override fun onBindViewHolder(holder: T, position: Int) {
     val item = getItem(position)
     holder.apply {
-      coroutineScope.launch(Dispatchers.Main.immediate) { viewHolderBinder.invoke(holder, item) }
+      coroutineScope.launch(dispatcherProvider.mainImmediate()) {
+        viewHolderBinder.invoke(holder, item, dispatcherProvider)
+      }
       selectionTracker?.let { itemView.isSelected = it.isSelected(item.stableId) }
       itemView.setOnClickListener {
         // Do not emit custom click events while the user is selecting items.

@@ -18,6 +18,7 @@ import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.databinding.PasswordRecyclerViewBinding
 import app.passwordstore.ui.adapters.PasswordItemRecyclerAdapter
 import app.passwordstore.ui.passwords.PasswordStore
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.viewmodel.ListMode
 import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
@@ -25,6 +26,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
@@ -32,6 +34,7 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 @AndroidEntryPoint
 class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
 
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
   private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
   private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
   private lateinit var listener: OnFragmentInteractionListener
@@ -42,7 +45,7 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
     super.onViewCreated(view, savedInstanceState)
     binding.fab.hide()
     recyclerAdapter =
-      PasswordItemRecyclerAdapter(lifecycleScope).onItemClicked { _, item ->
+      PasswordItemRecyclerAdapter(lifecycleScope, dispatcherProvider).onItemClicked { _, item ->
         listener.onFragmentInteraction(item)
       }
     binding.passRecycler.apply {

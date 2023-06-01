@@ -57,9 +57,7 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 
   final override fun reqPassword(resource: Resource<*>?): CharArray {
     val password =
-      runBlocking(Dispatchers.Main) {
-        suspendCoroutine<String?> { cont -> askForPassword(cont, isRetry) }
-      }
+      runBlocking(Dispatchers.Main) { suspendCoroutine { cont -> askForPassword(cont, isRetry) } }
     isRetry = true
     return password?.toCharArray() ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
   }

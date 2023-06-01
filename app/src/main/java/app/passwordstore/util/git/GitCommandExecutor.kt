@@ -8,6 +8,7 @@ package app.passwordstore.util.git
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.snackbar
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.git.GitException.PullException
@@ -21,7 +22,6 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.PullCommand
@@ -44,6 +44,7 @@ class GitCommandExecutor(
 
   suspend fun execute(): Result<Unit, Throwable> {
     val gitSettings = hiltEntryPoint.gitSettings()
+    val dispatcherProvider = hiltEntryPoint.dispatcherProvider()
     val snackbar =
       activity.snackbar(
         message = activity.resources.getString(R.string.git_operation_running),
@@ -55,13 +56,13 @@ class GitCommandExecutor(
         for (command in operation.commands) {
           when (command) {
             is StatusCommand -> {
-              val res = withContext(Dispatchers.IO) { command.call() }
+              val res = withContext(dispatcherProvider.io()) { command.call() }
               nbChanges = res.uncommittedChanges.size
             }
             is CommitCommand -> {
               // the previous status will eventually be used to avoid a commit
               if (nbChanges > 0) {
-                withContext(Dispatchers.IO) {
+                withContext(dispatcherProvider.io()) {
                   val name = gitSettings.authorName.ifEmpty { "root" }
                   val email = gitSettings.authorEmail.ifEmpty { "localhost" }
                   val identity = PersonIdent(name, email)
@@ -70,7 +71,7 @@ class GitCommandExecutor(
               }
             }
             is PullCommand -> {
-              val result = withContext(Dispatchers.IO) { command.call() }
+              val result = withContext(dispatcherProvider.io()) { command.call() }
               if (result.rebaseResult != null) {
                 if (!result.rebaseResult.status.isSuccessful) {
                   throw PullException.PullRebaseFailed
@@ -82,7 +83,7 @@ class GitCommandExecutor(
               }
             }
             is PushCommand -> {
-              val results = withContext(Dispatchers.IO) { command.call() }
+              val results = withContext(dispatcherProvider.io()) { command.call() }
               for (result in results) {
                 // Code imported (modified) from Gerrit PushOp, license Apache v2
                 for (rru in result.remoteUpdates) {
@@ -102,7 +103,7 @@ class GitCommandExecutor(
                       }
                     }
                     RemoteRefUpdate.Status.UP_TO_DATE -> {
-                      withContext(Dispatchers.Main) {
+                      withContext(dispatcherProvider.main()) {
                         Toast.makeText(
                             activity,
                             activity.applicationContext.getString(R.string.git_push_up_to_date),
@@ -117,7 +118,7 @@ class GitCommandExecutor(
               }
             }
             else -> {
-              withContext(Dispatchers.IO) { command.call() }
+              withContext(dispatcherProvider.io()) { command.call() }
             }
           }
         }
@@ -130,5 +131,7 @@ class GitCommandExecutor(
   interface GitCommandExecutorEntryPoint {
 
     fun gitSettings(): GitSettings
+
+    fun dispatcherProvider(): DispatcherProvider
   }
 }

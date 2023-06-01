@@ -30,7 +30,6 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -242,7 +241,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                     message = getString(R.string.delete_directory_progress_text),
                     length = Snackbar.LENGTH_INDEFINITE
                   )
-                withContext(Dispatchers.IO) {
+                withContext(dispatcherProvider.io()) {
                   localDir.deleteRecursively()
                   localDir.mkdirs()
                 }

@@ -26,9 +26,8 @@ import app.passwordstore.util.settings.PreferenceKeys.DICEWARE_SEPARATOR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import reactivecircus.flowbinding.android.widget.afterTextChanges
 
 @AndroidEntryPoint
@@ -47,12 +46,13 @@ class DicewarePasswordGeneratorDialogFragment : DialogFragment() {
     binding.passwordLengthText.setText(prefs.getInt(DICEWARE_LENGTH, 5).toString())
     binding.passwordText.typeface = Typeface.MONOSPACE
 
-    merge(
-        binding.passwordLengthText.afterTextChanges(),
-        binding.passwordSeparatorText.afterTextChanges(),
-      )
-      .onEach { generatePassword(binding) }
-      .launchIn(lifecycleScope)
+    lifecycleScope.launch {
+      merge(
+          binding.passwordLengthText.afterTextChanges(),
+          binding.passwordSeparatorText.afterTextChanges(),
+        )
+        .collect { _ -> generatePassword(binding) }
+    }
     return builder
       .run {
         setTitle(R.string.pwgen_title)

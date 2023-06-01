@@ -20,7 +20,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.passwordstore.R
@@ -29,6 +28,7 @@ import app.passwordstore.databinding.ActivityOreoAutofillFilterBinding
 import app.passwordstore.util.autofill.AutofillMatcher
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.DirectoryStructure
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.viewmodel.FilterMode
 import app.passwordstore.util.viewmodel.ListMode
@@ -37,13 +37,16 @@ import app.passwordstore.util.viewmodel.SearchableRepositoryAdapter
 import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
 @AndroidEntryPoint
 class AutofillFilterView : AppCompatActivity() {
+
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
 
   companion object {
 
@@ -142,7 +145,8 @@ class AutofillFilterView : AppCompatActivity() {
               R.layout.oreo_autofill_filter_row,
               ::PasswordViewHolder,
               lifecycleScope,
-            ) { item ->
+              dispatcherProvider,
+            ) { item, _ ->
               val file = item.file.relativeTo(item.rootDir)
               val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
               val identifier = directoryStructure.getIdentifierFor(file)
@@ -191,23 +195,24 @@ class AutofillFilterView : AppCompatActivity() {
           R.string.oreo_autofill_match_with,
           formOrigin.getPrettyIdentifier(applicationContext)
         )
-      model.searchResult
-        .flowWithLifecycle(lifecycle)
-        .onEach { result ->
-          val list = result.passwordItems
-          (rvPassword.adapter as SearchableRepositoryAdapter).submitList(list) {
-            rvPassword.scrollToPosition(0)
-          }
-          // Switch RecyclerView out for a "no results" message if the new list is empty and
-          // the message is not yet shown (and vice versa).
-          if (
-            (list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
-              (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id)
-          ) {
-            rvPasswordSwitcher.showNext()
-          }
-        }
-        .launchIn(lifecycleScope)
+      lifecycleScope.launch { handleSearchResults() }
+    }
+  }
+
+  private suspend fun handleSearchResults() {
+    model.searchResult.collect { result ->
+      val list = result.passwordItems
+      (binding.rvPassword.adapter as SearchableRepositoryAdapter).submitList(list) {
+        binding.rvPassword.scrollToPosition(0)
+      }
+      // Switch RecyclerView out for a "no results" message if the new list is empty and
+      // the message is not yet shown (and vice versa).
+      if (
+        (list.isEmpty() && binding.rvPasswordSwitcher.nextView.id == binding.rvPasswordEmpty.id) ||
+          (list.isNotEmpty() && binding.rvPasswordSwitcher.nextView.id == binding.rvPassword.id)
+      ) {
+        binding.rvPasswordSwitcher.showNext()
+      }
     }
   }
 
