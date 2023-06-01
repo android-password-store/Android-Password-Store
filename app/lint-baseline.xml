@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.1.0-beta02" type="baseline" client="gradle" dependencies="false" name="AGP (8.1.0-beta02)" variant="all" version="8.1.0-beta02">
+<issues format="6" by="lint 8.2.0-alpha06" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0-alpha06)" variant="all" version="8.2.0-alpha06">
 
     <issue
         id="StopShip"
@@ -10,6 +10,17 @@
             file="src/main/java/app/passwordstore/util/viewmodel/PGPKeyListViewModel.kt"
             line="35"
             column="19"/>
+    </issue>
+
+    <issue
+        id="FullyQualifiedResource"
+        message="Use an import alias instead"
+        errorLine1="      app.passwordstore.passgen.diceware.R.raw.diceware_wordlist"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/injection/pwgen/DicewareModule.kt"
+            line="50"
+            column="7"/>
     </issue>
 
     <issue
@@ -24,6 +35,292 @@
         message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory.1`.">
         <location
             file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.73/7673fe0f3510e88232c4bd98d027e9e0a3d0af6d/bcpkix-jdk15to18-1.73.jar"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="      withContext(Dispatchers.Main) {"
+        errorLine2="                  ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/autofill/AutofillDecryptActivity.kt"
+            line="104"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="      withContext(Dispatchers.Main) {"
+        errorLine2="                  ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/autofill/AutofillDecryptActivity.kt"
+            line="132"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="    withContext(Dispatchers.Main) { finish() }"
+        errorLine2="                ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/autofill/AutofillDecryptActivity.kt"
+            line="139"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="      withContext(Dispatchers.Main) {"
+        errorLine2="                  ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/git/base/BaseGitActivity.kt"
+            line="108"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="  private val scope = CoroutineScope(Job() + Dispatchers.Main)"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/services/ClipboardService.kt"
+            line="35"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="            withContext(Dispatchers.Main) {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/services/ClipboardService.kt"
+            line="56"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="                      withContext(Dispatchers.Main) {"
+        errorLine2="                                  ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/GitCommandExecutor.kt"
+            line="105"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="              withContext(Dispatchers.Main) {"
+        errorLine2="                          ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/operation/GitOperation.kt"
+            line="179"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="      lifecycleScope.launch(Dispatchers.Main) {"
+        errorLine2="                            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/crypto/PasswordCreationActivity.kt"
+            line="358"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="            withContext(Dispatchers.Main) {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
+            line="110"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="            withContext(Dispatchers.Main) {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
+            line="137"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="            withContext(Dispatchers.Main) {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
+            line="150"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="                withContext(Dispatchers.Main) {"
+        errorLine2="                            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
+            line="511"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="      withContext(Dispatchers.Main) {"
+        errorLine2="                  ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/passwords/PasswordStore.kt"
+            line="576"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="      coroutineScope.launch(Dispatchers.Main.immediate) { viewHolderBinder.invoke(holder, item) }"
+        errorLine2="                            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/viewmodel/SearchableRepositoryViewModel.kt"
+            line="485"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="            withContext(Dispatchers.Main) {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/sshkeygen/SshKeyGenActivity.kt"
+            line="114"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="      runBlocking(Dispatchers.Main) {"
+        errorLine2="                  ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/sshj/SshjSessionFactory.kt"
+            line="60"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
+        errorLine1="      model.searchResult"
+        errorLine2="      ^">
+        <location
+            file="src/main/java/app/passwordstore/ui/autofill/AutofillFilterView.kt"
+            line="194"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
+        errorLine1="        entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/crypto/DecryptActivity.kt"
+            line="271"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
+        errorLine1="    merge("
+        errorLine2="    ^">
+        <location
+            file="src/main/java/app/passwordstore/ui/dialogs/DicewarePasswordGeneratorDialogFragment.kt"
+            line="50"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use Context#getDrawableCompat() instead"
+        errorLine1="                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/adapters/FieldItemAdapter.kt"
+            line="67"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use Context#getDrawableCompat() instead"
+        errorLine1="                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/ui/adapters/FieldItemAdapter.kt"
+            line="67"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
+        errorLine1="    model.searchResult"
+        errorLine2="    ^">
+        <location
+            file="src/main/java/app/passwordstore/ui/passwords/PasswordFragment.kt"
+            line="180"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
+        errorLine1="    merge("
+        errorLine2="    ^">
+        <location
+            file="src/main/java/app/passwordstore/ui/dialogs/PasswordGeneratorDialogFragment.kt"
+            line="58"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="For a stack use ArrayDeque which is more efficient internally."
+        errorLine1="  private val navigationStack = Stack&lt;NavigationStackEntry>()"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/viewmodel/SearchableRepositoryViewModel.kt"
+            line="298"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DenyListedApi"
+        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
+        errorLine1="    model.searchResult"
+        errorLine2="    ^">
+        <location
+            file="src/main/java/app/passwordstore/ui/folderselect/SelectFolderFragment.kt"
+            line="59"
+            column="5"/>
     </issue>
 
     <issue
