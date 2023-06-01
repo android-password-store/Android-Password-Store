@@ -39,39 +39,6 @@
 
     <issue
         id="DenyListedApi"
-        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="      model.searchResult"
-        errorLine2="      ^">
-        <location
-            file="src/main/java/app/passwordstore/ui/autofill/AutofillFilterView.kt"
-            line="199"
-            column="7"/>
-    </issue>
-
-    <issue
-        id="DenyListedApi"
-        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="        entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/crypto/DecryptActivity.kt"
-            line="271"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="DenyListedApi"
-        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="    merge("
-        errorLine2="    ^">
-        <location
-            file="src/main/java/app/passwordstore/ui/dialogs/DicewarePasswordGeneratorDialogFragment.kt"
-            line="50"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="DenyListedApi"
         message="Use Context#getDrawableCompat() instead"
         errorLine1="                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)"
         errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
