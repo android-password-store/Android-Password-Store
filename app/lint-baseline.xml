@@ -83,17 +83,6 @@
 
     <issue
         id="DenyListedApi"
-        message="For a stack use ArrayDeque which is more efficient internally."
-        errorLine1="  private val navigationStack = Stack&lt;NavigationStackEntry>()"
-        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/viewmodel/SearchableRepositoryViewModel.kt"
-            line="297"
-            column="33"/>
-    </issue>
-
-    <issue
-        id="DenyListedApi"
         message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
         errorLine1="    model.searchResult"
         errorLine2="    ^">

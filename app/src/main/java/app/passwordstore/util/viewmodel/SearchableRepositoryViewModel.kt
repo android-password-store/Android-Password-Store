@@ -35,7 +35,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import java.text.Collator
 import java.util.Locale
-import java.util.Stack
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -294,7 +293,7 @@ constructor(
 
   data class NavigationStackEntry(val dir: File, val recyclerViewState: Parcelable?)
 
-  private val navigationStack = Stack<NavigationStackEntry>()
+  private val navigationStack = ArrayDeque<NavigationStackEntry>()
 
   fun navigateTo(
     newDirectory: File = root,
@@ -305,7 +304,7 @@ constructor(
     if (!newDirectory.exists()) return
     require(newDirectory.isDirectory) { "Can only navigate to a directory" }
     if (pushPreviousLocation) {
-      navigationStack.push(NavigationStackEntry(_currentDir.value, recyclerViewState))
+      navigationStack.addFirst(NavigationStackEntry(_currentDir.value, recyclerViewState))
     }
     searchActionFlow.update {
       makeSearchAction(
@@ -330,7 +329,7 @@ constructor(
    */
   fun navigateBack(): Parcelable? {
     if (!canNavigateBack) return null
-    val (oldDir, oldRecyclerViewState) = navigationStack.pop()
+    val (oldDir, oldRecyclerViewState) = navigationStack.removeFirst()
     navigateTo(oldDir, pushPreviousLocation = false)
     return oldRecyclerViewState
   }
