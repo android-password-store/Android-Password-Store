@@ -70,7 +70,10 @@ class DecryptActivity : BasePgpActivity() {
       features.isEnabled(EnableGPGPassphraseCache) &&
         BiometricAuthenticator.canAuthenticate(this@DecryptActivity)
     ) {
-      BiometricAuthenticator.authenticate(this@DecryptActivity) { authResult ->
+      BiometricAuthenticator.authenticate(
+        this@DecryptActivity,
+        R.string.biometric_prompt_title_gpg_passphrase_cache,
+      ) { authResult ->
         requireKeysExist { decrypt(isError = false, authResult) }
       }
     } else {

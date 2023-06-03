@@ -373,4 +373,5 @@
   <string name="pgp_key_manager_no_keys_guidance">Import a key using the add button below</string>
   <string name="no_keys_imported_dialog_title">No keys imported</string>
   <string name="no_keys_imported_dialog_message">There are no PGP keys imported in the app yet, press the button below to pick a key file</string>
+  <string name="biometric_prompt_title_gpg_passphrase_cache">Unlock passphrase cache</string>
 </resources>

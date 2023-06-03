@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.lifecycleScope
+import app.passwordstore.R
 import app.passwordstore.data.crypto.GPGPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.crypto.BasePgpActivity
@@ -73,7 +74,10 @@ class AutofillDecryptActivity : BasePgpActivity() {
       if (
         features.isEnabled(EnableGPGPassphraseCache) && BiometricAuthenticator.canAuthenticate(this)
       ) {
-        BiometricAuthenticator.authenticate(this) { authResult ->
+        BiometricAuthenticator.authenticate(
+          this,
+          R.string.biometric_prompt_title_gpg_passphrase_cache,
+        ) { authResult ->
           if (authResult is BiometricAuthenticator.Result.Success) {
             lifecycleScope.launch {
               val cachedPassphrase =
