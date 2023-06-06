@@ -2,8 +2,9 @@
 
 package app.passwordstore.gradle
 
+import com.vanniktech.maven.publish.AndroidMultiVariantLibrary
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
-import com.vanniktech.maven.publish.MavenPublishPlugin
+import com.vanniktech.maven.publish.MavenPublishBasePlugin
 import com.vanniktech.maven.publish.SonatypeHost
 import me.tylerbwong.gradle.metalava.Documentation
 import me.tylerbwong.gradle.metalava.extension.MetalavaExtension
@@ -18,7 +19,7 @@ class PublishedAndroidLibraryPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     project.plugins.run {
       apply(LibraryPlugin::class)
-      apply(MavenPublishPlugin::class)
+      apply(MavenPublishBasePlugin::class)
       apply("me.tylerbwong.gradle.metalava")
     }
     project.extensions.configure<MavenPublishBaseExtension> {
@@ -26,6 +27,8 @@ class PublishedAndroidLibraryPlugin : Plugin<Project> {
       if (project.providers.environmentVariable("CI").isPresent) {
         signAllPublications()
       }
+      configure(AndroidMultiVariantLibrary(sourcesJar = true, publishJavadocJar = true))
+      pomFromGradleProperties()
     }
     project.extensions.configure<MetalavaExtension> {
       documentation.set(Documentation.PUBLIC)
