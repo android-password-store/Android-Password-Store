@@ -26,6 +26,9 @@ class SentryPlugin : Plugin<Project> {
       }
       project.plugins.apply(SentryPlugin::class)
       project.extensions.configure<SentryPluginExtension> {
+        includeProguardMapping.set(
+          project.providers.gradleProperty(SENTRY_UPLOAD_MAPPINGS_PROPERTY).isPresent
+        )
         autoUploadProguardMapping.set(
           project.providers.gradleProperty(SENTRY_UPLOAD_MAPPINGS_PROPERTY).isPresent
         )
