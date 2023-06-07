@@ -47,7 +47,7 @@ build-moshi-kotlin = "com.squareup.moshi:moshi-kotlin:1.15.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.11.0"
 build-r8 = "com.android.tools:r8:8.2.7-dev"
 build-semver = "com.vdurmont:semver4j:3.1.0"
-build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.9.0"
+build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.10.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.0"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.46.0"
 compose-animation = { module = "androidx.compose.animation:animation" }
