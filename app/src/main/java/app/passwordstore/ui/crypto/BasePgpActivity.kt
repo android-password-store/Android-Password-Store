@@ -168,6 +168,8 @@ open class BasePgpActivity : AppCompatActivity() {
               // file we created. Skip the validation so we can make the user add a
               // real ID.
               if (line.isEmpty()) return@run
+              // Apparently `gpg-id` being the first line is also acceptable?
+              if (line == "gpg-id") return@run
               if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex()).not()) {
                 snackbar(message = resources.getString(R.string.invalid_gpg_id))
               }
