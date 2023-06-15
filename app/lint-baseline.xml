@@ -16,14 +16,14 @@
         id="InvalidPackage"
         message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming.directory`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory`.">
         <location
-            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.73/7673fe0f3510e88232c4bd98d027e9e0a3d0af6d/bcpkix-jdk15to18-1.73.jar"/>
+            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.74/a29da9d05899555ecc567a3b4ffb03fe656d6084/bcpkix-jdk15to18-1.74.jar"/>
     </issue>
 
     <issue
         id="InvalidPackage"
         message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory.1`.">
         <location
-            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.73/7673fe0f3510e88232c4bd98d027e9e0a3d0af6d/bcpkix-jdk15to18-1.73.jar"/>
+            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.74/a29da9d05899555ecc567a3b4ffb03fe656d6084/bcpkix-jdk15to18-1.74.jar"/>
     </issue>
 
     <issue
