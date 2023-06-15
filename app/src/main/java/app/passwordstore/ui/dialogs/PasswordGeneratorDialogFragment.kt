@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.afterTextChanges
 import reactivecircus.flowbinding.android.widget.checkedChanges
 
+@OptIn(ExperimentalStdlibApi::class)
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -138,10 +139,9 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
    */
   private fun setPrefs(ctx: Context, options: List<PasswordOption>, targetLength: Int): Boolean {
     ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE).edit {
-      for (possibleOption in PasswordOption.values()) putBoolean(
-        possibleOption.key,
-        possibleOption in options
-      )
+      for (possibleOption in PasswordOption.entries) {
+        putBoolean(possibleOption.key, possibleOption in options)
+      }
       putInt("length", targetLength)
     }
     return true

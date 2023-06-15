@@ -33,6 +33,7 @@ import logcat.LogPriority.VERBOSE
 import logcat.LogcatLogger
 import logcat.logcat
 
+@OptIn(ExperimentalStdlibApi::class)
 @Suppress("Unused")
 @HiltAndroidApp
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -68,7 +69,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     Sentry.configureScope { scope ->
       val user = User()
       user.data =
-        Feature.VALUES.associate { feature ->
+        Feature.entries.associate { feature ->
           "features.${feature.configKey}" to features.isEnabled(feature).toString()
         }
       scope.user = user

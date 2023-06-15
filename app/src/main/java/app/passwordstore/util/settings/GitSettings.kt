@@ -26,10 +26,9 @@ enum class Protocol(val pref: String) {
 
   companion object {
 
-    private val map = values().associateBy(Protocol::pref)
-
+    @OptIn(ExperimentalStdlibApi::class)
     fun fromString(type: String?): Protocol {
-      return map[type ?: return Ssh]
+      return entries.associateBy(Protocol::pref)[type ?: return Ssh]
         ?: throw IllegalArgumentException("$type is not a valid Protocol")
     }
   }
@@ -43,10 +42,9 @@ enum class AuthMode(val pref: String) {
 
   companion object {
 
-    private val map = values().associateBy(AuthMode::pref)
-
+    @OptIn(ExperimentalStdlibApi::class)
     fun fromString(type: String?): AuthMode {
-      return map[type ?: return SshKey]
+      return entries.associateBy(AuthMode::pref)[type ?: return SshKey]
         ?: throw IllegalArgumentException("$type is not a valid AuthMode")
     }
   }

@@ -25,9 +25,4 @@ enum class Feature(
 
   /** Opt into a cache layer for PGP passphrases. */
   EnablePGPPassphraseCache(false, "enable_gpg_passphrase_cache"),
-  ;
-
-  companion object {
-    @JvmField val VALUES = values()
-  }
 }

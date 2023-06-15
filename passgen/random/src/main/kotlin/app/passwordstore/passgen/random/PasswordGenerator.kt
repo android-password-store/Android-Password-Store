@@ -7,6 +7,7 @@ package app.passwordstore.passgen.random
 import app.passwordstore.passgen.random.util.clearFlag
 import app.passwordstore.passgen.random.util.hasFlag
 
+@OptIn(ExperimentalStdlibApi::class)
 public object PasswordGenerator {
 
   public const val DEFAULT_LENGTH: Int = 16
@@ -39,7 +40,7 @@ public object PasswordGenerator {
     var phonemes = true
     var pwgenFlags = DIGITS or UPPERS or LOWERS
 
-    for (option in PasswordOption.values()) {
+    for (option in PasswordOption.entries) {
       if (option in passwordOptions) {
         when (option) {
           PasswordOption.NoDigits -> pwgenFlags = pwgenFlags.clearFlag(DIGITS)
