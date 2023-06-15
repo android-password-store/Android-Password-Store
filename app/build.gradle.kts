@@ -71,8 +71,8 @@ dependencies {
   implementation(libs.compose.ui.tooling)
   implementation(libs.dagger.hilt.android)
 
-  implementation(libs.kotlin.coroutines.android)
-  implementation(libs.kotlin.coroutines.core)
+  implementation(libs.kotlinx.coroutines.android)
+  implementation(libs.kotlinx.coroutines.core)
 
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)

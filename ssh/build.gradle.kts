@@ -17,8 +17,8 @@ android {
 
 dependencies {
   implementation(libs.androidx.core.ktx)
-  implementation(libs.kotlin.coroutines.android)
-  implementation(libs.kotlin.coroutines.core)
+  implementation(libs.kotlinx.coroutines.android)
+  implementation(libs.kotlinx.coroutines.core)
   implementation(libs.thirdparty.sshj) { exclude(group = "org.bouncycastle") }
   implementation(libs.thirdparty.logcat)
   implementation(libs.androidx.security)

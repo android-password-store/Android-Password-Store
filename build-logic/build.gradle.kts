@@ -95,5 +95,5 @@ dependencies {
   implementation(libs.build.sentry)
   implementation(libs.build.vcu)
   implementation(libs.build.versions)
-  implementation(libs.kotlin.coroutines.core)
+  implementation(libs.kotlinx.coroutines.core)
 }

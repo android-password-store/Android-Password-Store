@@ -9,10 +9,10 @@ dependencies {
   implementation(projects.coroutineUtils)
   implementation(libs.androidx.annotation)
   implementation(libs.dagger.hilt.core)
-  implementation(libs.kotlin.coroutines.core)
+  implementation(libs.kotlinx.coroutines.core)
   implementation(libs.thirdparty.kotlinResult)
   implementation(libs.thirdparty.pgpainless)
   testImplementation(libs.bundles.testDependencies)
-  testImplementation(libs.kotlin.coroutines.test)
+  testImplementation(libs.kotlinx.coroutines.test)
   testImplementation(libs.testing.testparameterinjector)
 }

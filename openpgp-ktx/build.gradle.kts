@@ -13,4 +13,4 @@ android {
   namespace = "me.msfjarvis.openpgpktx"
 }
 
-dependencies { implementation(libs.kotlin.coroutines.core) }
+dependencies { implementation(libs.kotlinx.coroutines.core) }
