@@ -32,7 +32,7 @@ public class PGPKeyManager
 constructor(
   filesDir: String,
   private val dispatcher: CoroutineDispatcher,
-) : KeyManager<PGPKey, GpgIdentifier> {
+) : KeyManager<PGPKey, PGPIdentifier> {
 
   private val keyDir = File(filesDir, KEY_DIR_NAME)
 
@@ -74,7 +74,7 @@ constructor(
     }
 
   /** @see KeyManager.removeKey */
-  override suspend fun removeKey(identifier: GpgIdentifier): Result<Unit, Throwable> =
+  override suspend fun removeKey(identifier: PGPIdentifier): Result<Unit, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
@@ -87,7 +87,7 @@ constructor(
     }
 
   /** @see KeyManager.getKeyById */
-  override suspend fun getKeyById(id: GpgIdentifier): Result<PGPKey, Throwable> =
+  override suspend fun getKeyById(id: PGPIdentifier): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
@@ -97,14 +97,14 @@ constructor(
 
         val matchResult =
           when (id) {
-            is GpgIdentifier.KeyId -> {
+            is PGPIdentifier.KeyId -> {
               val keyIdMatch =
                 keys
                   .map { key -> key to tryGetId(key) }
                   .firstOrNull { (_, keyId) -> keyId?.id == id.id }
               keyIdMatch?.first
             }
-            is GpgIdentifier.UserId -> {
+            is PGPIdentifier.UserId -> {
               val selector = SelectUserId.byEmail(id.email)
               val userIdMatch =
                 keys
@@ -134,7 +134,7 @@ constructor(
     }
 
   /** @see KeyManager.getKeyById */
-  override suspend fun getKeyId(key: PGPKey): GpgIdentifier? = tryGetId(key)
+  override suspend fun getKeyId(key: PGPKey): PGPIdentifier? = tryGetId(key)
 
   /** Checks if [keyDir] exists and attempts to create it if not. */
   private fun keyDirExists(): Boolean {

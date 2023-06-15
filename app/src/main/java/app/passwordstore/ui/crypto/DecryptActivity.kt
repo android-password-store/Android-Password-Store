@@ -11,8 +11,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
-import app.passwordstore.crypto.GpgIdentifier
-import app.passwordstore.data.crypto.GPGPassphraseCache
+import app.passwordstore.crypto.PGPIdentifier
+import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
@@ -21,7 +21,7 @@ import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
-import app.passwordstore.util.features.Feature.EnableGPGPassphraseCache
+import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
@@ -42,10 +42,10 @@ import logcat.LogPriority.ERROR
 import logcat.logcat
 
 @AndroidEntryPoint
-class DecryptActivity : BasePgpActivity() {
+class DecryptActivity : BasePGPActivity() {
 
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-  @Inject lateinit var passphraseCache: GPGPassphraseCache
+  @Inject lateinit var passphraseCache: PGPPassphraseCache
   @Inject lateinit var features: Features
 
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
@@ -67,7 +67,7 @@ class DecryptActivity : BasePgpActivity() {
       }
     }
     if (
-      features.isEnabled(EnableGPGPassphraseCache) &&
+      features.isEnabled(EnablePGPPassphraseCache) &&
         BiometricAuthenticator.canAuthenticate(this@DecryptActivity)
     ) {
       BiometricAuthenticator.authenticate(
@@ -150,7 +150,7 @@ class DecryptActivity : BasePgpActivity() {
   }
 
   private fun decrypt(isError: Boolean, authResult: BiometricAuthenticator.Result) {
-    val gpgIdentifiers = getGpgIdentifiers("") ?: return
+    val gpgIdentifiers = getPGPIdentifiers("") ?: return
     lifecycleScope.launch(dispatcherProvider.main()) {
       if (authResult is BiometricAuthenticator.Result.Success) {
         val cachedPassphrase =
@@ -168,7 +168,7 @@ class DecryptActivity : BasePgpActivity() {
 
   private fun askPassphrase(
     isError: Boolean,
-    gpgIdentifiers: List<GpgIdentifier>,
+    gpgIdentifiers: List<PGPIdentifier>,
     authResult: BiometricAuthenticator.Result,
   ) {
     if (retries < MAX_RETRIES) {
@@ -206,7 +206,7 @@ class DecryptActivity : BasePgpActivity() {
 
   private suspend fun decryptWithCachedPassphrase(
     passphrase: String,
-    identifiers: List<GpgIdentifier>,
+    identifiers: List<PGPIdentifier>,
     authResult: BiometricAuthenticator.Result,
   ) {
     when (val result = decryptWithPassphrase(passphrase, identifiers)) {
@@ -225,7 +225,7 @@ class DecryptActivity : BasePgpActivity() {
 
   private suspend fun decryptWithPassphrase(
     password: String,
-    gpgIdentifiers: List<GpgIdentifier>,
+    gpgIdentifiers: List<PGPIdentifier>,
   ) = runCatching {
     val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
     val outputStream = ByteArrayOutputStream()

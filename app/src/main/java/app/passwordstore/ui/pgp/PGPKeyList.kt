@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.passwordstore.R
-import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.ui.compose.theme.APSThemePreview
 import app.passwordstore.util.extensions.conditional
 import kotlinx.collections.immutable.ImmutableList
@@ -41,10 +41,10 @@ import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun KeyList(
-  identifiers: ImmutableList<GpgIdentifier>,
-  onItemClick: (identifier: GpgIdentifier) -> Unit,
+  identifiers: ImmutableList<PGPIdentifier>,
+  onItemClick: (identifier: PGPIdentifier) -> Unit,
   modifier: Modifier = Modifier,
-  onKeySelected: ((identifier: GpgIdentifier) -> Unit)? = null,
+  onKeySelected: ((identifier: PGPIdentifier) -> Unit)? = null,
 ) {
   if (identifiers.isEmpty()) {
     Column(
@@ -69,10 +69,10 @@ fun KeyList(
 
 @Composable
 private fun KeyItem(
-  identifier: GpgIdentifier,
-  onItemClick: (identifier: GpgIdentifier) -> Unit,
+  identifier: PGPIdentifier,
+  onItemClick: (identifier: PGPIdentifier) -> Unit,
   modifier: Modifier = Modifier,
-  onKeySelected: ((identifier: GpgIdentifier) -> Unit)? = null,
+  onKeySelected: ((identifier: PGPIdentifier) -> Unit)? = null,
 ) {
   var isDeleting by remember { mutableStateOf(false) }
   DeleteConfirmationDialog(
@@ -85,8 +85,8 @@ private fun KeyItem(
   )
   val label =
     when (identifier) {
-      is GpgIdentifier.KeyId -> identifier.id.toString()
-      is GpgIdentifier.UserId -> identifier.email
+      is PGPIdentifier.KeyId -> identifier.id.toString()
+      is PGPIdentifier.UserId -> identifier.email
     }
   Row(
     modifier =
@@ -144,8 +144,8 @@ private fun KeyListPreview() {
       KeyList(
         identifiers =
           listOfNotNull(
-              GpgIdentifier.fromString("ultramicroscopicsilicovolcanoconiosis@example.com"),
-              GpgIdentifier.fromString("0xB950AE2813841585"),
+              PGPIdentifier.fromString("ultramicroscopicsilicovolcanoconiosis@example.com"),
+              PGPIdentifier.fromString("0xB950AE2813841585"),
             )
             .toPersistentList(),
         onItemClick = {}

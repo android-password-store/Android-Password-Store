@@ -63,7 +63,7 @@ import logcat.asLog
 import logcat.logcat
 
 @AndroidEntryPoint
-class PasswordCreationActivity : BasePgpActivity() {
+class PasswordCreationActivity : BasePGPActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
@@ -330,7 +330,7 @@ class PasswordCreationActivity : BasePgpActivity() {
       }
 
       // pass enters the key ID into `.gpg-id`.
-      val gpgIdentifiers = getGpgIdentifiers(directory.text.toString()) ?: return@with
+      val gpgIdentifiers = getPGPIdentifiers(directory.text.toString()) ?: return@with
       val content = "$editPass\n$editExtra"
       val path =
         when {

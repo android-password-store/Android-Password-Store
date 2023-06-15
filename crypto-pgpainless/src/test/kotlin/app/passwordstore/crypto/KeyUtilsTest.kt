@@ -18,7 +18,7 @@ class KeyUtilsTest {
     assertIs<PGPSecretKeyRing>(keyring)
     val keyId = tryGetId(key)
     assertNotNull(keyId)
-    assertIs<GpgIdentifier.KeyId>(keyId)
+    assertIs<PGPIdentifier.KeyId>(keyId)
     assertEquals("b950ae2813841585", keyId.toString())
   }
 }

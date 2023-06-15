@@ -4,15 +4,14 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.getString
 import javax.inject.Inject
 import kotlinx.coroutines.withContext
 
 /** Implements a rudimentary [EncryptedSharedPreferences]-backed cache for GPG passphrases. */
-@Suppress("Unused") // Soon
-class GPGPassphraseCache
+class PGPPassphraseCache
 @Inject
 constructor(
   private val dispatcherProvider: DispatcherProvider,
@@ -20,7 +19,7 @@ constructor(
 
   suspend fun cachePassphrase(
     context: Context,
-    identifier: GpgIdentifier,
+    identifier: PGPIdentifier,
     passphrase: String,
   ) {
     withContext(dispatcherProvider.io()) {
@@ -30,7 +29,7 @@ constructor(
 
   suspend fun retrieveCachedPassphrase(
     context: Context,
-    identifier: GpgIdentifier,
+    identifier: PGPIdentifier,
   ): String? {
     return withContext(dispatcherProvider.io()) {
       getPreferences(context).getString(identifier.toString())
@@ -39,7 +38,7 @@ constructor(
 
   suspend fun clearCachedPassphrase(
     context: Context,
-    identifier: GpgIdentifier,
+    identifier: PGPIdentifier,
   ) {
     withContext(dispatcherProvider.io()) {
       getPreferences(context).edit { remove(identifier.toString()) }

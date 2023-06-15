@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.passwordstore.crypto.GpgIdentifier
 import app.passwordstore.crypto.KeyUtils
+import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.crypto.PGPKeyManager
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class PGPKeyListViewModel @Inject constructor(private val keyManager: PGPKeyManager) : ViewModel() {
-  var keys: ImmutableList<GpgIdentifier> by mutableStateOf(persistentListOf())
+  var keys: ImmutableList<PGPIdentifier> by mutableStateOf(persistentListOf())
 
   init {
     updateKeySet()
@@ -40,7 +40,7 @@ class PGPKeyListViewModel @Inject constructor(private val keyManager: PGPKeyMana
     }
   }
 
-  fun deleteKey(identifier: GpgIdentifier) {
+  fun deleteKey(identifier: PGPIdentifier) {
     viewModelScope.launch {
       keyManager.removeKey(identifier)
       updateKeySet()

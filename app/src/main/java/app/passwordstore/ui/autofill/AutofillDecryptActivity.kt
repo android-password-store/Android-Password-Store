@@ -13,16 +13,16 @@ import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
-import app.passwordstore.data.crypto.GPGPassphraseCache
+import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
-import app.passwordstore.ui.crypto.BasePgpActivity
+import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.crypto.PasswordDialog
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
 import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.asLog
-import app.passwordstore.util.features.Feature.EnableGPGPassphraseCache
+import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
@@ -41,11 +41,11 @@ import logcat.LogPriority.ERROR
 import logcat.logcat
 
 @AndroidEntryPoint
-class AutofillDecryptActivity : BasePgpActivity() {
+class AutofillDecryptActivity : BasePGPActivity() {
 
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var features: Features
-  @Inject lateinit var passphraseCache: GPGPassphraseCache
+  @Inject lateinit var passphraseCache: PGPPassphraseCache
 
   private lateinit var directoryStructure: DirectoryStructure
 
@@ -70,9 +70,9 @@ class AutofillDecryptActivity : BasePgpActivity() {
     directoryStructure = AutofillPreferences.directoryStructure(this)
     logcat { action.toString() }
     requireKeysExist {
-      val gpgIdentifiers = getGpgIdentifiers("") ?: return@requireKeysExist
+      val gpgIdentifiers = getPGPIdentifiers("") ?: return@requireKeysExist
       if (
-        features.isEnabled(EnableGPGPassphraseCache) && BiometricAuthenticator.canAuthenticate(this)
+        features.isEnabled(EnablePGPPassphraseCache) && BiometricAuthenticator.canAuthenticate(this)
       ) {
         BiometricAuthenticator.authenticate(
           this,
@@ -143,7 +143,7 @@ class AutofillDecryptActivity : BasePgpActivity() {
   }
 
   private suspend fun decryptCredential(file: File, password: String): Credentials? {
-    val gpgIdentifiers = getGpgIdentifiers("") ?: return null
+    val gpgIdentifiers = getPGPIdentifiers("") ?: return null
     runCatching { file.readBytes().inputStream() }
       .onFailure { e ->
         logcat(ERROR) { e.asLog("File to decrypt not found") }

@@ -8,11 +8,11 @@ package app.passwordstore.crypto
 import java.util.Locale
 import java.util.regex.Pattern
 
-/** Supertype for valid identifiers of GPG keys. */
-public sealed class GpgIdentifier {
+/** Supertype for valid identifiers of PGP keys. */
+public sealed class PGPIdentifier {
 
-  /** A [GpgIdentifier] that represents either a long key ID or a fingerprint. */
-  public data class KeyId(val id: Long) : GpgIdentifier() {
+  /** A [PGPIdentifier] that represents either a long key ID or a fingerprint. */
+  public data class KeyId(val id: Long) : PGPIdentifier() {
     override fun toString(): String {
       return convertKeyIdToHex(id)
     }
@@ -36,10 +36,10 @@ public sealed class GpgIdentifier {
   }
 
   /**
-   * A [GpgIdentifier] that represents the textual name/email combination corresponding to a key.
+   * A [PGPIdentifier] that represents the textual name/email combination corresponding to a key.
    * Despite the [email] property in this class, the value is not guaranteed to be a valid email.
    */
-  public data class UserId(val email: String) : GpgIdentifier() {
+  public data class UserId(val email: String) : PGPIdentifier() {
     override fun toString(): String {
       return email
     }
@@ -53,10 +53,10 @@ public sealed class GpgIdentifier {
     private const val TRUNCATED_FINGERPRINT_LENGTH = 16
 
     /**
-     * Attempts to parse an untyped String identifier into a concrete subtype of [GpgIdentifier].
+     * Attempts to parse an untyped String identifier into a concrete subtype of [PGPIdentifier].
      */
     @Suppress("ReturnCount")
-    public fun fromString(identifier: String): GpgIdentifier? {
+    public fun fromString(identifier: String): PGPIdentifier? {
       if (identifier.isEmpty()) return null
       // Match long key IDs:
       // FF22334455667788 or 0xFF22334455667788

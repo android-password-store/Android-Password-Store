@@ -5,8 +5,8 @@
 
 package app.passwordstore.crypto
 
-import app.passwordstore.crypto.GpgIdentifier.KeyId
-import app.passwordstore.crypto.GpgIdentifier.UserId
+import app.passwordstore.crypto.PGPIdentifier.KeyId
+import app.passwordstore.crypto.PGPIdentifier.UserId
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import org.bouncycastle.openpgp.PGPKeyRing

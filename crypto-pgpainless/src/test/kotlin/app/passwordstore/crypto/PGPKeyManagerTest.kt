@@ -1,8 +1,8 @@
 package app.passwordstore.crypto
 
-import app.passwordstore.crypto.GpgIdentifier.KeyId
-import app.passwordstore.crypto.GpgIdentifier.UserId
 import app.passwordstore.crypto.KeyUtils.tryGetId
+import app.passwordstore.crypto.PGPIdentifier.KeyId
+import app.passwordstore.crypto.PGPIdentifier.UserId
 import app.passwordstore.crypto.errors.KeyAlreadyExistsException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException

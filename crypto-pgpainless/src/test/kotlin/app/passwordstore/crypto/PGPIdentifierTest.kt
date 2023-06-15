@@ -9,33 +9,33 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class GpgIdentifierTest {
+class PGPIdentifierTest {
 
   @Test
   fun parseHexKeyIdWithout0xPrefix() {
-    val identifier = GpgIdentifier.fromString("79E8208280490C77")
+    val identifier = PGPIdentifier.fromString("79E8208280490C77")
     assertNotNull(identifier)
-    assertTrue { identifier is GpgIdentifier.KeyId }
+    assertTrue { identifier is PGPIdentifier.KeyId }
   }
 
   @Test
   fun parseHexKeyId() {
-    val identifier = GpgIdentifier.fromString("0x79E8208280490C77")
+    val identifier = PGPIdentifier.fromString("0x79E8208280490C77")
     assertNotNull(identifier)
-    assertTrue { identifier is GpgIdentifier.KeyId }
+    assertTrue { identifier is PGPIdentifier.KeyId }
   }
 
   @Test
   fun parseValidEmail() {
-    val identifier = GpgIdentifier.fromString("john.doe@example.org")
+    val identifier = PGPIdentifier.fromString("john.doe@example.org")
     assertNotNull(identifier)
-    assertTrue { identifier is GpgIdentifier.UserId }
+    assertTrue { identifier is PGPIdentifier.UserId }
   }
 
   @Test
   fun parseEmailWithoutTLD() {
-    val identifier = GpgIdentifier.fromString("john.doe@example")
+    val identifier = PGPIdentifier.fromString("john.doe@example")
     assertNotNull(identifier)
-    assertTrue { identifier is GpgIdentifier.UserId }
+    assertTrue { identifier is PGPIdentifier.UserId }
   }
 }

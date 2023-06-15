@@ -25,8 +25,8 @@ import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.data.repo.PasswordRepository
-import app.passwordstore.ui.crypto.BasePgpActivity
-import app.passwordstore.ui.crypto.BasePgpActivity.Companion.getLongName
+import app.passwordstore.ui.crypto.BasePGPActivity
+import app.passwordstore.ui.crypto.BasePGPActivity.Companion.getLongName
 import app.passwordstore.ui.crypto.DecryptActivity
 import app.passwordstore.ui.crypto.PasswordCreationActivity
 import app.passwordstore.ui.dialogs.FolderCreationDialogFragment
@@ -393,9 +393,9 @@ class PasswordStore : BaseGitActivity() {
     val currentDir = currentDir
     logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
     val intent = Intent(this, PasswordCreationActivity::class.java)
-    intent.putExtra(BasePgpActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
+    intent.putExtra(BasePGPActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
     intent.putExtra(
-      BasePgpActivity.EXTRA_REPO_PATH,
+      BasePGPActivity.EXTRA_REPO_PATH,
       PasswordRepository.getRepositoryDirectory().absolutePath
     )
     listRefreshAction.launch(intent)

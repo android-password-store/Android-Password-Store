@@ -11,7 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import app.passwordstore.ui.crypto.BasePgpActivity
+import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.crypto.DecryptActivity
 import app.passwordstore.ui.passwords.PasswordStore
 import app.passwordstore.util.auth.BiometricAuthenticator
@@ -56,12 +56,12 @@ class LaunchActivity : AppCompatActivity() {
       if (intent.action == ACTION_DECRYPT_PASS)
         getDecryptIntent().apply {
           putExtra(
-            BasePgpActivity.EXTRA_FILE_PATH,
-            intent.getStringExtra(BasePgpActivity.EXTRA_FILE_PATH)
+            BasePGPActivity.EXTRA_FILE_PATH,
+            intent.getStringExtra(BasePGPActivity.EXTRA_FILE_PATH)
           )
           putExtra(
-            BasePgpActivity.EXTRA_REPO_PATH,
-            intent.getStringExtra(BasePgpActivity.EXTRA_REPO_PATH)
+            BasePGPActivity.EXTRA_REPO_PATH,
+            intent.getStringExtra(BasePGPActivity.EXTRA_REPO_PATH)
           )
         }
       else Intent(this, PasswordStore::class.java)

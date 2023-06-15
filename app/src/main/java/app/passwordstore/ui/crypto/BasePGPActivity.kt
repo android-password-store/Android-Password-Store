@@ -18,7 +18,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
-import app.passwordstore.crypto.GpgIdentifier
+import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.data.crypto.CryptoRepository
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.injection.prefs.SettingsPreferences
@@ -41,7 +41,7 @@ import kotlinx.coroutines.withContext
 
 @Suppress("Registered")
 @AndroidEntryPoint
-open class BasePgpActivity : AppCompatActivity() {
+open class BasePGPActivity : AppCompatActivity() {
 
   /** Full path to the repository */
   val repoPath by unsafeLazy { intent.getStringExtra("REPO_PATH")!! }
@@ -110,12 +110,12 @@ open class BasePgpActivity : AppCompatActivity() {
       val hasKeys = repository.hasKeys()
       if (!hasKeys) {
         withContext(dispatcherProvider.main()) {
-          MaterialAlertDialogBuilder(this@BasePgpActivity)
+          MaterialAlertDialogBuilder(this@BasePGPActivity)
             .setTitle(resources.getString(R.string.no_keys_imported_dialog_title))
             .setMessage(resources.getString(R.string.no_keys_imported_dialog_message))
             .setPositiveButton(resources.getString(R.string.button_label_import)) { _, _ ->
               onKeyImport = onKeysExist
-              keyImportAction.launch(Intent(this@BasePgpActivity, PGPKeyImportActivity::class.java))
+              keyImportAction.launch(Intent(this@BasePGPActivity, PGPKeyImportActivity::class.java))
             }
             .show()
         }
@@ -147,12 +147,12 @@ open class BasePgpActivity : AppCompatActivity() {
   }
 
   /**
-   * Get a list of available [GpgIdentifier]s for the current password repository. This method
+   * Get a list of available [PGPIdentifier]s for the current password repository. This method
    * throws when no identifiers were able to be parsed. If this method returns null, it means that
    * an invalid identifier was encountered and further execution must stop to let the user correct
    * the problem.
    */
-  fun getGpgIdentifiers(subDir: String): List<GpgIdentifier>? {
+  fun getPGPIdentifiers(subDir: String): List<PGPIdentifier>? {
     val repoRoot = PasswordRepository.getRepositoryDirectory()
     val gpgIdentifierFile =
       File(repoRoot, subDir).findTillRoot(".gpg-id", repoRoot)
@@ -162,7 +162,7 @@ open class BasePgpActivity : AppCompatActivity() {
         .readLines()
         .filter { it.isNotBlank() }
         .map { line ->
-          GpgIdentifier.fromString(line)
+          PGPIdentifier.fromString(line)
             ?: run {
               // The line being empty means this is most likely an empty `.gpg-id`
               // file we created. Skip the validation so we can make the user add a
@@ -176,7 +176,7 @@ open class BasePgpActivity : AppCompatActivity() {
               return null
             }
         }
-        .filterIsInstance<GpgIdentifier>()
+        .filterIsInstance<PGPIdentifier>()
     if (gpgIdentifiers.isEmpty()) {
       error("Failed to parse identifiers from .gpg-id: ${gpgIdentifierFile.readText()}")
     }

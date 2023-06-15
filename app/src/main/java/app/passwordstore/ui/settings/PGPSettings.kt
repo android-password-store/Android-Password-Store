@@ -32,7 +32,7 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
         titleRes = R.string.pref_pgp_ascii_armor_title
         persistent = true
       }
-      switch(Feature.EnableGPGPassphraseCache.configKey) {
+      switch(Feature.EnablePGPPassphraseCache.configKey) {
         titleRes = R.string.pref_passphrase_cache_title
         summaryRes = R.string.pref_passphrase_cache_summary
         defaultValue = false

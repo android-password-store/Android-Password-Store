@@ -7,7 +7,7 @@ package app.passwordstore.data.password
 import android.content.Context
 import android.content.Intent
 import app.passwordstore.data.repo.PasswordRepository
-import app.passwordstore.ui.crypto.BasePgpActivity
+import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.main.LaunchActivity
 import java.io.File
 
@@ -21,7 +21,7 @@ data class PasswordItem(
 
   val fullPathToParent = file.absolutePath.replace(rootDir.absolutePath, "").replace(file.name, "")
 
-  val longName = BasePgpActivity.getLongName(fullPathToParent, rootDir.absolutePath, toString())
+  val longName = BasePGPActivity.getLongName(fullPathToParent, rootDir.absolutePath, toString())
 
   override fun equals(other: Any?): Boolean {
     return (other is PasswordItem) && (other.file == file)

@@ -6,9 +6,9 @@
 package app.passwordstore.data.crypto
 
 import android.content.SharedPreferences
-import app.passwordstore.crypto.GpgIdentifier
 import app.passwordstore.crypto.PGPDecryptOptions
 import app.passwordstore.crypto.PGPEncryptOptions
+import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.crypto.PGPKeyManager
 import app.passwordstore.crypto.PGPainlessCryptoHandler
 import app.passwordstore.crypto.errors.CryptoHandlerException
@@ -40,20 +40,20 @@ constructor(
 
   suspend fun decrypt(
     password: String,
-    identities: List<GpgIdentifier>,
+    identities: List<PGPIdentifier>,
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ) = withContext(dispatcherProvider.io()) { decryptPgp(password, identities, message, out) }
 
   suspend fun encrypt(
-    identities: List<GpgIdentifier>,
+    identities: List<PGPIdentifier>,
     content: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ) = withContext(dispatcherProvider.io()) { encryptPgp(identities, content, out) }
 
   private suspend fun decryptPgp(
     password: String,
-    identities: List<GpgIdentifier>,
+    identities: List<PGPIdentifier>,
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
@@ -63,7 +63,7 @@ constructor(
   }
 
   private suspend fun encryptPgp(
-    identities: List<GpgIdentifier>,
+    identities: List<PGPIdentifier>,
     content: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
