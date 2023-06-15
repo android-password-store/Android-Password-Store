@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -24,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.passwordstore.R
@@ -88,9 +90,14 @@ private fun KeyItem(
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    Text(text = label)
+    Text(
+      text = label,
+      modifier = Modifier.weight(1f),
+      overflow = TextOverflow.Ellipsis,
+      maxLines = 1,
+    )
     if (onKeySelected == null) {
-      IconButton(onClick = { isDeleting = true }) {
+      IconButton(onClick = { isDeleting = true }, modifier = Modifier.requiredSize(24.dp)) {
         Icon(
           painter = painterResource(R.drawable.ic_delete_24dp),
           stringResource(id = R.string.delete)
