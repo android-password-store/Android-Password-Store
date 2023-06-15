@@ -1,8 +1,10 @@
 package app.passwordstore.ui.pgp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -134,19 +137,25 @@ private inline fun DeleteConfirmationDialog(
 @Composable
 private fun KeyListPreview() {
   APSThemePreview {
-    KeyList(
-      identifiers =
-        listOfNotNull(
-          GpgIdentifier.fromString("john.doe@example.com"),
-          GpgIdentifier.fromString("0xB950AE2813841585")
-        ),
-      onItemClick = {}
-    )
+    Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+      KeyList(
+        identifiers =
+          listOfNotNull(
+            GpgIdentifier.fromString("ultramicroscopicsilicovolcanoconiosis@example.com"),
+            GpgIdentifier.fromString("0xB950AE2813841585"),
+          ),
+        onItemClick = {}
+      )
+    }
   }
 }
 
 @Preview
 @Composable
 fun EmptyKeyListPreview() {
-  APSThemePreview { KeyList(identifiers = emptyList(), onItemClick = {}) }
+  APSThemePreview {
+    Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+      KeyList(identifiers = emptyList(), onItemClick = {})
+    }
+  }
 }
