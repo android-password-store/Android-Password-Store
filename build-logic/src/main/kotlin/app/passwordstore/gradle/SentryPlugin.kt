@@ -18,10 +18,8 @@ class SentryPlugin : Plugin<Project> {
       project.extensions.configure<ApplicationAndroidComponentsExtension> {
         onVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
           variant ->
-          val sentryDsn = project.providers.environmentVariable(SENTRY_DSN_PROPERTY)
-          if (sentryDsn.isPresent) {
-            variant.manifestPlaceholders.put("sentryDsn", sentryDsn.get())
-          }
+          val sentryDsn = project.providers.environmentVariable(SENTRY_DSN_PROPERTY).orElse("")
+          variant.manifestPlaceholders.put("sentryDsn", sentryDsn.get())
         }
       }
       project.plugins.apply(SentryPlugin::class)
