@@ -35,10 +35,13 @@ import app.passwordstore.R
 import app.passwordstore.crypto.GpgIdentifier
 import app.passwordstore.ui.compose.theme.APSThemePreview
 import app.passwordstore.util.extensions.conditional
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun KeyList(
-  identifiers: List<GpgIdentifier>,
+  identifiers: ImmutableList<GpgIdentifier>,
   onItemClick: (identifier: GpgIdentifier) -> Unit,
   modifier: Modifier = Modifier,
   onKeySelected: ((identifier: GpgIdentifier) -> Unit)? = null,
@@ -141,9 +144,10 @@ private fun KeyListPreview() {
       KeyList(
         identifiers =
           listOfNotNull(
-            GpgIdentifier.fromString("ultramicroscopicsilicovolcanoconiosis@example.com"),
-            GpgIdentifier.fromString("0xB950AE2813841585"),
-          ),
+              GpgIdentifier.fromString("ultramicroscopicsilicovolcanoconiosis@example.com"),
+              GpgIdentifier.fromString("0xB950AE2813841585"),
+            )
+            .toPersistentList(),
         onItemClick = {}
       )
     }
@@ -155,7 +159,7 @@ private fun KeyListPreview() {
 fun EmptyKeyListPreview() {
   APSThemePreview {
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-      KeyList(identifiers = emptyList(), onItemClick = {})
+      KeyList(identifiers = persistentListOf(), onItemClick = {})
     }
   }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.2.0-alpha06" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0-alpha06)" variant="all" version="8.2.0-alpha06">
+<issues format="6" by="lint 8.2.0-alpha08" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0-alpha08)" variant="all" version="8.2.0-alpha08">
 
     <issue
         id="StopShip"
@@ -8,7 +8,7 @@
         errorLine2="                  ~~~~~~">
         <location
             file="src/main/java/app/passwordstore/util/viewmodel/PGPKeyListViewModel.kt"
-            line="35"
+            line="38"
             column="19"/>
     </issue>
 
@@ -225,17 +225,6 @@
             file="src/main/res/layout/oreo_autofill_filter_row.xml"
             line="43"
             column="4"/>
-    </issue>
-
-    <issue
-        id="ComposeUnstableCollections"
-        message="The Compose Compiler cannot infer the stability of a parameter if a List&lt;GpgIdentifier> is used in it, even if the item type is stable.&#xA;You should use Kotlinx Immutable Collections instead: `identifiers: ImmutableList&lt;GpgIdentifier>` or create an `@Immutable` wrapper for this class: `@Immutable data class IdentifiersList(val items: List&lt;GpgIdentifier>)`&#xA;See https://slackhq.github.io/compose-lints/rules/#avoid-using-unstable-collections for more information."
-        errorLine1="  identifiers: List&lt;GpgIdentifier>,"
-        errorLine2="               ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/pgp/PGPKeyList.kt"
-            line="36"
-            column="16"/>
     </issue>
 
     <issue

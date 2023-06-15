@@ -13,11 +13,14 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class PGPKeyListViewModel @Inject constructor(private val keyManager: PGPKeyManager) : ViewModel() {
-  var keys: List<GpgIdentifier> by mutableStateOf(emptyList())
+  var keys: ImmutableList<GpgIdentifier> by mutableStateOf(persistentListOf())
 
   init {
     updateKeySet()
@@ -31,7 +34,7 @@ class PGPKeyListViewModel @Inject constructor(private val keyManager: PGPKeyMana
             keys.mapNotNull { key -> KeyUtils.tryGetEmail(key) }
           }
       ) {
-        is Ok -> keys = result.value
+        is Ok -> keys = result.value.toPersistentList()
         is Err -> TODO()
       }
     }
