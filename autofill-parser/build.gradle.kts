@@ -4,6 +4,9 @@
  */
 @file:Suppress("UnstableApiUsage")
 
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
   id("com.github.android-password-store.published-android-library")
   id("com.github.android-password-store.kotlin-android")
@@ -19,7 +22,14 @@ android {
   namespace = "com.github.androidpasswordstore.autofillparser"
 }
 
+tasks.withType<KotlinCompile>().configureEach {
+  compilerOptions {
+    languageVersion.set(KotlinVersion.KOTLIN_1_7)
+  }
+}
+
 dependencies {
+  implementation(platform(libs.kotlin1710.bom))
   implementation(libs.androidx.annotation)
   implementation(libs.androidx.autofill)
   implementation(libs.androidx.core.ktx)
