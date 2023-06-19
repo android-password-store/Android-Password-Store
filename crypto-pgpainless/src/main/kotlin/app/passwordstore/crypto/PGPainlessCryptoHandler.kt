@@ -19,6 +19,7 @@ import org.bouncycastle.openpgp.PGPPublicKeyRing
 import org.bouncycastle.openpgp.PGPPublicKeyRingCollection
 import org.bouncycastle.openpgp.PGPSecretKeyRing
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
+import org.bouncycastle.util.io.Streams
 import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.ConsumerOptions
 import org.pgpainless.encryption_signing.EncryptionOptions
@@ -53,14 +54,21 @@ public class PGPainlessCryptoHandler @Inject constructor() :
             .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
             .run(::PGPSecretKeyRingCollection)
         val protector = SecretKeyRingProtector.unlockAnyKeyWith(Passphrase.fromPassword(passphrase))
-        PGPainless.decryptAndOrVerify()
-          .onInputStream(ciphertextStream)
-          .withOptions(
-            ConsumerOptions()
-              .addDecryptionKeys(keyringCollection, protector)
-              .addDecryptionPassphrase(Passphrase.fromPassword(passphrase))
-          )
-          .use { decryptionStream -> decryptionStream.copyTo(outputStream) }
+        val decryptionStream =
+          PGPainless.decryptAndOrVerify()
+            .onInputStream(ciphertextStream)
+            .withOptions(
+              ConsumerOptions()
+                .addDecryptionKeys(keyringCollection, protector)
+                .addDecryptionPassphrase(Passphrase.fromPassword(passphrase))
+            )
+        Streams.pipeAll(decryptionStream, outputStream)
+        decryptionStream.close()
+        keyringCollection.forEach { keyRing ->
+          check(decryptionStream.metadata.isEncryptedFor(keyRing)) {
+            "Stream should be encrypted for ${keyRing.secretKey.keyID} but wasn't"
+          }
+        }
         return@runCatching
       }
       .mapError { error ->
@@ -106,12 +114,12 @@ public class PGPainlessCryptoHandler @Inject constructor() :
         val producerOptions =
           ProducerOptions.encrypt(encryptionOptions)
             .setAsciiArmor(options.isOptionEnabled(PGPEncryptOptions.ASCII_ARMOR))
-        val encryptor =
+        val encryptionStream =
           PGPainless.encryptAndOrSign().onOutputStream(outputStream).withOptions(producerOptions)
-        plaintextStream.copyTo(encryptor)
-        encryptor.close()
-        val result = encryptor.result
-        publicKeyRingCollection.keyRings.forEach { keyRing ->
+        Streams.pipeAll(plaintextStream, encryptionStream)
+        encryptionStream.close()
+        val result = encryptionStream.result
+        publicKeyRingCollection.forEach { keyRing ->
           require(result.isEncryptedFor(keyRing)) {
             "Stream should be encrypted for ${keyRing.publicKey.keyID} but wasn't"
           }
