@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.2.0-alpha08" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0-alpha08)" variant="all" version="8.2.0-alpha08">
+<issues format="6" by="lint 8.2.0-alpha09" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0-alpha09)" variant="all" version="8.2.0-alpha09">
 
     <issue
         id="StopShip"
@@ -16,14 +16,14 @@
         id="InvalidPackage"
         message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming.directory`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory`.">
         <location
-            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.74/a29da9d05899555ecc567a3b4ffb03fe656d6084/bcpkix-jdk15to18-1.74.jar"/>
+            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.75/f16e5252ad7a46d5eaf255231b0a5da307599082/bcpkix-jdk15to18-1.75.jar"/>
     </issue>
 
     <issue
         id="InvalidPackage"
         message="Invalid package reference in org.bouncycastle:bcpkix-jdk15to18; not included in Android: `javax.naming`. Referenced from `org.bouncycastle.cert.dane.fetcher.JndiDANEFetcherFactory.1`.">
         <location
-            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.74/a29da9d05899555ecc567a3b4ffb03fe656d6084/bcpkix-jdk15to18-1.74.jar"/>
+            file="$GRADLE_USER_HOME/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15to18/1.75/f16e5252ad7a46d5eaf255231b0a5da307599082/bcpkix-jdk15to18-1.75.jar"/>
     </issue>
 
     <issue
@@ -77,7 +77,7 @@
         errorLine2="    ^">
         <location
             file="src/main/java/app/passwordstore/ui/dialogs/PasswordGeneratorDialogFragment.kt"
-            line="58"
+            line="59"
             column="5"/>
     </issue>
 
