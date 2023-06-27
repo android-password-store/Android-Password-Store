@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +29,6 @@ import app.passwordstore.ui.compose.PasswordField
 import app.passwordstore.ui.compose.theme.APSThemePreview
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.UriTotpFinder
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -45,7 +43,6 @@ import kotlinx.coroutines.runBlocking
  * When [readOnly] is `false`, the [TextField]s are rendered editable but currently do not pass up
  * their "updated" state to anything. This will be changed in later commits.
  */
-@OptIn(ExperimentalTime::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordEntryScreen(
   entryName: String,
@@ -84,7 +81,7 @@ fun PasswordEntryScreen(
           TextField(
             value = totp.value,
             onValueChange = {},
-            readOnly = readOnly,
+            readOnly = true,
             label = { Text("OTP (expires in ${totp.remainingTime.inWholeSeconds}s)") },
             trailingIcon = { CopyButton({ totp.value }) },
             modifier = Modifier.padding(bottom = 8.dp),
@@ -107,7 +104,6 @@ fun PasswordEntryScreen(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun ExtraContent(
   entry: PasswordEntry,
   readOnly: Boolean,

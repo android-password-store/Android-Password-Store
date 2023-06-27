@@ -6,9 +6,7 @@
 package app.passwordstore.data.password
 
 import app.passwordstore.data.passfile.Totp
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 class FieldItem(val key: String, val value: String, val action: ActionType) {
   enum class ActionType {
     COPY,
