@@ -70,7 +70,7 @@ fun PasswordEntryScreen(
         if (entry.password != null) {
           PasswordField(
             value = entry.password!!,
-            label = "Password",
+            label = stringResource(R.string.password),
             initialVisibility = false,
             readOnly = readOnly,
             modifier = Modifier.padding(bottom = 8.dp),
@@ -92,7 +92,7 @@ fun PasswordEntryScreen(
             value = entry.username!!,
             onValueChange = {},
             readOnly = true,
-            label = { Text("Username") },
+            label = { Text(stringResource(R.string.username)) },
             trailingIcon = { CopyButton({ entry.username!! }) },
             modifier = Modifier.padding(bottom = 8.dp),
           )
