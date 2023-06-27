@@ -367,9 +367,7 @@ class PasswordStore : BaseGitActivity() {
   fun decryptPassword(item: PasswordItem) {
     val authDecryptIntent = item.createAuthEnabledIntent(this)
     val decryptIntent =
-      (authDecryptIntent.clone() as Intent).setComponent(
-        ComponentName(this, DecryptActivity::class.java)
-      )
+      Intent(authDecryptIntent).setComponent(ComponentName(this, DecryptActivity::class.java))
 
     startActivity(decryptIntent)
 
