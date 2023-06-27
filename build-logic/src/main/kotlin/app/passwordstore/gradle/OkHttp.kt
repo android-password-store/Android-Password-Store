@@ -15,9 +15,9 @@ object OkHttp {
       )
       .add(
         "publicsuffix.org",
-        "sha256/GHmZgxELzHuqpSexbC20wv6kqtrqS6BFdKs0z5pciGw=",
-        "sha256/cXjPgKdVe6iojP8s0YQJ3rtmDFHTnYZxcYvmYGFiYME=",
-        "sha256/hxqRlPTu1bMS/0DITB1SSu0vd4u/8l8TjPgfaAp63Gc=",
+        "sha256/Ov/MkC2OkVtTp9MdY+uXOKAuV2Birfdeazval8seMZM=",
+        "sha256/jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=",
+        "sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=",
       )
       .build()
   val CLIENT =
