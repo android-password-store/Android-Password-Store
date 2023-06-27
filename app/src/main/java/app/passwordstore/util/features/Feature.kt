@@ -13,13 +13,6 @@ enum class Feature(
   val configKey: String,
 ) {
 
-  /** Opt into the new PGP backend powered by the PGPainless library. */
-  @Deprecated(
-    "The PGPainless backend is now the only available one",
-    level = DeprecationLevel.ERROR
-  )
-  EnablePGPainlessBackend(true, "enable_pgp_v2_backend"),
-
   /** Opt into the new SSH layer implemented as a freestanding module. */
   EnableNewSSHLayer(false, "enable_new_ssh"),
 
