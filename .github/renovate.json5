@@ -23,18 +23,19 @@
       "groupName": "androidx"
     },
     {
+      // Compose compiler is tightly coupled to Kotlin version
+      "groupName": "Kotlin and Compose",
+      "matchPackagePrefixes": [
+        "androidx.compose.compiler",
+        "org.jetbrains.kotlin",
+      ],
+    },
+    {
       "matchPackagePatterns": [
         "^io.sentry",
         "^sentry",
       ],
       "groupName": "sentry"
-    },
-    {
-      "matchPackagePatterns": [
-        "^kotlin",
-        "^org.jetbrains.kotlin",
-      ],
-      "groupName": "kotlin"
     },
     {
       "managers": [
