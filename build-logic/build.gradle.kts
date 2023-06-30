@@ -5,10 +5,7 @@
 
 plugins { `kotlin-dsl` }
 
-private val jvmToolchainAction = Action<JavaToolchainSpec> {
-  languageVersion.set(JavaLanguageVersion.of(17))
-  vendor.set(JvmVendorSpec.ADOPTIUM)
-}
+private val jvmToolchainAction = Action<JavaToolchainSpec> { languageVersion.set(JavaLanguageVersion.of(17)) }
 
 java.toolchain(jvmToolchainAction)
 kotlin.jvmToolchain(jvmToolchainAction)

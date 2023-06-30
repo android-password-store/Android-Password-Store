@@ -12,7 +12,6 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JavaToolchainSpec
-import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -48,9 +47,6 @@ class KotlinCommonPlugin : Plugin<Project> {
       )
 
     val JVM_TOOLCHAIN_ACTION =
-      Action<JavaToolchainSpec> {
-        languageVersion.set(JavaLanguageVersion.of(17))
-        vendor.set(JvmVendorSpec.ADOPTIUM)
-      }
+      Action<JavaToolchainSpec> { languageVersion.set(JavaLanguageVersion.of(17)) }
   }
 }
