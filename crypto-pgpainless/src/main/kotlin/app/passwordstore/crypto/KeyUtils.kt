@@ -10,6 +10,7 @@ import app.passwordstore.crypto.PGPIdentifier.UserId
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import org.bouncycastle.openpgp.PGPKeyRing
+import org.pgpainless.PGPainless
 import org.pgpainless.key.parsing.KeyRingReader
 
 /** Utility methods to deal with [PGPKey]s. */
@@ -35,5 +36,17 @@ public object KeyUtils {
   public fun tryGetEmail(key: PGPKey): UserId? {
     val keyRing = tryParseKeyring(key) ?: return null
     return UserId(keyRing.publicKey.userIDs.next())
+  }
+
+  /**
+   * Tests if the given [key] can be used for encryption, which is a bare minimum necessity for the
+   * app.
+   */
+  public fun isKeyUsable(key: PGPKey): Boolean {
+    return runCatching {
+        val keyRing = tryParseKeyring(key) ?: return false
+        PGPainless.inspectKeyRing(keyRing).isUsableForEncryption
+      }
+      .get() != null
   }
 }

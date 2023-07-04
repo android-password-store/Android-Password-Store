@@ -16,4 +16,17 @@ object TestUtils {
 
   fun getArmoredPublicKeyWithMultipleIdentities() =
     this::class.java.classLoader.getResource("public_key_multiple_identities").readBytes()
+
+  fun getAEADPublicKey() = this::class.java.classLoader.getResource("aead_pub").readBytes()
+
+  fun getAEADSecretKey() = this::class.java.classLoader.getResource("aead_sec").readBytes()
+
+  enum class AllKeys(val keyMaterial: ByteArray) {
+    ARMORED_SEC(getArmoredSecretKey()),
+    ARMORED_PUB(getArmoredPublicKey()),
+    MULTIPLE_IDENTITIES_SEC(getArmoredSecretKeyWithMultipleIdentities()),
+    MULTIPLE_IDENTITIES_PUB(getArmoredPublicKeyWithMultipleIdentities()),
+    AEAD_SEC(getAEADSecretKey()),
+    AEAD_PUB(getAEADPublicKey()),
+  }
 }
