@@ -6,6 +6,7 @@ import app.passwordstore.crypto.PGPIdentifier.UserId
 import app.passwordstore.crypto.errors.KeyAlreadyExistsException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
+import app.passwordstore.crypto.errors.UnusableKeyException
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.unwrap
@@ -68,6 +69,13 @@ class PGPKeyManagerTest {
       val keyId = keyManager.getKeyId(keyManager.addKey(secretKey, true).unwrap())
 
       assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
+    }
+
+  @Test
+  fun addKeyWithUnusableKey() =
+    runTest(dispatcher) {
+      val error = keyManager.addKey(PGPKey(TestUtils.getAEADSecretKey())).unwrapError()
+      assertEquals(UnusableKeyException, error)
     }
 
   @Test

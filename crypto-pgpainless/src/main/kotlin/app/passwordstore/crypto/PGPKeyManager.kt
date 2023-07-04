@@ -7,6 +7,7 @@
 package app.passwordstore.crypto
 
 import androidx.annotation.VisibleForTesting
+import app.passwordstore.crypto.KeyUtils.isKeyUsable
 import app.passwordstore.crypto.KeyUtils.tryGetId
 import app.passwordstore.crypto.KeyUtils.tryParseKeyring
 import app.passwordstore.crypto.errors.InvalidKeyException
@@ -15,6 +16,7 @@ import app.passwordstore.crypto.errors.KeyDeletionFailedException
 import app.passwordstore.crypto.errors.KeyDirectoryUnavailableException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
+import app.passwordstore.crypto.errors.UnusableKeyException
 import app.passwordstore.util.coroutines.runSuspendCatching
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.unwrap
@@ -42,6 +44,7 @@ constructor(
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
         val incomingKeyRing = tryParseKeyring(key) ?: throw InvalidKeyException
+        if (!isKeyUsable(key)) throw UnusableKeyException
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
         if (keyFile.exists()) {
           val existingKeyBytes = keyFile.readBytes()

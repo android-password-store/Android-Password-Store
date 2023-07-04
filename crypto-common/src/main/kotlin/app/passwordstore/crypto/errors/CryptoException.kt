@@ -22,6 +22,10 @@ public object KeyDeletionFailedException : KeyManagerException("Couldn't delete 
 public object InvalidKeyException :
   KeyManagerException("Given key cannot be parsed as a known key type")
 
+/** Key failed the [app.passwordstore.crypto.KeyUtils.isKeyUsable] test. */
+public object UnusableKeyException :
+  KeyManagerException("Given key is not usable for encryption - is it using AEAD?")
+
 /** No key matching `keyId` could be found. */
 public class KeyNotFoundException(keyId: String) :
   KeyManagerException("No key found with id: $keyId")
