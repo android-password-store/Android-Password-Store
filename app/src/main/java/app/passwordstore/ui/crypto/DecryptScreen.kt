@@ -2,8 +2,11 @@ package app.passwordstore.ui.crypto
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,32 +51,28 @@ fun PasswordEntryScreen(
   entryName: String,
   entry: PasswordEntry,
   readOnly: Boolean,
+  onNavigateUp: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Scaffold(
     topBar = {
       APSAppBar(
-        title = "",
+        title = entryName,
         navigationIcon = painterResource(R.drawable.ic_arrow_back_black_24dp),
-        onNavigationIconClick = {},
+        onNavigationIconClick = onNavigateUp,
         backgroundColor = MaterialTheme.colorScheme.surface,
       )
     },
   ) { paddingValues ->
-    Box(modifier = modifier.fillMaxSize().padding(paddingValues)) {
-      Column(modifier = Modifier.padding(8.dp)) {
-        Text(
-          text = entryName,
-          style = MaterialTheme.typography.headlineSmall,
-          modifier = Modifier.padding(bottom = 8.dp),
-        )
+    Box(modifier = modifier.padding(paddingValues)) {
+      Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp).fillMaxSize()) {
         if (entry.password != null) {
           PasswordField(
             value = entry.password!!,
             label = stringResource(R.string.password),
             initialVisibility = false,
             readOnly = readOnly,
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
           )
         }
         if (entry.hasTotp() && readOnly) {
@@ -84,7 +83,7 @@ fun PasswordEntryScreen(
             readOnly = true,
             label = { Text("OTP (expires in ${totp.remainingTime.inWholeSeconds}s)") },
             trailingIcon = { CopyButton({ totp.value }) },
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
           )
         }
         if (entry.username != null && readOnly) {
@@ -94,7 +93,7 @@ fun PasswordEntryScreen(
             readOnly = true,
             label = { Text(stringResource(R.string.username)) },
             trailingIcon = { CopyButton({ entry.username!! }) },
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
           )
         }
         ExtraContent(entry = entry, readOnly = readOnly)
@@ -117,16 +116,16 @@ private fun ExtraContent(
         readOnly = true,
         label = { Text(label.capitalize(Locale.current)) },
         trailingIcon = { CopyButton({ value }) },
-        modifier = modifier.padding(bottom = 8.dp),
+        modifier = modifier.padding(bottom = 8.dp).fillMaxWidth(),
       )
     }
   } else {
     TextField(
-      value = entry.extraContentWithoutAuthData,
+      value = entry.extraContentString,
       onValueChange = {},
       readOnly = false,
       label = { Text("Extra content") },
-      modifier = modifier,
+      modifier = modifier.fillMaxWidth(),
     )
   }
 }
@@ -152,7 +151,12 @@ private fun CopyButton(
 @Composable
 private fun PasswordEntryPreview() {
   APSThemePreview {
-    PasswordEntryScreen(entryName = "Test Entry", entry = createTestEntry(), readOnly = true)
+    PasswordEntryScreen(
+      entryName = "Test Entry",
+      entry = createTestEntry(),
+      readOnly = true,
+      onNavigateUp = {},
+    )
   }
 }
 
