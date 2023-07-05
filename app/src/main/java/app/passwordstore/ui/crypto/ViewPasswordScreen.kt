@@ -2,13 +2,9 @@ package app.passwordstore.ui.crypto
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,10 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.APSAppBar
+import app.passwordstore.ui.compose.CopyButton
 import app.passwordstore.ui.compose.PasswordField
 import app.passwordstore.ui.compose.theme.APSThemePreview
 import app.passwordstore.util.time.UserClock
@@ -35,22 +30,11 @@ import app.passwordstore.util.totp.UriTotpFinder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-/**
- * Composable to show a [PasswordEntry]. It can be used for both read-only usage (decrypt screen) or
- * read-write (encrypt screen) to allow sharing UI logic for both these screens and deferring all
- * the cryptographic aspects to its parent.
- *
- * When [readOnly] is `true`, the Composable assumes that we're showcasing the provided [entry] to
- * the user and does not offer any edit capabilities.
- *
- * When [readOnly] is `false`, the [TextField]s are rendered editable but currently do not pass up
- * their "updated" state to anything. This will be changed in later commits.
- */
+/** Composable to show a decrypted [PasswordEntry]. */
 @Composable
-fun PasswordEntryScreen(
+fun ViewPasswordScreen(
   entryName: String,
   entry: PasswordEntry,
-  readOnly: Boolean,
   onNavigateUp: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -71,32 +55,32 @@ fun PasswordEntryScreen(
             value = entry.password!!,
             label = stringResource(R.string.password),
             initialVisibility = false,
-            readOnly = readOnly,
+            readOnly = true,
             modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
           )
         }
-        if (entry.hasTotp() && readOnly) {
+        if (entry.hasTotp()) {
           val totp by entry.totp.collectAsState(runBlocking { entry.totp.first() })
           TextField(
             value = totp.value,
             onValueChange = {},
             readOnly = true,
             label = { Text("OTP (expires in ${totp.remainingTime.inWholeSeconds}s)") },
-            trailingIcon = { CopyButton({ totp.value }) },
+            trailingIcon = { CopyButton(totp.value, R.string.copy_label) },
             modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
           )
         }
-        if (entry.username != null && readOnly) {
+        if (entry.username != null) {
           TextField(
             value = entry.username!!,
             onValueChange = {},
             readOnly = true,
             label = { Text(stringResource(R.string.username)) },
-            trailingIcon = { CopyButton({ entry.username!! }) },
+            trailingIcon = { CopyButton(entry.username!!, R.string.copy_label) },
             modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
           )
         }
-        ExtraContent(entry = entry, readOnly = readOnly)
+        ExtraContent(entry = entry)
       }
     }
   }
@@ -105,56 +89,27 @@ fun PasswordEntryScreen(
 @Composable
 private fun ExtraContent(
   entry: PasswordEntry,
-  readOnly: Boolean,
   modifier: Modifier = Modifier,
 ) {
-  if (readOnly) {
-    entry.extraContent.forEach { (label, value) ->
-      TextField(
-        value = value,
-        onValueChange = {},
-        readOnly = true,
-        label = { Text(label.capitalize(Locale.current)) },
-        trailingIcon = { CopyButton({ value }) },
-        modifier = modifier.padding(bottom = 8.dp).fillMaxWidth(),
-      )
-    }
-  } else {
+  entry.extraContent.forEach { (label, value) ->
     TextField(
-      value = entry.extraContentString,
+      value = value,
       onValueChange = {},
-      readOnly = false,
-      label = { Text("Extra content") },
-      modifier = modifier.fillMaxWidth(),
-    )
-  }
-}
-
-@Composable
-private fun CopyButton(
-  textToCopy: () -> String,
-  modifier: Modifier = Modifier,
-) {
-  val clipboard = LocalClipboardManager.current
-  IconButton(
-    onClick = { clipboard.setText(AnnotatedString(textToCopy())) },
-    modifier = modifier,
-  ) {
-    Icon(
-      painter = painterResource(R.drawable.ic_content_copy),
-      contentDescription = stringResource(R.string.copy_password),
+      readOnly = true,
+      label = { Text(label.capitalize(Locale.current)) },
+      trailingIcon = { CopyButton(value, R.string.copy_label) },
+      modifier = modifier.padding(bottom = 8.dp).fillMaxWidth(),
     )
   }
 }
 
 @Preview
 @Composable
-private fun PasswordEntryPreview() {
+private fun ViewPasswordScreenPreview() {
   APSThemePreview {
-    PasswordEntryScreen(
+    ViewPasswordScreen(
       entryName = "Test Entry",
       entry = createTestEntry(),
-      readOnly = true,
       onNavigateUp = {},
     )
   }

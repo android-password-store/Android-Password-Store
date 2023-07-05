@@ -1,5 +1,6 @@
 package app.passwordstore.ui.compose
 
+import androidx.annotation.StringRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -10,7 +11,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
@@ -19,8 +23,8 @@ public fun PasswordField(
   value: String,
   label: String,
   initialVisibility: Boolean,
-  readOnly: Boolean,
   modifier: Modifier = Modifier,
+  readOnly: Boolean = false,
 ) {
   var visible by remember { mutableStateOf(initialVisibility) }
   TextField(
@@ -55,6 +59,24 @@ private fun ToggleButton(
     Icon(
       painter = icon,
       contentDescription = contentDescription,
+    )
+  }
+}
+
+@Composable
+public fun CopyButton(
+  textToCopy: String,
+  @StringRes buttonLabelRes: Int,
+  modifier: Modifier = Modifier,
+) {
+  val clipboard = LocalClipboardManager.current
+  IconButton(
+    onClick = { clipboard.setText(AnnotatedString(textToCopy)) },
+    modifier = modifier,
+  ) {
+    Icon(
+      painter = painterResource(R.drawable.ic_content_copy),
+      contentDescription = stringResource(buttonLabelRes),
     )
   }
 }
