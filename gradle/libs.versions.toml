@@ -7,7 +7,7 @@ composeCompiler = "1.4.8"
 coroutines = "1.7.2"
 flowbinding = "1.2.0"
 hilt = "2.46.1"
-kotlin = "1.8.22"
+kotlin = "1.9.0"
 kotlin1710 = { strictly = "[1.7.0,)", prefer = "1.7.10" }
 leakcanary = "2.12"
 lifecycle = "2.6.1"
