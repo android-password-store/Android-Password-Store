@@ -23,9 +23,7 @@ android {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-  compilerOptions {
-    languageVersion.set(KotlinVersion.KOTLIN_1_7)
-  }
+  compilerOptions { languageVersion.set(KotlinVersion.KOTLIN_1_7) }
 }
 
 dependencies {

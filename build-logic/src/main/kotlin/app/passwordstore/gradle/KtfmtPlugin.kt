@@ -12,7 +12,7 @@ class KtfmtPlugin : Plugin<Project> {
   override fun apply(target: Project) {
     val input = Callable {
       target.layout.projectDirectory.asFileTree.filter { file ->
-        file.extension == "kt" || file.extension == "kts" && !file.canonicalPath.contains("build")
+        file.extension == "kt" || file.extension == "kts" && !file.canonicalPath.contains("build/")
       }
     }
     target.tasks.register<KtfmtFormatTask>("ktfmtFormat") { source(input) }

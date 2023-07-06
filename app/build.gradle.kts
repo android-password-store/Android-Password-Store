@@ -29,9 +29,7 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
-  buildFeatures {
-    compose = true
-  }
+  buildFeatures { compose = true }
   composeOptions {
     useLiveLiterals = false
     kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
