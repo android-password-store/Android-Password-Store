@@ -9,5 +9,4 @@ interface KtfmtWorkerParameters : WorkParameters {
   val name: Property<String>
   val files: ConfigurableFileCollection
   val projectDirectory: RegularFileProperty
-  val output: RegularFileProperty
 }

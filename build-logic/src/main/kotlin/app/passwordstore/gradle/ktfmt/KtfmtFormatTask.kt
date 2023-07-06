@@ -16,16 +16,12 @@ constructor(
   private val projectLayout: ProjectLayout,
 ) : SourceTask() {
 
-  init {
-    outputs.upToDateWhen { false }
-  }
-
   @TaskAction
   fun execute() {
     val result =
       with(workerExecutor.noIsolation()) {
         submit(KtfmtWorkerAction::class.java) {
-          name.set("foofoo")
+          name.set("ktfmt-worker")
           files.from(source)
           projectDirectory.set(projectLayout.projectDirectory.asFile)
         }
@@ -48,10 +44,5 @@ constructor(
         it?.javaClass?.canonicalName == T::class.java.canonicalName
       }
       .filterNotNull()
-  }
-
-  companion object {
-
-    private const val PARALLEL_TASK_LIMIT = 4
   }
 }
