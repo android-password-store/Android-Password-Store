@@ -29,17 +29,28 @@ class KotlinAndroidPlugin : Plugin<Project> {
     project.extensions.getByType<KotlinProjectExtension>().jvmToolchain(JVM_TOOLCHAIN_ACTION)
     val catalog = project.extensions.getByType<VersionCatalogsExtension>()
     val libs = catalog.named("libs")
-    if (libs.getVersion("composeCompiler").contains("-dev")) {
-      val kotlinVersion = libs.getVersion("kotlin")
-      project.tasks.withType<KotlinCompile>().configureEach {
-        compilerOptions.freeCompilerArgs.addAll(
-          "-P",
-          "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=$kotlinVersion",
-        )
+    val composeCompilerVersion = libs.getVersion("composeCompiler")
+    val kotlinVersion = libs.getVersion("kotlin")
+    val matches = COMPOSE_COMPILER_VERSION_REGEX.find(composeCompilerVersion)
+
+    if (matches != null) {
+      val (compilerKotlinVersion) = matches.destructured
+      if (compilerKotlinVersion != kotlinVersion) {
+        project.tasks.withType<KotlinCompile>().configureEach {
+          compilerOptions.freeCompilerArgs.addAll(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=$kotlinVersion",
+          )
+        }
       }
     }
   }
 
   private fun VersionCatalog.getVersion(key: String) =
     findVersion(key).map(VersionConstraint::toString).get()
+
+  private companion object {
+    // Matches against 1.5.0-dev-k1.9.0-6a60475e07f
+    val COMPOSE_COMPILER_VERSION_REGEX = "\\d.\\d.\\d-dev-k(\\d.\\d.\\d)-[a-z0-9]+".toRegex()
+  }
 }
