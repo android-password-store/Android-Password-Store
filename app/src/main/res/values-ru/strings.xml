@@ -110,6 +110,8 @@
   <string name="pref_git_delete_repo_summary">Удалить локальный (скрытый) репозиторий</string>
   <string name="prefs_export_passwords_title">Экспортировать пароли</string>
   <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
+  <string name="pref_import_pgp_key_title">Импортировать PGP-ключ</string>
+  <string name="pref_pgp_key_manager_title">Менеджер ключей</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Сгенерировать пароль</string>
   <string name="pwgen_generate">Сгенерировать</string>
@@ -124,6 +126,7 @@
   <string name="pwgen_no_chars_error">Не включать символы</string>
   <string name="pwgen_length_too_short_error">Длина не соответствует выбранным критериям</string>
   <string name="pwgen_max_iterations_exceeded">Не удалось создать пароль, удовлетворяющий ограничениям. Попробуйте увеличить длину.</string>
+  <string name="pwgen_separator">Разделитель</string>
   <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Тип генератора паролей</string>
   <!-- ssh keygen fragment -->
@@ -264,12 +267,14 @@
   <string name="otp_import_success">Конфигурация TOTP успешно импортирована</string>
   <string name="otp_import_failure_generic">Не удалось импортировать конфигурацию TOTP</string>
   <string name="exporting_passwords">Экспорт паролей…</string>
+  <string name="invalid_gpg_id">Найден .gpg-id, но он содержит неверный ID ключа, fingerprint или ID пользователя</string>
   <string name="invalid_filename_text">Имя файла не должно содержать \'/\', укажите директорию выше</string>
   <string name="directory_hint">Директория</string>
   <string name="new_folder_set_gpg_key">Установить GPG ключ для каталога</string>
   <!-- GitException messages -->
   <string name="git_unknown_error">Неизвестная ошибка</string>
   <string name="git_pull_rebase_fail_error">Не удалось получить изменения, вы находитесь в состоянии \"оторванной головы\". Используйте \"настройки &gt; утилиты git\", сохраните ваши изменения в новую удаленную ветку и разрешите конфликты на своем компьютере.</string>
+  <string name="git_pull_merge_fail_error">Слияние не удалось, вы находитесь в конфликтующем состоянии. ВТО: Добавьте метод восстановления.</string>
   <string name="git_push_nff_error">Запись изменений была отклонена удаленным репозиторием, сначала пполучите изменения перед повторной записью. Вы можете использовать Синхронизацию вместо получения/записи изменений, т.к. она реализует оба подхда.</string>
   <string name="git_push_generic_error">Запись изменений была отклонена удаленным репозиторием, причина: %1$s</string>
   <string name="git_push_other_error">Удаленный репозиторий отклонил запись изменений без быстрой перемотки вперед. Проверьте переменную receive.denyNonFastForwards в файле конфигурации репозитория назначения.</string>
@@ -298,6 +303,7 @@
   <string name="git_scheme_disallowed_title">Использование протокола git нежелательно</string>
   <string name="git_scheme_disallowed_message">Протокол git, предоставляемый демоном, не обеспечивает транспортного шифрования и не подходит для безопасных операций.</string>
   <!-- Proxy configuration activity -->
+  <string name="activity_proxy_label">Настройки прокси-сервера</string>
   <string name="proxy_hostname">Хост прокси</string>
   <string name="port">Порт</string>
   <string name="pref_edit_proxy_settings">Настройки HTTP(S) прокси</string>
