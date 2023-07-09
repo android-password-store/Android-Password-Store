@@ -9,21 +9,21 @@ public sealed class CryptoException(message: String? = null, cause: Throwable? =
 public sealed class KeyManagerException(message: String? = null) : CryptoException(message)
 
 /** Store contains no keys. */
-public object NoKeysAvailableException : KeyManagerException("No keys were found")
+public data object NoKeysAvailableException : KeyManagerException("No keys were found")
 
 /** Key directory does not exist or cannot be accessed. */
-public object KeyDirectoryUnavailableException :
+public data object KeyDirectoryUnavailableException :
   KeyManagerException("Key directory does not exist")
 
 /** Failed to delete given key. */
-public object KeyDeletionFailedException : KeyManagerException("Couldn't delete the key file")
+public data object KeyDeletionFailedException : KeyManagerException("Couldn't delete the key file")
 
 /** Failed to parse the key as a known type. */
-public object InvalidKeyException :
+public data object InvalidKeyException :
   KeyManagerException("Given key cannot be parsed as a known key type")
 
 /** Key failed the [app.passwordstore.crypto.KeyUtils.isKeyUsable] test. */
-public object UnusableKeyException :
+public data object UnusableKeyException :
   KeyManagerException("Given key is not usable for encryption - is it using AEAD?")
 
 /** No key matching `keyId` could be found. */
@@ -42,7 +42,7 @@ public sealed class CryptoHandlerException(message: String? = null, cause: Throw
 public class IncorrectPassphraseException(cause: Throwable) : CryptoHandlerException(null, cause)
 
 /** No keys were passed to the encrypt/decrypt operation. */
-public object NoKeysProvidedException : CryptoHandlerException(null, null)
+public data object NoKeysProvidedException : CryptoHandlerException(null, null)
 
 /** An unexpected error that cannot be mapped to a known type. */
 public class UnknownError(cause: Throwable) : CryptoHandlerException(null, cause)

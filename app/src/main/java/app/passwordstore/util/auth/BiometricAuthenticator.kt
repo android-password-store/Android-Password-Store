@@ -37,13 +37,13 @@ object BiometricAuthenticator {
      * An incorrect biometric was entered, but the prompt UI is offering the option to retry the
      * operation.
      */
-    object Retry : Result()
+    data object Retry : Result()
 
     /** The biometric hardware is unavailable or disabled on a software or hardware level. */
-    object HardwareUnavailableOrDisabled : Result()
+    data object HardwareUnavailableOrDisabled : Result()
 
     /** The prompt was dismissed. */
-    object Cancelled : Result()
+    data object Cancelled : Result()
   }
 
   fun canAuthenticate(activity: FragmentActivity): Boolean {

@@ -135,9 +135,9 @@ constructor(
     class AuthModeMismatch(val newProtocol: Protocol, val validModes: List<AuthMode>) :
       UpdateConnectionSettingsResult()
 
-    object Valid : UpdateConnectionSettingsResult()
+    data object Valid : UpdateConnectionSettingsResult()
 
-    object FailedToParseUrl : UpdateConnectionSettingsResult()
+    data object FailedToParseUrl : UpdateConnectionSettingsResult()
   }
 
   fun updateConnectionSettingsIfValid(
