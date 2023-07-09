@@ -18,6 +18,7 @@ import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.crypto.PasswordDialog
 import app.passwordstore.util.auth.BiometricAuthenticator
+import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
 import app.passwordstore.util.autofill.DirectoryStructure
@@ -70,7 +71,6 @@ class AutofillDecryptActivity : BasePGPActivity() {
     directoryStructure = AutofillPreferences.directoryStructure(this)
     logcat { action.toString() }
     requireKeysExist {
-      val gpgIdentifiers = getPGPIdentifiers("") ?: return@requireKeysExist
       if (
         features.isEnabled(EnablePGPPassphraseCache) && BiometricAuthenticator.canAuthenticate(this)
       ) {
@@ -78,25 +78,42 @@ class AutofillDecryptActivity : BasePGPActivity() {
           this,
           R.string.biometric_prompt_title_gpg_passphrase_cache,
         ) { authResult ->
-          if (authResult is BiometricAuthenticator.Result.Success) {
-            lifecycleScope.launch {
-              val cachedPassphrase =
-                passphraseCache.retrieveCachedPassphrase(
-                  this@AutofillDecryptActivity,
-                  gpgIdentifiers.first()
-                )
-              if (cachedPassphrase != null) {
-                decrypt(File(filePath), clientState, action, cachedPassphrase)
-              } else {
-                askPassphrase(filePath, clientState, action)
-              }
-            }
+          decrypt(filePath, clientState, action, authResult)
+        }
+      } else {
+        decrypt(filePath, clientState, action, Result.Cancelled)
+      }
+    }
+  }
+
+  private fun decrypt(
+    filePath: String,
+    clientState: Bundle,
+    action: AutofillAction,
+    authResult: Result,
+  ) {
+    val gpgIdentifiers = getPGPIdentifiers("") ?: return
+    lifecycleScope.launch(dispatcherProvider.main()) {
+      when (authResult) {
+        // Internally handled by the prompt dialog
+        is Result.Retry -> {}
+        // If the dialog is dismissed for any reason, prompt for passphrase
+        is Result.Cancelled,
+        is Result.Failure,
+        is Result.HardwareUnavailableOrDisabled -> askPassphrase(filePath, clientState, action)
+        //
+        is Result.Success -> {
+          val cachedPassphrase =
+            passphraseCache.retrieveCachedPassphrase(
+              this@AutofillDecryptActivity,
+              gpgIdentifiers.first()
+            )
+          if (cachedPassphrase != null) {
+            decryptWithPassphrase(File(filePath), clientState, action, cachedPassphrase)
           } else {
             askPassphrase(filePath, clientState, action)
           }
         }
-      } else {
-        askPassphrase(filePath, clientState, action)
       }
     }
   }
@@ -107,7 +124,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
       withContext(dispatcherProvider.main()) {
         dialog.password.collectLatest { value ->
           if (value != null) {
-            decrypt(File(filePath), clientState, action, value)
+            decryptWithPassphrase(File(filePath), clientState, action, value)
           }
         }
       }
@@ -115,7 +132,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
-  private suspend fun decrypt(
+  private suspend fun decryptWithPassphrase(
     filePath: File,
     clientState: Bundle,
     action: AutofillAction,

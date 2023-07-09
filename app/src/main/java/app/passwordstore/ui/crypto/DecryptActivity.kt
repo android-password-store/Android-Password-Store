@@ -18,6 +18,7 @@ import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
 import app.passwordstore.ui.adapters.FieldItemAdapter
 import app.passwordstore.util.auth.BiometricAuthenticator
+import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
@@ -77,7 +78,7 @@ class DecryptActivity : BasePGPActivity() {
         requireKeysExist { decrypt(isError = false, authResult) }
       }
     } else {
-      requireKeysExist { decrypt(isError = false, BiometricAuthenticator.Result.Cancelled) }
+      requireKeysExist { decrypt(isError = false, Result.Cancelled) }
     }
   }
 
@@ -149,19 +150,27 @@ class DecryptActivity : BasePGPActivity() {
     )
   }
 
-  private fun decrypt(isError: Boolean, authResult: BiometricAuthenticator.Result) {
+  private fun decrypt(isError: Boolean, authResult: Result) {
     val gpgIdentifiers = getPGPIdentifiers("") ?: return
     lifecycleScope.launch(dispatcherProvider.main()) {
-      if (authResult is BiometricAuthenticator.Result.Success) {
-        val cachedPassphrase =
-          passphraseCache.retrieveCachedPassphrase(this@DecryptActivity, gpgIdentifiers.first())
-        if (cachedPassphrase != null) {
-          decryptWithCachedPassphrase(cachedPassphrase, gpgIdentifiers, authResult)
-        } else {
+      when (authResult) {
+        // Internally handled by the prompt dialog
+        is Result.Retry -> {}
+        // If the dialog is dismissed for any reason, prompt for passphrase
+        is Result.Cancelled,
+        is Result.Failure,
+        is Result.HardwareUnavailableOrDisabled ->
           askPassphrase(isError, gpgIdentifiers, authResult)
+        //
+        is Result.Success -> {
+          val cachedPassphrase =
+            passphraseCache.retrieveCachedPassphrase(this@DecryptActivity, gpgIdentifiers.first())
+          if (cachedPassphrase != null) {
+            decryptWithCachedPassphrase(cachedPassphrase, gpgIdentifiers, authResult)
+          } else {
+            askPassphrase(isError, gpgIdentifiers, authResult)
+          }
         }
-      } else {
-        askPassphrase(isError, gpgIdentifiers, authResult)
       }
     }
   }
@@ -169,7 +178,7 @@ class DecryptActivity : BasePGPActivity() {
   private fun askPassphrase(
     isError: Boolean,
     gpgIdentifiers: List<PGPIdentifier>,
-    authResult: BiometricAuthenticator.Result,
+    authResult: Result,
   ) {
     if (retries < MAX_RETRIES) {
       retries += 1
@@ -189,7 +198,7 @@ class DecryptActivity : BasePGPActivity() {
               passwordEntry = entry
               createPasswordUI(entry)
               startAutoDismissTimer()
-              if (authResult is BiometricAuthenticator.Result.Success) {
+              if (authResult is Result.Success) {
                 passphraseCache.cachePassphrase(this@DecryptActivity, gpgIdentifiers.first(), value)
               }
             }
@@ -207,7 +216,7 @@ class DecryptActivity : BasePGPActivity() {
   private suspend fun decryptWithCachedPassphrase(
     passphrase: String,
     identifiers: List<PGPIdentifier>,
-    authResult: BiometricAuthenticator.Result,
+    authResult: Result,
   ) {
     when (val result = decryptWithPassphrase(passphrase, identifiers)) {
       is Ok -> {
