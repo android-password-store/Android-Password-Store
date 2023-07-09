@@ -10,24 +10,21 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.WindowManager
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import app.passwordstore.R
 import app.passwordstore.databinding.DialogPasswordEntryBinding
 import app.passwordstore.util.extensions.finish
 import app.passwordstore.util.extensions.unsafeLazy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
 /** [DialogFragment] to request a password from the user and forward it along. */
 class PasswordDialog : DialogFragment() {
 
   private val binding by unsafeLazy { DialogPasswordEntryBinding.inflate(layoutInflater) }
   private var isError: Boolean = false
-  private val _password = MutableStateFlow<String?>(null)
-  val password = _password.asStateFlow()
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val builder = MaterialAlertDialogBuilder(requireContext())
@@ -66,7 +63,12 @@ class PasswordDialog : DialogFragment() {
   }
 
   private fun setPasswordAndDismiss() {
-    _password.update { binding.passwordEditText.text.toString() }
+    val password = binding.passwordEditText.text.toString()
+    setFragmentResult(PASSWORD_RESULT_KEY, bundleOf(PASSWORD_RESULT_KEY to password))
     dismissAllowingStateLoss()
+  }
+
+  companion object {
+    const val PASSWORD_RESULT_KEY = "password_result"
   }
 }

@@ -11,6 +11,7 @@ import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.crypto.PGPPassphraseCache
@@ -35,7 +36,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -120,16 +120,15 @@ class AutofillDecryptActivity : BasePGPActivity() {
 
   private fun askPassphrase(filePath: String, clientState: Bundle, action: AutofillAction) {
     val dialog = PasswordDialog()
-    lifecycleScope.launch {
-      withContext(dispatcherProvider.main()) {
-        dialog.password.collectLatest { value ->
-          if (value != null) {
-            decryptWithPassphrase(File(filePath), clientState, action, value)
-          }
+    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
+    dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
+      if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
+        val value = bundle.getString(PasswordDialog.PASSWORD_RESULT_KEY)!!
+        lifecycleScope.launch(dispatcherProvider.main()) {
+          decryptWithPassphrase(File(filePath), clientState, action, value)
         }
       }
     }
-    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
   private suspend fun decryptWithPassphrase(

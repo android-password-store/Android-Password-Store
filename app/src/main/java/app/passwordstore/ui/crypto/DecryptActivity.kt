@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
@@ -35,7 +36,6 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -189,9 +189,11 @@ class DecryptActivity : BasePGPActivity() {
     if (isError) {
       dialog.setError()
     }
-    lifecycleScope.launch(dispatcherProvider.main()) {
-      dialog.password.collectLatest { value ->
-        if (value != null) {
+    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
+    dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
+      if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
+        val value = bundle.getString(PasswordDialog.PASSWORD_RESULT_KEY)!!
+        lifecycleScope.launch(dispatcherProvider.main()) {
           when (val result = decryptWithPassphrase(value, gpgIdentifiers)) {
             is Ok -> {
               val entry = passwordEntryFactory.create(result.value.toByteArray())
@@ -210,7 +212,6 @@ class DecryptActivity : BasePGPActivity() {
         }
       }
     }
-    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
   private suspend fun decryptWithCachedPassphrase(
