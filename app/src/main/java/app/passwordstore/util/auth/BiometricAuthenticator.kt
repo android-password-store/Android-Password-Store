@@ -56,63 +56,7 @@ object BiometricAuthenticator {
     @StringRes dialogTitleRes: Int = R.string.biometric_prompt_title,
     callback: (Result) -> Unit
   ) {
-    val authCallback =
-      object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-          super.onAuthenticationError(errorCode, errString)
-          logcat(TAG) { "onAuthenticationError(errorCode=$errorCode, msg=$errString)" }
-          when (errorCode) {
-            BiometricPrompt.ERROR_CANCELED,
-            BiometricPrompt.ERROR_USER_CANCELED,
-            BiometricPrompt.ERROR_NEGATIVE_BUTTON -> {
-              callback(Result.Cancelled)
-            }
-            BiometricPrompt.ERROR_HW_NOT_PRESENT,
-            BiometricPrompt.ERROR_HW_UNAVAILABLE,
-            BiometricPrompt.ERROR_NO_BIOMETRICS,
-            BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
-              callback(Result.HardwareUnavailableOrDisabled)
-            }
-            BiometricPrompt.ERROR_LOCKOUT,
-            BiometricPrompt.ERROR_LOCKOUT_PERMANENT,
-            BiometricPrompt.ERROR_NO_SPACE,
-            BiometricPrompt.ERROR_TIMEOUT,
-            BiometricPrompt.ERROR_VENDOR -> {
-              callback(
-                Result.Failure(
-                  errorCode,
-                  activity.getString(R.string.biometric_auth_error_reason, errString)
-                )
-              )
-            }
-            BiometricPrompt.ERROR_UNABLE_TO_PROCESS -> {
-              callback(Result.Retry)
-            }
-            // We cover all guaranteed values above, but [errorCode] is still an Int
-            // at the end of the day so a catch-all else will always be required.
-            else -> {
-              callback(
-                Result.Failure(
-                  errorCode,
-                  activity.getString(R.string.biometric_auth_error_reason, errString)
-                )
-              )
-            }
-          }
-        }
-
-        override fun onAuthenticationFailed() {
-          super.onAuthenticationFailed()
-          logcat(TAG) { "onAuthenticationFailed()" }
-          callback(Result.Retry)
-        }
-
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-          super.onAuthenticationSucceeded(result)
-          logcat(TAG) { "onAuthenticationSucceeded()" }
-          callback(Result.Success(result.cryptoObject))
-        }
-      }
+    val authCallback = createPromptAuthenticationCallback(activity, callback)
     val deviceHasKeyguard = activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
     if (canAuthenticate(activity) || deviceHasKeyguard) {
       val promptInfo =
@@ -123,11 +67,73 @@ object BiometricAuthenticator {
       BiometricPrompt(
           activity,
           ContextCompat.getMainExecutor(activity.applicationContext),
-          authCallback
+          authCallback,
         )
         .authenticate(promptInfo)
     } else {
       callback(Result.HardwareUnavailableOrDisabled)
+    }
+  }
+
+  private fun createPromptAuthenticationCallback(
+    activity: FragmentActivity,
+    callback: (Result) -> Unit,
+  ): BiometricPrompt.AuthenticationCallback {
+    return object : BiometricPrompt.AuthenticationCallback() {
+      override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+        super.onAuthenticationError(errorCode, errString)
+        logcat(TAG) { "onAuthenticationError(errorCode=$errorCode, msg=$errString)" }
+        when (errorCode) {
+          BiometricPrompt.ERROR_CANCELED,
+          BiometricPrompt.ERROR_USER_CANCELED,
+          BiometricPrompt.ERROR_NEGATIVE_BUTTON -> {
+            callback(Result.Cancelled)
+          }
+          BiometricPrompt.ERROR_HW_NOT_PRESENT,
+          BiometricPrompt.ERROR_HW_UNAVAILABLE,
+          BiometricPrompt.ERROR_NO_BIOMETRICS,
+          BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
+            callback(Result.HardwareUnavailableOrDisabled)
+          }
+          BiometricPrompt.ERROR_LOCKOUT,
+          BiometricPrompt.ERROR_LOCKOUT_PERMANENT,
+          BiometricPrompt.ERROR_NO_SPACE,
+          BiometricPrompt.ERROR_TIMEOUT,
+          BiometricPrompt.ERROR_VENDOR -> {
+            callback(
+              Result.Failure(
+                errorCode,
+                activity.getString(R.string.biometric_auth_error_reason, errString)
+              )
+            )
+          }
+          BiometricPrompt.ERROR_UNABLE_TO_PROCESS -> {
+            callback(Result.Retry)
+          }
+          // We cover all guaranteed values above, but [errorCode] is still an Int
+          // at the end of the day so a catch-all else will always be required.
+          else -> {
+            callback(
+              Result.Failure(
+                errorCode,
+                activity.getString(R.string.biometric_auth_error_reason, errString)
+              )
+            )
+          }
+        }
+      }
+
+      override fun onAuthenticationFailed() {
+        super.onAuthenticationFailed()
+        logcat(TAG) { "onAuthenticationFailed()" }
+        callback(Result.Retry)
+      }
+
+      override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+        super.onAuthenticationSucceeded(result)
+        logcat(TAG) { "onAuthenticationSucceeded()" }
+        callback(Result.Success(result.cryptoObject))
+      }
     }
   }
 }
