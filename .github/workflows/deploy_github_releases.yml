@@ -42,7 +42,7 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Build release binaries
-      uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2.5.1
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
         gradle-home-cache-cleanup: true
