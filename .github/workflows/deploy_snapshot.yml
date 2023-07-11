@@ -61,6 +61,7 @@ jobs:
       with:
         arguments: collectFreeReleaseApks collectNonFreeReleaseApks bundleFreeRelease bundleNonFreeRelease -PsentryUploadMappings
         gradle-home-cache-cleanup: true
+        dependency-graph: generate-and-submit
 
     - name: Clean secrets
       run: scripts/signing-cleanup.sh
