@@ -6,5 +6,4 @@ plugins {
   id("com.github.android-password-store.git-hooks")
   id("com.github.android-password-store.kotlin-common")
   id("com.github.android-password-store.ktfmt")
-  alias(libs.plugins.hilt) apply false
 }

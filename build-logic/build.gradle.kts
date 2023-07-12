@@ -80,6 +80,7 @@ dependencies {
   implementation(libs.build.agp)
   implementation(libs.build.diffutils)
   implementation(libs.build.download)
+  implementation(libs.build.javapoet)
   implementation(libs.build.kotlin)
   implementation(libs.build.ktfmt)
   implementation(libs.build.mavenpublish)

@@ -12,7 +12,7 @@ plugins {
   id("com.github.android-password-store.versioning-plugin")
   id("com.github.android-password-store.sentry")
   id("com.github.android-password-store.rename-artifacts")
-  id("dagger.hilt.android.plugin")
+  alias(libs.plugins.hilt)
 }
 
 crowdin {
