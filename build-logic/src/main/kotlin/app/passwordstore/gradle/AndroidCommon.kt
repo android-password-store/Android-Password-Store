@@ -16,10 +16,10 @@ import org.gradle.kotlin.dsl.withType
 object AndroidCommon {
   fun configure(project: Project) {
     project.extensions.configure<TestedExtension> {
-      setCompileSdkVersion(33)
+      compileSdkVersion(34)
       defaultConfig {
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
       }
 
       packagingOptions {

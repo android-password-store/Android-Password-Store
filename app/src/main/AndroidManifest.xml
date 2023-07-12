@@ -105,10 +105,12 @@
     <service
       android:name=".util.services.ClipboardService"
       android:exported="false"
+      android:foregroundServiceType="shortService"
       android:process=":clipboard_service_process" />
     <service
       android:name=".util.services.PasswordExportService"
       android:exported="false"
+      android:foregroundServiceType="shortService"
       android:process=":password_export_service_process" />
     <service
       android:name=".util.services.OreoAutofillService"

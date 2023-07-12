@@ -81,7 +81,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     super.onTerminate()
   }
 
-  override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
+  override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
     if (key == PreferenceKeys.APP_THEME) {
       setNightMode()
     }
