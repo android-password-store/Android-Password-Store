@@ -8,7 +8,6 @@ rootProject.name = "APS"
 
 // Plugin repositories
 pluginManagement {
-  plugins { id("org.gradle.toolchains.foojay-resolver-convention") version "0.6.0" }
   repositories {
     includeBuild("build-logic")
     exclusiveContent {
@@ -43,6 +42,11 @@ pluginManagement {
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
         includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
         includeModule("me.tylerbwong.gradle.metalava", "plugin")
+        includeModule(
+          "org.gradle.toolchains.foojay-resolver-convention",
+          "org.gradle.toolchains.foojay-resolver-convention.gradle.plugin",
+        )
+        includeModule("org.gradle.toolchains", "foojay-resolver")
       }
     }
     exclusiveContent {
@@ -53,7 +57,11 @@ pluginManagement {
   }
 }
 
-plugins { id("com.gradle.enterprise") version "3.13.4" }
+plugins {
+  id("org.gradle.toolchains.foojay-resolver-convention") version "0.6.0"
+  id("com.gradle.enterprise") version "3.13.4"
+  id("com.github.android-password-store.versions")
+}
 
 gradleEnterprise {
   buildScan {

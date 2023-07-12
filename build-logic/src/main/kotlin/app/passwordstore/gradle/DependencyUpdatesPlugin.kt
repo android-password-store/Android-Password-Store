@@ -5,29 +5,31 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import nl.littlerobots.vcu.plugin.VersionCatalogUpdateExtension
 import nl.littlerobots.vcu.plugin.VersionCatalogUpdatePlugin
 import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.initialization.Settings
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 
 @Suppress("Unused")
-class DependencyUpdatesPlugin : Plugin<Project> {
+class DependencyUpdatesPlugin : Plugin<Settings> {
 
-  override fun apply(project: Project) {
-    project.pluginManager.apply(VersionsPlugin::class)
-    project.pluginManager.apply(VersionCatalogUpdatePlugin::class)
-    project.tasks.withType<DependencyUpdatesTask> {
-      rejectVersionIf {
-        when (candidate.group) {
-          "commons-codec",
-          "org.eclipse.jgit" -> true
-          else -> false
+  override fun apply(settings: Settings) {
+    settings.gradle.allprojects {
+      if (rootProject == this) {
+        pluginManager.apply(VersionCatalogUpdatePlugin::class)
+        extensions.configure<VersionCatalogUpdateExtension> { keep.keepUnusedLibraries.set(true) }
+        pluginManager.apply(VersionsPlugin::class)
+        tasks.withType<DependencyUpdatesTask> {
+          rejectVersionIf {
+            when (candidate.group) {
+              "commons-codec",
+              "org.eclipse.jgit" -> true
+              else -> false
+            }
+          }
+          checkForGradleUpdate = false
         }
       }
-      checkForGradleUpdate = false
-    }
-    project.extensions.configure<VersionCatalogUpdateExtension> {
-      keep.keepUnusedLibraries.set(true)
     }
   }
 }
