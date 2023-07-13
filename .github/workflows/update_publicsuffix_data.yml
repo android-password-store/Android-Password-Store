@@ -11,21 +11,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
-      - name: Accept all SDK licenses
-        shell: bash
-        run: printf 'y\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-
-      - name: Get build-tools directory
-        id: build-tools-path
-        shell: bash
-        run: echo "dir=${ANDROID_HOME}/build-tools/34.0.0" >> "${GITHUB_OUTPUT}"
-
-      - name: Cache build-tools
-        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
-        with:
-          path: ${{ steps.build-tools-path.outputs.dir }}
-          key: ${{ runner.os }}-34.0.0
-
       - name: Set up JDK
         uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
         with:
