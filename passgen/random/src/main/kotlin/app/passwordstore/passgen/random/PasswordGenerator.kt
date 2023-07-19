@@ -7,7 +7,6 @@ package app.passwordstore.passgen.random
 import app.passwordstore.passgen.random.util.clearFlag
 import app.passwordstore.passgen.random.util.hasFlag
 
-@OptIn(ExperimentalStdlibApi::class)
 public object PasswordGenerator {
 
   public const val DEFAULT_LENGTH: Int = 16

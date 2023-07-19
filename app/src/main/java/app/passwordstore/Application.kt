@@ -33,7 +33,6 @@ import logcat.LogPriority.VERBOSE
 import logcat.LogcatLogger
 import logcat.logcat
 
-@OptIn(ExperimentalStdlibApi::class)
 @Suppress("Unused")
 @HiltAndroidApp
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {

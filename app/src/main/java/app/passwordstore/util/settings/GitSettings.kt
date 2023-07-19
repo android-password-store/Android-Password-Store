@@ -26,7 +26,6 @@ enum class Protocol(val pref: String) {
 
   companion object {
 
-    @OptIn(ExperimentalStdlibApi::class)
     fun fromString(type: String?): Protocol {
       return entries.associateBy(Protocol::pref)[type ?: return Ssh]
         ?: throw IllegalArgumentException("$type is not a valid Protocol")
@@ -42,7 +41,6 @@ enum class AuthMode(val pref: String) {
 
   companion object {
 
-    @OptIn(ExperimentalStdlibApi::class)
     fun fromString(type: String?): AuthMode {
       return entries.associateBy(AuthMode::pref)[type ?: return SshKey]
         ?: throw IllegalArgumentException("$type is not a valid AuthMode")

@@ -4,7 +4,6 @@
 package app.passwordstore.util
 
 import android.os.Looper
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 import logcat.logcat
 
@@ -12,7 +11,6 @@ import logcat.logcat
  * Small helper to execute a given [block] and log the time it took to execute it. Intended for use
  * in day-to-day perf investigations and code using it should probably not be shipped.
  */
-@OptIn(ExperimentalTime::class)
 inline fun <T> logExecutionTime(tag: String, crossinline block: () -> T): T {
   val res: T
   val duration = measureTime { res = block() }

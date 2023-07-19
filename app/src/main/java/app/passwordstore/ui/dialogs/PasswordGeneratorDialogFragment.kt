@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.afterTextChanges
 import reactivecircus.flowbinding.android.widget.checkedChanges
 
-@OptIn(ExperimentalStdlibApi::class)
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

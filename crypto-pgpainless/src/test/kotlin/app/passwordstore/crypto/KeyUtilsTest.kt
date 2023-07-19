@@ -24,7 +24,6 @@ class KeyUtilsTest {
     assertEquals("b950ae2813841585", keyId.toString())
   }
 
-  @OptIn(ExperimentalStdlibApi::class)
   @Test
   fun isKeyUsable() {
     val params = AllKeys.entries.map { it to (it != AllKeys.AEAD_PUB && it != AllKeys.AEAD_SEC) }
