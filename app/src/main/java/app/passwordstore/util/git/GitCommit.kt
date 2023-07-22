@@ -5,7 +5,7 @@
 
 package app.passwordstore.util.git
 
-import java.util.Date
+import java.time.Instant
 
 /**
  * Basic information about a git commit.
@@ -19,5 +19,5 @@ data class GitCommit(
   val hash: String,
   val shortMessage: String,
   val authorName: String,
-  val time: Date
+  val time: Instant
 )
