@@ -4,8 +4,6 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
--   Add [Mull (divestos.org)](https://divestos.org/pages/our_apps#mull) to supported browsers list for Autofill
-
 ### Added
 
 -   On Android 11, Autofill will use the new [inline autofill](https://developer.android.com/guide/topics/text/ime-autofill#configure-provider) UI that integrates Autofill results into your keyboard app.

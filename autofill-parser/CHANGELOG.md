@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - [Vivaldi](https://play.google.com/store/apps/details?id=com.vivaldi.browser) is now supported as an Autofill-capable browser.
 - [Vanadium](https://github.com/GrapheneOS/Vanadium) is now supported as an Autofill-capable browser.
 - `mail` is now included in the heuristics for username fields
+- [Mull (divestos.org)](https://divestos.org/pages/our_apps#mull) is now supported as an Autofill-capable browser.
 - Dependency updates
     - `androidx.core:core-ktx:1.10.1`
     - `androidx.autofill:autofill:1.2.0-beta01`
