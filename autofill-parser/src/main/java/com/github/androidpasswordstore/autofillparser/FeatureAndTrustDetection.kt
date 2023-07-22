@@ -81,7 +81,11 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "org.ungoogled.chromium.extensions.stable" to
       arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
     "com.kiwibrowser.browser" to arrayOf("wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig="),
-    "us.spotco.fennec_dos" to arrayOf("/4H1vlY5ZZTu5w/vKDIlbhUhQSLiupzt0mAF/9S8qqg="),
+    "us.spotco.fennec_dos" to
+      arrayOf(
+        "Jg4KSWeMeLcMAtZTet07bcChcXG73oznX9QCaoo+GNI=",
+        "/4H1vlY5ZZTu5w/vKDIlbhUhQSLiupzt0mAF/9S8qqg="
+      ),
     "com.vivaldi.browser" to arrayOf("6KeFRGVbqMCYF/cydo9WibFmLsSyvFoLwOwTjTPKPR4="),
     "app.vanadium.browser" to arrayOf("xq24uDxtTBfSkq/eVv1IilHTFv+PLBHFQQIjv/in27M="),
   )
