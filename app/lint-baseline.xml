@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.2.0-alpha09" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0-alpha09)" variant="all" version="8.2.0-alpha09">
+<issues format="6" by="lint 8.2.0-alpha13" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0-alpha13)" variant="all" version="8.2.0-alpha13">
 
     <issue
         id="StopShip"
@@ -41,55 +41,55 @@
         id="DenyListedApi"
         message="Use Context#getDrawableCompat() instead"
         errorLine1="                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine2="                              ~~~~~~~~~~~">
         <location
             file="src/main/java/app/passwordstore/ui/adapters/FieldItemAdapter.kt"
             line="67"
-            column="17"/>
+            column="31"/>
     </issue>
 
     <issue
         id="DenyListedApi"
         message="Use Context#getDrawableCompat() instead"
         errorLine1="                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine2="                              ~~~~~~~~~~~">
         <location
             file="src/main/java/app/passwordstore/ui/adapters/FieldItemAdapter.kt"
             line="67"
-            column="17"/>
+            column="31"/>
     </issue>
 
     <issue
         id="DenyListedApi"
         message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="    model.searchResult"
-        errorLine2="    ^">
+        errorLine1="      .launchIn(lifecycleScope)"
+        errorLine2="       ~~~~~~~~">
         <location
             file="src/main/java/app/passwordstore/ui/passwords/PasswordFragment.kt"
-            line="182"
-            column="5"/>
+            line="212"
+            column="8"/>
     </issue>
 
     <issue
         id="DenyListedApi"
         message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="    merge("
-        errorLine2="    ^">
+        errorLine1="      .launchIn(lifecycleScope)"
+        errorLine2="       ~~~~~~~~">
         <location
             file="src/main/java/app/passwordstore/ui/dialogs/PasswordGeneratorDialogFragment.kt"
-            line="59"
-            column="5"/>
+            line="68"
+            column="8"/>
     </issue>
 
     <issue
         id="DenyListedApi"
         message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="    model.searchResult"
-        errorLine2="    ^">
+        errorLine1="      .launchIn(lifecycleScope)"
+        errorLine2="       ~~~~~~~~">
         <location
             file="src/main/java/app/passwordstore/ui/folderselect/SelectFolderFragment.kt"
-            line="62"
-            column="5"/>
+            line="65"
+            column="8"/>
     </issue>
 
     <issue
