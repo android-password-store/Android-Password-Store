@@ -24,7 +24,7 @@ class KotlinCommonPlugin : Plugin<Project> {
     project.tasks.run {
       withType<KotlinCompile>().configureEach task@{
         compilerOptions {
-          allWarningsAsErrors.set(true)
+          allWarningsAsErrors.set(project.providers.environmentVariable("CI").isPresent)
           languageVersion.set(KotlinVersion.KOTLIN_1_9)
           freeCompilerArgs.addAll(ADDITIONAL_COMPILER_ARGS)
           if (!this@task.name.contains("test", ignoreCase = true) && !isAppModule) {

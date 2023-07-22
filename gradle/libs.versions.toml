@@ -99,7 +99,7 @@ thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-service
 thirdparty-nonfree-sentry = "io.sentry:sentry-android:6.26.0"
 thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.0"
 thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
-thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.3.0"
+thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.4.0"
 # TODO: Remove the explicit bcpkix dependency when upgrading this to a BC 1.71 compatible version
 thirdparty-sshj = "com.hierynomus:sshj:0.35.0"
 thirdparty-uri = "com.eygraber:uri-kmp:0.0.13"

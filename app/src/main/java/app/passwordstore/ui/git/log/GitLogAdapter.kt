@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import app.passwordstore.databinding.GitLogRowLayoutBinding
 import app.passwordstore.util.git.GitCommit
 import app.passwordstore.util.git.GitLogModel
-import java.text.DateFormat
-import java.util.Date
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
@@ -20,8 +20,8 @@ private fun shortHash(hash: String): String {
   return hash.substring(0 until 8)
 }
 
-private fun stringFrom(date: Date): String {
-  return DateFormat.getDateTimeInstance().format(date)
+private fun stringFrom(date: Instant): String {
+  return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)
 }
 
 /** @see GitLogActivity */

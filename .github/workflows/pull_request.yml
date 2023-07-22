@@ -163,37 +163,6 @@ jobs:
           name: Build report
           path: build/reports/kotlin-build/
 
-  lint-debug:
-    needs: [ "check-changed-files" ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
-        with:
-          distribution: temurin
-          java-version: 18
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Run Lint on debug variants
-        uses: gradle/gradle-build-action@915a66c096a03101667f9df2e56c9efef558b165 # v2.6.1
-        with:
-          arguments: lintDebug
-          gradle-home-cache-cleanup: true
-
-      - name: Upload Kotlin build report
-        if: "${{ always() }}"
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-        with:
-          name: Build report
-          path: build/reports/kotlin-build/
-
   lint:
     needs: [ "check-changed-files" ]
     runs-on: ubuntu-latest

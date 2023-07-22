@@ -10,7 +10,7 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import java.io.File
-import java.util.Date
+import java.time.Instant
 import logcat.asLog
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
@@ -57,11 +57,10 @@ val RevCommit.hash: String
  *
  * @see RevCommit.commitTime
  */
-val RevCommit.time: Date
+val RevCommit.time: Instant
   get() {
     val epochSeconds = commitTime.toLong()
-    val epochMilliseconds = epochSeconds * 1000
-    return Date(epochMilliseconds)
+    return Instant.ofEpochSecond(epochSeconds)
   }
 
 /** Alias to [lazy] with thread safety mode always set to [LazyThreadSafetyMode.NONE]. */
