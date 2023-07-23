@@ -282,7 +282,6 @@
   <string name="git_operation_running">Выполнение операции git…</string>
   <string name="git_break_out_of_detached_success">При попытке rebase\'а возник конфликт. Ваша локальная ветка %1$s была запушена %2$s\n Используйте эту ветку для разрешения конфликтов с помощью компьютера</string>
   <string name="git_break_out_of_detached_unneeded">Не нужно пушить в другую ветку - rebase не был запущен</string>
-  <!-- OpenKeychain not installed -->
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Файл с таким именем уже существует</string>
   <string name="folder_creation_err_folder_exists">Папка с таким именем уже существует</string>

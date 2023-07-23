@@ -35,6 +35,7 @@
   <string name="git_commit_remove_text">从仓库中删除%1$s</string>
   <string name="git_commit_move_text">将%1$s重命名为%2$s</string>
   <string name="git_commit_move_multiple_text">将多个密码移至%1$s</string>
+  <string name="git_commit_gpg_id">初始化 %1$s 中的 GPG ID</string>
   <!-- PGPHandler -->
   <string name="clipboard_copied_text">复制到剪切板</string>
   <string name="file_toast_text">请提供文件名</string>
@@ -70,6 +71,7 @@
   <string name="action_search">搜索</string>
   <string name="password">密码</string>
   <string name="username">用户名</string>
+  <string name="copy_label">复制</string>
   <string name="edit_password">编辑密码</string>
   <string name="copy_password">复制密码</string>
   <string name="share_as_plaintext">用明文分享</string>
@@ -115,6 +117,8 @@
   <string name="pref_import_pgp_key_title">导入 PGP 密钥</string>
   <string name="pref_pgp_key_manager_title">密钥管理器</string>
   <string name="pref_pgp_ascii_armor_title">以 ASCII 装甲模式加密</string>
+  <string name="pref_passphrase_cache_title">启用密码短语缓存</string>
+  <string name="pref_passphrase_cache_summary">警告：此功能可正常工作，但仍然非常实验性。</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">生成密码</string>
   <string name="pwgen_generate">生成</string>
@@ -284,14 +288,16 @@ personal.com</string>
   <!-- GitException messages -->
   <string name="git_unknown_error">未知错误</string>
   <string name="git_pull_merge_fail_error">合并失败，你处于冲突状态。TODO：添加恢复方法。</string>
+  <string name="git_push_nff_error">推送被远端拒绝，在推送前运行拉取。您可以使用同步而不是拉取/推送，因为它实现了这两种功能。</string>
   <string name="git_push_generic_error">推送被远程拒绝,原因: %1$s</string>
+  <string name="git_push_other_error">远端拒绝了非快进推送。检查目标仓库配置文件中的 receive.denyNonFastForwards 变量。</string>
   <string name="git_unknown_host">未知主机: %1$s</string>
   <string name="git_operation_running">运行Git操作…</string>
   <string name="git_break_out_of_detached_success">尝试变更时发生冲突,您的本地%1$s分支被推送到另一个名为%2$s的分支
 使用此分支解决计算机上的冲突</string>
   <string name="git_break_out_of_detached_unneeded">存储库没有变更,无需推送到另一个分支</string>
-  <!-- OpenKeychain not installed -->
   <!-- GPG key selection in folder creation -->
+  <string name="gpg_key_select_mandatory">选择一个 GPG 密钥才能继续</string>
   <string name="folder_creation_err_file_exists">该名称的文件已存在</string>
   <string name="folder_creation_err_folder_exists">该名称的文件夹已存在</string>
   <!-- Onboarding flow -->
@@ -342,4 +348,5 @@ GPG
   <string name="pgp_key_manager_no_keys_guidance">使用下面的添加按钮导入密钥</string>
   <string name="no_keys_imported_dialog_title">未导入密钥</string>
   <string name="no_keys_imported_dialog_message">应用中还没有导入PGP密钥，按下下面的按钮选择一个密钥文件</string>
+  <string name="biometric_prompt_title_gpg_passphrase_cache">解锁密码短语缓存</string>
 </resources>

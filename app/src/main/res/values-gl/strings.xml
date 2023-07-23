@@ -36,6 +36,7 @@
   <string name="git_commit_remove_text">Eliminar %1$s da almacenaxe.</string>
   <string name="git_commit_move_text">Mudar nome %1$s a %2$s.</string>
   <string name="git_commit_move_multiple_text">Mover varios contrasinais a %1$s.</string>
+  <string name="git_commit_gpg_id">Iniciar cos IDs GPG en %1$s.</string>
   <!-- PGPHandler -->
   <string name="clipboard_copied_text">Copiado ao portapapeis</string>
   <string name="file_toast_text">Debes proporcionar un nome de ficheiro</string>
@@ -71,6 +72,7 @@
   <string name="action_search">Buscar</string>
   <string name="password">Contrasinal</string>
   <string name="username">Identificador</string>
+  <string name="copy_label">Copiar</string>
   <string name="edit_password">Editar contrasinal</string>
   <string name="copy_password">Copiar contrasinal</string>
   <string name="share_as_plaintext">Compartir como texto plano</string>
@@ -116,6 +118,8 @@
   <string name="pref_import_pgp_key_title">Importar chave PGP</string>
   <string name="pref_pgp_key_manager_title">Xestor de chaves</string>
   <string name="pref_pgp_ascii_armor_title">Cifrar co modo ASCII armor</string>
+  <string name="pref_passphrase_cache_title">Permitir usar a caché para frase de paso</string>
+  <string name="pref_passphrase_cache_summary">AVISO: esta ferramenta é funcional pero aínda experimental.</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Crear contrasinal</string>
   <string name="pwgen_generate">Crear</string>
@@ -288,8 +292,8 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="git_operation_running">Realizando operación git…</string>
   <string name="git_break_out_of_detached_success">Hai un conflito ó realizar rebase. A túa póla local %1$s fixo push a outra póla chamada %2$s\nUsa esta póla para resolver o conflito na túa computadora</string>
   <string name="git_break_out_of_detached_unneeded">O repositorio non cambiou de base, non é preciso cambiar a outra póla</string>
-  <!-- OpenKeychain not installed -->
   <!-- GPG key selection in folder creation -->
+  <string name="gpg_key_select_mandatory">Hai que elexir unha chave GPG para continuar</string>
   <string name="folder_creation_err_file_exists">Xa existe un ficheiro con ese nome</string>
   <string name="folder_creation_err_folder_exists">Xa existe un cartafol con ese nome</string>
   <!-- Onboarding flow -->
@@ -337,4 +341,5 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="pgp_key_manager_no_keys_guidance">Importar unha chave usando o botón inferior Engadir</string>
   <string name="no_keys_imported_dialog_title">Non se importaron chaves</string>
   <string name="no_keys_imported_dialog_message">Aínda non hai chaves PGP importadas na app, preme no botón inferior para seleccionar un ficheiro de chave</string>
+  <string name="biometric_prompt_title_gpg_passphrase_cache">Desbloquear cache da frase de paso</string>
 </resources>

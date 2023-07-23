@@ -280,7 +280,6 @@
   <string name="git_operation_running">Opération git en cours…</string>
   <string name="git_break_out_of_detached_success">Il y a eu un conflit lors de la tentative de rebase. Votre branche locale %1$s a été poussée vers une autre branche nommée %2$s\n Utilisez cette branche pour résoudre les conflits sur votre ordinateur</string>
   <string name="git_break_out_of_detached_unneeded">Le dépôt n\'est pas rebasé, pas besoin de pousser vers une autre branche</string>
-  <!-- OpenKeychain not installed -->
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Un fichier portant ce nom existe déjà</string>
   <string name="folder_creation_err_folder_exists">Un dossier portant ce nom existe déjà</string>
