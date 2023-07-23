@@ -276,7 +276,6 @@
   <string name="git_operation_running">Git-Operation wird ausgeführt…</string>
   <string name="git_break_out_of_detached_success">Es gab einen Klonflikt während des rebase-Prozesses. Dein lokaler %1$s branch wurde auf einen anderen Branch namens %2$s gepusht.\nNutze diesen Branch um Konflikte auf deinem Computer zu beheben</string>
   <string name="git_break_out_of_detached_unneeded">Das Repository befindet sich nicht im Rebase-Prozess, es ist nicht nötig, den Zustand auf einen weiteren Branch zu pushen</string>
-  <!-- OpenKeychain not installed -->
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Dateiname bereits vergeben</string>
   <string name="folder_creation_err_folder_exists">Ein Ordner mit diesem Namen existiert bereits</string>
