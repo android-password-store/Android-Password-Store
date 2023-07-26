@@ -4,7 +4,6 @@
  */
 package app.passwordstore.ui.git.config
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +19,7 @@ import app.passwordstore.ui.dialogs.TextInputDialog
 import app.passwordstore.ui.git.base.BaseGitActivity
 import app.passwordstore.ui.git.log.GitLogActivity
 import app.passwordstore.util.extensions.asLog
+import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.extensions.viewBinding
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.getOrElse
@@ -91,7 +91,7 @@ class GitConfigActivity : BaseGitActivity() {
       binding.gitAbortRebase.alpha = if (needsAbort) 1.0f else 0.5f
     }
     binding.gitLog.setOnClickListener {
-      runCatching { startActivity(Intent(this, GitLogActivity::class.java)) }
+      runCatching { launchActivity(GitLogActivity::class.java) }
         .onFailure { ex -> logcat(ERROR) { ex.asLog("Failed to start GitLogActivity") } }
     }
     binding.gitAbortRebase.setOnClickListener { abortRebase() }

@@ -127,7 +127,7 @@ fun FragmentActivity.snackbar(
 
 /** Launch an activity denoted by [clazz]. */
 fun <T : ComponentActivity> ComponentActivity.launchActivity(clazz: Class<T>) {
-  startActivity(Intent(this, clazz))
+  startActivity(Intent(this, clazz).setAction(Intent.ACTION_VIEW))
 }
 
 /** Simplifies the common `getString(key, null) ?: defaultValue` case slightly */

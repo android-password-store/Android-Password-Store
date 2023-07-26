@@ -40,6 +40,7 @@ import app.passwordstore.util.extensions.commitChange
 import app.passwordstore.util.extensions.contains
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.isInsideRepository
+import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.extensions.listFilesRecursively
 import app.passwordstore.util.extensions.sharedPrefs
 import app.passwordstore.util.settings.AuthMode
@@ -272,7 +273,7 @@ class PasswordStore : BaseGitActivity() {
         .setPositiveButton(resources.getString(R.string.dialog_ok), null)
     when (id) {
       R.id.user_pref -> {
-        runCatching { startActivity(Intent(this, SettingsActivity::class.java)) }
+        runCatching { launchActivity(SettingsActivity::class.java) }
           .onFailure { e -> e.printStackTrace() }
       }
       R.id.git_push -> {
@@ -356,7 +357,7 @@ class PasswordStore : BaseGitActivity() {
         }
       }
     } else {
-      startActivity(Intent(this, OnboardingActivity::class.java))
+      launchActivity(OnboardingActivity::class.java)
     }
   }
 

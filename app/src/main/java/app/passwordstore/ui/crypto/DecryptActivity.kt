@@ -127,6 +127,7 @@ class DecryptActivity : BasePGPActivity() {
    */
   private fun editPassword() {
     val intent = Intent(this, PasswordCreationActivity::class.java)
+    intent.action = Intent.ACTION_VIEW
     intent.putExtra("FILE_PATH", relativeParentPath)
     intent.putExtra("REPO_PATH", repoPath)
     intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)

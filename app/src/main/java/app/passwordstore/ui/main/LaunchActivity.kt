@@ -64,7 +64,7 @@ class LaunchActivity : AppCompatActivity() {
             intent.getStringExtra(BasePGPActivity.EXTRA_REPO_PATH)
           )
         }
-      else Intent(this, PasswordStore::class.java)
+      else Intent(this, PasswordStore::class.java).setAction(Intent.ACTION_VIEW)
     startActivity(intentToStart)
 
     Handler(Looper.getMainLooper()).postDelayed({ finish() }, if (noAuth) 0L else 500L)

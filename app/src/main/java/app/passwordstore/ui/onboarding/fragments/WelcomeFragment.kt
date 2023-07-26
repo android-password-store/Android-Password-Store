@@ -5,7 +5,6 @@
 
 package app.passwordstore.ui.onboarding.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.Keep
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment
 import app.passwordstore.R
 import app.passwordstore.databinding.FragmentWelcomeBinding
 import app.passwordstore.ui.settings.SettingsActivity
+import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.extensions.performTransactionWithBackStack
 import app.passwordstore.util.extensions.viewBinding
 
@@ -27,7 +27,7 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
       parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance())
     }
     binding.settingsButton.setOnClickListener {
-      startActivity(Intent(requireContext(), SettingsActivity::class.java))
+      requireActivity().launchActivity(SettingsActivity::class.java)
     }
   }
 }

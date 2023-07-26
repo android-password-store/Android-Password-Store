@@ -4,7 +4,6 @@
  */
 package app.passwordstore.util.git.operation
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
@@ -18,6 +17,7 @@ import app.passwordstore.util.auth.BiometricAuthenticator.Result.Failure
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Retry
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Success
 import app.passwordstore.util.coroutines.DispatcherProvider
+import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.git.GitCommandExecutor
 import app.passwordstore.util.git.sshj.SshAuthMethod
 import app.passwordstore.util.git.sshj.SshjSessionFactory
@@ -108,15 +108,11 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     }
   }
 
-  private fun getSshKey(make: Boolean) {
+  private fun getSshKey(generateKey: Boolean) {
     runCatching {
-        val intent =
-          if (make) {
-            Intent(callingActivity.applicationContext, SshKeyGenActivity::class.java)
-          } else {
-            Intent(callingActivity.applicationContext, SshKeyImportActivity::class.java)
-          }
-        callingActivity.startActivity(intent)
+        callingActivity.launchActivity(
+          if (generateKey) SshKeyGenActivity::class.java else SshKeyImportActivity::class.java
+        )
       }
       .onFailure { e -> logcat(ERROR) { e.asLog() } }
   }
