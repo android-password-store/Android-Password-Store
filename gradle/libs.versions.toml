@@ -9,7 +9,6 @@ coroutines = "1.7.3"
 flowbinding = "1.2.0"
 hilt = "2.47"
 kotlin = "1.9.0"
-kotlin1710 = { strictly = "[1.7.0,)", prefer = "1.7.10" }
 leakcanary = "2.12"
 lifecycle = "2.6.1"
 
@@ -70,7 +69,6 @@ dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref =
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
-kotlin1710-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin1710" }
 kotlinx-collections-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
