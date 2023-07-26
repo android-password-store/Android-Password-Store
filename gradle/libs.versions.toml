@@ -52,19 +52,12 @@ build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.11.1"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.1"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.47.0"
-compose-animation = { module = "androidx.compose.animation:animation" }
 compose-bom = "androidx.compose:compose-bom:2023.06.01"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
-compose-hilt = "androidx.hilt:hilt-navigation-compose:1.0.0"
-compose-material = { module = "androidx.compose.material:material" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-runtime = { module = "androidx.compose.runtime:runtime" }
 compose-ui-core = { module = "androidx.compose.ui:ui" }
-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-compose-ui-util = { module = "androidx.compose.ui:ui-util" }
-compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
