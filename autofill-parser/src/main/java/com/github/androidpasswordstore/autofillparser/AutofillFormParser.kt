@@ -50,7 +50,6 @@ public sealed class FormOrigin(public open val identifier: String) {
               ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong())
             )
           } else {
-            @Suppress("DEPRECATION")
             context.packageManager.getApplicationInfo(identifier, PackageManager.GET_META_DATA)
           }
         val label = context.packageManager.getApplicationLabel(info)

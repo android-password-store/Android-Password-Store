@@ -142,7 +142,7 @@ fun PackageManager.getPackageInfoCompat(packageName: String, flags: Int): Packag
   return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     getPackageInfo(packageName, PackageInfoFlags.of(flags.toLong()))
   } else {
-    @Suppress("DEPRECATION") getPackageInfo(packageName, flags)
+    getPackageInfo(packageName, flags)
   }
 }
 
@@ -150,7 +150,7 @@ fun PackageManager.getApplicationInfoCompat(packageName: String, flags: Int): Ap
   return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     getApplicationInfo(packageName, ApplicationInfoFlags.of(flags.toLong()))
   } else {
-    @Suppress("DEPRECATION") getApplicationInfo(packageName, flags)
+    getApplicationInfo(packageName, flags)
   }
 }
 

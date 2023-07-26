@@ -254,7 +254,6 @@ public fun getInstalledBrowsersWithAutofillSupportLevel(
         ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong())
       )
     } else {
-      @Suppress("DEPRECATION")
       context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)
     }
   return installedBrowsers

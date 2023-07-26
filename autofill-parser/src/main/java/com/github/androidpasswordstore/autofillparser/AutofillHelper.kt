@@ -60,7 +60,6 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
           PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
         )
       } else {
-        @Suppress("DEPRECATION")
         context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNING_CERTIFICATES)
       }
     val signaturesNew =
