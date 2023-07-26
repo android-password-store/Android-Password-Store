@@ -12,7 +12,10 @@ import app.passwordstore.databinding.GitLogRowLayoutBinding
 import app.passwordstore.util.git.GitCommit
 import app.passwordstore.util.git.GitLogModel
 import java.time.Instant
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
@@ -21,7 +24,10 @@ private fun shortHash(hash: String): String {
 }
 
 private fun stringFrom(date: Instant): String {
-  return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)
+  return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+    .withLocale(Locale.getDefault())
+    .withZone(ZoneId.systemDefault())
+    .format(date)
 }
 
 /** @see GitLogActivity */
