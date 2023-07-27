@@ -67,6 +67,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "com.opera.mini.native.beta" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.touch" to arrayOf("qtjiBNJNF3k0yc0MY8xqo4779CxKaVcJfiIQ9X+qZ6o="),
     "org.bromite.bromite" to arrayOf("4e5c0HbXsNyEyytF+3i4bfLrOaO2xWuj3CkqXgw7lQQ="),
+    "org.cromite.cromite" to arrayOf("Yz+kHYIR1tCRaoGbiWaMbekuZCMtpn+dFv2Bw7fpI/8="),
     "org.gnu.icecat" to arrayOf("wi2iuVvK/WYZUzd2g0Qzn9ef3kAisQURZ8U1WSMTkcM="),
     "org.mozilla.fenix" to arrayOf("UAR3kIjn+YjVvFzF+HmP6/T4zQhKGypG79TI7krq8hE="),
     "org.mozilla.fenix.nightly" to arrayOf("d+rEzu02r++6dheZMd1MwZWrDNVLrzVdIV57vdKOQCo="),
