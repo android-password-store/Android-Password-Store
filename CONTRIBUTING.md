@@ -23,15 +23,15 @@ The source code is split across 12 modules and 1 subproject.
 - `build-logic` and its modules host the Gradle build logic for the project.
 - `autofill-parser` is the aptly named parser for Android's Autofill structures that also deals with trust and feature detection for browsers. 
 - `coroutine-utils` is a helper libraries that allow for effective usage and testing of [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html).
-- `crypto-common` is the foundation of our new, extensible cryptography APIs that adds the ability to introduce new cryptographic backends to APS with minimal effort.
-- `crypto-pgpainless` is the first of our new backends that implements the APIs defined in `crypto-common` to offer PGP cryptography through the [PGPainless](https://gh.pgpainless.org/) library.
-- `format-common` handles parsing the `pass` file format.
+- `crypto/common` is the foundation of our new, extensible cryptography APIs that adds the ability to introduce new cryptographic backends to APS with minimal effort.
+- `crypto/pgpainless` is the first of our new backends that implements the APIs defined in `crypto-common` to offer PGP cryptography through the [PGPainless](https://gh.pgpainless.org/) library.
+- `format/common` handles parsing the `pass` file format.
 - `openpgp-ktx` contains the now defunct glue code that was used by APS to interact with OpenKeychain.
 - `passgen/diceware` is our new password generator that implements the [Diceware](https://theworld.com/~reinhold/diceware.html) algorithm.
 - `passgen/random` contains the default password generator.
 - `sentry-stub` contains no-op variants of [Sentry](https://sentry.io/) APIs that we use to ensure the FOSS-only, telemetry-free variant of APS continues to compile in absence of Sentry dependencies.
 - `ssh` has exactly what you think it does.
-- `ui-compose` has the theming code for building UI components in [Jetpack Compose](https://developer.android.com/jetpack/compose).
+- `ui/compose` has the theming code for building UI components in [Jetpack Compose](https://developer.android.com/jetpack/compose).
 - `app` is everything else that constitutes APS.
 
 In most scenarios, the `app` directory is where you'd be contributing changes to. While most of the code has been rewritten and documented, there are still gnarly "legacy" parts that might be challenging to understand at a glance. Please get in touch via the [Discussions](https://github.com/android-password-store/Android-Password-Store/discussions) page with any questions you have, and we'd love to explain and improve things.

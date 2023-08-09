@@ -180,11 +180,11 @@ include("autofill-parser")
 
 include("coroutine-utils")
 
-include("crypto-common")
+include("crypto:common")
 
-include("crypto-pgpainless")
+include("crypto:pgpainless")
 
-include("format-common")
+include("format:common")
 
 include("passgen:diceware")
 
@@ -192,6 +192,6 @@ include("passgen:random")
 
 include("sentry-stub")
 
-include("ui-compose")
+include("ui:compose")
 
 include("ssh")
