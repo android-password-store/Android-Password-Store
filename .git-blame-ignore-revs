@@ -12,3 +12,5 @@ aaf6ceb8ecbc71f6948c84b1a19fb83abfe8a418
 549ee790d3e52bc62565ddf92e6a556e98b5195e
 # Restructure build-logic to a single top-level project
 afd0eebdd3287d932c53879fa1ac88f430080ef5
+# Restructure modules into groups
+959a56d7ffbc20db60721d7a09f399c8bdefe07e
