@@ -114,4 +114,4 @@ testDependencies = [
 [plugins]
 buildconfig = "com.github.gmazzo.buildconfig:4.1.2"
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-ksp = "com.google.devtools.ksp:1.9.0-1.0.12"
+ksp = "com.google.devtools.ksp:1.9.0-1.0.13"
