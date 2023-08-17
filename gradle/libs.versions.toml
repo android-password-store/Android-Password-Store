@@ -45,7 +45,7 @@ build-javapoet = "com.squareup:javapoet:1.13.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 build-kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 build-ktfmt = "com.facebook:ktfmt:0.44"
-build-kct = "dev.zacsweers.kctfork:core:0.3.0"
+build-kct = "dev.zacsweers.kctfork:core:0.3.2"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.25.3"
 build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.3"
 build-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
