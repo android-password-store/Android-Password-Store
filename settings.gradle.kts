@@ -47,6 +47,16 @@ pluginManagement {
           "org.gradle.toolchains.foojay-resolver-convention.gradle.plugin",
         )
         includeModule("org.gradle.toolchains", "foojay-resolver")
+        includeModule(
+          "org.gradle.kotlin.kotlin-dsl",
+          "org.gradle.kotlin.kotlin-dsl.gradle.plugin",
+        )
+        includeModule("org.gradle.kotlin", "gradle-kotlin-dsl-plugins")
+        includeModule(
+          "com.github.gmazzo.buildconfig",
+          "com.github.gmazzo.buildconfig.gradle.plugin"
+        )
+        includeModule("com.github.gmazzo.buildconfig", "plugin")
       }
     }
     exclusiveContent {
@@ -192,6 +202,12 @@ include("passgen:random")
 
 include("sentry-stub")
 
-include("ui:compose")
-
 include("ssh")
+
+include("tracing:compiler-plugin")
+
+include("tracing:gradle-plugin")
+
+include("tracing:runtime")
+
+include("ui:compose")
