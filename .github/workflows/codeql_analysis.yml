@@ -2,12 +2,12 @@ name: "CodeQL"
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - develop
-  pull_request:
-    branches:
-      - develop
+  # push:
+    # branches:
+      # - develop
+  # pull_request:
+    # branches:
+      # - develop
 
 env:
   SENTRY_DSN: 'https://public_key@example.com/project_id'
