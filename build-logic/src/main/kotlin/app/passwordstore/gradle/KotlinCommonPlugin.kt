@@ -47,6 +47,6 @@ class KotlinCommonPlugin : Plugin<Project> {
       )
 
     val JVM_TOOLCHAIN_ACTION =
-      Action<JavaToolchainSpec> { languageVersion.set(JavaLanguageVersion.of(17)) }
+      Action<JavaToolchainSpec> { languageVersion.set(JavaLanguageVersion.of(20)) }
   }
 }

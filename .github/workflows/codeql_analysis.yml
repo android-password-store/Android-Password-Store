@@ -28,7 +28,7 @@ jobs:
       uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3.12.0
       with:
         distribution: temurin
-        java-version: 18
+        java-version: 20
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@a09933a12a80f87b87005513f0abb1494c27a716 # v2.21.4

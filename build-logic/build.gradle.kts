@@ -5,10 +5,7 @@
 
 plugins { `kotlin-dsl` }
 
-private val jvmToolchainAction =
-  Action<JavaToolchainSpec> { languageVersion.set(JavaLanguageVersion.of(17)) }
-
-kotlin.jvmToolchain(jvmToolchainAction)
+kotlin.jvmToolchain(20)
 
 gradlePlugin {
   plugins {

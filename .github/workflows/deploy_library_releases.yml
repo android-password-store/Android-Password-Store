@@ -15,7 +15,7 @@ jobs:
       uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3.12.0
       with:
         distribution: temurin
-        java-version: 18
+        java-version: 20
 
     - name: Upload binaries
       uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2.7.1
