@@ -18,7 +18,7 @@ jobs:
           java-version: 20
 
       - name: Download new publicsuffix data
-        uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2.7.1
+        uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2.8.0
         with:
           arguments: updatePSL
           gradle-home-cache-cleanup: true
@@ -27,7 +27,7 @@ jobs:
         run: if [[ $(git status -s) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
 
       - name: Verify update publicsuffixes file
-        uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2.7.1
+        uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2.8.0
         if: "${{ env.UPDATED == 'true' }}"
         with:
           arguments: :autofill-parser:test -PslimTests
