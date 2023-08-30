@@ -72,8 +72,8 @@ testing-robolectric = "org.robolectric:robolectric:4.10.3"
 testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
 testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.12"
 testing-turbine = "app.cash.turbine:turbine:1.0.0"
-thirdparty-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk15to18", version.ref = "bouncycastle" }
-thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15to18", version.ref = "bouncycastle" }
+thirdparty-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle" }
+thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
 thirdparty-compose-lints = "com.slack.lint.compose:compose-lint-checks:1.2.0"
 thirdparty-eddsa = "net.i2p.crypto:eddsa:0.3.0"
