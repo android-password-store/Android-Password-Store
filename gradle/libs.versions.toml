@@ -72,8 +72,8 @@ testing-robolectric = "org.robolectric:robolectric:4.10.3"
 testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
 testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.12"
 testing-turbine = "app.cash.turbine:turbine:1.0.0"
-thirdparty-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk15to18", version.ref = "bouncycastle" }
-thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15to18", version.ref = "bouncycastle" }
+thirdparty-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle" }
+thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
 thirdparty-compose-lints = "com.slack.lint.compose:compose-lint-checks:1.2.0"
 thirdparty-eddsa = "net.i2p.crypto:eddsa:0.3.0"
@@ -88,7 +88,7 @@ thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.2"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.1"
 thirdparty-nonfree-sentry = "io.sentry:sentry-android:6.28.0"
-thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.1"
+thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.2"
 thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.4.0"
 # TODO: Remove the explicit bcpkix dependency when upgrading this to a BC 1.71 compatible version
