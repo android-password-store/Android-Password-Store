@@ -15,5 +15,5 @@ import dagger.hilt.android.components.ActivityComponent
 @Module
 @InstallIn(ActivityComponent::class)
 interface TotpModule {
-  @Binds fun UriTotpFinder.bind(): TotpFinder
+  @Binds fun bindTotpFinder(impl: UriTotpFinder): TotpFinder
 }

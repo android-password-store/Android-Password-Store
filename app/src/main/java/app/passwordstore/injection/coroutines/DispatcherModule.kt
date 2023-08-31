@@ -15,5 +15,5 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 interface DispatcherModule {
-  @Binds fun DefaultDispatcherProvider.bind(): DispatcherProvider
+  @Binds fun bindDispatcherProvider(impl: DefaultDispatcherProvider): DispatcherProvider
 }
