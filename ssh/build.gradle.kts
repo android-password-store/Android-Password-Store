@@ -19,7 +19,7 @@ dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
-  implementation(libs.thirdparty.sshj) { exclude(group = "org.bouncycastle") }
+  implementation(libs.thirdparty.sshj)
   implementation(libs.thirdparty.logcat)
   implementation(libs.androidx.security)
   implementation(libs.thirdparty.eddsa)
