@@ -92,7 +92,7 @@ thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.2"
 thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.4.0"
 # TODO: Remove the explicit bcpkix dependency when upgrading this to a BC 1.71 compatible version
-thirdparty-sshj = "com.hierynomus:sshj:0.35.0"
+thirdparty-sshj = "com.hierynomus:sshj:0.36.0"
 thirdparty-uri = "com.eygraber:uri-kmp:0.0.14"
 thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:1.0.0-alpha04"
 
