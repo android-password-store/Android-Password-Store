@@ -38,6 +38,9 @@ object LintConfig {
       disable += "FragmentFieldInjection"
       // Too pedantic
       disable += "ArgInFormattedQuantityStringRes"
+      // Illegal in Dagger v2.48, can be removed after
+      // https://github.com/slackhq/slack-lints/pull/133 is released.
+      disable += "BindsCanBeExtensionFunction"
     }
     baseline = project.file("lint-baseline.xml")
   }
