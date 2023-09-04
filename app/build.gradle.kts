@@ -86,14 +86,17 @@ dependencies {
   implementation(libs.thirdparty.logcat)
   implementation(libs.thirdparty.modernAndroidPrefs)
   implementation(libs.thirdparty.plumber)
-  implementation(libs.thirdparty.sshj) { exclude(group = "org.bouncycastle") }
+  implementation(libs.thirdparty.sshj)
   implementation(libs.thirdparty.bouncycastle.bcprov)
-  implementation(libs.thirdparty.bouncycastle.bcpkix)
 
   if (snapshot.snapshot) {
     implementation(libs.thirdparty.whatthestack)
   } else {
     debugImplementation(libs.thirdparty.whatthestack)
+  }
+
+  implementation(libs.thirdparty.slf4j.api) {
+    because("SSHJ now uses SLF4J 2.0 which we don't want")
   }
 
   implementation(libs.thirdparty.leakcanary.core)
