@@ -95,6 +95,10 @@ dependencies {
     debugImplementation(libs.thirdparty.whatthestack)
   }
 
+  implementation(libs.thirdparty.slf4j.api) {
+    because("SSHJ now uses SLF4J 2.0 which we don't want")
+  }
+
   implementation(libs.thirdparty.leakcanary.core)
   nonFreeImplementation(libs.thirdparty.nonfree.googlePlayAuthApiPhone)
   nonFreeImplementation(libs.thirdparty.nonfree.sentry)
