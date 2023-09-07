@@ -58,7 +58,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -89,14 +89,14 @@ jobs:
 
       - name: (Fail-only) Upload test report
         if: "${{ failure() }}"
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: Test report
           path: app/build/reports
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -127,7 +127,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -158,7 +158,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: Build report
           path: build/reports/kotlin-build/
@@ -189,7 +189,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
           name: Build report
           path: build/reports/kotlin-build/
