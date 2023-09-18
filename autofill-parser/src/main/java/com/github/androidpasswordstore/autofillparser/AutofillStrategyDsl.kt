@@ -430,8 +430,7 @@ internal class AutofillStrategy private constructor(private val rules: List<Auto
         possibleOtpFields,
         singleOriginMode = singleOriginMode,
         isManualRequest = isManualRequest
-      )
-        ?: continue
+      ) ?: continue
     }
     return null
   }

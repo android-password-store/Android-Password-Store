@@ -165,6 +165,5 @@ fun Context.getCustomSuffixes(): Sequence<String> {
   return sharedPrefs
     .getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)
     ?.splitToSequence('\n')
-    ?.filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
-    ?: emptySequence()
+    ?.filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' } ?: emptySequence()
 }
