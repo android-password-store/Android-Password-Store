@@ -61,8 +61,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
   private fun keyType(): SSHKeyType {
     return SSHKeyType.fromValue(
       applicationContext.sharedPrefs.getString(Constants.GIT_REMOTE_KEY_TYPE, null)
-    )
-      ?: throw NullKeyException()
+    ) ?: throw NullKeyException()
   }
 
   public fun keyExists(): Boolean {
@@ -121,8 +120,7 @@ public class SSHKeyManager(private val applicationContext: Context) {
           // Cursor returns only a single row.
           cursor.moveToFirst()
           cursor.getInt(0)
-        }
-        ?: throw IOException(applicationContext.getString(R.string.ssh_key_does_not_exist))
+        } ?: throw IOException(applicationContext.getString(R.string.ssh_key_does_not_exist))
     // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
     require(fileSize in 1 until SSH_KEY_MAX_FILE_SIZE) {
       applicationContext.getString(R.string.ssh_key_import_error_not_an_ssh_key_message)

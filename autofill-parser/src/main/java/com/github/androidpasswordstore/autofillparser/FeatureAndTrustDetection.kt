@@ -238,8 +238,7 @@ private fun getBrowserAutofillSupportLevel(
     // browsers here.
     supportLevel != BrowserAutofillSupportLevel.GeneralFillAndSave &&
       Build.VERSION.SDK_INT < Build.VERSION_CODES.P
-  }
-    ?: BrowserAutofillSupportLevel.None
+  } ?: BrowserAutofillSupportLevel.None
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

@@ -197,8 +197,7 @@ object SshKey {
         // Cursor returns only a single row.
         cursor.moveToFirst()
         cursor.getInt(0)
-      }
-        ?: throw IOException(context.getString(R.string.ssh_key_does_not_exist))
+      } ?: throw IOException(context.getString(R.string.ssh_key_does_not_exist))
 
     // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
     if (fileSize > 100_000 || fileSize == 0)

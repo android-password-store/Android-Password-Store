@@ -70,24 +70,21 @@ public sealed class AutofillScenario<out T : Any> {
                 clientState,
                 BUNDLE_KEY_CURRENT_PASSWORD_IDS,
                 AutofillId::class.java
-              )
-                ?: emptyList()
+              ) ?: emptyList()
             )
             newPassword.addAll(
               BundleCompat.getParcelableArrayList(
                 clientState,
                 BUNDLE_KEY_NEW_PASSWORD_IDS,
                 AutofillId::class.java
-              )
-                ?: emptyList()
+              ) ?: emptyList()
             )
             genericPassword.addAll(
               BundleCompat.getParcelableArrayList(
                 clientState,
                 BUNDLE_KEY_GENERIC_PASSWORD_IDS,
                 AutofillId::class.java
-              )
-                ?: emptyList()
+              ) ?: emptyList()
             )
           }
           .build()
