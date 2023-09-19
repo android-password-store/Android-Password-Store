@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 @file:Suppress("JUnitMalformedDeclaration") // The test runner takes care of it
+
 package app.passwordstore.crypto
 
 import app.passwordstore.crypto.CryptoConstants.KEY_PASSPHRASE
