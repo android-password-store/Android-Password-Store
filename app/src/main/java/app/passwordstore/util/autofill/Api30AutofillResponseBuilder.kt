@@ -10,6 +10,7 @@ import android.content.IntentSender
 import android.os.Build
 import android.service.autofill.Dataset
 import android.service.autofill.FillCallback
+import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.service.autofill.Presentations
 import android.service.autofill.SaveInfo
@@ -25,9 +26,6 @@ import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
 import com.github.michaelbull.result.fold
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import java.io.File
 import logcat.LogPriority.ERROR
 import logcat.asLog
@@ -36,14 +34,14 @@ import logcat.logcat
 /** Implements [AutofillResponseBuilder]'s methods for API 30 and above */
 @RequiresApi(Build.VERSION_CODES.R)
 class Api30AutofillResponseBuilder
-@AssistedInject
-constructor(
-  @Assisted form: FillableForm,
-) {
+private constructor(
+  form: FillableForm,
+) : AutofillResponseBuilder {
 
-  @AssistedFactory
-  interface Factory {
-    fun create(form: FillableForm): Api30AutofillResponseBuilder
+  object Factory : AutofillResponseBuilder.Factory {
+    override fun create(
+      form: FillableForm,
+    ): AutofillResponseBuilder = Api30AutofillResponseBuilder(form)
   }
 
   private val formOrigin = form.formOrigin
@@ -260,19 +258,19 @@ constructor(
   }
 
   /** Creates and returns a suitable [FillResponse] to the Autofill framework. */
-  fun fillCredentials(
-    context: Context,
-    inlineSuggestionsRequest: InlineSuggestionsRequest?,
-    callback: FillCallback
-  ) {
+  override fun fillCredentials(context: Context, fillRequest: FillRequest, callback: FillCallback) {
     AutofillMatcher.getMatchesFor(context, formOrigin)
       .fold(
         success = { matchedFiles ->
-          callback.onSuccess(makeFillResponse(context, inlineSuggestionsRequest, matchedFiles))
+          callback.onSuccess(
+            makeFillResponse(context, fillRequest.inlineSuggestionsRequest, matchedFiles)
+          )
         },
         failure = { e ->
           logcat(ERROR) { e.asLog() }
-          callback.onSuccess(makePublisherChangedResponse(context, inlineSuggestionsRequest, e))
+          callback.onSuccess(
+            makePublisherChangedResponse(context, fillRequest.inlineSuggestionsRequest, e)
+          )
         }
       )
   }
