@@ -16,7 +16,6 @@ import android.service.autofill.SaveRequest
 import app.passwordstore.BuildConfig
 import app.passwordstore.R
 import app.passwordstore.ui.autofill.AutofillSaveActivity
-import app.passwordstore.util.autofill.Api30AutofillResponseBuilder
 import app.passwordstore.util.autofill.AutofillResponseBuilder
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.hasFlag
@@ -56,7 +55,6 @@ class OreoAutofillService : AutofillService() {
     private const val DISABLE_AUTOFILL_DURATION_MS = 1000 * 60 * 60 * 24L
   }
 
-  @Inject lateinit var api30ResponseBuilderFactory: Api30AutofillResponseBuilder.Factory
   @Inject lateinit var responseBuilderFactory: AutofillResponseBuilder.Factory
 
   override fun onCreate() {
@@ -100,13 +98,7 @@ class OreoAutofillService : AutofillService() {
           callback.onSuccess(null)
           return
         }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      api30ResponseBuilderFactory
-        .create(formToFill)
-        .fillCredentials(this, request.inlineSuggestionsRequest, callback)
-    } else {
-      responseBuilderFactory.create(formToFill).fillCredentials(this, callback)
-    }
+    responseBuilderFactory.create(formToFill).fillCredentials(this, request, callback)
   }
 
   override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
