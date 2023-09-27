@@ -6,6 +6,7 @@ package app.passwordstore.util.git.sshj
 
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.settings.AuthMode
 import app.passwordstore.util.ssh.SSHFacade
@@ -20,7 +21,6 @@ import java.util.Collections
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority.WARN
 import logcat.logcat
@@ -49,15 +49,18 @@ sealed class SshAuthMethod(val activity: AppCompatActivity) {
   class SshKey(activity: AppCompatActivity) : SshAuthMethod(activity)
 }
 
-abstract class InteractivePasswordFinder : PasswordFinder {
+abstract class InteractivePasswordFinder(private val dispatcherProvider: DispatcherProvider) :
+  PasswordFinder {
 
   private var isRetry = false
 
   abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
 
-  final override fun reqPassword(resource: Resource<*>?): CharArray {
+  override fun reqPassword(resource: Resource<*>?): CharArray {
     val password =
-      runBlocking(Dispatchers.Main) { suspendCoroutine { cont -> askForPassword(cont, isRetry) } }
+      runBlocking(dispatcherProvider.main()) {
+        suspendCoroutine { cont -> askForPassword(cont, isRetry) }
+      }
     isRetry = true
     return password?.toCharArray() ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
   }
@@ -69,6 +72,7 @@ class SshjSessionFactory(
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
   private val sshFacade: SSHFacade,
+  private val dispatcherProvider: DispatcherProvider,
 ) : SshSessionFactory() {
 
   private var currentSession: SshjSession? = null
@@ -80,10 +84,12 @@ class SshjSessionFactory(
     tms: Int
   ): RemoteSession {
     return currentSession
-      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, sshFacade).connect().also {
-        logcat { "New SSH connection created" }
-        currentSession = it
-      }
+      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, sshFacade, dispatcherProvider)
+        .connect()
+        .also {
+          logcat { "New SSH connection created" }
+          currentSession = it
+        }
   }
 
   fun close() {
@@ -125,6 +131,7 @@ private class SshjSession(
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
   private val sshFacade: SSHFacade,
+  private val dispatcherProvider: DispatcherProvider,
 ) : RemoteSession {
 
   private lateinit var ssh: SSHClient
@@ -151,7 +158,8 @@ private class SshjSession(
     ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
     ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
     if (!ssh.isConnected) throw IOException()
-    val passwordAuth = AuthPassword(CredentialFinder(authMethod.activity, AuthMode.Password))
+    val passwordAuth =
+      AuthPassword(CredentialFinder(authMethod.activity, AuthMode.Password, dispatcherProvider))
     when (authMethod) {
       is SshAuthMethod.Password -> {
         ssh.auth(username, passwordAuth)
@@ -159,7 +167,10 @@ private class SshjSession(
       is SshAuthMethod.SshKey -> {
         val pubkeyAuth =
           AuthPublickey(
-            sshFacade.keyProvider(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey))
+            sshFacade.keyProvider(
+              ssh,
+              CredentialFinder(authMethod.activity, AuthMode.SshKey, dispatcherProvider)
+            )
           )
         ssh.auth(username, pubkeyAuth, passwordAuth)
       }

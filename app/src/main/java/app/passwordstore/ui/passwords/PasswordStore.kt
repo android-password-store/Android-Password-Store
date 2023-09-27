@@ -83,8 +83,16 @@ class PasswordStore : BaseGitActivity() {
   private val passwordMoveAction =
     registerForActivityResult(StartActivityForResult()) { result ->
       val intentData = result.data ?: return@registerForActivityResult
-      val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
-      val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
+      val filesToMove =
+        requireNotNull(intentData.getStringArrayExtra("Files")) {
+          "'Files' intent extra must be set"
+        }
+      val target =
+        File(
+          requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")) {
+            "'SELECTED_FOLDER_PATH' intent extra must be set"
+          }
+        )
       val repositoryPath = PasswordRepository.getRepositoryDirectory().absolutePath
       if (!target.isDirectory) {
         logcat(ERROR) { "Tried moving passwords to a non-existing folder." }
@@ -103,7 +111,12 @@ class PasswordStore : BaseGitActivity() {
           }
           val destinationFile = File(target.absolutePath + "/" + source.name)
           val basename = source.nameWithoutExtension
-          val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
+          val sourceLongName =
+            getLongName(
+              requireNotNull(source.parent) { "$file has no parent" },
+              repositoryPath,
+              basename
+            )
           val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
           if (destinationFile.exists()) {
             logcat(ERROR) { "Trying to move a file that already exists." }
@@ -132,7 +145,11 @@ class PasswordStore : BaseGitActivity() {
             val source = File(filesToMove[0])
             val basename = source.nameWithoutExtension
             val sourceLongName =
-              getLongName(requireNotNull(source.parent), repositoryPath, basename)
+              getLongName(
+                requireNotNull(source.parent) { "$basename has no parent" },
+                repositoryPath,
+                basename
+              )
             val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
             withContext(dispatcherProvider.main()) {
               commitChange(

@@ -10,9 +10,9 @@ import kotlin.test.Test
 class PublicSuffixListLoaderTest {
   @Test
   fun testLoadingBundledPublicSuffixList() {
-    requireNotNull(javaClass.classLoader).getResourceAsStream("publicsuffixes").buffered().use {
-      stream ->
-      PublicSuffixListLoader.load(stream)
-    }
+    requireNotNull(javaClass.classLoader) { "Null classloader????" }
+      .getResourceAsStream("publicsuffixes")
+      .buffered()
+      .use { stream -> PublicSuffixListLoader.load(stream) }
   }
 }

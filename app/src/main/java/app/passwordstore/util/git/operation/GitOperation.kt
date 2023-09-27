@@ -121,7 +121,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     authMethod: SshAuthMethod,
     credentialsProvider: CredentialsProvider? = null
   ) {
-    sshSessionFactory = SshjSessionFactory(authMethod, hostKeyFile, sshFacade)
+    sshSessionFactory =
+      SshjSessionFactory(authMethod, hostKeyFile, sshFacade, hiltEntryPoint.dispatcherProvider())
     commands.filterIsInstance<TransportCommand<*, *>>().forEach { command ->
       command.setTransportConfigCallback { transport: Transport ->
         (transport as? SshTransport)?.sshSessionFactory = sshSessionFactory
@@ -217,7 +218,13 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         }
       AuthMode.Password -> {
         val httpsCredentialProvider =
-          HttpsCredentialsProvider(CredentialFinder(callingActivity, AuthMode.Password))
+          HttpsCredentialsProvider(
+            CredentialFinder(
+              callingActivity,
+              AuthMode.Password,
+              hiltEntryPoint.dispatcherProvider()
+            )
+          )
         registerAuthProviders(SshAuthMethod.Password(authActivity), httpsCredentialProvider)
       }
       AuthMode.None -> {}

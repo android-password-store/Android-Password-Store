@@ -57,7 +57,10 @@ class PasswordExportService : Service() {
    */
   private fun exportPasswords(targetDirectory: DocumentFile) {
 
-    val repositoryDirectory = requireNotNull(PasswordRepository.getRepositoryDirectory())
+    val repositoryDirectory =
+      requireNotNull(PasswordRepository.getRepositoryDirectory()) {
+        "Password directory must be set to export them"
+      }
     val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
 
     logcat { "Copying ${repositoryDirectory.path} to $targetDirectory" }

@@ -31,9 +31,8 @@ import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import reactivecircus.flowbinding.android.widget.afterTextChanges
 import reactivecircus.flowbinding.android.widget.checkedChanges
 
@@ -55,17 +54,18 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     binding.lengthNumber.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
     binding.passwordText.typeface = Typeface.MONOSPACE
 
-    merge(
-        binding.numerals.checkedChanges().skipInitialValue(),
-        binding.symbols.checkedChanges().skipInitialValue(),
-        binding.uppercase.checkedChanges().skipInitialValue(),
-        binding.lowercase.checkedChanges().skipInitialValue(),
-        binding.ambiguous.checkedChanges().skipInitialValue(),
-        binding.pronounceable.checkedChanges().skipInitialValue(),
-        binding.lengthNumber.afterTextChanges().skipInitialValue(),
-      )
-      .onEach { generate(binding.passwordText) }
-      .launchIn(lifecycleScope)
+    lifecycleScope.launch {
+      merge(
+          binding.numerals.checkedChanges().skipInitialValue(),
+          binding.symbols.checkedChanges().skipInitialValue(),
+          binding.uppercase.checkedChanges().skipInitialValue(),
+          binding.lowercase.checkedChanges().skipInitialValue(),
+          binding.ambiguous.checkedChanges().skipInitialValue(),
+          binding.pronounceable.checkedChanges().skipInitialValue(),
+          binding.lengthNumber.afterTextChanges().skipInitialValue(),
+        )
+        .collect { generate(binding.passwordText) }
+    }
 
     return builder
       .run {

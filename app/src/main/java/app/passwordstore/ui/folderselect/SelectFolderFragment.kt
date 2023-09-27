@@ -27,8 +27,7 @@ import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 @AndroidEntryPoint
@@ -57,12 +56,16 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
     FastScrollerBuilder(binding.passRecycler).build()
     registerForContextMenu(binding.passRecycler)
 
-    val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
+    val path =
+      requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH)) {
+        "Cannot navigate if ${PasswordStore.REQUEST_ARG_PATH} is not provided"
+      }
     model.navigateTo(File(path), listMode = ListMode.DirectoriesOnly, pushPreviousLocation = false)
-    model.searchResult
-      .flowWithLifecycle(lifecycle)
-      .onEach { result -> recyclerAdapter.submitList(result.passwordItems) }
-      .launchIn(lifecycleScope)
+    lifecycleScope.launch {
+      model.searchResult.flowWithLifecycle(lifecycle).collect { result ->
+        recyclerAdapter.submitList(result.passwordItems)
+      }
+    }
   }
 
   override fun onAttach(context: Context) {

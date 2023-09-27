@@ -68,7 +68,7 @@ constructor(
   var url
     get() = settings.getString(PreferenceKeys.GIT_REMOTE_URL)
     private set(value) {
-      require(value != null)
+      require(value != null) { "Cannot set a null URL" }
       if (value == url) return
       settings.edit { putString(PreferenceKeys.GIT_REMOTE_URL, value) }
       if (PasswordRepository.isInitialized) PasswordRepository.addRemote("origin", value, true)

@@ -50,8 +50,6 @@ import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
@@ -177,11 +175,13 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     recyclerAdapter.makeSelectable(recyclerView)
     registerForContextMenu(recyclerView)
 
-    val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
+    val path =
+      requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH)) {
+        "Cannot navigate if ${PasswordStore.REQUEST_ARG_PATH} is not provided"
+      }
     model.navigateTo(File(path), pushPreviousLocation = false)
-    model.searchResult
-      .flowWithLifecycle(lifecycle)
-      .onEach { result ->
+    lifecycleScope.launch {
+      model.searchResult.flowWithLifecycle(lifecycle).collect { result ->
         // Only run animations when the new list is filtered, i.e., the user submitted a search,
         // and not on folder navigation since the latter leads to too many removal animations.
         (recyclerView.itemAnimator as OnOffItemAnimator).isEnabled = result.isFiltered
@@ -209,7 +209,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
           }
         }
       }
-      .launchIn(lifecycleScope)
+    }
   }
 
   private val actionModeCallback =

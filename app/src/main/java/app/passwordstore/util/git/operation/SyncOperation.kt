@@ -5,13 +5,14 @@
 package app.passwordstore.util.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
+import org.eclipse.jgit.api.GitCommand
 
 class SyncOperation(
   callingActivity: AppCompatActivity,
   rebase: Boolean,
 ) : GitOperation(callingActivity) {
 
-  override val commands =
+  override val commands: Array<GitCommand<out Any>> =
     arrayOf(
       // Stage all files
       git.add().addFilepattern("."),

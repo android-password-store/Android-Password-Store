@@ -6,12 +6,13 @@ package app.passwordstore.util.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode.TRACK
+import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.api.ResetCommand
 
 class ResetToRemoteOperation(callingActivity: AppCompatActivity, remoteBranch: String) :
   GitOperation(callingActivity) {
 
-  override val commands =
+  override val commands: Array<GitCommand<out Any>> =
     arrayOf(
       // Fetch everything from the origin remote
       git.fetch().setRemote("origin").setRemoveDeletedRefs(true),

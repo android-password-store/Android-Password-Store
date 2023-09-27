@@ -9,6 +9,7 @@ import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.util.extensions.unsafeLazy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.api.RebaseCommand
 import org.eclipse.jgit.api.ResetCommand
 import org.eclipse.jgit.lib.RepositoryState
@@ -30,7 +31,7 @@ class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(call
       git.checkout().setName(localBranch),
     )
 
-  override val commands by unsafeLazy {
+  override val commands: Array<GitCommand<out Any>> by unsafeLazy {
     if (merging) {
       // We need to run some non-command operations first
       repository.writeMergeCommitMsg(null)

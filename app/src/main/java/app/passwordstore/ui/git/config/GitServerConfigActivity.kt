@@ -221,7 +221,10 @@ class GitServerConfigActivity : BaseGitActivity() {
 
   /** Clones the repository, the directory exists, deletes it */
   private fun cloneRepository() {
-    val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
+    val localDir =
+      requireNotNull(PasswordRepository.getRepositoryDirectory()) {
+        "Repository directory must be set before cloning"
+      }
     val localDirFiles = localDir.listFiles() ?: emptyArray()
     // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
     if (
