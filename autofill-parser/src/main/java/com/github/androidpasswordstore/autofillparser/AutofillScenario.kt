@@ -105,7 +105,9 @@ public sealed class AutofillScenario<out T : Any> {
     val genericPassword = mutableListOf<T>()
 
     fun build(): AutofillScenario<T> {
-      require(genericPassword.isEmpty() || (currentPassword.isEmpty() && newPassword.isEmpty()))
+      require(genericPassword.isEmpty() || (currentPassword.isEmpty() && newPassword.isEmpty())) {
+        "Password requirements failed."
+      }
       return if (currentPassword.isNotEmpty() || newPassword.isNotEmpty()) {
         ClassifiedAutofillScenario(
           username = username,

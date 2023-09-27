@@ -114,7 +114,11 @@ object PasswordRepository {
     val dir = getRepositoryDirectory()
     // Un-initialize the repo if the dir does not exist or is absolutely empty
     settings.edit {
-      if (!dir.exists() || !dir.isDirectory || requireNotNull(dir.listFiles()).isEmpty()) {
+      if (
+        !dir.exists() ||
+          !dir.isDirectory ||
+          requireNotNull(dir.listFiles()) { "Failed to list files in ${dir.path}" }.isEmpty()
+      ) {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
       } else {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true)

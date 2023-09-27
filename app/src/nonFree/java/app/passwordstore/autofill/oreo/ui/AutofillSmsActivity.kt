@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.databinding.ActivityOreoAutofillSmsBinding
 import app.passwordstore.util.autofill.AutofillResponseBuilder
@@ -113,18 +114,19 @@ class AutofillSmsActivity : AppCompatActivity() {
           return
         }
 
-    registerReceiver(
+    ContextCompat.registerReceiver(
+      this,
       smsCodeRetrievedReceiver,
       IntentFilter(SmsCodeRetriever.SMS_CODE_RETRIEVED_ACTION),
       SmsRetriever.SEND_PERMISSION,
-      null
+      null,
+      ContextCompat.RECEIVER_EXPORTED,
     )
     lifecycleScope.launch { waitForSms() }
   }
 
   // Retry starting the SMS code retriever after a permission request.
   @Deprecated("Deprecated in Java")
-  @Suppress("DEPRECATION")
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode != Activity.RESULT_OK) return

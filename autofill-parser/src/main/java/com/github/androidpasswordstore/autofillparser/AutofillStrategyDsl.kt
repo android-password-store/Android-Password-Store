@@ -357,13 +357,17 @@ private constructor(
       logcat { "$name: Matched $type" }
       when (type) {
         FillableFieldType.Username -> {
-          check(matchResult.size == 1 && scenarioBuilder.username == null)
+          check(matchResult.size == 1 && scenarioBuilder.username == null) {
+            "Scenario has existing username or too many matches"
+          }
           scenarioBuilder.username = matchResult.single()
           // Hidden username fields should be saved but not filled.
           scenarioBuilder.fillUsername = scenarioBuilder.username!!.isVisible == true
         }
         FillableFieldType.Otp -> {
-          check(matchResult.size == 1 && scenarioBuilder.otp == null)
+          check(matchResult.size == 1 && scenarioBuilder.otp == null) {
+            "Scenario has existing OTP or too many matches"
+          }
           scenarioBuilder.otp = matchResult.single()
         }
         FillableFieldType.CurrentPassword -> scenarioBuilder.currentPassword.addAll(matchResult)

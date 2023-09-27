@@ -40,7 +40,9 @@ class AutofillPublisherChangedException(val formOrigin: FormOrigin) :
   ) {
 
   init {
-    require(formOrigin is FormOrigin.App)
+    require(formOrigin is FormOrigin.App) {
+      "${this::class.java.simpleName} is only applicable for apps"
+    }
   }
 }
 

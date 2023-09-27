@@ -116,7 +116,7 @@ private class AutofillFormParser(
       if (trustedBrowserInfo?.multiOriginMethod == BrowserMultiOriginMethod.WebView) {
         FormField(node, fieldIndex, true, inheritedWebOrigin)
       } else {
-        check(inheritedWebOrigin == null)
+        check(inheritedWebOrigin == null) { "'inheritedWebOrigin' should be null here" }
         FormField(node, fieldIndex, false)
       }
     if (field.relevantField) {

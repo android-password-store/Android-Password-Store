@@ -244,7 +244,7 @@ private constructor(
   // https://developer.android.com/reference/android/service/autofill/SaveInfo#FLAG_DELAY_SAVE
   private fun makeSaveInfo(): SaveInfo? {
     if (!canBeSaved) return null
-    check(saveFlags != null)
+    check(saveFlags != null) { "saveFlags must not be null" }
     val idsToSave = scenario.fieldsToSave.toTypedArray()
     if (idsToSave.isEmpty()) return null
     var saveDataTypes = SaveInfo.SAVE_DATA_TYPE_PASSWORD

@@ -177,7 +177,10 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     recyclerAdapter.makeSelectable(recyclerView)
     registerForContextMenu(recyclerView)
 
-    val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
+    val path =
+      requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH)) {
+        "Cannot navigate if ${PasswordStore.REQUEST_ARG_PATH} is not provided"
+      }
     model.navigateTo(File(path), pushPreviousLocation = false)
     model.searchResult
       .flowWithLifecycle(lifecycle)
