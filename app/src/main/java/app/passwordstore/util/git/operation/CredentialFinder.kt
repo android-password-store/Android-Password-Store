@@ -15,6 +15,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
 import app.passwordstore.injection.prefs.GitPreferences
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.git.sshj.InteractivePasswordFinder
 import app.passwordstore.util.settings.AuthMode
 import app.passwordstore.util.settings.PreferenceKeys
@@ -32,7 +33,8 @@ import kotlin.coroutines.resume
 class CredentialFinder(
   private val callingActivity: FragmentActivity,
   private val authMode: AuthMode,
-) : InteractivePasswordFinder() {
+  dispatcherProvider: DispatcherProvider,
+) : InteractivePasswordFinder(dispatcherProvider) {
 
   private val hiltEntryPoint =
     EntryPointAccessors.fromApplication(
