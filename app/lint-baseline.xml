@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.3.0-alpha01" type="baseline" client="gradle" dependencies="false" name="AGP (8.3.0-alpha01)" variant="all" version="8.3.0-alpha01">
+<issues format="6" by="lint 8.3.0-alpha05" type="baseline" client="gradle" dependencies="false" name="AGP (8.3.0-alpha05)" variant="all" version="8.3.0-alpha05">
 
     <issue
         id="StopShip"
@@ -27,17 +27,6 @@
     </issue>
 
     <issue
-        id="RawDispatchersUse"
-        message="Use SlackDispatchers."
-        errorLine1="      runBlocking(Dispatchers.Main) { suspendCoroutine { cont -> askForPassword(cont, isRetry) } }"
-        errorLine2="                  ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/git/sshj/SshjSessionFactory.kt"
-            line="60"
-            column="19"/>
-    </issue>
-
-    <issue
         id="DenyListedApi"
         message="Use Context#getDrawableCompat() instead"
         errorLine1="                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)"
@@ -57,39 +46,6 @@
             file="src/main/java/app/passwordstore/ui/adapters/FieldItemAdapter.kt"
             line="67"
             column="31"/>
-    </issue>
-
-    <issue
-        id="DenyListedApi"
-        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="      .launchIn(lifecycleScope)"
-        errorLine2="       ~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/passwords/PasswordFragment.kt"
-            line="212"
-            column="8"/>
-    </issue>
-
-    <issue
-        id="DenyListedApi"
-        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="      .launchIn(lifecycleScope)"
-        errorLine2="       ~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/dialogs/PasswordGeneratorDialogFragment.kt"
-            line="68"
-            column="8"/>
-    </issue>
-
-    <issue
-        id="DenyListedApi"
-        message="Use the structured concurrent CoroutineScope#launch and Flow#collect APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect can be refactored into standalone suspend funs and mixed in with regular control flow in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at the same time hide the suspend context, encouraging the developer to continue working in the reactive domain."
-        errorLine1="      .launchIn(lifecycleScope)"
-        errorLine2="       ~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/ui/folderselect/SelectFolderFragment.kt"
-            line="65"
-            column="8"/>
     </issue>
 
     <issue
@@ -225,39 +181,6 @@
             file="src/main/res/layout/oreo_autofill_filter_row.xml"
             line="43"
             column="4"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Should explicitly declare type here since implicit type does not specify nullness (Lazy&lt;Array&lt;(GitCommand&lt;out (Any or Any?)> or GitCommand&lt;out (Any or Any?)>?)>>)"
-        errorLine1="  override val commands by unsafeLazy {"
-        errorLine2="               ~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/git/operation/BreakOutOfDetached.kt"
-            line="33"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Should explicitly declare type here since implicit type does not specify nullness (Array&lt;(GitCommand&lt;out (Any or Any?)> or GitCommand&lt;out (Any or Any?)>?)>)"
-        errorLine1="  override val commands ="
-        errorLine2="               ~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/git/operation/ResetToRemoteOperation.kt"
-            line="14"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Should explicitly declare type here since implicit type does not specify nullness (Array&lt;(GitCommand&lt;out (Any or Any?)> or GitCommand&lt;out (Any or Any?)>?)>)"
-        errorLine1="  override val commands ="
-        errorLine2="               ~~~~~~~~">
-        <location
-            file="src/main/java/app/passwordstore/util/git/operation/SyncOperation.kt"
-            line="14"
-            column="16"/>
     </issue>
 
 </issues>
