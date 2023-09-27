@@ -17,8 +17,8 @@ import app.passwordstore.crypto.errors.KeyDirectoryUnavailableException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
 import app.passwordstore.crypto.errors.UnusableKeyException
-import app.passwordstore.util.coroutines.runSuspendCatching
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.coroutines.runSuspendCatching
 import com.github.michaelbull.result.unwrap
 import java.io.File
 import javax.inject.Inject
