@@ -18,7 +18,7 @@ jobs:
         java-version: 20
 
     - name: Upload binaries
-      uses: gradle/gradle-build-action@b5126f31dbc19dd434c3269bf8c28c315e121da2 # v2.8.1
+      uses: gradle/gradle-build-action@d1b726d8c1e0cc120447ad1a950d6e6794c51ad8 # v2.9.0
       with:
         arguments: --no-configuration-cache :autofill-parser:publishAllPublicationsToMavenCentralRepository
         gradle-home-cache-cleanup: true
