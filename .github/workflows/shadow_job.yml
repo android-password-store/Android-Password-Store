@@ -52,7 +52,7 @@ jobs:
       run: printf 'y\ny\ny\ny\ny\n' | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
     - name: Run checks
-      uses: gradle/gradle-build-action@d1b726d8c1e0cc120447ad1a950d6e6794c51ad8 # v2.9.0
+      uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2.9.0
       env:
         DEP_OVERRIDE: true
         DEP_OVERRIDE_agp: ${{ matrix.agp-version }}
