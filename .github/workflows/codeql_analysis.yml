@@ -31,7 +31,7 @@ jobs:
         java-version: 20
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@2cb752a87e96af96708ab57187ab6372ee1973ab # v2.22.0
+      uses: github/codeql-action/init@fdcae64e1484d349b3366718cdfef3d404390e85 # v2.22.1
       with:
         languages: java
         tools: latest
@@ -45,6 +45,6 @@ jobs:
         arguments: assembleNonFreeRelease
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@2cb752a87e96af96708ab57187ab6372ee1973ab # v2.22.0
+      uses: github/codeql-action/analyze@fdcae64e1484d349b3366718cdfef3d404390e85 # v2.22.1
       with:
         category: "/language:java"
