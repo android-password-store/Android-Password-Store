@@ -93,7 +93,7 @@ thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.2"
 thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android-startup", version.ref = "leakcanary" }
 thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.6.1"
 thirdparty-slf4j-api = { module = "org.slf4j:slf4j-api", version = { strictly = "[1.7, 1.8[", prefer = "1.7.36" } }
-thirdparty-sshj = "com.hierynomus:sshj:0.36.0"
+thirdparty-sshj = "com.hierynomus:sshj:0.37.0"
 thirdparty-uri = "com.eygraber:uri-kmp:0.0.15"
 thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:1.0.0-alpha04"
 
