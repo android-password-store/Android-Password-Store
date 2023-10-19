@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.0-alpha07"
+agp = "8.3.0-alpha08"
 androidxActivity = "1.8.0"
 bouncycastle = "1.76"
 moshi = "1.15.0"
