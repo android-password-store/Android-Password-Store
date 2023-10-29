@@ -40,6 +40,7 @@
   <string name="git_commit_remove_text">Удалить %1$sиз хранилища.</string>
   <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
   <string name="git_commit_move_multiple_text">Переместить несколько паролей в %1$s.</string>
+  <string name="git_commit_gpg_id">Инициализация GPG ID через %1$s.</string>
   <!-- PGPHandler -->
   <string name="clipboard_copied_text">Скопировано в буфер обмена</string>
   <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
@@ -107,11 +108,15 @@
   <string name="pref_category_autofill_title">Автозаполнение</string>
   <string name="pref_autofill_enable_title">Включить автозаполнение</string>
   <string name="pref_category_misc_title">Другое</string>
+  <string name="pref_clear_clipboard_summary">Включите, чтобы заполнить историю буфера обмена на устройствах, поддерживающих такую функцию, последовательными числами, стирая любые пароли</string>
   <string name="pref_git_delete_repo_summary">Удалить локальный (скрытый) репозиторий</string>
   <string name="prefs_export_passwords_title">Экспортировать пароли</string>
   <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
   <string name="pref_import_pgp_key_title">Импортировать PGP-ключ</string>
   <string name="pref_pgp_key_manager_title">Менеджер ключей</string>
+  <string name="pref_pgp_ascii_armor_title">Шифрование в режиме брони ASCII</string>
+  <string name="pref_passphrase_cache_title">Включить кэширование ключевой фразы</string>
+  <string name="pref_passphrase_cache_summary">ВНИМАНИЕ: эта функция работающая, но очень экспериментальная.</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Сгенерировать пароль</string>
   <string name="pwgen_generate">Сгенерировать</string>
@@ -266,6 +271,7 @@
   <string name="add_otp">Добавить OTP</string>
   <string name="otp_import_success">Конфигурация TOTP успешно импортирована</string>
   <string name="otp_import_failure_generic">Не удалось импортировать конфигурацию TOTP</string>
+  <string name="otp_import_failure_no_selection">Не выбран файл изображения</string>
   <string name="exporting_passwords">Экспорт паролей…</string>
   <string name="invalid_gpg_id">Найден .gpg-id, но он содержит неверный ID ключа, fingerprint или ID пользователя</string>
   <string name="invalid_filename_text">Имя файла не должно содержать \'/\', укажите директорию выше</string>
@@ -283,6 +289,7 @@
   <string name="git_break_out_of_detached_success">При попытке rebase\'а возник конфликт. Ваша локальная ветка %1$s была запушена %2$s\n Используйте эту ветку для разрешения конфликтов с помощью компьютера</string>
   <string name="git_break_out_of_detached_unneeded">Не нужно пушить в другую ветку - rebase не был запущен</string>
   <!-- GPG key selection in folder creation -->
+  <string name="gpg_key_select_mandatory">Для продолжения необходимо выбрать GPG-ключ</string>
   <string name="folder_creation_err_file_exists">Файл с таким именем уже существует</string>
   <string name="folder_creation_err_folder_exists">Папка с таким именем уже существует</string>
   <!-- Onboarding flow -->
@@ -311,7 +318,11 @@
   <string name="clear_saved_host_key">Очистить сохраненный ключ хоста</string>
   <string name="clear_saved_host_key_success">Сохраненный ключ хоста был успешно удален!</string>
   <string name="otp_import_qr_code">Отсканировать QR-код</string>
+  <string name="otp_import_from_file">Выберите изображение</string>
   <string name="otp_import_manual_entry">Ввести вручную</string>
   <string name="otp_import_manual_hint_account">Учетная запись</string>
   <string name="place_shortcut_on_home_screen">Разместить ярлык на рабочем столе</string>
+  <string name="password_list_fab_content_description">Создать новый пароль или папку</string>
+  <string name="pgp_key_import_failed">Не удалось импортировать PGP-ключ</string>
+  <string name="pgp_key_import_succeeded">PGP ключ успешно импортирован</string>
 </resources>
