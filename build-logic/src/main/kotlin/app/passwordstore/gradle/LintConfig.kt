@@ -28,6 +28,8 @@ object LintConfig {
     disable += "TypographyQuotes"
     // False-positives abound due to use of ViewBinding
     disable += "UnusedIds"
+    // False-positive, not relevant on the API levels we support
+    disable += "TrulyRandom"
     if (!isJVM) {
       // Enable compose-lint-checks' Material 2 detector
       enable += "ComposeM2Api"
