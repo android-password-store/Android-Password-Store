@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.0-alpha13"
 androidxActivity = "1.8.0"
-bouncycastle = "1.76"
+bouncycastle = "1.77"
 moshi = "1.15.0"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.5.4-dev-k1.9.20-50f08dfa4b4"
