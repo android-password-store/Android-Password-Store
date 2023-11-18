@@ -113,6 +113,7 @@ dependencyResolutionManagement {
         includeGroup("androidx.localbroadcastmanager")
         includeGroup("androidx.preference")
         includeGroup("androidx.print")
+        includeGroup("androidx.privacysandbox.tools")
         includeGroup("androidx.profileinstaller")
         includeGroup("androidx.recyclerview")
         includeGroup("androidx.resourceinspection")
