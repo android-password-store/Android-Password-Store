@@ -31,14 +31,14 @@
   <string name="edit">Редактировать</string>
   <string name="delete">Удалить</string>
   <string name="password_exists_title">Пароль уже существует!</string>
-  <string name="password_exists_message">Это перезапишет %1$sна%2$s</string>
+  <string name="password_exists_message">Это перезапишет %1$s на %2$s</string>
   <string name="password_move_error_title">Ошибка при перемещении паролей</string>
   <string name="password_move_error_message">Не удалось переместить %1$s в %2$s</string>
   <!-- git commits -->
   <string name="git_commit_add_text">Добавлен пароль %1$s из хранилища.</string>
   <string name="git_commit_edit_text">Отредактирован %1$s из хранилища.</string>
-  <string name="git_commit_remove_text">Удалить %1$sиз хранилища.</string>
-  <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
+  <string name="git_commit_remove_text">Удалить %1$s из хранилища.</string>
+  <string name="git_commit_move_text">Переименовать %1$s в %2$s.</string>
   <string name="git_commit_move_multiple_text">Переместить несколько паролей в %1$s.</string>
   <string name="git_commit_gpg_id">Инициализация GPG ID через %1$s.</string>
   <!-- PGPHandler -->
