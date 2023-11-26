@@ -15,6 +15,11 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
+import kotlin.io.path.absolute
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.exists
 import logcat.LogPriority.ERROR
 import logcat.LogPriority.WARN
 import logcat.logcat
@@ -135,7 +140,7 @@ class AutofillMatcher {
      * The maximum number of matches is limited by [MAX_NUM_MATCHES] since older versions of Android
      * may crash when too many datasets are offered.
      */
-    fun addMatchFor(context: Context, formOrigin: FormOrigin, file: File) {
+    fun addMatchFor(context: Context, formOrigin: FormOrigin, file: Path) {
       if (!file.exists()) return
       if (hasFormOriginHashChanged(context, formOrigin)) {
         // This should never happen since we already verified the publisher in
@@ -145,8 +150,8 @@ class AutofillMatcher {
       }
       val matchPreferences = context.matchPreferences(formOrigin)
       val matchedFiles =
-        matchPreferences.getStringSet(matchesKey(formOrigin), emptySet())!!.map { File(it) }
-      val newFiles = setOf(file.absoluteFile).union(matchedFiles)
+        matchPreferences.getStringSet(matchesKey(formOrigin), emptySet()).orEmpty().map(Paths::get)
+      val newFiles = setOf(file.absolute()).union(matchedFiles)
       if (newFiles.size > MAX_NUM_MATCHES) {
         Toast.makeText(
             context,
@@ -157,7 +162,7 @@ class AutofillMatcher {
         return
       }
       matchPreferences.edit {
-        putStringSet(matchesKey(formOrigin), newFiles.map { it.absolutePath }.toSet())
+        putStringSet(matchesKey(formOrigin), newFiles.map(Path::absolutePathString).toSet())
       }
       storeFormOriginHash(context, formOrigin)
       logcat { "Stored match for $formOrigin" }

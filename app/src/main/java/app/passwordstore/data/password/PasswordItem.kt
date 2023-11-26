@@ -9,19 +9,25 @@ import android.content.Intent
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.main.LaunchActivity
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.pathString
+import kotlin.io.path.relativeTo
 
 data class PasswordItem(
-  val name: String,
   val parent: PasswordItem? = null,
   val type: Char,
-  val file: File,
-  val rootDir: File
+  val file: Path,
+  val rootDir: Path
 ) : Comparable<PasswordItem> {
 
-  val fullPathToParent = file.absolutePath.replace(rootDir.absolutePath, "").replace(file.name, "")
+  val name = file.nameWithoutExtension
 
-  val longName = BasePGPActivity.getLongName(fullPathToParent, rootDir.absolutePath, toString())
+  val fullPathToParent = file.relativeTo(rootDir).parent.pathString
+
+  val longName =
+    BasePGPActivity.getLongName(fullPathToParent, rootDir.absolutePathString(), toString())
 
   override fun equals(other: Any?): Boolean {
     return (other is PasswordItem) && (other.file == file)
@@ -32,7 +38,7 @@ data class PasswordItem(
   }
 
   override fun toString(): String {
-    return name.replace("\\.gpg$".toRegex(), "")
+    return name
   }
 
   override fun hashCode(): Int {
@@ -43,8 +49,8 @@ data class PasswordItem(
   fun createAuthEnabledIntent(context: Context): Intent {
     val intent = Intent(context, LaunchActivity::class.java)
     intent.putExtra("NAME", toString())
-    intent.putExtra("FILE_PATH", file.absolutePath)
-    intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePath)
+    intent.putExtra("FILE_PATH", file.absolutePathString())
+    intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePathString())
     intent.action = LaunchActivity.ACTION_DECRYPT_PASS
     return intent
   }
@@ -55,23 +61,23 @@ data class PasswordItem(
     const val TYPE_PASSWORD = 'p'
 
     @JvmStatic
-    fun newCategory(name: String, file: File, parent: PasswordItem, rootDir: File): PasswordItem {
-      return PasswordItem(name, parent, TYPE_CATEGORY, file, rootDir)
+    fun newCategory(path: Path, parent: PasswordItem, rootDir: Path): PasswordItem {
+      return PasswordItem(parent, TYPE_CATEGORY, path, rootDir)
     }
 
     @JvmStatic
-    fun newCategory(name: String, file: File, rootDir: File): PasswordItem {
-      return PasswordItem(name, null, TYPE_CATEGORY, file, rootDir)
+    fun newCategory(path: Path, rootDir: Path): PasswordItem {
+      return PasswordItem(null, TYPE_CATEGORY, path, rootDir)
     }
 
     @JvmStatic
-    fun newPassword(name: String, file: File, parent: PasswordItem, rootDir: File): PasswordItem {
-      return PasswordItem(name, parent, TYPE_PASSWORD, file, rootDir)
+    fun newPassword(path: Path, parent: PasswordItem, rootDir: Path): PasswordItem {
+      return PasswordItem(parent, TYPE_PASSWORD, path, rootDir)
     }
 
     @JvmStatic
-    fun newPassword(name: String, file: File, rootDir: File): PasswordItem {
-      return PasswordItem(name, null, TYPE_PASSWORD, file, rootDir)
+    fun newPassword(path: Path, rootDir: Path): PasswordItem {
+      return PasswordItem(null, TYPE_PASSWORD, path, rootDir)
     }
   }
 }

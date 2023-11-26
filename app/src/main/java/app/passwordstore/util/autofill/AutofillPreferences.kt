@@ -12,7 +12,11 @@ import app.passwordstore.util.services.getDefaultUsername
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.autofillparser.Credentials
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.name
+import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.pathString
 
 enum class DirectoryStructure(val value: String) {
   EncryptedUsername("encrypted_username"),
@@ -29,11 +33,11 @@ enum class DirectoryStructure(val value: String) {
    * - work/example.org/john@doe.org/password.gpg --> john@doe.org (DirectoryBased)
    * - Temporary PIN.gpg --> Temporary PIN (DirectoryBased, fallback)
    */
-  fun getUsernameFor(file: File): String? =
+  fun getUsernameFor(file: Path): String? =
     when (this) {
       EncryptedUsername -> null
       FileBased -> file.nameWithoutExtension
-      DirectoryBased -> file.parentFile?.name ?: file.nameWithoutExtension
+      DirectoryBased -> file.parent?.name ?: file.nameWithoutExtension
     }
 
   /**
@@ -50,11 +54,11 @@ enum class DirectoryStructure(val value: String) {
    * - work/example.org/john@doe.org/password.gpg --> example.org (DirectoryBased)
    * - Temporary PIN.gpg --> null (DirectoryBased)
    */
-  fun getIdentifierFor(file: File): String? =
+  fun getIdentifierFor(file: Path): String? =
     when (this) {
       EncryptedUsername -> file.nameWithoutExtension
-      FileBased -> file.parentFile?.name ?: file.nameWithoutExtension
-      DirectoryBased -> file.parentFile?.parent
+      FileBased -> file.parent?.name ?: file.nameWithoutExtension
+      DirectoryBased -> file.parent?.parent?.pathString
     }
 
   /**
@@ -132,13 +136,13 @@ object AutofillPreferences {
 
   fun credentialsFromStoreEntry(
     context: Context,
-    file: File,
+    path: Path,
     entry: PasswordEntry,
     directoryStructure: DirectoryStructure
   ): Credentials {
     // Always give priority to a username stored in the encrypted extras
     val username =
-      entry.username ?: directoryStructure.getUsernameFor(file) ?: context.getDefaultUsername()
+      entry.username ?: directoryStructure.getUsernameFor(path) ?: context.getDefaultUsername()
     val totp = if (entry.hasTotp()) entry.currentOtp else null
     return Credentials(username, entry.password, totp)
   }

@@ -23,6 +23,10 @@ import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
+import java.nio.file.LinkOption
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.notExists
 import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
@@ -55,7 +59,9 @@ class CloneFragment : Fragment(R.layout.fragment_clone) {
   private fun createRepository() {
     val localDir = PasswordRepository.getRepositoryDirectory()
     runCatching {
-        check(localDir.exists() || localDir.mkdir()) { "Failed to create directory!" }
+        if (localDir.notExists(LinkOption.NOFOLLOW_LINKS)) {
+          localDir.createDirectories()
+        }
         PasswordRepository.createRepository(localDir)
         if (!PasswordRepository.isInitialized) {
           PasswordRepository.initialize()
@@ -64,7 +70,7 @@ class CloneFragment : Fragment(R.layout.fragment_clone) {
       }
       .onFailure { e ->
         logcat(ERROR) { e.asLog() }
-        if (!localDir.delete()) {
+        if (!localDir.deleteIfExists()) {
           logcat { "Failed to delete local repository: $localDir" }
         }
         finish()

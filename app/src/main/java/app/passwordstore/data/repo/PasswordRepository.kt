@@ -14,7 +14,16 @@ import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import java.io.File
+import java.nio.file.LinkOption
+import java.nio.file.Path
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.deleteRecursively
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isHidden
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.name
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
@@ -28,7 +37,7 @@ object PasswordRepository {
   var repository: Repository? = null
   private val settings by unsafeLazy { Application.instance.sharedPrefs }
   private val filesDir
-    get() = Application.instance.filesDir
+    get() = Application.instance.filesDir.toPath()
 
   val isInitialized: Boolean
     get() = repository != null
@@ -41,19 +50,20 @@ object PasswordRepository {
    * Takes in a [repositoryDir] to initialize a Git repository with, and assigns it to [repository]
    * as static state.
    */
-  private fun initializeRepository(repositoryDir: File) {
+  private fun initializeRepository(repositoryDir: Path) {
     val builder = FileRepositoryBuilder()
     repository =
-      runCatching { builder.setGitDir(repositoryDir).build() }
+      runCatching { builder.setGitDir(repositoryDir.toFile()).build() }
         .getOrElse { e ->
           e.printStackTrace()
           null
         }
   }
 
-  fun createRepository(repositoryDir: File) {
-    repositoryDir.delete()
-    repository = Git.init().setDirectory(repositoryDir).call().repository
+  @OptIn(ExperimentalPathApi::class)
+  fun createRepository(repositoryDir: Path) {
+    repositoryDir.deleteRecursively()
+    repository = Git.init().setDirectory(repositoryDir.toFile()).call().repository
   }
 
   // TODO add multiple remotes support for pull/push
@@ -106,19 +116,15 @@ object PasswordRepository {
     repository = null
   }
 
-  fun getRepositoryDirectory(): File {
-    return File(filesDir.toString(), "/store")
+  fun getRepositoryDirectory(): Path {
+    return filesDir.resolve("store")
   }
 
   fun initialize(): Repository? {
     val dir = getRepositoryDirectory()
     // Un-initialize the repo if the dir does not exist or is absolutely empty
     settings.edit {
-      if (
-        !dir.exists() ||
-          !dir.isDirectory ||
-          requireNotNull(dir.listFiles()) { "Failed to list files in ${dir.path}" }.isEmpty()
-      ) {
+      if (!dir.exists() || !dir.isDirectory() || dir.listDirectoryEntries().isEmpty()) {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
       } else {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true)
@@ -148,14 +154,9 @@ object PasswordRepository {
    * @param path the directory path
    * @return the list of gpg files in that directory
    */
-  private fun getFilesList(path: File): ArrayList<File> {
-    if (!path.exists()) return ArrayList()
-    val files =
-      (path.listFiles { file -> file.isDirectory || file.extension == "gpg" } ?: emptyArray())
-        .toList()
-    val items = ArrayList<File>()
-    items.addAll(files)
-    return items
+  private fun getFilesList(path: Path): List<Path> {
+    if (!path.exists()) return emptyList()
+    return path.listDirectoryEntries("*.gpg").filter { it.isRegularFile(LinkOption.NOFOLLOW_LINKS) }
   }
 
   /**
@@ -164,26 +165,22 @@ object PasswordRepository {
    * @param path the directory path
    * @return a list of password items
    */
-  fun getPasswords(
-    path: File,
-    rootDir: File,
-    sortOrder: PasswordSortOrder
-  ): ArrayList<PasswordItem> {
+  fun getPasswords(path: Path, rootDir: Path, sortOrder: PasswordSortOrder): List<PasswordItem> {
     // We need to recover the passwords then parse the files
-    val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
-    val passwordList = ArrayList<PasswordItem>()
+    var passList = getFilesList(path).sortedBy(Path::name)
+    val passwordList = mutableListOf<PasswordItem>()
     val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
 
-    if (passList.size == 0) return passwordList
+    if (passList.isEmpty()) return passwordList
     if (!showHidden) {
-      passList.filter { !it.isHidden }.toCollection(passList.apply { clear() })
+      passList = passList.filterNot(Path::isHidden)
     }
-    passList.forEach { file ->
+    passList.forEach { pass ->
       passwordList.add(
-        if (file.isFile) {
-          PasswordItem.newPassword(file.name, file, rootDir)
+        if (pass.isRegularFile(LinkOption.NOFOLLOW_LINKS)) {
+          PasswordItem.newPassword(pass, rootDir)
         } else {
-          PasswordItem.newCategory(file.name, file, rootDir)
+          PasswordItem.newCategory(pass, rootDir)
         }
       )
     }

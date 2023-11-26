@@ -34,8 +34,11 @@ import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
-import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.inject.Inject
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.readBytes
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -110,7 +113,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
               gpgIdentifiers.first()
             )
           if (cachedPassphrase != null) {
-            decryptWithPassphrase(File(filePath), clientState, action, cachedPassphrase)
+            decryptWithPassphrase(Paths.get(filePath), clientState, action, cachedPassphrase)
           } else {
             askPassphrase(filePath, clientState, action)
           }
@@ -126,19 +129,19 @@ class AutofillDecryptActivity : BasePGPActivity() {
       if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
         val value = bundle.getString(PasswordDialog.PASSWORD_RESULT_KEY)!!
         lifecycleScope.launch(dispatcherProvider.main()) {
-          decryptWithPassphrase(File(filePath), clientState, action, value)
+          decryptWithPassphrase(Paths.get(filePath), clientState, action, value)
         }
       }
     }
   }
 
   private suspend fun decryptWithPassphrase(
-    filePath: File,
+    path: Path,
     clientState: Bundle,
     action: AutofillAction,
     password: String,
   ) {
-    val credentials = decryptCredential(filePath, password)
+    val credentials = decryptCredential(path, password)
     if (credentials == null) {
       setResult(RESULT_CANCELED)
     } else {
@@ -159,7 +162,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
     withContext(dispatcherProvider.main()) { finish() }
   }
 
-  private suspend fun decryptCredential(file: File, password: String): Credentials? {
+  private suspend fun decryptCredential(file: Path, password: String): Credentials? {
     val gpgIdentifiers = getPGPIdentifiers("") ?: return null
     runCatching { file.readBytes().inputStream() }
       .onFailure { e ->
@@ -204,19 +207,19 @@ class AutofillDecryptActivity : BasePGPActivity() {
 
     private var decryptFileRequestCode = 1
 
-    fun makeDecryptFileIntent(file: File, forwardedExtras: Bundle, context: Context): Intent {
+    fun makeDecryptFileIntent(file: Path, forwardedExtras: Bundle, context: Context): Intent {
       return Intent(context, AutofillDecryptActivity::class.java).apply {
         putExtras(forwardedExtras)
         putExtra(EXTRA_SEARCH_ACTION, true)
-        putExtra(EXTRA_FILE_PATH, file.absolutePath)
+        putExtra(EXTRA_FILE_PATH, file.absolutePathString())
       }
     }
 
-    fun makeDecryptFileIntentSender(file: File, context: Context): IntentSender {
+    fun makeDecryptFileIntentSender(file: Path, context: Context): IntentSender {
       val intent =
         Intent(context, AutofillDecryptActivity::class.java).apply {
           putExtra(EXTRA_SEARCH_ACTION, false)
-          putExtra(EXTRA_FILE_PATH, file.absolutePath)
+          putExtra(EXTRA_FILE_PATH, file.absolutePathString())
         }
       return PendingIntent.getActivity(
           context,

@@ -38,7 +38,6 @@ import app.passwordstore.ui.settings.SettingsActivity
 import app.passwordstore.util.autofill.AutofillMatcher
 import app.passwordstore.util.extensions.base64
 import app.passwordstore.util.extensions.commitChange
-import app.passwordstore.util.extensions.contains
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.isInsideRepository
 import app.passwordstore.util.extensions.launchActivity
@@ -57,6 +56,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.lang.Character.UnicodeBlock
 import javax.inject.Inject
+import kotlin.io.path.absolute
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.name
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -94,7 +96,7 @@ class PasswordStore : BaseGitActivity() {
             "'SELECTED_FOLDER_PATH' intent extra must be set"
           }
         )
-      val repositoryPath = PasswordRepository.getRepositoryDirectory().absolutePath
+      val repositoryPath = PasswordRepository.getRepositoryDirectory().absolutePathString()
       if (!target.isDirectory) {
         logcat(ERROR) { "Tried moving passwords to a non-existing folder." }
         return@registerForActivityResult
@@ -163,7 +165,7 @@ class PasswordStore : BaseGitActivity() {
             }
           }
           else -> {
-            val repoDir = PasswordRepository.getRepositoryDirectory().absolutePath
+            val repoDir = PasswordRepository.getRepositoryDirectory().absolutePathString()
             val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
             withContext(dispatcherProvider.main()) {
               commitChange(
@@ -204,7 +206,7 @@ class PasswordStore : BaseGitActivity() {
 
     lifecycleScope.launch {
       model.currentDir.flowWithLifecycle(lifecycle).collect { dir ->
-        val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
+        val basePath = PasswordRepository.getRepositoryDirectory().absolute()
         supportActionBar?.apply {
           if (dir != basePath) title = dir.name else setTitle(R.string.app_name)
         }

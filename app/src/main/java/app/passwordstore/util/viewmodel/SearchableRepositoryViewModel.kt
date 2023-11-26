@@ -33,9 +33,21 @@ import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.text.Collator
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.exists
+import kotlin.io.path.extension
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isHidden
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.name
+import kotlin.io.path.pathString
+import kotlin.io.path.relativeTo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +55,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -54,9 +65,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
-private fun File.toPasswordItem() =
-  if (isFile) PasswordItem.newPassword(name, this, PasswordRepository.getRepositoryDirectory())
-  else PasswordItem.newCategory(name, this, PasswordRepository.getRepositoryDirectory())
+private fun Path.toPasswordItem() =
+  if (isRegularFile()) PasswordItem.newPassword(this, PasswordRepository.getRepositoryDirectory())
+  else PasswordItem.newCategory(this, PasswordRepository.getRepositoryDirectory())
 
 private fun PasswordItem.fuzzyMatch(filter: String): Int {
   val (_, score) = Fuzzy.fuzzyMatch(filter, longName)
@@ -89,7 +100,7 @@ private fun PasswordItem.Companion.makeComparator(
 }
 
 val PasswordItem.stableId: String
-  get() = file.absolutePath
+  get() = file.absolutePathString()
 
 enum class FilterMode {
   NoFilter,
@@ -151,7 +162,7 @@ constructor(
     get() = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
 
   private data class SearchAction(
-    val baseDirectory: File,
+    val baseDirectory: Path,
     val filter: String,
     val filterMode: FilterMode,
     val searchMode: SearchMode,
@@ -162,7 +173,7 @@ constructor(
   )
 
   private fun makeSearchAction(
-    baseDirectory: File,
+    baseDirectory: Path,
     filter: String,
     filterMode: FilterMode,
     searchMode: SearchMode,
@@ -206,9 +217,9 @@ constructor(
         val prefilteredResultFlow =
           when (searchAction.listMode) {
             ListMode.FilesOnly ->
-              listResultFlow.filter { it.isFile }.flowOn(dispatcherProvider.io())
+              listResultFlow.filter { it.isRegularFile() }.flowOn(dispatcherProvider.io())
             ListMode.DirectoriesOnly ->
-              listResultFlow.filter { it.isDirectory }.flowOn(dispatcherProvider.io())
+              listResultFlow.filter { it.isDirectory() }.flowOn(dispatcherProvider.io())
             ListMode.AllEntries -> listResultFlow
           }
         val passwordList =
@@ -223,7 +234,7 @@ constructor(
             FilterMode.Exact -> {
               prefilteredResultFlow
                 .filter { absoluteFile ->
-                  absoluteFile.relativeTo(root).path.contains(searchAction.filter)
+                  absoluteFile.relativeTo(root).pathString.contains(searchAction.filter)
                 }
                 .map { it.toPasswordItem() }
                 .flowOn(dispatcherProvider.io())
@@ -238,7 +249,7 @@ constructor(
               if (regex != null) {
                 prefilteredResultFlow
                   .filter { absoluteFile ->
-                    regex.containsMatchIn(absoluteFile.relativeTo(root).path)
+                    regex.containsMatchIn(absoluteFile.relativeTo(root).pathString)
                   }
                   .map { it.toPasswordItem() }
                   .flowOn(dispatcherProvider.io())
@@ -268,27 +279,28 @@ constructor(
       }
       .flowOn(dispatcherProvider.io())
 
-  private fun shouldTake(file: File) =
+  private fun shouldTake(file: Path) =
     with(file) {
       if (showHiddenContents) {
         return !file.name.startsWith(".git")
       }
-      if (isDirectory) {
-        !isHidden
+      if (isDirectory()) {
+        !isHidden()
       } else {
-        !isHidden && file.extension == "gpg"
+        !isHidden() && file.extension == "gpg"
       }
     }
 
-  private fun listFiles(dir: File): Flow<File> {
-    return dir.listFiles(::shouldTake)?.asFlow() ?: emptyFlow()
+  private fun listFiles(dir: Path): Flow<Path> {
+    return Files.newDirectoryStream(dir, ::shouldTake).asFlow()
   }
 
-  private fun listFilesRecursively(dir: File): Flow<File> {
+  private fun listFilesRecursively(dir: Path): Flow<Path> {
     return dir
+      .toFile()
       // Take top directory even if it is hidden.
       .walkTopDown()
-      .onEnter { file -> file == dir || shouldTake(file) }
+      .onEnter { file -> file.toPath() == dir || shouldTake(file.toPath()) }
       .asFlow()
       // Skip the root directory
       .drop(1)
@@ -296,24 +308,25 @@ constructor(
         yield()
         it
       }
+      .map { it.toPath() }
       .filter(::shouldTake)
   }
 
   private val _currentDir = MutableStateFlow(root)
   val currentDir = _currentDir.asStateFlow()
 
-  data class NavigationStackEntry(val dir: File, val recyclerViewState: Parcelable?)
+  data class NavigationStackEntry(val dir: Path, val recyclerViewState: Parcelable?)
 
   private val navigationStack = ArrayDeque<NavigationStackEntry>()
 
   fun navigateTo(
-    newDirectory: File = root,
+    newDirectory: Path = root,
     listMode: ListMode = ListMode.AllEntries,
     recyclerViewState: Parcelable? = null,
     pushPreviousLocation: Boolean = true
   ) {
     if (!newDirectory.exists()) return
-    require(newDirectory.isDirectory) { "Can only navigate to a directory" }
+    require(newDirectory.isDirectory()) { "Can only navigate to a directory" }
     if (pushPreviousLocation) {
       navigationStack.addFirst(NavigationStackEntry(_currentDir.value, recyclerViewState))
     }
@@ -353,12 +366,12 @@ constructor(
 
   fun search(
     filter: String,
-    baseDirectory: File? = null,
+    baseDirectory: Path? = null,
     filterMode: FilterMode = FilterMode.Fuzzy,
     searchMode: SearchMode? = null,
     listMode: ListMode = ListMode.AllEntries
   ) {
-    require(baseDirectory?.isDirectory != false) { "Can only search in a directory" }
+    require(baseDirectory?.isDirectory() != false) { "Can only search in a directory" }
     searchActionFlow.update {
       makeSearchAction(
         filter = filter,
@@ -401,7 +414,7 @@ constructor(
 private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() {
 
   override fun areItemsTheSame(oldItem: PasswordItem, newItem: PasswordItem) =
-    oldItem.file.absolutePath == newItem.file.absolutePath
+    oldItem.file.absolutePathString() == newItem.file.absolutePathString()
 
   override fun areContentsTheSame(oldItem: PasswordItem, newItem: PasswordItem) = oldItem == newItem
 }
@@ -479,7 +492,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   fun requireSelectionTracker() = selectionTracker!!
 
   private val selectedFiles
-    get() = requireSelectionTracker().selection.map { File(it) }
+    get() = requireSelectionTracker().selection.map { Paths.get(it) }
 
   fun getSelectedItems() = selectedFiles.map { it.toPasswordItem() }
 

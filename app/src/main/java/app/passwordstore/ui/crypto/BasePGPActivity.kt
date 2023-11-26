@@ -35,7 +35,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.nio.file.Path
 import javax.inject.Inject
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.createFile
+import kotlin.io.path.exists
+import kotlin.io.path.readLines
+import kotlin.io.path.readText
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -155,8 +161,8 @@ open class BasePGPActivity : AppCompatActivity() {
   fun getPGPIdentifiers(subDir: String): List<PGPIdentifier>? {
     val repoRoot = PasswordRepository.getRepositoryDirectory()
     val gpgIdentifierFile =
-      File(repoRoot, subDir).findTillRoot(".gpg-id", repoRoot)
-        ?: File(repoRoot, ".gpg-id").apply { createNewFile() }
+      repoRoot.resolve(subDir).findTillRoot(".gpg-id", repoRoot)
+        ?: repoRoot.resolve(".gpg-id").createFile()
     val gpgIdentifiers =
       gpgIdentifierFile
         .readLines()
@@ -185,15 +191,13 @@ open class BasePGPActivity : AppCompatActivity() {
     return gpgIdentifiers
   }
 
-  @Suppress("ReturnCount")
-  private fun File.findTillRoot(fileName: String, rootPath: File): File? {
-    val gpgFile = File(this, fileName)
+  private fun Path.findTillRoot(fileName: String, rootPath: Path): Path? {
+    val gpgFile = this.resolve(fileName)
     if (gpgFile.exists()) return gpgFile
 
-    if (this.absolutePath == rootPath.absolutePath) {
+    if (this.absolutePathString() == rootPath.absolutePathString()) {
       return null
     }
-    val parent = parentFile
     return if (parent != null && parent.exists()) {
       parent.findTillRoot(fileName, rootPath)
     } else {
