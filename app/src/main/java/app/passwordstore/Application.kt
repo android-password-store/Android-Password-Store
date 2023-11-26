@@ -14,7 +14,6 @@ import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.features.Feature
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.git.sshj.setUpBouncyCastleForSshj
-import app.passwordstore.util.leaks.SentryLeakUploader
 import app.passwordstore.util.proxy.ProxyUtils
 import app.passwordstore.util.settings.GitSettings
 import app.passwordstore.util.settings.PreferenceKeys
@@ -25,8 +24,6 @@ import io.sentry.Sentry
 import io.sentry.protocol.User
 import java.util.concurrent.Executors
 import javax.inject.Inject
-import leakcanary.AppWatcher
-import leakcanary.LeakCanary
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority.DEBUG
 import logcat.LogPriority.VERBOSE
@@ -46,18 +43,12 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
   override fun onCreate() {
     super.onCreate()
     instance = this
-    val eventListeners = LeakCanary.config.eventListeners + SentryLeakUploader
     if (
       BuildConfig.ENABLE_DEBUG_FEATURES ||
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
       LogcatLogger.install(AndroidLogcatLogger(DEBUG))
       setVmPolicy()
-      AppWatcher.manualInstall(this)
-      LeakCanary.config = LeakCanary.config.copy(dumpHeap = true, eventListeners = eventListeners)
-      LeakCanary.showLeakDisplayActivityLauncherIcon(true)
-    } else {
-      LeakCanary.config = LeakCanary.config.copy(dumpHeap = false, eventListeners = eventListeners)
     }
     prefs.registerOnSharedPreferenceChangeListener(this)
     setNightMode()
