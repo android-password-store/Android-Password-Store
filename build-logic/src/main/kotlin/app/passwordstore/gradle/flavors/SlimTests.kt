@@ -25,7 +25,7 @@ internal fun Project.configureSlimTests() {
     extensions.findByType<LibraryAndroidComponentsExtension>()?.run {
       beforeVariants(selector().withBuildType(BUILD_TYPE_RELEASE)) {
         (it as HasUnitTestBuilder).enableUnitTest = false
-        it.enableAndroidTest = false
+        it.androidTest.enable = false
       }
     }
 
@@ -37,7 +37,7 @@ internal fun Project.configureSlimTests() {
       }
       beforeVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
         (it as HasUnitTestBuilder).enableUnitTest = false
-        it.enableAndroidTest = false
+        it.androidTest.enable = false
       }
     }
   }
