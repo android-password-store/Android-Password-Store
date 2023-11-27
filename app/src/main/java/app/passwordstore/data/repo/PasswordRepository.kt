@@ -133,7 +133,7 @@ object PasswordRepository {
   /** Get the currently checked out branch. */
   fun getCurrentBranch(): String? {
     val repository = repository ?: return null
-    val headRef = repository.getRef(Constants.HEAD) ?: return null
+    val headRef = repository.findRef(Constants.HEAD) ?: return null
     return if (headRef.isSymbolic) {
       val branchName = headRef.target.name
       Repository.shortenRefName(branchName)

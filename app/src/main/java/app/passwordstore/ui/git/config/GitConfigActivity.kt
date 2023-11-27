@@ -158,7 +158,7 @@ class GitConfigActivity : BaseGitActivity() {
    */
   private fun headStatusMsg(repo: Repository): String {
     return runCatching {
-        val headRef = repo.getRef(Constants.HEAD)
+        val headRef = repo.findRef(Constants.HEAD)
         if (headRef.isSymbolic) {
           val branchName = headRef.target.name
           val shortBranchName = Repository.shortenRefName(branchName)

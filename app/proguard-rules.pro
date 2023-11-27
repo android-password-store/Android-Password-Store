@@ -8,6 +8,7 @@
 -dontwarn sun.misc.SignalHandler
 -dontwarn java.lang.instrument.ClassFileTransformer
 -dontwarn javax.servlet.ServletContextListener
+-dontwarn javax.xml.bind.DatatypeConverter
 
 # WhatTheStack
 -keep class com.haroldadmin.whatthestack.WhatTheStackInitializer {
