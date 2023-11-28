@@ -89,12 +89,6 @@ dependencies {
   implementation(libs.thirdparty.sshj)
   implementation(libs.thirdparty.bouncycastle.bcprov)
 
-  if (snapshot.snapshot) {
-    implementation(libs.thirdparty.whatthestack)
-  } else {
-    debugImplementation(libs.thirdparty.whatthestack)
-  }
-
   implementation(libs.thirdparty.slf4j.api) {
     because("SSHJ now uses SLF4J 2.0 which we don't want")
   }

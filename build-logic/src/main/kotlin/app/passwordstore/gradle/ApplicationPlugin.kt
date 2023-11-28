@@ -5,15 +5,12 @@ package app.passwordstore.gradle
 import app.passwordstore.gradle.flavors.FlavorDimensions
 import app.passwordstore.gradle.flavors.ProductFlavors
 import app.passwordstore.gradle.signing.configureBuildSigning
-import app.passwordstore.gradle.snapshot.SnapshotExtension
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.AppPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.the
 
 @Suppress("Unused")
 class ApplicationPlugin : Plugin<Project> {
@@ -60,11 +57,6 @@ class ApplicationPlugin : Plugin<Project> {
       }
 
       project.configureBuildSigning()
-    }
-
-    project.dependencies {
-      extensions.add("snapshot", SnapshotExtension::class.java)
-      the<SnapshotExtension>().snapshot = project.isSnapshot()
     }
   }
 

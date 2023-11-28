@@ -157,10 +157,6 @@ dependencyResolutionManagement {
       }
     }
     exclusiveContent {
-      forRepository { maven("https://jitpack.io") }
-      filter { includeModule("com.github.haroldadmin", "WhatTheStack") }
-    }
-    exclusiveContent {
       forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }
       filter { includeModule("com.android.tools", "r8") }
     }
