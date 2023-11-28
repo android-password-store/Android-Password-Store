@@ -1,5 +1,6 @@
 # This is generated automatically by the Android Gradle plugin.
 -dontwarn com.google.errorprone.annotations.Immutable
+-dontwarn java.lang.instrument.ClassFileTransformer
 -dontwarn javax.naming.Binding
 -dontwarn javax.naming.NamingEnumeration
 -dontwarn javax.naming.NamingException
@@ -10,6 +11,8 @@
 -dontwarn javax.naming.directory.SearchControls
 -dontwarn javax.naming.directory.SearchResult
 -dontwarn javax.security.auth.login.LoginContext
+-dontwarn javax.servlet.ServletContextListener
+-dontwarn javax.xml.bind.DatatypeConverter
 -dontwarn org.bouncycastle.asn1.bsi.BSIObjectIdentifiers
 -dontwarn org.bouncycastle.asn1.cmp.CMPCertificate
 -dontwarn org.bouncycastle.asn1.cmp.CMPObjectIdentifiers
@@ -151,3 +154,4 @@
 -dontwarn androidx.work.WorkRequest
 -dontwarn androidx.work.Worker
 -dontwarn androidx.work.multiprocess.RemoteListenableWorker
+-dontwarn sun.misc.SignalHandler
