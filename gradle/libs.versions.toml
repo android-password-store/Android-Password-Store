@@ -13,7 +13,7 @@ kotlinResult = "1.1.18"
 lifecycle = "2.6.2"
 
 [libraries]
-android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.3"
+android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.4"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidx-annotation = "androidx.annotation:annotation:1.7.0"
@@ -51,7 +51,7 @@ build-r8 = "com.android.tools:r8:8.2.7-dev"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:3.14.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.1"
-build-versions = "com.github.ben-manes:gradle-versions-plugin:0.48.0"
+build-versions = "com.github.ben-manes:gradle-versions-plugin:0.49.0"
 compose-bom = "androidx.compose:compose-bom:2023.10.01"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
@@ -73,6 +73,8 @@ testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-
 testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.14"
 testing-turbine = "app.cash.turbine:turbine:1.0.0"
 thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+# We're fine with the current version.
+# noinspection GradleDependency
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
 thirdparty-compose-lints = "com.slack.lint.compose:compose-lint-checks:1.2.0"
 thirdparty-eddsa = "net.i2p.crypto:eddsa:0.3.0"
