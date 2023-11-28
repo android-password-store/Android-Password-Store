@@ -5,12 +5,11 @@ import app.passwordstore.gradle.flavors.configureSlimTests
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.gradle.TestedExtension
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 
 object AndroidCommon {
@@ -47,11 +46,10 @@ object AndroidCommon {
     }
     project.extensions.findByType<ApplicationExtension>()?.run { lint.configureLint(project) }
     project.extensions.findByType<LibraryExtension>()?.run { lint.configureLint(project) }
-    val lintDepKeys = listOf("thirdparty-compose-lints", "thirdparty-slack-lints")
-    val catalog = project.extensions.getByType<VersionCatalogsExtension>()
-    val libs = catalog.named("libs")
-    lintDepKeys.forEach { key ->
-      project.dependencies.addProvider("lintChecks", libs.findLibrary(key).get())
+    val libs = project.extensions.getByName("libs") as LibrariesForLibs
+    project.dependencies.apply {
+      addProvider("lintChecks", libs.thirdparty.compose.lints)
+      addProvider("lintChecks", libs.thirdparty.slack.lints)
     }
   }
 }

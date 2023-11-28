@@ -91,4 +91,7 @@ dependencies {
   implementation(libs.build.vcu)
   implementation(libs.build.versions)
   implementation(libs.kotlinx.coroutines.core)
+
+  // Expose the generated version catalog API to the plugin.
+  implementation(files(libs::class.java.superclass.protectionDomain.codeSource.location))
 }

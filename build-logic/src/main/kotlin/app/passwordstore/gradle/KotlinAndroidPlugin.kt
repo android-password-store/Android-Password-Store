@@ -6,11 +6,9 @@
 package app.passwordstore.gradle
 
 import app.passwordstore.gradle.KotlinCommonPlugin.Companion.JVM_TOOLCHAIN_ACTION
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalog
-import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.api.artifacts.VersionConstraint
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
@@ -27,10 +25,9 @@ class KotlinAndroidPlugin : Plugin<Project> {
       apply(KotlinCommonPlugin::class)
     }
     project.extensions.getByType<KotlinProjectExtension>().jvmToolchain(JVM_TOOLCHAIN_ACTION)
-    val catalog = project.extensions.getByType<VersionCatalogsExtension>()
-    val libs = catalog.named("libs")
-    val composeCompilerVersion = libs.getVersion("composeCompiler")
-    val kotlinVersion = libs.getVersion("kotlin")
+    val libs = project.extensions.getByName("libs") as LibrariesForLibs
+    val composeCompilerVersion = libs.versions.composeCompiler.get()
+    val kotlinVersion = libs.versions.kotlin.get()
     val matches = COMPOSE_COMPILER_VERSION_REGEX.find(composeCompilerVersion)
 
     if (matches != null) {
@@ -46,11 +43,8 @@ class KotlinAndroidPlugin : Plugin<Project> {
     }
   }
 
-  private fun VersionCatalog.getVersion(key: String) =
-    findVersion(key).map(VersionConstraint::toString).get()
-
   private companion object {
     // Matches against 1.5.0-dev-k1.9.0-6a60475e07f
-    val COMPOSE_COMPILER_VERSION_REGEX = "\\d.\\d.\\d-dev-k(\\d.\\d.\\d)-[a-z0-9]+".toRegex()
+    val COMPOSE_COMPILER_VERSION_REGEX = "\\d.\\d.\\d-dev-k(\\d.\\d.\\d+)-[a-z0-9]+".toRegex()
   }
 }
