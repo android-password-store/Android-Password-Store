@@ -8,6 +8,7 @@ package app.passwordstore.ui.settings
 import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
 import app.passwordstore.ui.pgp.PGPKeyListActivity
+import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.features.Feature
 import app.passwordstore.util.settings.PreferenceKeys
@@ -33,6 +34,7 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
         persistent = true
       }
       switch(Feature.EnablePGPPassphraseCache.configKey) {
+        enabled = BiometricAuthenticator.canAuthenticate(activity)
         titleRes = R.string.pref_passphrase_cache_title
         summaryRes = R.string.pref_passphrase_cache_summary
         defaultValue = false
