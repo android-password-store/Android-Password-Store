@@ -8,7 +8,7 @@ composeCompiler = "1.5.5-dev-k1.9.21-163bb051fe5"
 coroutines = "1.7.3"
 flowbinding = "1.2.0"
 hilt = "2.48.1"
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 kotlinResult = "1.1.18"
 lifecycle = "2.6.2"
 
