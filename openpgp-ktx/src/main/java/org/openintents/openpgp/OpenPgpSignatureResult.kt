@@ -60,7 +60,7 @@ public class OpenPgpSignatureResult : Parcelable {
     // backward compatibility for this exact version
     if (version > 2) {
       senderStatusResult =
-        readEnumWithNullAndFallback(source, SenderStatusResult.values(), SenderStatusResult.UNKNOWN)
+        readEnumWithNullAndFallback(source, SenderStatusResult.entries, SenderStatusResult.UNKNOWN)
       confirmedUserIds = source.createStringArrayList()
     } else {
       senderStatusResult = SenderStatusResult.UNKNOWN
@@ -74,7 +74,7 @@ public class OpenPgpSignatureResult : Parcelable {
       }
     autocryptPeerentityResult =
       if (version > 4) {
-        readEnumWithNullAndFallback(source, AutocryptPeerResult.values(), null)
+        readEnumWithNullAndFallback(source, AutocryptPeerResult.entries, null)
       } else {
         null
       }

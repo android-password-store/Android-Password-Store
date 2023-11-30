@@ -117,7 +117,7 @@ enum class DirectoryStructure(val value: String) {
 
     val DEFAULT = FileBased
 
-    private val reverseMap = values().associateBy { it.value }
+    private val reverseMap = entries.associateBy { it.value }
 
     fun fromValue(value: String?) = if (value != null) reverseMap[value] ?: DEFAULT else DEFAULT
   }

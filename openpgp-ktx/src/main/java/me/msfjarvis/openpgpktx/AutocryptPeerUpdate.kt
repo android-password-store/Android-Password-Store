@@ -29,7 +29,7 @@ public class AutocryptPeerUpdate() : Parcelable {
   private constructor(source: Parcel, version: Int) : this() {
     keyData = source.createByteArray()
     effectiveDate = if (source.readInt() != 0) Date(source.readLong()) else null
-    preferEncrypt = PreferEncrypt.values()[source.readInt()]
+    preferEncrypt = PreferEncrypt.entries[source.readInt()]
   }
 
   public fun createAutocryptPeerUpdate(keyData: ByteArray?, timestamp: Date?): AutocryptPeerUpdate {

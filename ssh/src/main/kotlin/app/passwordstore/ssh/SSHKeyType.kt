@@ -10,6 +10,6 @@ public enum class SSHKeyType(internal val value: String) {
 
   public companion object {
 
-    public fun fromValue(type: String?): SSHKeyType? = values().associateBy { it.value }[type]
+    public fun fromValue(type: String?): SSHKeyType? = entries.associateBy { it.value }[type]
   }
 }

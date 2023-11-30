@@ -140,7 +140,7 @@ object SshKey {
 
     companion object {
 
-      fun fromValue(value: String?): Type? = values().associateBy { it.value }[value]
+      fun fromValue(value: String?): Type? = entries.associateBy { it.value }[value]
     }
   }
 
