@@ -94,18 +94,19 @@ val PasswordItem.stableId: String
 enum class FilterMode {
   NoFilter,
   StrictDomain,
-  Fuzzy
+  Fuzzy,
+  Exact,
 }
 
 enum class SearchMode {
   RecursivelyInSubdirectories,
-  InCurrentDirectoryOnly
+  InCurrentDirectoryOnly,
 }
 
 enum class ListMode {
   FilesOnly,
   DirectoriesOnly,
-  AllEntries
+  AllEntries,
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -214,6 +215,16 @@ constructor(
           when (if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode) {
             FilterMode.NoFilter -> {
               prefilteredResultFlow
+                .map { it.toPasswordItem() }
+                .flowOn(dispatcherProvider.io())
+                .toList()
+                .sortedWith(itemComparator)
+            }
+            FilterMode.Exact -> {
+              prefilteredResultFlow
+                .filter { absoluteFile ->
+                  absoluteFile.relativeTo(root).path.contains(searchAction.filter)
+                }
                 .map { it.toPasswordItem() }
                 .flowOn(dispatcherProvider.io())
                 .toList()
