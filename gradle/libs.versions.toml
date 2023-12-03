@@ -51,7 +51,7 @@ build-r8 = "com.android.tools:r8:8.2.7-dev"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.0.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.1"
-build-versions = "com.github.ben-manes:gradle-versions-plugin:0.49.0"
+build-versions = "com.github.ben-manes:gradle-versions-plugin:0.50.0"
 compose-bom = "androidx.compose:compose-bom:2023.10.01"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
