@@ -4,7 +4,7 @@ androidxActivity = "1.8.1"
 bouncycastle = "1.77"
 moshi = "1.15.0"
 # @keep used for kotlinCompilerExtensionVersion
-composeCompiler = "1.5.5-dev-k1.9.21-163bb051fe5"
+composeCompiler = "1.5.6"
 coroutines = "1.7.3"
 flowbinding = "1.2.0"
 hilt = "2.49"
