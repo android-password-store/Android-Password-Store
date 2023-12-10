@@ -10,6 +10,7 @@ object PreferenceKeys {
   const val APP_THEME = "app_theme"
   const val AUTOFILL_ENABLE = "autofill_enable"
   const val BIOMETRIC_AUTH = "biometric_auth"
+  const val BIOMETRIC_AUTH_2 = "biometric_auth_delete_soon_please"
   @Deprecated(
     message = "Use CLEAR_CLIPBOARD_HISTORY instead",
     replaceWith = ReplaceWith("PreferenceKeys.CLEAR_CLIPBOARD_HISTORY"),
