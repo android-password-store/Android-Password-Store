@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+<resources>
+  <plurals name="delete_title">
+    <item quantity="other">선택된 아이템 %d</item>
+  </plurals>
+  <!-- Activity names -->
+  <string name="action_settings">설정</string>
+  <string name="dialog_delete_title">이미 생성된 디렉토리입니다</string>
+  <string name="dialog_delete_msg">해당 디렉토리는 이미 사용 중입니다. 아직은 하나의 저장소만 지원합니다. 현재 비밀번호 저장소 디렉토리를 삭제하시겠습니까?\n(%1$s)</string>
+  <string name="dialog_delete">디렉토리 삭제</string>
+  <string name="dialog_do_not_delete">삭제 취소</string>
+  <string name="title_activity_git_clone">레포지토리 정보</string>
+  <string name="title_activity_git_log">커밋 로그</string>
+  <!-- Password Store -->
+  <string name="creation_dialog_text">비밀번호를 추가하거나 동기화 하기 전에 레포지토리를 클론 하거나 새로 생성해 주세요.</string>
+  <plurals name="delete_dialog_text">
+    <item quantity="other">%d 개의 비밀번호를 삭제하시겠습니까?</item>
+  </plurals>
+  <string name="delete_directory_progress_text">삭제중…</string>
+  <string name="move">이동</string>
+  <string name="edit">수정</string>
+  <string name="delete">삭제</string>
+  <string name="password_exists_title">이미 추가된 비밀번호입니다!</string>
+  <string name="password_exists_message">%1$s 내용이 %2$s 로 덮어씌워집니다.</string>
+  <string name="password_move_error_title">비밀번호를 옮기는 중 문제가 발생하였습니다.</string>
+  <string name="password_move_error_message">%1$s 를 %2$s 로 옮기는데 실패하였습니다.</string>
+  <!-- git commits -->
+  <string name="git_commit_add_text">Android Password Store 를 이용해 %1$s 의 비밀번호를 생성하였습니다.</string>
+  <string name="git_commit_edit_text">Android Password Store 를 이용해 %1$s 의 비밀번호를 변경하였습니다.</string>
+  <string name="git_commit_remove_text">%1$s 을 저장소에서 삭제하였습니다.</string>
+  <string name="git_commit_move_text">%1$s 의 이름을 %2$s 로 변경하였습니다.</string>
+  <string name="git_commit_move_multiple_text">여러개의 비밀번호를 %1$s 로 옮겼습니다.</string>
+  <string name="git_commit_gpg_id">%1$s의 GPG ID를 초기화 합니다.</string>
+  <!-- PGPHandler -->
+  <string name="clipboard_copied_text">클립보드로 복사됨</string>
+  <string name="file_toast_text">파일 이름이 필요합니다</string>
+  <string name="path_toast_text">파일 경로가 필요합니다</string>
+  <string name="empty_toast_text">비어있는 비밀번호나 추가 정보를 사용할 수 없습니다</string>
+  <!-- Git Async Task -->
+  <string name="jgit_error_dialog_title">Git 동작 중 문제가 발생하였습니다</string>
+  <!-- Git Handler -->
+  <string name="ssh_preferences_dialog_text">설정에서 SSH키를 생성하거나 추가 해 주세요</string>
+  <string name="ssh_preferences_dialog_title">SSH 키가 없습니다</string>
+  <string name="button_label_import">가져오기</string>
+  <string name="ssh_preferences_dialog_generate">생성</string>
+  <string name="passphrase_dialog_title">인증</string>
+  <string name="passphrase_dialog_text">SSH 키 비밀번호를 입력해 주세요</string>
+  <string name="password_dialog_text">이 레포지토리의 비밀번호를 입력해 주세요</string>
+  <!-- Clone fragment -->
+  <string name="server_url">레포지토리 URL</string>
+  <string name="connection_mode">인증 모드</string>
+  <!-- Git Config fragment -->
+  <string name="git_user_name_hint">계정 이름</string>
+  <string name="git_user_email">이메일</string>
+  <string name="invalid_email_dialog_text">올바른 이메일 주소를 입력해 주세요</string>
+  <string name="clone_button">Clone</string>
+  <!-- PGP Handler -->
+  <string name="crypto_name_hint">이름</string>
+  <string name="crypto_pass_label">비밀번호</string>
+  <string name="crypto_extra_label">추가 내용</string>
+  <string name="crypto_encrypt_username_label">암호화 계정 이름</string>
+  <string name="crypto_select">선택</string>
+  <string name="crypto_save">저장</string>
+  <string name="crypto_save_and_copy">저장 및 복사</string>
+  <!-- DECRYPT Layout -->
+  <string name="action_search">검색</string>
+  <string name="password">비밀번호</string>
+  <string name="username">사용자명</string>
+  <string name="copy_label">복사</string>
+  <string name="edit_password">암호 수정</string>
+  <string name="copy_password">암호 복사</string>
+  <string name="share_as_plaintext">텍스트로 공유</string>
+  <!-- Preferences -->
+  <string name="pref_category_repository_title">저장소</string>
+  <string name="pref_edit_git_server_settings">Git 서버 설정 수정</string>
+  <string name="pref_edit_git_config">로컬 Git 설정 &amp; 툴</string>
+  <string name="pref_import_ssh_key_title">SSH 키 가져오기</string>
+  <string name="pref_ssh_keygen_title">SSH 키쌍 생성</string>
+  <string name="pref_ssh_see_key_title">생성된 SSH 공개키 보기</string>
+  <string name="pref_git_delete_repo_title">저장소 삭제</string>
+  <string name="pref_dialog_delete_title">저장소 청소</string>
+  <string name="pref_category_general_title">일반</string>
+  <string name="pref_category_passwords_title">암호 목록</string>
+  <string name="pref_clipboard_timeout_title">암호 복사 시간 만료</string>
+  <string name="pref_clipboard_timeout_summary">암호를 클립보드에 저장할 시간(초) 을 설정하십시오. 0은 제한시간이 없습니다. 현재값: %1$s</string>
+  <string name="pref_copy_title">암호 자동 복사</string>
+  <string name="pref_copy_summary">복호화 성공 후 자동으로 암호를 클립보드에 복사합니다.</string>
+  <string name="ssh_key_import_error_not_an_ssh_key_message">선택된 파일이 SSH 개인키가 아닌 것 같습니다.</string>
+  <string name="ssh_key_success_dialog_title">SSH 개인키를 가져왔습니다.</string>
+  <string name="ssh_key_error_dialog_title">키 가져오기 오류</string>
+  <string name="ssh_key_error_dialog_text">메시지 : \n</string>
+  <string name="pref_recursive_filter_title">순환 필터링</string>
+  <string name="pref_recursive_filter_summary">현재 위치의 모든 하위 디렉토리에서 암호를 찾습니다.</string>
+  <string name="pref_sort_order_title">암호 정렬 순서</string>
+  <string name="pref_folder_first_sort_order">폴더 우선</string>
+  <string name="pref_file_first_sort_order">파일 우선</string>
+  <string name="pref_type_independent_sort_order">타입순</string>
+  <string name="pref_recently_used_sort_order">최신순</string>
+  <string name="pref_category_autofill_title">자동완성</string>
+  <string name="pref_autofill_enable_title">자동완성 활성화</string>
+  <string name="pref_category_misc_title">기타</string>
+  <string name="pref_clear_clipboard_title">클립보드 히스토리 기능 대응</string>
+  <string name="pref_clear_clipboard_summary">클립보드 히스토리 기능이 있는 디바이스에서 최대 허용량 넘게 클립보드에 복사하여 어떤 암호도 남아있지 않게 합니다</string>
+  <string name="pref_git_delete_repo_summary">(숨겨진) 로컬 저장소 삭제</string>
+  <string name="prefs_export_passwords_title">암호 내보내기</string>
+  <string name="prefs_export_passwords_summary">외부 저장소에 암호화된 목록 내보내기</string>
+  <string name="pref_rebase_on_pull_title">Rebase pull 사용</string>
+  <string name="pref_rebase_on_pull_summary">Git pull 하거나 동기화할 때 업스트림 변경사항과 병합 커밋을 만듭니다.</string>
+  <string name="pref_rebase_on_pull_summary_on">Pull 하거나 동기화 할 때, 현재 원격 저장소에 있지 않은 commit을 Rebase 합니다.</string>
+  <string name="pref_disable_sync_on_pull_title">동기화 시 pull 비활성화</string>
+  <string name="pref_disable_sync_on_pull_summary">Git 동기화 할 때 암호 목록을 pull 하는 것을 방지합니다</string>
+  <string name="pref_import_pgp_key_title">GPG 키 가져오기</string>
+  <string name="pref_pgp_key_manager_title">키 관리자</string>
+  <string name="pref_pgp_ascii_armor_title">ASCII armor 모드로 암호화</string>
+  <string name="pref_passphrase_cache_title">비밀번호 캐쉬 활성화</string>
+  <string name="pref_passphrase_cache_summary">경고: 이 기능은 매우 실험적인 기능입니다.</string>
+  <!-- PasswordGenerator fragment -->
+  <string name="pwgen_title">암호 생성</string>
+  <string name="pwgen_generate">생성</string>
+  <string name="pwgen_include">포함</string>
+  <string name="pwgen_length">길이</string>
+  <string name="pwgen_numerals">숫자만</string>
+  <string name="pwgen_symbols">특수문자</string>
+  <string name="pwgen_uppercase">대문자</string>
+  <string name="pwgen_lowercase">소문자</string>
+  <string name="pwgen_ambiguous">모호한</string>
+  <string name="pwgen_pronounceable">발음할 수 있음</string>
+  <string name="pwgen_no_chars_error">포함된 문자가 없습니다</string>
+  <string name="pwgen_length_too_short_error">선택한 기준에 비해 길이가 너무 짧습니다.</string>
+  <string name="pwgen_max_iterations_exceeded">제약 조건을 충족하는 비밀번호를 생성하지 못했습니다. 길이를 늘려 보세요.</string>
+  <string name="pwgen_separator">구분 기호</string>
+  <!-- Password generator prefs -->
+  <string name="pref_password_generator_type_title">암호 생성기 타입</string>
+  <!-- ssh keygen fragment -->
+  <string name="ssh_keygen_passphrase">암호</string>
+  <string name="ssh_keygen_generate">생성</string>
+  <string name="ssh_keygen_share">공유</string>
+  <string name="ssh_keygen_later">나중에</string>
+  <string name="ssh_keygen_message">%1$s\n\n이 공개키를 당신의 git 서버에 등록하세요.</string>
+  <string name="ssh_key_gen_generating_progress">키 생성 중</string>
+  <string name="ssh_keygen_require_authentication">화면 잠금 자격 증명으로 보호</string>
+  <string name="ssh_keygen_label_rsa">RSA</string>
+  <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+  <string name="ssh_keygen_label_ed25519">Ed25519</string>
+  <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\n모든 서버에서 지원되지만, 인증 속도가 비교적 느립니다.</string>
+  <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\n빠른 인증이 가능하며, 아직 업데이트를 받고 있는 대부분의 서버에서 지원됩니다.</string>
+  <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\n빠른 인증이지만 다소 최신 서버에서만 지원됩니다.</string>
+  <string name="ssh_keygen_existing_title">SSH 키</string>
+  <string name="ssh_keygen_existing_message">기존 SSH 키를 교체하시나요? 서버에 액세스하지 못할 수 있습니다.</string>
+  <string name="ssh_keygen_existing_replace">교체</string>
+  <string name="ssh_keygen_existing_keep">유지하기</string>
+  <!-- SSH Android Keystore auth -->
+  <string name="biometric_auth_generic_failure">화면 잠금 인증 실패</string>
+  <string name="biometric_prompt_title_ssh_auth">SSH 키 잠금 해제</string>
+  <string name="biometric_prompt_title_ssh_keygen">SSH 키 생성</string>
+  <!-- Misc -->
+  <string name="dialog_ok">확인</string>
+  <string name="dialog_yes">예</string>
+  <string name="dialog_no">아니오</string>
+  <string name="dialog_cancel">취소</string>
+  <string name="dialog_skip">건너뛰기</string>
+  <string name="git_sync">저장소 동기화</string>
+  <string name="git_pull">원격에서 pull</string>
+  <string name="git_push">원격으로 푸시</string>
+  <string name="git_push_up_to_date">최신 버전입니다</string>
+  <string name="git_log">커밋 로그 보기</string>
+  <string name="show_password_pref_title">비밀번호 표시하기</string>
+  <string name="show_password_pref_summary">암호가 해독된 후 비밀번호의 공개 여부를 제어합니다. 그렇다고 해서 클립보드 복사가 비활성화되지는 않습니다.</string>
+  <string name="pwd_generate_button">생성</string>
+  <string name="refresh_list">목록 새로 고침</string>
+  <string name="send_plaintext_password_to">비밀번호를 일반 텍스트로 보내는 중...</string>
+  <string name="app_icon_hint">앱 아이콘</string>
+  <!-- Oreo Autofill -->
+  <string name="oreo_autofill_select_and_fill_into">입력할 항목 선택</string>
+  <string name="oreo_autofill_strict_domain_search">피싱 방지 검색</string>
+  <string name="oreo_autofill_match_with">%1$s와 일치</string>
+  <string name="oreo_autofill_matches_clear_existing">기존 일치 항목 지우기</string>
+  <string name="oreo_autofill_filter_no_results">검색 결과가 없습니다.</string>
+  <string name="oreo_autofill_search_in_store">검색 항목</string>
+  <string name="oreo_autofill_save_internal_error">내부 오류로 인해 저장을 실패했습니다</string>
+  <string name="oreo_autofill_save_app_not_supported">이 앱은 현재 지원하지 않습니다</string>
+  <string name="oreo_autofill_save_passwords_dont_match">암호가 일치하지 않습니다</string>
+  <string name="oreo_autofill_generate_password">항목 생성</string>
+  <string name="oreo_autofill_fill_otp_from_sms">SMS에서 코드 추출</string>
+  <string name="oreo_autofill_max_matches_reached">최대 일치 수(%1$d) 에 도달했습니다. 새 일치 항목을 추가하기 전에 일치 항목을 지웁니다.</string>
+  <string name="oreo_autofill_warning_publisher_header">비밀번호 저장소 항목을 처음 연결한 이후 이 앱의 게시자가 변경되었습니다:</string>
+  <string name="oreo_autofill_warning_publisher_footer"><b>현재 설치된 앱이 신뢰할 수 있는 앱인 것처럼 가장하여 자격 증명을 도용하려고 시도하고 있을 수 있습니다.</b>\n\n앱을 삭제한 후 Play 스토어, Amazon 앱스토어, F-Droid 또는 휴대폰 제조업체 스토어와 같은 신뢰할 수 있는 출처에서 다시 설치해 보시기 바랍니다.</string>
+  <string name="oreo_autofill_warning_publisher_install_time">설치됨: %1$s</string>
+  <string name="oreo_autofill_warning_publisher_advanced_info_button">고급 정보</string>
+  <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">자동 완성 비활성화 유지</string>
+  <string name="oreo_autofill_warning_publisher_reenable_button">자동완성 재활성화</string>
+  <string name="oreo_autofill_warning_publisher_warning_sign_description">경고</string>
+  <string name="oreo_autofill_warning_publisher_dataset_summary">세부정보를 보려면 탭하세요</string>
+  <string name="oreo_autofill_warning_publisher_dataset_title">피싱 시도 가능성</string>
+  <string name="oreo_autofill_general_fill_and_save_support">자격 증명 입력 및 저장</string>
+  <string name="oreo_autofill_general_fill_support">자격 증명 입력</string>
+  <string name="oreo_autofill_password_fill_support">암호 입력</string>
+  <string name="oreo_autofill_flaky_fill_support">비밀번호 채우기 (때때로 브라우저를 다시 시작해야 할 수 있음)</string>
+  <string name="oreo_autofill_no_support">지원하지 않음</string>
+  <string name="oreo_autofill_preference_directory_structure">암허 파일 정리</string>
+  <string name="oreo_autofill_enable_dialog_description">Password Store는 로그인 양식을 작성하고 앱이나 웹사이트에 입력한 자격 증명을 저장하는 기능도 제공합니다.</string>
+  <string name="oreo_autofill_enable_dialog_instructions">이 기능을 사용하려면 확인을 탭하여 자동 완성 설정으로 이동합니다. 목록에서 암호 저장을 선택하고 확인으로 확인 메시지를 확인합니다.</string>
+  <string name="oreo_autofill_enable_dialog_installed_browsers">자동 완성 지원 하는 설치된 브라우저:</string>
+  <!-- Autofill -->
+  <string name="ssh_key_does_not_exist">SSH 개인 키를 열 수 없습니다. 파일이 존재하는지 확인하세요</string>
+  <string name="new_password_title">새 암호</string>
+  <string name="clear_saved_passphrase_ssh">로컬 SSH 키의 저장된 비밀번호 지우기</string>
+  <string name="clear_saved_passphrase_https">저장된 HTTPS 비밀번호 지우기</string>
+  <string name="git_operation_remember_passphrase">키 암호 기억하기</string>
+  <string name="git_tools">유틸리티</string>
+  <string name="abort_rebase">리베이스 중단 및 새 브랜치 푸시</string>
+  <string name="reset_to_remote">원격 지점으로 하드 리셋</string>
+  <string name="git_head_on_branch">%1$s 브랜치</string>
+  <string name="git_head_detached">%1$s에서 HEAD 분리됨</string>
+  <string name="git_head_missing">HEAD를 찾을 수 없습니다.</string>
+  <string name="git_abort_and_push_title">중단 및 푸시</string>
+  <string name="biometric_prompt_title">생체 인식 프롬프트</string>
+  <string name="biometric_auth_error_reason">인증 실패: %s</string>
+  <string name="pref_biometric_auth_title">생체 인증 사용</string>
+  <string name="pref_biometric_auth_summary">비밀번호 저장소를 활성화하면 앱을 시작할 때 지문을 입력하라는 메시지가 표시됩니다</string>
+  <string name="pref_biometric_auth_summary_error">지문 하드웨어에 액세스할 수 없거나 누락된 경우</string>
+  <string name="pref_title_openkeystore_clear_keyid">저장된 OpenKeyStore SSH 키 ID 지우기</string>
+  <string name="your_public_key">공개 키</string>
+  <string name="error_generate_ssh_key">Ssh 키를 생성하는 동안 오류가 발생했습니다.</string>
+  <string name="pref_show_hidden_title">모든 파일 및 폴더 표시</string>
+  <string name="pref_show_hidden_summary">비밀번호 목록에 비밀번호가 아닌 파일 및 디렉터리를 포함하기</string>
+  <string name="title_create_folder">폴더 생성</string>
+  <string name="title_rename_folder">폴더 이름 변경</string>
+  <string name="message_category_error_empty_field">카테고리 이름은 비워 둘 수 없습니다</string>
+  <string name="message_category_error_category_exists">카테고리가 이미 있습니다</string>
+  <string name="message_error_destination_outside_repo">대상은 리포지토리 내에 있어야 합니다</string>
+  <string name="message_rename_folder">%1$s의 목적지 입력</string>
+  <string name="button_create">생성</string>
+  <string name="pref_search_on_start_title">시작 시 검색 열기</string>
+  <string name="pref_search_on_start_summary">앱 실행 시 검색창 열기</string>
+  <string name="tap_clear_clipboard">클립보드를 지우려면 여기를 탭하세요</string>
+  <string name="clone_git_repo">변경 사항을 동기화하기 전에 리포지토리를 복제해야 합니다.</string>
+  <string name="pref_app_theme_title">앱 테마</string>
+  <string name="pref_app_theme_value_light">밝은 테마</string>
+  <string name="pref_app_theme_value_dark">어두운 테마</string>
+  <string name="pref_app_theme_value_battery_saver">배터리 절약모드 설정</string>
+  <string name="pref_app_theme_value_follow_system">시스템 기본값</string>
+  <string name="connection_mode_ssh_key">SSH 키</string>
+  <string name="connection_mode_basic_authentication">비밀번호</string>
+  <string name="git_server_config_save_success">구성을 성공적으로 저장했습니다</string>
+  <string name="git_server_config_save_error">제공한 리포지토리 URL이 유효하지 않습니다</string>
+  <string name="git_server_config_save_missing_username_https">다음 형식으로 HTTPS 사용자 이름을 지정하세요
+https://username@example.com/...</string>
+  <string name="git_server_config_save_missing_username_ssh">다음 형식으로 SSH 사용자 이름을 지정하세요
+username@example.com:...</string>
+  <string name="git_server_config_save_auth_mode_mismatch">%1$s에 대해 유효한 인증 모드: %2$s</string>
+  <string name="git_operation_wrong_passphrase">잘못된 암호</string>
+  <string name="git_operation_wrong_password">잘못된 비밀번호</string>
+  <string name="bottom_sheet_create_new_folder">새 폴더 생성</string>
+  <string name="bottom_sheet_create_new_password">새 비밀번호 생성</string>
+  <string name="pref_debug_logging_summary">디버그 로깅 사용 (앱 재시작 필요)</string>
+  <string name="pref_debug_logging_title">디버그 로깅</string>
+  <string name="preference_default_username_summary">비밀번호 파일 또는 디렉터리 구조에서 사용자 이름을 확인할 수 없는 경우 여기에 지정된 값으로 자동 완성 합니다</string>
+  <string name="preference_default_username_title">기본 사용자 이름</string>
+  <string name="git_operation_remember_password">비밀번호 저장</string>
+  <string name="git_operation_hint_password">비밀번호</string>
+  <string name="preference_custom_public_suffixes_title">지정 도메인</string>
+  <string name="preference_custom_public_suffixes_summary">자동 완성은 다음 도메인의 하위 도메인을 구분합니다.</string>
+  <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
+  <!-- Password creation failure -->
+  <string name="password_creation_file_fail_title">오류</string>
+  <string name="password_creation_file_write_fail_message">스토어에 비밀번호 파일을 작성하지 못했습니다. 다시 시도해 주세요.</string>
+  <string name="password_creation_file_delete_fail_message">스토어에서 비밀번호 파일 %1$s를 삭제하지 못했습니다. 수동으로 삭제하세요.</string>
+  <string name="password_creation_duplicate_error">파일이 이미 존재합니다. 다른 이름을 사용하세요</string>
+  <string name="add_otp">OTP 추가</string>
+  <string name="otp_import_success">TOTP 구성을 성공적으로 가져왔습니다</string>
+  <string name="otp_import_failure_generic">TOTP 구성을 가져오지 못했습니다.</string>
+  <string name="otp_import_failure_no_selection">선택한 이미지 파일이 없습니다</string>
+  <string name="exporting_passwords">비밀번호 내보내는 중...</string>
+  <string name="invalid_gpg_id">.gpg-id를 찾았지만 잘못된 키 ID, 지문 또는 사용자 ID가 포함되어 있습니다</string>
+  <string name="invalid_filename_text">파일 이름에 \'/\'가 포함되어서는 안됩니다. 위의 디렉터리를 설정하세요</string>
+  <string name="directory_hint">디렉토리</string>
+  <string name="new_folder_set_gpg_key">디렉토리의 GPG 키 설정</string>
+  <!-- GitException messages -->
+  <string name="git_unknown_error">알 수 없는 오류</string>
+  <string name="git_pull_rebase_fail_error">풀이 실패하여 head가 분리된 상태입니다. \"설정 &gt; git 기능\"을 사용하여 원격 저장소에 변경 내용을 새 브랜치에 저장하고 컴퓨터에서 충돌을 해결하세요.</string>
+  <string name="git_pull_merge_fail_error">병합에 실패하여 충돌 상태 입니다. 할 일: 복구 방법을 추가하세요.</string>
+  <string name="git_push_nff_error">원격에서 푸시가 거부된 경우 다시 푸시하기 전에 풀을 실행합니다. 풀/푸시 대신 동기화를 사용하면 두 가지를 모두 구현할 수 있습니다</string>
+  <string name="git_push_generic_error">원격에서 푸시를 거부했습니다. 원인: %1$s</string>
+  <string name="git_push_other_error">원격에서 non-fast-forward 푸시를 거부했습니다. 대상 리포지토리의 설정 파일에서 receive.denyNonFastForwards 변수를 확인하세요.</string>
+  <string name="git_unknown_host">알 수 없는 호스트: %1$s</string>
+  <string name="git_operation_running">Git 작업 실행 중...</string>
+  <string name="git_break_out_of_detached_success">리베이스하는 동안 충돌이 발생했습니다. 로컬 %1$s 브랜치가 %2$s이라는 다른 브랜치로 푸시되었습니다.\n이 브랜치를 사용하여 컴퓨터에서 충돌을 해결하세요.</string>
+  <string name="git_break_out_of_detached_unneeded">이 저장소는 리베이스가 아니므로 다른 브랜치로 푸시할 필요가 없습니다.</string>
+  <!-- GPG key selection in folder creation -->
+  <string name="gpg_key_select_mandatory">계속하려면 GPG 키를 선택해야 합니다</string>
+  <string name="folder_creation_err_file_exists">동일한 이름의 파일이 이미 있습니다</string>
+  <string name="folder_creation_err_folder_exists">이 이름의 폴더가 이미 존재합니다</string>
+  <!-- Onboarding flow -->
+  <string name="let_s_go">시작합니다!</string>
+  <string name="select_n_repository_type">저장소 유형 \n선택</string>
+  <string name="select_repo_type_text">로컬 리포지토리를 만들 것인지, 원격 리포지토리를 복제할 것인지 선택합니다.</string>
+  <string name="clone_remote_repo">원격 저장소 복제</string>
+  <string name="create_local_repo">로컬 저장소 생성</string>
+  <string name="select_gpg_key_title">GPG 키\n선택</string>
+  <string name="select_gpg_key_message">스토어를 초기화할 GPG 키를 선택합니다</string>
+  <string name="gpg_key_select">키 선택</string>
+  <!-- SSH port validation -->
+  <string name="ssh_scheme_needed_title">잠재적으로 잘못된 URL</string>
+  <string name="ssh_scheme_needed_message">URL에 사용자 지정 포트가 포함되어 있지만 ssh:// scheme를 지정하지 않은 것 같습니다.\n이로 인해 포트가 경로의 일부로 간주될 수 있습니다. 여기에서 확인을 눌러 URL을 수정합니다.</string>
+  <string name="https_scheme_with_port_title">사용자 지정 포트가 포함된 HTTPS URL</string>
+  <string name="https_scheme_with_port_message">사용자 지정 포트가 있는 HTTPS URL을 사용하고 있는 것 같습니다. 이는 지원되지 않으며 나중에 문제를 일으킬 수 있습니다. 확인을 눌러 URL에서 포트를 제거하세요.</string>
+  <string name="git_scheme_disallowed_title">git:// 프로토콜 사용은 권장하지 않습니다</string>
+  <string name="git_scheme_disallowed_message">git-daemon이 제공하는 git 프로토콜은 전송 암호화를 수행하지 않으므로 보안 작업에 적합하지 않습니다.</string>
+  <!-- Proxy configuration activity -->
+  <string name="activity_proxy_label">프록시 설정</string>
+  <string name="proxy_hostname">프록시 호스트 이름</string>
+  <string name="port">포트</string>
+  <string name="pref_edit_proxy_settings">HTTP(S) 프록시 설정</string>
+  <string name="invalid_proxy_url">잘못된 URL</string>
+  <string name="oreo_autofill_password_fill_and_conditional_save_support">비밀번호 입력 및 저장 (저장 시 접근성 서비스가 활성화되어 있지 않아야 함)</string>
+  <string name="clear_saved_host_key">저장된 호스트 키 지우기</string>
+  <string name="clear_saved_host_key_success">저장된 호스트 키를 성공적으로 지웠습니다!</string>
+  <string name="otp_import_qr_code">QR코드 스캔</string>
+  <string name="otp_import_from_file">이미지 선택</string>
+  <string name="otp_import_manual_entry">직접 입력</string>
+  <string name="otp_import_manual_hint_secret">비밀</string>
+  <string name="otp_import_manual_hint_account">계정</string>
+  <string name="place_shortcut_on_home_screen">홈 화면에 추가</string>
+  <string name="password_list_fab_content_description">새 비밀번호 또는 폴더 만들기</string>
+  <string name="pgp_key_import_failed">PGP 키를 가져오지 못했습니다</string>
+  <string name="pgp_key_import_failed_replace_message">이 ID를 가진 기존 키가 발견되었습니다. 교체하시겠습니까?</string>
+  <string name="pgp_key_import_succeeded">PGP 키를 성공적으로 가져왔습니다</string>
+  <string name="pgp_key_import_succeeded_message">가져온 키의 키 ID는 다음과 같습니다. 정확한지 확인하시기 바랍니다:\n%1$s</string>
+  <string name="pref_category_pgp_title">PGP 설정</string>
+  <string name="pwgen_some_error_occurred">오류가 발생했습니다</string>
+  <string name="git_run_gc_job">메모리 정리 작업 수행</string>
+  <string name="activity_label_pgp_key_manager">PGP 키 관리자</string>
+  <string name="pgp_key_manager_delete_confirmation_dialog_title">키를 삭제하시겠습니까?</string>
+  <string name="git_utils_reset_remote_branch_title">원격 브랜치명</string>
+  <string name="pgp_key_manager_no_keys_guidance">아래의 추가 버튼을 사용하여 키를 가져옵니다</string>
+  <string name="no_keys_imported_dialog_title">가져온 키 없음</string>
+  <string name="no_keys_imported_dialog_message">아직 앱에서 가져온 PGP 키가 없는 경우, 아래 버튼을 눌러 키 파일을 선택하세요.</string>
+  <string name="biometric_prompt_title_gpg_passphrase_cache">암호 캐시 잠금 해제</string>
+</resources>
