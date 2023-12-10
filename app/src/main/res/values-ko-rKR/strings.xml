@@ -172,7 +172,7 @@
   <string name="show_password_pref_summary">암호가 해독된 후 비밀번호의 공개 여부를 제어합니다. 그렇다고 해서 클립보드 복사가 비활성화되지는 않습니다.</string>
   <string name="pwd_generate_button">생성</string>
   <string name="refresh_list">목록 새로 고침</string>
-  <string name="send_plaintext_password_to">비밀번호를 일반 텍스트로 보내는 중...</string>
+  <string name="send_plaintext_password_to">비밀번호를 일반 텍스트로 보내는 중…</string>
   <string name="app_icon_hint">앱 아이콘</string>
   <!-- Oreo Autofill -->
   <string name="oreo_autofill_select_and_fill_into">입력할 항목 선택</string>
