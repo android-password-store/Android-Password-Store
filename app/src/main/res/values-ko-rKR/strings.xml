@@ -249,9 +249,9 @@
   <string name="git_server_config_save_success">구성을 성공적으로 저장했습니다</string>
   <string name="git_server_config_save_error">제공한 리포지토리 URL이 유효하지 않습니다</string>
   <string name="git_server_config_save_missing_username_https">다음 형식으로 HTTPS 사용자 이름을 지정하세요
-https://username@example.com/...</string>
+https://username@example.com/…</string>
   <string name="git_server_config_save_missing_username_ssh">다음 형식으로 SSH 사용자 이름을 지정하세요
-username@example.com:...</string>
+username@example.com:…</string>
   <string name="git_server_config_save_auth_mode_mismatch">%1$s에 대해 유효한 인증 모드: %2$s</string>
   <string name="git_operation_wrong_passphrase">잘못된 암호</string>
   <string name="git_operation_wrong_password">잘못된 비밀번호</string>
@@ -275,7 +275,7 @@ username@example.com:...</string>
   <string name="otp_import_success">TOTP 구성을 성공적으로 가져왔습니다</string>
   <string name="otp_import_failure_generic">TOTP 구성을 가져오지 못했습니다.</string>
   <string name="otp_import_failure_no_selection">선택한 이미지 파일이 없습니다</string>
-  <string name="exporting_passwords">비밀번호 내보내는 중...</string>
+  <string name="exporting_passwords">비밀번호 내보내는 중…</string>
   <string name="invalid_gpg_id">.gpg-id를 찾았지만 잘못된 키 ID, 지문 또는 사용자 ID가 포함되어 있습니다</string>
   <string name="invalid_filename_text">파일 이름에 \'/\'가 포함되어서는 안됩니다. 위의 디렉터리를 설정하세요</string>
   <string name="directory_hint">디렉토리</string>
@@ -288,7 +288,7 @@ username@example.com:...</string>
   <string name="git_push_generic_error">원격에서 푸시를 거부했습니다. 원인: %1$s</string>
   <string name="git_push_other_error">원격에서 non-fast-forward 푸시를 거부했습니다. 대상 리포지토리의 설정 파일에서 receive.denyNonFastForwards 변수를 확인하세요.</string>
   <string name="git_unknown_host">알 수 없는 호스트: %1$s</string>
-  <string name="git_operation_running">Git 작업 실행 중...</string>
+  <string name="git_operation_running">Git 작업 실행 중…</string>
   <string name="git_break_out_of_detached_success">리베이스하는 동안 충돌이 발생했습니다. 로컬 %1$s 브랜치가 %2$s이라는 다른 브랜치로 푸시되었습니다.\n이 브랜치를 사용하여 컴퓨터에서 충돌을 해결하세요.</string>
   <string name="git_break_out_of_detached_unneeded">이 저장소는 리베이스가 아니므로 다른 브랜치로 푸시할 필요가 없습니다.</string>
   <!-- GPG key selection in folder creation -->
