@@ -40,6 +40,8 @@ object LintConfig {
       disable += "FragmentFieldInjection"
       // Too pedantic
       disable += "ArgInFormattedQuantityStringRes"
+      // Biometric strings are temporarily unused due to issue 2802
+      disable += "UnusedResources"
     }
     baseline = project.file("lint-baseline.xml")
   }
