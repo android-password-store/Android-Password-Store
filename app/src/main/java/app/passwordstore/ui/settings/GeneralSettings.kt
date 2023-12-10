@@ -65,14 +65,15 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
         defaultValue = false
       }
 
-      val canAuthenticate = BiometricAuthenticator.canAuthenticate(activity)
-      switch(PreferenceKeys.BIOMETRIC_AUTH) {
+      // val canAuthenticate = BiometricAuthenticator.canAuthenticate(activity)
+      switch(PreferenceKeys.BIOMETRIC_AUTH_2) {
         titleRes = R.string.pref_biometric_auth_title
         defaultValue = false
-        enabled = canAuthenticate
-        summaryRes =
-          if (canAuthenticate) R.string.pref_biometric_auth_summary
-          else R.string.pref_biometric_auth_summary_error
+        enabled = false
+        // summaryRes =
+        //   if (canAuthenticate) R.string.pref_biometric_auth_summary
+        //   else R.string.pref_biometric_auth_summary_error
+        summary = "Temporarily disabled due to a bug, see issue 2802"
         onClick {
           enabled = false
           val isChecked = checked
@@ -81,7 +82,7 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
               when (result) {
                 is Result.Success -> {
                   // Apply the changes
-                  putBoolean(PreferenceKeys.BIOMETRIC_AUTH, checked)
+                  putBoolean(PreferenceKeys.BIOMETRIC_AUTH_2, checked)
                   enabled = true
                 }
                 is Result.Retry -> {}
@@ -89,7 +90,7 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
                   // If any error occurs, revert back to the previous
                   // state. This
                   // catch-all clause includes the cancellation case.
-                  putBoolean(PreferenceKeys.BIOMETRIC_AUTH, !checked)
+                  putBoolean(PreferenceKeys.BIOMETRIC_AUTH_2, !checked)
                   checked = !isChecked
                   enabled = true
                 }
