@@ -65,19 +65,19 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Get Non-Free Release APK
-        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+        uses: actions/download-artifact@7a1cd3216ca9260cd8022db641d960b1db4d1be4 # v4.0.0
         with:
           name: APS Non-Free Release APK
           path: artifacts/nonFree
 
       - name: Get Non-Free Bundle
-        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+        uses: actions/download-artifact@7a1cd3216ca9260cd8022db641d960b1db4d1be4 # v4.0.0
         with:
           name: APS Non-Free Release Bundle
           path: artifacts/nonFree
 
       - name: Get Free Release APK
-        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+        uses: actions/download-artifact@7a1cd3216ca9260cd8022db641d960b1db4d1be4 # v4.0.0
         with:
           name: APS Free Release APK
           path: artifacts/free
