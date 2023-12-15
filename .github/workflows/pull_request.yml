@@ -60,7 +60,7 @@ jobs:
         if: "${{ always() }}"
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
-          name: Build report
+          name: Build report (check-codestyle)
           path: build/reports/kotlin-build/
 
   unit-tests:
@@ -91,14 +91,14 @@ jobs:
         if: "${{ failure() }}"
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
-          name: Test report
+          name: Test report (unit-tests)
           path: app/build/reports
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
-          name: Build report
+          name: Build report (unit-tests)
           path: build/reports/kotlin-build/
 
   build-apks:
@@ -129,7 +129,7 @@ jobs:
         if: "${{ always() }}"
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
-          name: Build report
+          name: Build report (build-apks)
           path: build/reports/kotlin-build/
 
   check-api:
@@ -160,7 +160,7 @@ jobs:
         if: "${{ always() }}"
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
-          name: Build report
+          name: Build report (check-api)
           path: build/reports/kotlin-build/
 
   lint:
@@ -191,5 +191,5 @@ jobs:
         if: "${{ always() }}"
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
-          name: Build report
+          name: Build report (lint)
           path: build/reports/kotlin-build/
