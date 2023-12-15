@@ -18,12 +18,12 @@ import app.passwordstore.R
 import app.passwordstore.databinding.ActivitySshKeygenBinding
 import app.passwordstore.injection.prefs.GitPreferences
 import app.passwordstore.ssh.SSHKeyAlgorithm
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.keyguardManager
 import app.passwordstore.util.extensions.viewBinding
-import app.passwordstore.util.ssh.SSHFacade
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -40,7 +40,7 @@ class SshKeyGenActivity : AppCompatActivity() {
   private var sshKeyAlgorithm = SSHKeyAlgorithm.ECDSA
   private val binding by viewBinding(ActivitySshKeygenBinding::inflate)
   @GitPreferences @Inject lateinit var gitPrefs: SharedPreferences
-  @Inject lateinit var sshFacade: SSHFacade
+  @Inject lateinit var sshKeyManager: SSHKeyManager
   @Inject lateinit var dispatcherProvider: DispatcherProvider
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class SshKeyGenActivity : AppCompatActivity() {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     with(binding) {
       generate.setOnClickListener {
-        if (sshFacade.keyExists()) {
+        if (sshKeyManager.keyExists()) {
           MaterialAlertDialogBuilder(this@SshKeyGenActivity).run {
             setTitle(R.string.ssh_keygen_existing_title)
             setMessage(R.string.ssh_keygen_existing_message)
@@ -127,7 +127,7 @@ class SshKeyGenActivity : AppCompatActivity() {
           if (result !is Result.Success)
             throw UserNotAuthenticatedException(getString(R.string.biometric_auth_generic_failure))
         }
-        sshFacade.generateKey(sshKeyAlgorithm, requireAuthentication)
+        sshKeyManager.generateKey(sshKeyAlgorithm, requireAuthentication)
       }
     }
     // Check if we still need this

@@ -13,9 +13,6 @@ enum class Feature(
   val configKey: String,
 ) {
 
-  /** Opt into the new SSH layer implemented as a freestanding module. */
-  EnableNewSSHLayer(false, "enable_new_ssh"),
-
   /** Opt into a cache layer for PGP passphrases. */
   EnablePGPPassphraseCache(false, "enable_gpg_passphrase_cache"),
 }

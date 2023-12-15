@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.ui.sshkeygen.SshKeyGenActivity
 import app.passwordstore.ui.sshkeygen.SshKeyImportActivity
 import app.passwordstore.util.auth.BiometricAuthenticator
@@ -22,7 +23,6 @@ import app.passwordstore.util.git.GitCommandExecutor
 import app.passwordstore.util.git.sshj.SshAuthMethod
 import app.passwordstore.util.git.sshj.SshjSessionFactory
 import app.passwordstore.util.settings.AuthMode
-import app.passwordstore.util.ssh.SSHFacade
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
@@ -71,7 +71,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
       callingActivity.applicationContext,
       GitOperationEntryPoint::class.java
     )
-  private val sshFacade = hiltEntryPoint.sshFacade()
+  private val sshKeyManager = hiltEntryPoint.sshKeyManager()
   protected val repository = PasswordRepository.repository!!
   protected val git = Git(repository)
   private val authActivity
@@ -121,8 +121,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     authMethod: SshAuthMethod,
     credentialsProvider: CredentialsProvider? = null
   ) {
-    sshSessionFactory =
-      SshjSessionFactory(authMethod, hostKeyFile, sshFacade, hiltEntryPoint.dispatcherProvider())
+    sshSessionFactory = SshjSessionFactory(authMethod, hostKeyFile, sshKeyManager, hiltEntryPoint.dispatcherProvider())
     commands.filterIsInstance<TransportCommand<*, *>>().forEach { command ->
       command.setTransportConfigCallback { transport: Transport ->
         (transport as? SshTransport)?.sshSessionFactory = sshSessionFactory
@@ -170,8 +169,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   suspend fun executeAfterAuthentication(authMode: AuthMode): Result<Unit, Throwable> {
     when (authMode) {
       AuthMode.SshKey ->
-        if (sshFacade.keyExists()) {
-          if (sshFacade.needsAuthentication()) {
+        if (sshKeyManager.keyExists()) {
+          if (sshKeyManager.needsAuthentication()) {
             val result =
               withContext(hiltEntryPoint.dispatcherProvider().main()) {
                 suspendCoroutine { cont ->
@@ -248,7 +247,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   @EntryPoint
   @InstallIn(SingletonComponent::class)
   interface GitOperationEntryPoint {
-    fun sshFacade(): SSHFacade
+    fun sshKeyManager(): SSHKeyManager
 
     fun dispatcherProvider(): DispatcherProvider
   }

@@ -6,10 +6,10 @@ package app.passwordstore.util.git.sshj
 
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.settings.AuthMode
-import app.passwordstore.util.ssh.SSHFacade
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import java.io.File
@@ -71,7 +71,7 @@ abstract class InteractivePasswordFinder(private val dispatcherProvider: Dispatc
 class SshjSessionFactory(
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
-  private val sshFacade: SSHFacade,
+  private val sshKeyManager: SSHKeyManager,
   private val dispatcherProvider: DispatcherProvider,
 ) : SshSessionFactory() {
 
@@ -84,12 +84,10 @@ class SshjSessionFactory(
     tms: Int
   ): RemoteSession {
     return currentSession
-      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, sshFacade, dispatcherProvider)
-        .connect()
-        .also {
-          logcat { "New SSH connection created" }
-          currentSession = it
-        }
+      ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, dispatcherProvider, sshKeyManager).connect().also {
+        logcat { "New SSH connection created" }
+        currentSession = it
+      }
   }
 
   fun close() {
@@ -130,8 +128,8 @@ private class SshjSession(
   private val username: String,
   private val authMethod: SshAuthMethod,
   private val hostKeyFile: File,
-  private val sshFacade: SSHFacade,
   private val dispatcherProvider: DispatcherProvider,
+  private val sshKeyManager: SSHKeyManager,
 ) : RemoteSession {
 
   private lateinit var ssh: SSHClient
@@ -167,10 +165,7 @@ private class SshjSession(
       is SshAuthMethod.SshKey -> {
         val pubkeyAuth =
           AuthPublickey(
-            sshFacade.keyProvider(
-              ssh,
-              CredentialFinder(authMethod.activity, AuthMode.SshKey, dispatcherProvider)
-            )
+            sshKeyManager.keyProvider(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey, dispatcherProvider))
           )
         ssh.auth(username, pubkeyAuth, passwordAuth)
       }

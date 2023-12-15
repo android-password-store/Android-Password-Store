@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.injection.prefs.GitPreferences
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.ui.git.config.GitConfigActivity
 import app.passwordstore.ui.git.config.GitServerConfigActivity
 import app.passwordstore.ui.proxy.ProxySelectorActivity
@@ -28,7 +29,6 @@ import app.passwordstore.util.extensions.snackbar
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.settings.GitSettings
 import app.passwordstore.util.settings.PreferenceKeys
-import app.passwordstore.util.ssh.SSHFacade
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -44,11 +44,11 @@ import de.Maxr1998.modernpreferences.helpers.switch
 
 class RepositorySettings(
   private val activity: FragmentActivity,
-  private val sshFacade: SSHFacade,
+  private val sshKeyManager: SSHKeyManager,
 ) : SettingsProvider {
   private val generateSshKey =
     activity.registerForActivityResult(StartActivityForResult()) {
-      showSshKeyPref?.visible = sshFacade.canShowPublicKey()
+      showSshKeyPref?.visible = sshKeyManager.canShowPublicKey()
     }
 
   private val hiltEntryPoint by unsafeLazy {
@@ -113,7 +113,7 @@ class RepositorySettings(
       showSshKeyPref =
         pref(PreferenceKeys.SSH_SEE_KEY) {
           titleRes = R.string.pref_ssh_see_key_title
-          visible = PasswordRepository.isGitRepo() && sshFacade.canShowPublicKey()
+          visible = PasswordRepository.isGitRepo() && sshKeyManager.canShowPublicKey()
           onClick {
             ShowSshKeyFragment().show(activity.supportFragmentManager, "public_key")
             true

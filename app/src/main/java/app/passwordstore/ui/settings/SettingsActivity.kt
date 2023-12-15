@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BundleCompat
 import app.passwordstore.R
 import app.passwordstore.databinding.ActivityPreferenceRecyclerviewBinding
+import app.passwordstore.ssh.SSHKeyManager
 import app.passwordstore.util.extensions.viewBinding
-import app.passwordstore.util.ssh.SSHFacade
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import de.Maxr1998.modernpreferences.Preference
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
 
-  @Inject lateinit var sshFacade: SSHFacade
+  @Inject lateinit var sshKeyManager: SSHKeyManager
   private lateinit var repositorySettings: RepositorySettings
   private val miscSettings = MiscSettings(this)
   private val autofillSettings = AutofillSettings(this)
@@ -40,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
     Preference.Config.dialogBuilderFactory = { context -> MaterialAlertDialogBuilder(context) }
-    repositorySettings = RepositorySettings(this, sshFacade)
+    repositorySettings = RepositorySettings(this, sshKeyManager)
     val screen =
       screen(this) {
         subScreen {

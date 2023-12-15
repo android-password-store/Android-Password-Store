@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import app.passwordstore.R
-import app.passwordstore.util.ssh.SSHFacade
+import app.passwordstore.ssh.SSHKeyManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -17,11 +17,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ShowSshKeyFragment : DialogFragment() {
 
-  @Inject lateinit var sshFacade: SSHFacade
+  @Inject lateinit var sshKeyManager: SSHKeyManager
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val activity = requireActivity()
-    val publicKey = sshFacade.publicKey()
+    val publicKey = sshKeyManager.publicKey()
     return MaterialAlertDialogBuilder(requireActivity()).run {
       setMessage(getString(R.string.ssh_keygen_message, publicKey))
       setTitle(R.string.your_public_key)
