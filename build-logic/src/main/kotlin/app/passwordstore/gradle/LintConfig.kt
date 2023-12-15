@@ -21,6 +21,8 @@ object LintConfig {
     // Noisy, not particularly actionable
     disable += "DuplicateStrings"
     // We deal with dependency upgrades separately
+    disable += "AndroidGradlePluginVersion"
+    disable += "GradleDependency"
     disable += "NewerVersionAvailable"
     // Noisy
     disable += "SyntheticAccessor"
