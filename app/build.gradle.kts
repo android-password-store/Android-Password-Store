@@ -47,7 +47,6 @@ dependencies {
   implementation(projects.format.common)
   implementation(projects.passgen.diceware)
   implementation(projects.passgen.random)
-  implementation(projects.ssh)
   implementation(projects.ui.compose)
   implementation(libs.androidx.activity.ktx)
   implementation(libs.androidx.activity.compose)
