@@ -305,6 +305,7 @@
   <string name="otp_import_failure_no_selection">No image file was selected</string>
   <string name="exporting_passwords">Exporting passwords…</string>
   <string name="invalid_gpg_id">Found .gpg-id, but it contains an invalid key ID, fingerprint or user ID</string>
+  <string name="short_gpg_id">Found .gpg-id, but it contains a short hex ID, which is not supported</string>
   <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
   <string name="directory_hint">Directory</string>
   <string name="new_folder_set_gpg_key">Set GPG key for directory</string>

@@ -170,7 +170,9 @@ open class BasePGPActivity : AppCompatActivity() {
               if (line.isEmpty()) return@run
               // Apparently `gpg-id` being the first line is also acceptable?
               if (line == "gpg-id") return@run
-              if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex()).not()) {
+              if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex())) {
+                snackbar(message = resources.getString(R.string.short_gpg_id))
+              } else {
                 snackbar(message = resources.getString(R.string.invalid_gpg_id))
               }
               return null
