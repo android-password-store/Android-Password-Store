@@ -1,5 +1,7 @@
 [versions]
-agp = "8.3.0-alpha16"
+# Not using alpha track due to installRelease regression
+# https://issuetracker.google.com/issues/315337463
+agp = "8.2.0"
 androidxActivity = "1.8.2"
 bouncycastle = "1.77"
 moshi = "1.15.0"

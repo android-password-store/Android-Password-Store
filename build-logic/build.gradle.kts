@@ -5,7 +5,7 @@
 
 plugins { `kotlin-dsl` }
 
-kotlin.jvmToolchain(20)
+kotlin.jvmToolchain(17)
 
 gradlePlugin {
   plugins {
