@@ -12,7 +12,8 @@ import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.sshkeygen.SshKeyGenActivity
 import app.passwordstore.ui.sshkeygen.SshKeyImportActivity
 import app.passwordstore.util.auth.BiometricAuthenticator
-import app.passwordstore.util.auth.BiometricAuthenticator.Result.Cancelled
+import app.passwordstore.util.auth.BiometricAuthenticator.Result.CanceledBySystem
+import app.passwordstore.util.auth.BiometricAuthenticator.Result.CanceledByUser
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Failure
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Retry
 import app.passwordstore.util.auth.BiometricAuthenticator.Result.Success
@@ -183,10 +184,11 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
               is Success -> {
                 registerAuthProviders(SshAuthMethod.SshKey(authActivity))
               }
-              is Cancelled -> {
+              is CanceledByUser -> {
                 return Err(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
               }
-              is Failure -> {
+              is Failure,
+              is CanceledBySystem -> {
                 throw IllegalStateException("Biometric authentication failures should be ignored")
               }
               else -> {

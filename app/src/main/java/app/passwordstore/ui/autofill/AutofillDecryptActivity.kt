@@ -81,7 +81,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
           decrypt(filePath, clientState, action, authResult)
         }
       } else {
-        decrypt(filePath, clientState, action, Result.Cancelled)
+        decrypt(filePath, clientState, action, Result.CanceledByUser)
       }
     }
   }
@@ -98,7 +98,8 @@ class AutofillDecryptActivity : BasePGPActivity() {
         // Internally handled by the prompt dialog
         is Result.Retry -> {}
         // If the dialog is dismissed for any reason, prompt for passphrase
-        is Result.Cancelled,
+        is Result.CanceledBySystem,
+        is Result.CanceledByUser,
         is Result.Failure,
         is Result.HardwareUnavailableOrDisabled -> askPassphrase(filePath, clientState, action)
         //

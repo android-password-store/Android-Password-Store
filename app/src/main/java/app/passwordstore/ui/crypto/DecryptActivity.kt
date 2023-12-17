@@ -78,7 +78,7 @@ class DecryptActivity : BasePGPActivity() {
         requireKeysExist { decrypt(isError = false, authResult) }
       }
     } else {
-      requireKeysExist { decrypt(isError = false, Result.Cancelled) }
+      requireKeysExist { decrypt(isError = false, Result.CanceledByUser) }
     }
   }
 
@@ -158,7 +158,8 @@ class DecryptActivity : BasePGPActivity() {
         // Internally handled by the prompt dialog
         is Result.Retry -> {}
         // If the dialog is dismissed for any reason, prompt for passphrase
-        is Result.Cancelled,
+        is Result.CanceledByUser,
+        is Result.CanceledBySystem,
         is Result.Failure,
         is Result.HardwareUnavailableOrDisabled ->
           askPassphrase(isError, gpgIdentifiers, authResult)

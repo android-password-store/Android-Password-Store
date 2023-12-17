@@ -42,8 +42,11 @@ object BiometricAuthenticator {
     /** The biometric hardware is unavailable or disabled on a software or hardware level. */
     data object HardwareUnavailableOrDisabled : Result()
 
-    /** The prompt was dismissed. */
-    data object Cancelled : Result()
+    /** The biometric prompt was canceled due to a user-initiated action. */
+    data object CanceledByUser : Result()
+
+    /** The biometric prompt was canceled by the system. */
+    data object CanceledBySystem : Result()
   }
 
   fun canAuthenticate(activity: FragmentActivity): Boolean {
@@ -84,32 +87,51 @@ object BiometricAuthenticator {
         super.onAuthenticationError(errorCode, errString)
         logcat(TAG) { "onAuthenticationError(errorCode=$errorCode, msg=$errString)" }
         when (errorCode) {
-          BiometricPrompt.ERROR_CANCELED,
-          BiometricPrompt.ERROR_USER_CANCELED,
-          BiometricPrompt.ERROR_NEGATIVE_BUTTON -> {
-            callback(Result.Cancelled)
-          }
-          BiometricPrompt.ERROR_HW_NOT_PRESENT,
-          BiometricPrompt.ERROR_HW_UNAVAILABLE,
-          BiometricPrompt.ERROR_NO_BIOMETRICS,
-          BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
-            callback(Result.HardwareUnavailableOrDisabled)
-          }
-          BiometricPrompt.ERROR_LOCKOUT,
-          BiometricPrompt.ERROR_LOCKOUT_PERMANENT,
-          BiometricPrompt.ERROR_NO_SPACE,
-          BiometricPrompt.ERROR_TIMEOUT,
-          BiometricPrompt.ERROR_VENDOR -> {
+          /** Keep in sync with [androidx.biometric.BiometricPrompt.AuthenticationError] */
+          BiometricPrompt.ERROR_HW_UNAVAILABLE -> callback(Result.HardwareUnavailableOrDisabled)
+          BiometricPrompt.ERROR_UNABLE_TO_PROCESS -> callback(Result.Retry)
+          BiometricPrompt.ERROR_TIMEOUT ->
             callback(
               Result.Failure(
                 errorCode,
                 activity.getString(R.string.biometric_auth_error_reason, errString)
               )
             )
-          }
-          BiometricPrompt.ERROR_UNABLE_TO_PROCESS -> {
-            callback(Result.Retry)
-          }
+          BiometricPrompt.ERROR_NO_SPACE ->
+            callback(
+              Result.Failure(
+                errorCode,
+                activity.getString(R.string.biometric_auth_error_reason, errString)
+              )
+            )
+          BiometricPrompt.ERROR_CANCELED -> callback(Result.CanceledBySystem)
+          BiometricPrompt.ERROR_LOCKOUT ->
+            callback(
+              Result.Failure(
+                errorCode,
+                activity.getString(R.string.biometric_auth_error_reason, errString)
+              )
+            )
+          BiometricPrompt.ERROR_VENDOR ->
+            callback(
+              Result.Failure(
+                errorCode,
+                activity.getString(R.string.biometric_auth_error_reason, errString)
+              )
+            )
+          BiometricPrompt.ERROR_LOCKOUT_PERMANENT ->
+            callback(
+              Result.Failure(
+                errorCode,
+                activity.getString(R.string.biometric_auth_error_reason, errString)
+              )
+            )
+          BiometricPrompt.ERROR_USER_CANCELED -> callback(Result.CanceledByUser)
+          BiometricPrompt.ERROR_NO_BIOMETRICS -> callback(Result.HardwareUnavailableOrDisabled)
+          BiometricPrompt.ERROR_HW_NOT_PRESENT -> callback(Result.HardwareUnavailableOrDisabled)
+          BiometricPrompt.ERROR_NEGATIVE_BUTTON -> callback(Result.CanceledByUser)
+          BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL ->
+            callback(Result.HardwareUnavailableOrDisabled)
           // We cover all guaranteed values above, but [errorCode] is still an Int
           // at the end of the day so a catch-all else will always be required.
           else -> {

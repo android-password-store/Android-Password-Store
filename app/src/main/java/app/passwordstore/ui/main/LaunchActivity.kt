@@ -36,7 +36,8 @@ class LaunchActivity : AppCompatActivity() {
             startTargetActivity(false)
           }
           is Result.Failure,
-          Result.Cancelled -> {
+          Result.CanceledBySystem,
+          Result.CanceledByUser -> {
             finish()
           }
           is Result.Retry -> {}
