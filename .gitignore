@@ -106,6 +106,7 @@ obj/
 .idea/jarRepositories.xml
 .idea/runConfigurations.xml
 .idea/deploymentTargetDropDown.xml
+.idea/deploymentTargetSelector.xml
 .idea/kotlinc.xml
 .idea/migrations.xml
 
