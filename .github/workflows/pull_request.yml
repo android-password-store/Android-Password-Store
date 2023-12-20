@@ -5,35 +5,14 @@ on:
 name: Check pull request
 
 concurrency:
-  group: ${{ github.head_ref }}
+  group: ${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 env:
   SENTRY_DSN: 'https://public_key@example.com/project_id'
 
 jobs:
-  check-changed-files:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-      - name: Check if relevant files have changed
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        id: service-changed
-        with:
-          result-encoding: string
-          script: |
-            const script = require('.github/check-changed-files.js')
-            return await script({github, context})
-
-      - name: Fail if no files changed
-        if: "${{ steps.service-changed.outputs.result != 'true' }}"
-        shell: bash
-        run: exit 1
-
   check-codestyle:
-    needs: [ "check-changed-files" ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -64,7 +43,6 @@ jobs:
           path: build/reports/kotlin-build/
 
   unit-tests:
-    needs: [ "check-changed-files" ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -102,7 +80,6 @@ jobs:
           path: build/reports/kotlin-build/
 
   build-apks:
-    needs: [ "check-changed-files" ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -133,7 +110,6 @@ jobs:
           path: build/reports/kotlin-build/
 
   check-api:
-    needs: [ "check-changed-files" ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -164,7 +140,6 @@ jobs:
           path: build/reports/kotlin-build/
 
   lint:
-    needs: [ "check-changed-files" ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
