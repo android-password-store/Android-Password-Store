@@ -18,7 +18,7 @@ jobs:
           java-version: 20
 
       - name: Download new translations from Crowdin
-        uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27 # v2.11.0
+        uses: gradle/gradle-build-action@982da8e78c05368c70dac0351bb82647a9e9a5d2 # v2.11.1
         with:
           arguments: --no-configuration-cache crowdin
           gradle-home-cache-cleanup: true
