@@ -52,7 +52,7 @@ build-okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
 build-r8 = "com.android.tools:r8:8.2.33"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.1.0"
-build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.1"
+build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.3"
 build-versions = "com.github.ben-manes:gradle-versions-plugin:0.50.0"
 compose-bom = "androidx.compose:compose-bom:2023.10.01"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
