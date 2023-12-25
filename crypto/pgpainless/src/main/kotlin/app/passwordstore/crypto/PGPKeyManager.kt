@@ -139,6 +139,14 @@ constructor(
   /** @see KeyManager.getKeyById */
   override suspend fun getKeyId(key: PGPKey): PGPIdentifier? = tryGetId(key)
 
+  public suspend fun isPasswordProtected(key: PGPKey): Boolean {
+    val keyring = tryParseKeyring(key)
+    if (keyring is PGPSecretKeyRing) {
+      keyring.secretKey.keyEncryptionAlgorithm
+    }
+    return false
+  }
+
   /** Checks if [keyDir] exists and attempts to create it if not. */
   private fun keyDirExists(): Boolean {
     return keyDir.exists() || keyDir.mkdirs()

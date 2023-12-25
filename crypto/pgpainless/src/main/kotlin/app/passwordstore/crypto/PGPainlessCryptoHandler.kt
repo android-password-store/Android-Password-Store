@@ -22,6 +22,7 @@ import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
 import org.bouncycastle.util.io.Streams
 import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.ConsumerOptions
+import org.pgpainless.decryption_verification.MessageInspector
 import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.ProducerOptions
 import org.pgpainless.exception.WrongPassphraseException
@@ -135,5 +136,10 @@ public class PGPainlessCryptoHandler @Inject constructor() :
   /** Runs a naive check on the extension for the given [fileName] to check if it is a PGP file. */
   public override fun canHandle(fileName: String): Boolean {
     return fileName.substringAfterLast('.', "") == "gpg"
+  }
+
+  public override fun isPassphraseProtected(message: InputStream): Boolean {
+    val info = MessageInspector.determineEncryptionInfoForMessage(message)
+    return info.isPassphraseEncrypted
   }
 }
