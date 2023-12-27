@@ -177,7 +177,7 @@ class DecryptActivity : BasePGPActivity() {
     }
   }
 
-  private suspend fun askPassphrase(
+  private fun askPassphrase(
     isError: Boolean,
     gpgIdentifiers: List<PGPIdentifier>,
     authResult: Result,
@@ -186,14 +186,6 @@ class DecryptActivity : BasePGPActivity() {
       retries += 1
     } else {
       finish()
-    }
-    if (
-      !repository.isPasswordProtected(
-        withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
-      )
-    ) {
-      decryptWithPassphrase(password = "", gpgIdentifiers = gpgIdentifiers)
-      return
     }
     val dialog = PasswordDialog()
     if (isError) {

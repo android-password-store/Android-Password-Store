@@ -41,10 +41,4 @@ public interface CryptoHandler<Key, EncOpts : CryptoOptions, DecryptOpts : Crypt
 
   /** Given a [fileName], return whether this instance can handle it. */
   public fun canHandle(fileName: String): Boolean
-
-  /**
-   * Inspects the given encrypted [message] to notify user if a passphrase is necessary to decrypt
-   * it.
-   */
-  public fun isPassphraseProtected(message: InputStream): Boolean
 }

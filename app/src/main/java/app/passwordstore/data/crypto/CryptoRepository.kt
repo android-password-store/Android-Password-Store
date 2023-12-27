@@ -45,10 +45,6 @@ constructor(
     out: ByteArrayOutputStream,
   ) = withContext(dispatcherProvider.io()) { decryptPgp(password, identities, message, out) }
 
-  fun isPasswordProtected(message: ByteArrayInputStream): Boolean {
-    return pgpCryptoHandler.isPassphraseProtected(message)
-  }
-
   suspend fun encrypt(
     identities: List<PGPIdentifier>,
     content: ByteArrayInputStream,
