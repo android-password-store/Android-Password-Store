@@ -3,6 +3,7 @@ agp = "8.4.1"
 androidxActivity = "1.9.0"
 bouncycastle = "1.78.1"
 coroutines = "1.8.1"
+credentials = "1.3.0-alpha04"
 flowbinding = "1.2.0"
 hilt = "2.51.1"
 kotlin = "2.0.0"
@@ -20,6 +21,9 @@ androidx-autofill = "androidx.autofill:autofill:1.3.0-alpha01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha13"
 androidx-core-ktx = "androidx.core:core-ktx:1.13.1"
+#noinspection CredentialDependency
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+androidx-credentials-play-services = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.1"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
