@@ -115,6 +115,7 @@
   <string name="pref_import_pgp_key_title">Importuj klucz PGP</string>
   <string name="pref_pgp_key_manager_title">Menedżer kluczy</string>
   <string name="pref_pgp_ascii_armor_title">Szyfruj w trybie ASCII-armor</string>
+  <string name="pref_passphrase_cache_summary">UWAGA: ta funkcjonalność powinna działać poprawnie, ale jest bardzo eksperymentalna. Wymaga aktywnej blokady ekranu.</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Generuj hasło</string>
   <string name="pwgen_generate">Wygeneruj</string>
@@ -267,6 +268,7 @@
   <string name="otp_import_success">Pomyślnie zaimportowano konfigurację TOTP</string>
   <string name="exporting_passwords">Eksportowanie haseł…</string>
   <string name="invalid_gpg_id">Znaleziono .gpg-id, ale zawiera nieprawidłowy identyfikator klucza, odcisk palca lub identyfikator użytkownika</string>
+  <string name="short_gpg_id">Znaleziono .gpg-id, ale zawarty w nim skrócony identyfikator nie jest obsługiwany</string>
   <string name="invalid_filename_text">Nazwa pliku nie może zawierać \'/\', ustaw katalog powyżej</string>
   <string name="directory_hint">Katalog</string>
   <string name="new_folder_set_gpg_key">Ustaw klucz GPG dla katalogu</string>

@@ -119,7 +119,7 @@
   <string name="pref_pgp_key_manager_title">Xestor de chaves</string>
   <string name="pref_pgp_ascii_armor_title">Cifrar co modo ASCII armor</string>
   <string name="pref_passphrase_cache_title">Permitir usar a caché para frase de paso</string>
-  <string name="pref_passphrase_cache_summary">AVISO: esta ferramenta é funcional pero aínda experimental.</string>
+  <string name="pref_passphrase_cache_summary">AVISO: esta característica funciona ben pero é experimental. Require que a pantalla estea bloqueada.</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Crear contrasinal</string>
   <string name="pwgen_generate">Crear</string>
@@ -278,6 +278,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="otp_import_failure_no_selection">Non se seleccionou ningún ficheiro de imaxe</string>
   <string name="exporting_passwords">Exportando contrasinais…</string>
   <string name="invalid_gpg_id">Atopouse .gpg-id, pero contén un ID de chave, impresión dixital ou ID de usuaria non válidos</string>
+  <string name="short_gpg_id">Atopouse .gpg-id, pero contén un ID hex curto, ao que non damos soporte</string>
   <string name="invalid_filename_text">O nome do ficheiro non pode conter \'/\', establece un directorio superior</string>
   <string name="directory_hint">Directorio</string>
   <string name="new_folder_set_gpg_key">Establece chave GPG para o directorio</string>
