@@ -117,7 +117,7 @@
   <string name="pref_pgp_key_manager_title">키 관리자</string>
   <string name="pref_pgp_ascii_armor_title">ASCII armor 모드로 암호화</string>
   <string name="pref_passphrase_cache_title">비밀번호 캐쉬 활성화</string>
-  <string name="pref_passphrase_cache_summary">경고: 이 기능은 매우 실험적인 기능입니다.</string>
+  <string name="pref_passphrase_cache_summary">경고: 이 기능은 기능적이지만 매우 실험적인 기능입니다. 화면 잠금이 활성화되어 있어야 합니다.</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">암호 생성</string>
   <string name="pwgen_generate">생성</string>
@@ -277,6 +277,7 @@ username@example.com:…</string>
   <string name="otp_import_failure_no_selection">선택한 이미지 파일이 없습니다</string>
   <string name="exporting_passwords">비밀번호 내보내는 중…</string>
   <string name="invalid_gpg_id">.gpg-id를 찾았지만 잘못된 키 ID, 지문 또는 사용자 ID가 포함되어 있습니다</string>
+  <string name="short_gpg_id">.gpg-id를 찾았지만, 지원되지 않는 짧은 16진수 ID가 포함되어 있습니다.</string>
   <string name="invalid_filename_text">파일 이름에 \'/\'가 포함되어서는 안됩니다. 위의 디렉터리를 설정하세요</string>
   <string name="directory_hint">디렉토리</string>
   <string name="new_folder_set_gpg_key">디렉토리의 GPG 키 설정</string>

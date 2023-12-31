@@ -116,7 +116,6 @@
   <string name="pref_pgp_key_manager_title">Менеджер ключей</string>
   <string name="pref_pgp_ascii_armor_title">Шифрование в режиме брони ASCII</string>
   <string name="pref_passphrase_cache_title">Включить кэширование ключевой фразы</string>
-  <string name="pref_passphrase_cache_summary">ВНИМАНИЕ: эта функция работающая, но очень экспериментальная.</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Сгенерировать пароль</string>
   <string name="pwgen_generate">Сгенерировать</string>

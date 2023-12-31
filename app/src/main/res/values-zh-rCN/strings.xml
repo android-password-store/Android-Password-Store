@@ -118,7 +118,7 @@
   <string name="pref_pgp_key_manager_title">密钥管理器</string>
   <string name="pref_pgp_ascii_armor_title">以 ASCII 装甲模式加密</string>
   <string name="pref_passphrase_cache_title">启用密码短语缓存</string>
-  <string name="pref_passphrase_cache_summary">警告：此功能可正常工作，但仍然非常实验性。</string>
+  <string name="pref_passphrase_cache_summary">警告：此功能可以运作，但非常实验性，需要活跃的屏幕锁。</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">生成密码</string>
   <string name="pwgen_generate">生成</string>
@@ -282,6 +282,7 @@ personal.com</string>
   <string name="otp_import_failure_no_selection">没有选择镜像文件</string>
   <string name="exporting_passwords">正在导出密码…</string>
   <string name="invalid_gpg_id">找到了 .gpg-id，但它包含无效的密钥ID、指纹或用户ID</string>
+  <string name="short_gpg_id">找到 .gpg-id 但它包含一个不受支持的短十六进制ID。</string>
   <string name="invalid_filename_text">文件名不能包含\'/\'</string>
   <string name="directory_hint">目录</string>
   <string name="new_folder_set_gpg_key">为目录设置GPG密钥</string>
