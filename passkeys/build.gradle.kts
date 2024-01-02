@@ -16,6 +16,8 @@ android {
 
 dependencies {
   implementation(libs.androidx.annotation)
+  implementation(libs.androidx.activity.ktx)
+  implementation(libs.androidx.biometricKtx)
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.credentials)
   implementation(libs.kotlinx.coroutines.core)
