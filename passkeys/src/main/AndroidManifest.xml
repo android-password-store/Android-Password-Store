@@ -3,6 +3,7 @@
   ~ SPDX-License-Identifier: LGPL-3.0-only WITH LGPL-3.0-linking-exception
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
   <application>
     <service
       android:name=".APSCredentialProviderService"
@@ -15,7 +16,25 @@
       </intent-filter>
       <meta-data
         android:name="android.credentials.provider"
-        android:resource="@xml/provider"/>
+        android:resource="@xml/provider" />
     </service>
+
+    <activity
+      android:name="app.passwordstore.passkeys.CreatePasskeyActivity"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="app.passwordstore.CREATE_PASSKEY" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
+
+    <activity
+      android:name="app.passwordstore.passkeys.GetPasskeyActivity"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="app.passwordstore.GET_PASSKEY" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
   </application>
 </manifest>
