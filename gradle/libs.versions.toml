@@ -10,7 +10,7 @@ composeCompiler = "1.5.7"
 coroutines = "1.7.3"
 flowbinding = "1.2.0"
 hilt = "2.50"
-kotlin = "1.9.21"
+kotlin = "1.9.22"
 kotlinResult = "1.1.18"
 lifecycle = "2.6.2"
 
