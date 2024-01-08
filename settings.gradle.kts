@@ -35,7 +35,7 @@ pluginManagement {
       forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }
       filter { includeModule("com.android.tools", "r8") }
     }
-    mavenCentral()
+    mavenCentral { mavenContent { releasesOnly() } }
   }
 }
 
@@ -56,9 +56,8 @@ gradleEnterprise {
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
-    exclusiveContent {
-      forRepository { google() }
-      filter {
+    google {
+      content {
         includeGroupByRegex("androidx.*")
         includeGroupByRegex("com.android.*")
         includeGroup("com.google.android.gms")
@@ -73,7 +72,7 @@ dependencyResolutionManagement {
       name = "Compose Compiler Snapshots"
       content { includeGroup("androidx.compose.compiler") }
     }
-    mavenCentral()
+    mavenCentral { mavenContent { releasesOnly() } }
   }
 }
 

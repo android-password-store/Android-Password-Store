@@ -28,7 +28,7 @@ dependencyResolutionManagement {
       forRepository { maven("https://storage.googleapis.com/r8-releases/raw") }
       filter { includeModule("com.android.tools", "r8") }
     }
-    mavenCentral()
+    mavenCentral { mavenContent { releasesOnly() } }
   }
   versionCatalogs {
     maybeCreate("libs").apply {
