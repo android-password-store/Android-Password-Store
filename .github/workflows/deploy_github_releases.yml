@@ -35,19 +35,19 @@ jobs:
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
     - name: Upload non-free release APK
-      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+      uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4.1.0
       with:
         name: APS Non-Free Release APK
         path: app/build/outputs/apk/nonFree/release/app-nonFree-release.apk
 
     - name: Upload non-free release Bundle
-      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+      uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4.1.0
       with:
         name: APS Non-Free Release Bundle
         path: app/build/outputs/bundle/nonFreeRelease/app-nonFree-release.aab
 
     - name: Upload free release APK
-      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+      uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4.1.0
       with:
         name: APS Free Release APK
         path: app/build/outputs/apk/free/release/app-free-release.apk
