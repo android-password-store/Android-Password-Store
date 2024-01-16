@@ -166,7 +166,7 @@ public class APSCredentialProviderService : CredentialProviderService() {
     // that are to be invoked through the PendingIntent(s)
     const val CREATE_REQUEST_CODE = 10001
     const val GET_REQUEST_CODE = 10002
-    const val DEFAULT_ACCOUNT_NAME = "Default Password Store"
+    const val DEFAULT_ACCOUNT_NAME = "Password Store"
     const val CREATE_PASSKEY_INTENT_ACTION = "app.passwordstore.CREATE_PASSKEY"
     const val GET_PASSKEY_INTENT_ACTION = "app.passwordstore.GET_PASSKEY"
   }
