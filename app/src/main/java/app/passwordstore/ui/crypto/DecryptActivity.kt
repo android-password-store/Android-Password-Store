@@ -262,6 +262,9 @@ class DecryptActivity : BasePGPActivity() {
       val items = arrayListOf<FieldItem>()
       if (!entry.password.isNullOrBlank()) {
         items.add(FieldItem.createPasswordField(entry.password!!))
+        if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
+          copyPasswordToClipboard(entry.password)
+        }
       }
 
       if (entry.hasTotp()) {
