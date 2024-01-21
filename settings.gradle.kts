@@ -20,7 +20,6 @@ pluginManagement {
     exclusiveContent {
       forRepository { gradlePluginPortal() }
       filter {
-        includeModule("com.github.ben-manes", "gradle-versions-plugin")
         includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
         includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
         includeModule("me.tylerbwong.gradle.metalava", "plugin")
@@ -42,7 +41,6 @@ pluginManagement {
 plugins {
   id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
   id("com.gradle.enterprise") version "3.16.1"
-  id("com.github.android-password-store.versions")
 }
 
 gradleEnterprise {

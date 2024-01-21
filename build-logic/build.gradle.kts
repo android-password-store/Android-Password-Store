@@ -65,10 +65,6 @@ gradlePlugin {
       id = "com.github.android-password-store.versioning-plugin"
       implementationClass = "app.passwordstore.gradle.versioning.VersioningPlugin"
     }
-    register("versions") {
-      id = "com.github.android-password-store.versions"
-      implementationClass = "app.passwordstore.gradle.DependencyUpdatesPlugin"
-    }
   }
 }
 
@@ -88,8 +84,6 @@ dependencies {
   implementation(libs.build.r8)
   implementation(libs.build.semver)
   implementation(libs.build.sentry)
-  implementation(libs.build.vcu)
-  implementation(libs.build.versions)
   implementation(libs.kotlinx.coroutines.core)
 
   // Expose the generated version catalog API to the plugin.
