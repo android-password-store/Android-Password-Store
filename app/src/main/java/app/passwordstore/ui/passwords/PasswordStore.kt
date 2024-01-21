@@ -315,7 +315,9 @@ class PasswordStore : BaseGitActivity() {
         }
       }
       R.id.refresh -> refreshPasswordList()
-      android.R.id.home -> onBackPressedDispatcher.onBackPressed()
+      android.R.id.home -> {
+        @Suppress("DEPRECATION") onBackPressed()
+      }
       else -> return super.onOptionsItemSelected(item)
     }
     return true
