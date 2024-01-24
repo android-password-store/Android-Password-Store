@@ -2,7 +2,7 @@
 # Not using alpha track due to installRelease regression
 # https://issuetracker.google.com/issues/315337463
 agp = "8.2.0"
-androidxActivity = "1.8.2"
+androidxActivity = "1.9.0-alpha02"
 bouncycastle = "1.77"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.5.8-dev-k1.9.22-42b6ec2b037"
@@ -17,7 +17,7 @@ moshi = "1.15.0"
 [libraries]
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.4"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "androidxActivity" }
 androidx-annotation = "androidx.annotation:annotation:1.7.1"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
 androidx-autofill = "androidx.autofill:autofill:1.3.0-alpha01"

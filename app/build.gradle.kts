@@ -48,7 +48,7 @@ dependencies {
   implementation(projects.passgen.diceware)
   implementation(projects.passgen.random)
   implementation(projects.ui.compose)
-  implementation(libs.androidx.activity.ktx)
+  implementation(libs.androidx.activity)
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.autofill)
