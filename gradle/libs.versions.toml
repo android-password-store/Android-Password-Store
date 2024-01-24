@@ -25,7 +25,7 @@ androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha13"
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-alpha08"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-alpha09"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
