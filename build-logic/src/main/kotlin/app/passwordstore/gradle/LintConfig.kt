@@ -32,6 +32,8 @@ object LintConfig {
     disable += "UnusedIds"
     // False-positive, not relevant on the API levels we support
     disable += "TrulyRandom"
+    // I can't do anything about this
+    disable += "ObsoleteLintCustomCheck"
     if (!isJVM) {
       // Enable compose-lint-checks' Material 2 detector
       enable += "ComposeM2Api"
