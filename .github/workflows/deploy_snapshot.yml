@@ -38,7 +38,7 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Build release app
-      uses: gradle/gradle-build-action@982da8e78c05368c70dac0351bb82647a9e9a5d2 # v2.11.1
+      uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa # v2.12.0
       env:
         SNAPSHOT: "true"
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
