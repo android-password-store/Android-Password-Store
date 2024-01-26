@@ -156,7 +156,7 @@ private fun KeyListPreview() {
 
 @Preview
 @Composable
-fun EmptyKeyListPreview() {
+private fun EmptyKeyListPreview() {
   APSThemePreview {
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
       KeyList(identifiers = persistentListOf(), onItemClick = {})
