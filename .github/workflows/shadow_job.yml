@@ -14,7 +14,7 @@ jobs:
       agp-versions: ${{ steps.build-agp-matrix.outputs.agp-versions }}
     steps:
       - id: agp-version-finder
-        uses: usefulness/agp-version-finder-action@90844048a634a3fef57d3deba3cfe697f6fb001e # v1
+        uses: usefulness/agp-version-finder-action@2e27d3b2fdcddf9894df4d6edffdd90e232312fa # v1
       - id: build-agp-matrix
         run: echo 'agp-versions=["${{ steps.agp-version-finder.outputs.latest-beta }}","${{ steps.agp-version-finder.outputs.latest-alpha }}"]' >> $GITHUB_OUTPUT
 
