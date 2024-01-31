@@ -38,7 +38,7 @@ jobs:
         queries: +security-extended
 
     - name: Build project
-      uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa # v2.12.0
+      uses: gradle/gradle-build-action@3b1b3b9a2104c2b47fbae53f3938079c00c9bb87 # v3.0.0
       with:
         gradle-home-cache-cleanup: true
         cache-read-only: true
