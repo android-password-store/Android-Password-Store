@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+<resources>
+  <plurals name="delete_title">
+    <item quantity="one">%d elemento seleccionado</item>
+    <item quantity="other">%d elementos seleccionados</item>
+  </plurals>
+  <!-- Activity names -->
+  <string name="action_settings">Ajustes</string>
+  <string name="dialog_delete_title">El directorio ya existe</string>
+  <string name="dialog_delete_msg">El directorio seleccionado ya existe. La versión actual solo soporta un almacén de contraseñas. ¿Quieres eliminar el almacén actual?\n(%1$s)</string>
+  <string name="dialog_delete">Eliminar directorio</string>
+  <string name="dialog_do_not_delete">Cancelar</string>
+  <string name="title_activity_git_clone">Información del repositorio</string>
+  <string name="title_activity_git_log">Comprometido</string>
+  <!-- Password Store -->
+  <string name="creation_dialog_text">Por favor clona o crea un nuevo repositorio antes de añadir una contraseña o ejecutar una operación de sincronización.</string>
+  <plurals name="delete_dialog_text">
+    <item quantity="one">¿Está seguro de que quiere borrar la contraseña?</item>
+    <item quantity="other">¿Está seguro de que quiere borrar %d contraseñas?</item>
+  </plurals>
+  <string name="delete_directory_progress_text">Borrando…</string>
+  <string name="move">Mover</string>
+  <string name="edit">Editar</string>
+  <string name="delete">Eliminar</string>
+  <string name="password_exists_title">¡Esta contraseña ya existe!</string>
+  <string name="password_exists_message">Esto sobrescribirá %1$s con %2$s.</string>
+  <string name="password_move_error_title">Error al mover las contraseñas</string>
+  <string name="password_move_error_message">Error al mover %1$s a %2$s</string>
+  <!-- git commits -->
+  <string name="git_commit_add_text">Añadir contraseña generada para %1$s usando Android Password Store.</string>
+  <string name="git_commit_edit_text">Editar contraseña para %1$s usando Android Password Store.</string>
+  <string name="git_commit_remove_text">Eliminar %1$s del almacén.</string>
+  <string name="git_commit_move_text">Renombrado %1$s a %2$s usando Android Password Store..</string>
+  <string name="git_commit_move_multiple_text">Mover múltiples contraseñas a %1$s.</string>
+  <string name="git_commit_gpg_id">Inicializar IDs GPG en %1$s.</string>
+  <!-- PGPHandler -->
+  <string name="clipboard_copied_text">Copiado al portapapeles</string>
+  <string name="file_toast_text">Por favor selecciona un nombre de archivo</string>
+  <string name="path_toast_text">Por favor proporcione una ruta de archivo</string>
+  <string name="empty_toast_text">No puedes dejar la contraseña y el contenido extra ambos vacíos</string>
+  <!-- Git Async Task -->
+  <string name="jgit_error_dialog_title">Ocurrió un error durante la operación de Git</string>
+  <!-- Git Handler -->
+  <string name="ssh_preferences_dialog_text">Por favor importa o genera tu llave SSH en los ajustes</string>
+  <string name="ssh_preferences_dialog_title">No hay llave SSH</string>
+  <string name="button_label_import">Importar</string>
+  <string name="ssh_preferences_dialog_generate">Generar</string>
+  <string name="passphrase_dialog_title">Autenticar</string>
+  <string name="passphrase_dialog_text">Por favor, ingresa una contraseña para tu llave SSH</string>
+  <string name="password_dialog_text">Por favor ingresa una contraseña para este repositorio</string>
+  <!-- Clone fragment -->
+  <string name="server_url">URL del repositorio</string>
+  <string name="connection_mode">Modo de autenticación</string>
+  <!-- Git Config fragment -->
+  <string name="git_user_name_hint">Nombre de usuario</string>
+  <string name="git_user_email">E-mail</string>
+  <string name="invalid_email_dialog_text">Por favor ingresa una dirección de correo</string>
+  <string name="clone_button">¡Clonar!</string>
+  <!-- PGP Handler -->
+  <string name="crypto_name_hint">Nombre</string>
+  <string name="crypto_pass_label">Contraseña:</string>
+  <string name="crypto_extra_label">Extra:</string>
+  <string name="crypto_encrypt_username_label">Encriptar nombre de usuario</string>
+  <string name="crypto_select">Seleccionar</string>
+  <string name="crypto_save">Guardar</string>
+  <string name="crypto_save_and_copy">Guardar y copiar</string>
+  <!-- DECRYPT Layout -->
+  <string name="action_search">Buscar</string>
+  <string name="password">Contraseña</string>
+  <string name="username">Nombre de usuario</string>
+  <string name="copy_label">Copiar</string>
+  <string name="edit_password">Editar contraseña</string>
+  <string name="copy_password">Copiar contraseña</string>
+  <string name="share_as_plaintext">Compartir como texto plano</string>
+  <!-- Preferences -->
+  <string name="pref_category_repository_title">Repositorio</string>
+  <string name="pref_edit_git_server_settings">Editar ajustes del servidor Git</string>
+  <string name="pref_edit_git_config">Configuración local de Git &amp; utilidades</string>
+  <string name="pref_import_ssh_key_title">Importar llave SSH</string>
+  <string name="pref_ssh_keygen_title">Generar par de llaves SSH</string>
+  <string name="pref_ssh_see_key_title">Ver llave pública SSH generada</string>
+  <string name="pref_git_delete_repo_title">Eliminar repositorio</string>
+  <string name="pref_dialog_delete_title">Limpiar repositorio</string>
+  <string name="pref_category_general_title">General</string>
+  <string name="pref_category_passwords_title">Contraseñas</string>
+  <string name="pref_clipboard_timeout_title">Límite de tiempo para copiar la contraseña</string>
+  <string name="pref_clipboard_timeout_summary">Establecer el tiempo (en segundos) que desea que la contraseña esté en el portapapeles. 0 significa para siempre. Valor actual: %1$s</string>
+  <string name="pref_copy_title">Copiar contraseña automáticamente</string>
+  <string name="pref_copy_summary">Automáticamente copia la contraseña al portapapeles si el descifrado fue exitoso.</string>
+  <string name="ssh_key_import_error_not_an_ssh_key_message">El archivo seleccionado no parece ser una clave privada SSH.</string>
+  <string name="ssh_key_success_dialog_title">Llave SSH importada</string>
+  <string name="ssh_key_error_dialog_title">Error al importar clave</string>
+  <string name="ssh_key_error_dialog_text">Mensaje: \n</string>
+  <string name="pref_recursive_filter_title">Búsqueda recursiva</string>
+  <string name="pref_recursive_filter_summary">Busca contraseñas recursivamente en el directorio actual.</string>
+  <string name="pref_sort_order_title">Ordenamiento de contraseñas</string>
+  <string name="pref_folder_first_sort_order">Primero directorios</string>
+  <string name="pref_file_first_sort_order">Primero archivos</string>
+  <string name="pref_type_independent_sort_order">Independiente del tipo</string>
+  <string name="pref_recently_used_sort_order">Recientemente utilizado</string>
+  <string name="pref_category_autofill_title">Autocompletar</string>
+  <string name="pref_autofill_enable_title">Habilitar autollenado</string>
+  <string name="pref_category_misc_title">Miscelánea</string>
+  <string name="pref_clear_clipboard_title">Solución alternativa para la función de historial del portapapeles</string>
+  <string name="pref_clear_clipboard_summary">Activar para llenar el historial del portapapeles, en dispositivos que lo permiten, con números consecutivos, eliminando toda contraseña previamente almacenada</string>
+  <string name="pref_git_delete_repo_summary">Eliminar repositorio local (oculto)</string>
+  <string name="prefs_export_passwords_title">Exportar contraseñas</string>
+  <string name="prefs_export_passwords_summary">Exporta las contraseñas cifradas a un directorio externo.</string>
+  <string name="pref_rebase_on_pull_title">Realizar rebase al hacer pull</string>
+  <string name="pref_rebase_on_pull_summary">Al realizar un pull o sincronizar, crea un commit de fusión con los cambios del autor</string>
+  <string name="pref_disable_sync_on_pull_title">Desactivar la acción de sincronización al realizar pull</string>
+  <string name="pref_import_pgp_key_title">Importar PGP key</string>
+  <string name="pref_pgp_key_manager_title">Gestor de claves</string>
+  <string name="pref_pgp_ascii_armor_title">Encriptar en modo ASCII armor</string>
+  <string name="pref_passphrase_cache_title">Activar caché de contraseñas</string>
+  <string name="pref_passphrase_cache_summary">ADVERTENCIA: esta opción es funcional pero muy experimental. Requiere un bloqueo de pantalla activo.</string>
+  <!-- PasswordGenerator fragment -->
+  <string name="pwgen_title">Generar Contraseña</string>
+  <string name="pwgen_generate">Generar</string>
+  <string name="pwgen_include">Incluir:</string>
+  <string name="pwgen_length">Longitud:</string>
+  <string name="pwgen_numerals">Números</string>
+  <string name="pwgen_symbols">Símbolos</string>
+  <string name="pwgen_uppercase">Mayúsculas</string>
+  <string name="pwgen_lowercase">Minúsculas</string>
+  <string name="pwgen_ambiguous">Caracteres ambiguos</string>
+  <string name="pwgen_pronounceable">Pronunciable</string>
+  <string name="pwgen_no_chars_error">No se han incluído caracteres</string>
+  <string name="pwgen_length_too_short_error">Longitud demasiado corta para el criterio seleccionado</string>
+  <string name="pwgen_separator">Separador</string>
+  <!-- Password generator prefs -->
+  <string name="pref_password_generator_type_title">Tipo de generador de contraseña</string>
+  <!-- ssh keygen fragment -->
+  <string name="ssh_keygen_passphrase">Contraseña</string>
+  <string name="ssh_keygen_generate">Generar</string>
+  <string name="ssh_keygen_share">Compartir</string>
+  <string name="ssh_keygen_later">Más tarde</string>
+  <string name="ssh_key_gen_generating_progress">Generando keys…</string>
+  <string name="ssh_keygen_require_authentication">Proteger con la clave de bloqueo de pantalla</string>
+  <string name="ssh_keygen_label_rsa">RSA</string>
+  <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+  <string name="ssh_keygen_label_ed25519">Ed25519</string>
+  <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nEs compatible con todos los servidores, pero la autenticación es relativamente lenta.</string>
+  <string name="ssh_keygen_existing_title">SSH key</string>
+  <string name="ssh_keygen_existing_replace">Cambiar</string>
+  <string name="ssh_keygen_existing_keep">Mantener</string>
+  <!-- SSH Android Keystore auth -->
+  <string name="biometric_prompt_title_ssh_auth">Desbloquear llave SSH</string>
+  <string name="biometric_prompt_title_ssh_keygen">Generar una llave SSH</string>
+  <!-- Misc -->
+  <string name="dialog_ok">Aceptar</string>
+  <string name="dialog_yes">Sí</string>
+  <string name="dialog_no">No</string>
+  <string name="dialog_cancel">Cancelar</string>
+  <string name="dialog_skip">Omitir</string>
+  <string name="git_sync">Sincronizar con servidor</string>
+  <string name="git_pull">Descargar del servidor</string>
+  <string name="git_push">Subir al servidor</string>
+  <string name="git_push_up_to_date">Todo está actualizado</string>
+  <string name="git_log">Mostrar historial de commits</string>
+  <string name="show_password_pref_title">Mostrar contraseña</string>
+  <string name="show_password_pref_summary">Controla la visibilidad de las contraseñas una vez descifradas. Esto no deshabilita el copiado de la contraseña.</string>
+  <string name="pwd_generate_button">Generar</string>
+  <string name="refresh_list">Actualizar lista</string>
+  <string name="send_plaintext_password_to">Enviar contraseña en texto plano usando…</string>
+  <string name="app_icon_hint">Ícono de app</string>
+  <!-- Oreo Autofill -->
+  <string name="oreo_autofill_select_and_fill_into">Seleccionar entrada a rellenar</string>
+  <string name="oreo_autofill_strict_domain_search">Búsqueda resistente al phishing</string>
+  <string name="oreo_autofill_match_with">Coincide con %1$s</string>
+  <string name="oreo_autofill_filter_no_results">Sin resultados.</string>
+  <string name="oreo_autofill_search_in_store">Buscar entrada</string>
+  <string name="oreo_autofill_save_internal_error">Error al guardar debido a un error interno</string>
+  <string name="oreo_autofill_save_app_not_supported">Esta aplicación no es compatible actualmente</string>
+  <string name="oreo_autofill_save_passwords_dont_match">Las contraseñas no coinciden</string>
+  <string name="oreo_autofill_generate_password">Crear entrada</string>
+  <string name="oreo_autofill_fill_otp_from_sms">Extraer código de SMS</string>
+  <string name="oreo_autofill_warning_publisher_install_time">Instalada: %1$s</string>
+  <string name="oreo_autofill_warning_publisher_advanced_info_button">Información avanzada</string>
+  <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Mantener el Autocompletado desactivado</string>
+  <string name="oreo_autofill_warning_publisher_reenable_button">Reactivar el Autocompletado</string>
+  <string name="oreo_autofill_warning_publisher_warning_sign_description">Advertencia</string>
+  <string name="oreo_autofill_warning_publisher_dataset_summary">Pulse para ver detalles</string>
+  <string name="oreo_autofill_warning_publisher_dataset_title">Posible intento de suplantación de identidad</string>
+  <string name="oreo_autofill_general_fill_and_save_support">Rellena y guarda las credenciales</string>
+  <string name="oreo_autofill_general_fill_support">Rellena las credenciales</string>
+  <string name="oreo_autofill_password_fill_support">Rellenar las contraseñas</string>
+  <string name="oreo_autofill_no_support">Sin soporte</string>
+  <!-- Autofill -->
+  <string name="ssh_key_does_not_exist">Imposible abrir la llave privada SSH. Por favor verifica que el archivo exista</string>
+  <string name="new_password_title">Nueva contraseña</string>
+  <string name="git_operation_remember_passphrase">Recordar contraseñagit  (inseguro)</string>
+  <string name="git_tools">Utilidades</string>
+  <string name="abort_rebase">Abortar rebase</string>
+  <string name="git_head_on_branch">En la rama %1$s</string>
+  <string name="git_head_missing">No se puede localizar HEAD</string>
+  <string name="your_public_key">Tu clave pública</string>
+  <string name="error_generate_ssh_key">Error al generar la clave ssh</string>
+  <string name="pref_show_hidden_title">Mostrar todos los archivos y carpetas</string>
+  <string name="pref_show_hidden_summary">Incluir archivos y directorios que no son contraseñas en la lista</string>
+  <string name="title_create_folder">Crear carpeta</string>
+  <string name="title_rename_folder">Renombrar carpeta</string>
+  <string name="message_category_error_empty_field">Nombre de categoría no puede estar vacío</string>
+  <string name="button_create">Crear</string>
+  <string name="pref_app_theme_title">Tema de la aplicación</string>
+  <string name="pref_app_theme_value_light">Claro</string>
+  <string name="pref_app_theme_value_dark">Oscuro</string>
+  <string name="pref_app_theme_value_battery_saver">Definido por el ahorro de energía</string>
+  <string name="pref_app_theme_value_follow_system">Predeterminado del sistema</string>
+  <string name="connection_mode_ssh_key">SSH key</string>
+  <string name="connection_mode_basic_authentication">Contraseña</string>
+  <string name="git_server_config_save_success">Configuración guardada exitosamente</string>
+  <string name="git_server_config_save_error">La URL del repositorio proporcionada no es válida</string>
+  <string name="git_server_config_save_missing_username_https">Por favor, especifique el nombre de usuario HTTPS en el formulario https://username@example.com/…</string>
+  <string name="git_server_config_save_missing_username_ssh">Por favor, especifique el nombre de usuario en el formulario username@example.com:…</string>
+  <string name="git_server_config_save_auth_mode_mismatch">Modos de autenticación válidos para %1$s: %2$s</string>
+  <string name="git_operation_wrong_passphrase">Passphrase inválida</string>
+  <string name="git_operation_wrong_password">Contraseña inválida</string>
+  <string name="bottom_sheet_create_new_folder">Crear nueva carpeta</string>
+  <string name="bottom_sheet_create_new_password">Crear nueva contraseña</string>
+  <string name="pref_debug_logging_summary">Habilitar registro de depuración (requiere reiniciar la aplicación)</string>
+  <string name="pref_debug_logging_title">Debug logging</string>
+  <string name="preference_default_username_summary">Si el autorrelleno no puede determinar un nombre de usuario a partir de su contraseña o estructura de directorios, utilizará el valor especificado aquí</string>
+  <string name="preference_default_username_title">Nombre de usuario por defecto</string>
+  <string name="git_operation_remember_password">Recordar contraseña</string>
+  <string name="git_operation_hint_password">Contraseña</string>
+  <string name="preference_custom_public_suffixes_title">Dominio personalizado</string>
+  <string name="preference_custom_public_suffixes_summary">Autorelleno distinguirá los subdominios de estos dominios</string>
+  <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
+  <!-- Password creation failure -->
+  <string name="password_creation_file_fail_title">Error</string>
+  <string name="password_creation_file_write_fail_message">Error al escribir la contraseña en la tienda, por favor inténtalo de nuevo.</string>
+  <string name="password_creation_duplicate_error">El archivo ya existe, por favor utilice un nombre diferente</string>
+  <string name="add_otp">Añadir OTP</string>
+  <string name="otp_import_success">Configuración TOTP importada con éxito</string>
+  <string name="otp_import_failure_generic">Error al importar la configuración de TOTP</string>
+  <string name="otp_import_failure_no_selection">No se ha seleccionado ningún archivo de imagen</string>
+  <string name="exporting_passwords">Exportando contraseñas…</string>
+  <string name="invalid_gpg_id">Se encontró .gpg-id, pero contiene un ID de clave no válido, huella digital o ID de usuario</string>
+  <string name="invalid_filename_text">El nombre de archivo no debe contener \'/\', establecer directorio arriba</string>
+  <string name="directory_hint">Directorio</string>
+  <string name="new_folder_set_gpg_key">Establecer clave GPG para el directorio</string>
+  <!-- GitException messages -->
+  <string name="git_unknown_error">Error desconocido</string>
+  <string name="git_pull_rebase_fail_error">Pull ha fallado, estás en una HEAD separada. Utilizando \"ajustes &gt; git utils\", guarde los cambios en el control remoto en una nueva rama y resuelva el conflicto en su computadora.</string>
+  <string name="git_pull_merge_fail_error">La fusión ha fallado, está en un estado en conflicto. TODO: Añadir un método de recuperación.</string>
+  <string name="git_push_nff_error">La subida fue rechazada por el servidor, Ejecuta \'Descargar desde servidor\' antes de subir o pulsa \'Sincronizar con servidor\' para realizar ambas acciones.</string>
+  <string name="git_push_generic_error">Push fue rechazado por remote, razón: %1$s</string>
+  <string name="git_push_other_error">Remote ha rechazado el  non-fast-forward push. Compruebe la variable receive.denyNonFastForwards en el archivo de configuración del repositorio de destino.</string>
+  <string name="git_unknown_host">Host desconocido: %1$s</string>
+  <string name="git_operation_running">Ejecutando operación de git…</string>
+  <string name="git_break_out_of_detached_success">Hubo un conflicto cuando se intentaba hacer rebase. Tu rama %1$s local fue pusheada a otra rama llamada %2$s\n Usa esta rama para resolver conflictos en tu computadora</string>
+  <string name="git_break_out_of_detached_unneeded">El repositorio no hecho rebase, no hay necesidad de hacer push a otra rama</string>
+  <!-- GPG key selection in folder creation -->
+  <string name="gpg_key_select_mandatory">Seleccionar una clave GPG es necesario para continuar</string>
+  <string name="folder_creation_err_file_exists">Ya existe un archivo con ese nombre</string>
+  <string name="folder_creation_err_folder_exists">Ya existe una carpeta con ese nombre</string>
+  <!-- Onboarding flow -->
+  <string name="let_s_go">¡Vamos!</string>
+  <string name="select_n_repository_type">Selecciona \nRepository Type</string>
+  <string name="select_repo_type_text">Seleccione si desea crear un repositorio local o clonar un repositorio remoto.</string>
+  <!-- SSH port validation -->
+  <!-- Proxy configuration activity -->
+  <string name="activity_proxy_label">Preferencias de Proxy</string>
+  <string name="port">Puerto</string>
+  <string name="invalid_proxy_url">URL no válida</string>
+  <string name="otp_import_qr_code">Escanear código QR</string>
+  <string name="otp_import_from_file">Elija una imagen</string>
+  <string name="otp_import_manual_entry">Introducir manualmente</string>
+  <string name="otp_import_manual_hint_account">Cuenta</string>
+  <string name="place_shortcut_on_home_screen">Poner acceso directo en la pantalla de inicio</string>
+  <string name="password_list_fab_content_description">Crear nueva contraseña o carpeta</string>
+  <string name="pgp_key_import_failed">Error al importar la clave PGP</string>
+  <string name="pgp_key_import_failed_replace_message">Se encontró una clave con este ID, ¿quiere reemplazarla?</string>
+  <string name="pgp_key_import_succeeded">Clave PGP importada correctamente</string>
+  <string name="pgp_key_import_succeeded_message">El ID de la clave importada se muestra a continuación, por favor revise que sea correcto:\n%1$s</string>
+  <string name="pref_category_pgp_title">Ajustes PGP</string>
+  <string name="pwgen_some_error_occurred">Se ha producido un error</string>
+  <string name="activity_label_pgp_key_manager">Gestor de claves PGP</string>
+  <string name="pgp_key_manager_delete_confirmation_dialog_title">¿Borrar clave?</string>
+  <string name="no_keys_imported_dialog_title">No existen claves importadas</string>
+  <string name="no_keys_imported_dialog_message">No existen claves PGP importadas en la aplicación, pulse el botón de abajo para seleccionar un archivo de clave</string>
+</resources>
