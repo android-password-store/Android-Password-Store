@@ -19,13 +19,14 @@ import org.gradle.kotlin.dsl.findByType
  * Examples: `./gradlew test -PslimTests` will run unit tests for `nonFreeDebug` and `debug` build
  * variants in Android App and Library projects, and all tests in JVM projects.
  */
+@Suppress("UnstableApiUsage")
 internal fun Project.configureSlimTests() {
   if (providers.gradleProperty(SLIM_TESTS_PROPERTY).isPresent) {
     // Disable unit test tasks on the release build type for Android Library projects
     extensions.findByType<LibraryAndroidComponentsExtension>()?.run {
       beforeVariants(selector().withBuildType(BUILD_TYPE_RELEASE)) {
         (it as HasUnitTestBuilder).enableUnitTest = false
-        it.enableAndroidTest = true
+        it.androidTest.enable = false
       }
     }
 
@@ -37,7 +38,7 @@ internal fun Project.configureSlimTests() {
       }
       beforeVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
         (it as HasUnitTestBuilder).enableUnitTest = false
-        it.enableAndroidTest = true
+        it.androidTest.enable = false
       }
     }
   }
