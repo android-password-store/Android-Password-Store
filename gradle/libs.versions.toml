@@ -38,7 +38,7 @@ aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:2.3.4"
 aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
 build-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 build-diffutils = "io.github.java-diff-utils:java-diff-utils:4.12"
-build-download = "de.undercouch:gradle-download-task:5.5.0"
+build-download = "de.undercouch:gradle-download-task:5.6.0"
 build-javapoet = "com.squareup:javapoet:1.13.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 build-ktfmt = "com.facebook:ktfmt:0.47"
