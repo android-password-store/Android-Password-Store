@@ -8,7 +8,7 @@ coroutines = "1.8.0"
 flowbinding = "1.2.0"
 hilt = "2.51"
 kotlin = "1.9.22"
-kotlinResult = "1.1.19"
+kotlinResult = "1.1.20"
 lifecycle = "2.7.0"
 moshi = "1.15.1"
 
