@@ -69,7 +69,7 @@ testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", 
 testing-robolectric = "org.robolectric:robolectric:4.11.1"
 testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
 testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.15"
-testing-turbine = "app.cash.turbine:turbine:1.0.0"
+testing-turbine = "app.cash.turbine:turbine:1.1.0"
 thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 # We're fine with the current version.
 # noinspection GradleDependency
