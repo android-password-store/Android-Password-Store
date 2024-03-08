@@ -87,7 +87,7 @@ thirdparty-leakcanary-plumber = "com.squareup.leakcanary:plumber-android-startup
 thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.2"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.2"
-thirdparty-nonfree-sentry = "io.sentry:sentry-android:7.5.0"
+thirdparty-nonfree-sentry = "io.sentry:sentry-android:7.6.0"
 thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.6"
 thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.7.0"
 thirdparty-slf4j-api = { module = "org.slf4j:slf4j-api", version = { strictly = "[1.7, 1.8[", prefer = "1.7.36" } }
