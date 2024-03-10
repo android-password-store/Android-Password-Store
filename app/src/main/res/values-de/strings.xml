@@ -157,7 +157,7 @@
   <string name="git_push">Git Push</string>
   <string name="git_push_up_to_date">Alles aktuell</string>
   <string name="git_log">Commit-Log anzeigen</string>
-  <string name="show_password_pref_title">Zeige das Password</string>
+  <string name="show_password_pref_title">Zeige das Passwort</string>
   <string name="show_password_pref_summary">Soll das entschlüsselte Passwort sichtbar sein? Dies deaktiviert nicht das Kopieren.</string>
   <string name="pwd_generate_button">Generieren</string>
   <string name="refresh_list">Aktualisieren</string>
