@@ -81,7 +81,6 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     val builder =
       StrictMode.VmPolicy.Builder()
         .detectActivityLeaks()
-        .detectCleartextNetwork()
         .detectFileUriExposure()
         .detectLeakedClosableObjects()
         .detectLeakedRegistrationObjects()
