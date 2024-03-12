@@ -185,6 +185,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
           }
           .onSuccess { result ->
             return runCatching {
+                passphraseCache.cachePassphrase(this, gpgIdentifiers.first(), password)
                 val entry = passwordEntryFactory.create(result.toByteArray())
                 AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
               }
