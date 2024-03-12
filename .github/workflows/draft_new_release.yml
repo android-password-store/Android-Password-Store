@@ -84,7 +84,7 @@ jobs:
           git commit -m "build: bump version"
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@a4f52f8033a6168103c2538976c07b467e8163bc # v6.0.1
+        uses: peter-evans/create-pull-request@70a41aba780001da0a30141984ae2a0c95d8704e # v6.0.2
         with:
           author: GitHub Actions <noreply@github.com>
           body: This is an automated pull request to bump the changelog for the ${{ github.event.milestone.title }} release.
