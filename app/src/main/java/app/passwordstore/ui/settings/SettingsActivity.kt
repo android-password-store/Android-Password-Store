@@ -11,22 +11,27 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BundleCompat
 import app.passwordstore.R
+import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.databinding.ActivityPreferenceRecyclerviewBinding
 import app.passwordstore.util.extensions.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferencesAdapter
 import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.subScreen
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
 
+  @Inject lateinit var passphraseCache: PGPPassphraseCache
   private val miscSettings = MiscSettings(this)
   private val autofillSettings = AutofillSettings(this)
   private val passwordSettings = PasswordSettings(this)
   private val repositorySettings = RepositorySettings(this)
   private val generalSettings = GeneralSettings(this)
-  private val pgpSettings = PGPSettings(this)
+  private lateinit var pgpSettings: PGPSettings
 
   private val binding by viewBinding(ActivityPreferenceRecyclerviewBinding::inflate)
   private val preferencesAdapter: PreferencesAdapter
@@ -36,6 +41,7 @@ class SettingsActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
     Preference.Config.dialogBuilderFactory = { context -> MaterialAlertDialogBuilder(context) }
+    pgpSettings = PGPSettings(this, passphraseCache)
     val screen =
       screen(this) {
         subScreen {

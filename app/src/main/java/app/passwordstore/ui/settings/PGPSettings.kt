@@ -6,18 +6,25 @@
 package app.passwordstore.ui.settings
 
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
+import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.ui.pgp.PGPKeyListActivity
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.extensions.launchActivity
 import app.passwordstore.util.features.Feature
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
+import de.Maxr1998.modernpreferences.helpers.onCheckedChange
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import de.Maxr1998.modernpreferences.helpers.switch
+import kotlinx.coroutines.launch
 
-class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
+class PGPSettings(
+  private val activity: FragmentActivity,
+  private val passphraseCache: PGPPassphraseCache,
+) : SettingsProvider {
 
   override fun provideSettings(builder: PreferenceScreen.Builder) {
     builder.apply {
@@ -38,6 +45,20 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
         titleRes = R.string.pref_passphrase_cache_title
         summaryRes = R.string.pref_passphrase_cache_summary
         defaultValue = false
+        onCheckedChange { checked ->
+          if (!checked && BiometricAuthenticator.canAuthenticate(activity)) {
+            BiometricAuthenticator.authenticate(
+              activity,
+              R.string.pref_passphrase_cache_authenticate_clear,
+            ) {
+              if (it is BiometricAuthenticator.Result.Success)
+                activity.lifecycleScope.launch {
+                  passphraseCache.clearAllCachedPassphrases(activity)
+                }
+            }
+          }
+          true
+        }
       }
     }
   }

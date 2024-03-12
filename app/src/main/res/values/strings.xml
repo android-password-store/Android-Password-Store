@@ -137,6 +137,7 @@
   <string name="pref_pgp_ascii_armor_title">Encrypt in ASCII armor mode</string>
   <string name="pref_passphrase_cache_title">Enable passphrase caching</string>
   <string name="pref_passphrase_cache_summary">WARNING: this feature is functional but very experimental. Requires an active screen lock.</string>
+  <string name="pref_passphrase_cache_authenticate_clear">Authenticate to clear cache</string>
 
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Generate Password</string>
