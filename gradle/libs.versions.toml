@@ -47,7 +47,7 @@ build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.5"
 build-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 build-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 build-okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
-build-r8 = "com.android.tools:r8:8.2.47"
+build-r8 = "com.android.tools:r8:8.3.37"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.3.1"
 compose-bom = "androidx.compose:compose-bom:2024.02.02"
