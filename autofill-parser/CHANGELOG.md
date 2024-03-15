@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - [Mull](https://divestos.org/pages/our_apps#mull) is now supported as an Autofill-capable browser when installed from the divestos.org [repo](https://divestos.org/fdroid/official/).
 - [Cromite](https://github.com/uazo/cromite) is now supported as an Autofill-capable browser.
+- Calyx's [Chromium](https://gitlab.com/CalyxOS/platform_external_calyx_chromium) is now supported as an Autofill-capable browser.
 
 ## [1.1.2]
 

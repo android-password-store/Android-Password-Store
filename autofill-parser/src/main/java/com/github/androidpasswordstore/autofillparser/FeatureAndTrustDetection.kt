@@ -78,6 +78,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "org.mozilla.focus" to arrayOf("YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w="),
     "org.mozilla.klar" to arrayOf("YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w="),
     "org.torproject.torbrowser" to arrayOf("IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg="),
+    "org.ungoogled.chromium" to arrayOf("qFZIUHm8s1e/vmm6Gam6Q80K2asiZ1LHgLaIiv1IIWs="),
     "org.ungoogled.chromium.stable" to arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
     "org.ungoogled.chromium.extensions.stable" to
       arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
@@ -166,6 +167,7 @@ private val BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY =
     "com.chrome.dev" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "org.bromite.bromite" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "org.cromite.cromite" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "org.ungoogled.chromium" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "org.ungoogled.chromium.stable" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
   )
 
