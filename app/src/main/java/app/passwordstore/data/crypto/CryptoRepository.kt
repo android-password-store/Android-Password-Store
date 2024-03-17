@@ -16,7 +16,7 @@ import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.getAll
+import com.github.michaelbull.result.filterValues
 import com.github.michaelbull.result.mapBoth
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -57,7 +57,7 @@ constructor(
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
   ): Result<Unit, CryptoHandlerException> {
-    val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.getAll()
+    val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.filterValues()
     val decryptionOptions = PGPDecryptOptions.Builder().build()
     return pgpCryptoHandler.decrypt(keys, password, message, out, decryptionOptions)
   }
@@ -71,7 +71,7 @@ constructor(
       PGPEncryptOptions.Builder()
         .withAsciiArmor(settings.getBoolean(PreferenceKeys.ASCII_ARMOR, false))
         .build()
-    val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.getAll()
+    val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.filterValues()
     return pgpCryptoHandler.encrypt(
       keys,
       content,

@@ -7,8 +7,6 @@ import app.passwordstore.crypto.errors.KeyAlreadyExistsException
 import app.passwordstore.crypto.errors.KeyNotFoundException
 import app.passwordstore.crypto.errors.NoKeysAvailableException
 import app.passwordstore.crypto.errors.UnusableKeyException
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.unwrap
 import com.github.michaelbull.result.unwrapError
 import java.io.File
@@ -18,8 +16,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -28,7 +26,6 @@ class PGPKeyManagerTest {
 
   @get:Rule val temporaryFolder: TemporaryFolder = TemporaryFolder()
   private val dispatcher = StandardTestDispatcher()
-  private val scope = TestScope(dispatcher)
   private val filesDir by unsafeLazy { temporaryFolder.root }
   private val keysDir by unsafeLazy { File(filesDir, PGPKeyManager.KEY_DIR_NAME) }
   private val keyManager by unsafeLazy { PGPKeyManager(filesDir.absolutePath, dispatcher) }
@@ -170,24 +167,24 @@ class PGPKeyManagerTest {
   @Test
   fun replaceSecretKeyWithPublicKey() =
     runTest(dispatcher) {
-      assertIs<Ok<PGPKey>>(keyManager.addKey(secretKey))
-      assertIs<Err<KeyAlreadyExistsException>>(keyManager.addKey(publicKey))
+      assertTrue(keyManager.addKey(secretKey).isOk)
+      assertTrue(keyManager.addKey(publicKey).isErr)
     }
 
   @Test
   fun replacePublicKeyWithSecretKey() =
     runTest(dispatcher) {
-      assertIs<Ok<PGPKey>>(keyManager.addKey(publicKey))
-      assertIs<Ok<PGPKey>>(keyManager.addKey(secretKey))
+      assertTrue(keyManager.addKey(publicKey).isOk)
+      assertTrue(keyManager.addKey(secretKey).isOk)
     }
 
   @Test
   fun replacePublicKeyWithPublicKey() =
     runTest(dispatcher) {
-      assertIs<Ok<PGPKey>>(keyManager.addKey(publicKey))
-      assertIs<Ok<PGPKey>>(keyManager.addKey(publicKey))
+      assertTrue(keyManager.addKey(publicKey).isOk)
+      assertTrue(keyManager.addKey(publicKey).isOk)
       val allKeys = keyManager.getAllKeys()
-      assertIs<Ok<List<PGPKey>>>(allKeys)
+      assertTrue(allKeys.isOk)
       assertEquals(1, allKeys.value.size)
       val key = allKeys.value[0]
       assertContentEquals(publicKey.contents, key.contents)
@@ -196,8 +193,8 @@ class PGPKeyManagerTest {
   @Test
   fun replaceSecretKeyWithSecretKey() =
     runTest(dispatcher) {
-      assertIs<Ok<PGPKey>>(keyManager.addKey(secretKey))
-      assertIs<Err<KeyAlreadyExistsException>>(keyManager.addKey(secretKey))
+      assertTrue(keyManager.addKey(secretKey).isOk)
+      assertTrue(keyManager.addKey(secretKey).isErr)
     }
 
   @Test
@@ -207,11 +204,11 @@ class PGPKeyManagerTest {
         PGPKey(this::class.java.classLoader.getResource("alice_owner@example_com")!!.readBytes())
       val bobby =
         PGPKey(this::class.java.classLoader.getResource("bobby_owner@example_com")!!.readBytes())
-      assertIs<Ok<PGPKey>>(keyManager.addKey(alice))
-      assertIs<Ok<PGPKey>>(keyManager.addKey(bobby))
+      assertTrue(keyManager.addKey(alice).isOk)
+      assertTrue(keyManager.addKey(bobby).isOk)
 
       keyManager.getAllKeys().apply {
-        assertIs<Ok<List<PGPKey>>>(this)
+        assertTrue(this.isOk)
         assertEquals(2, this.value.size)
       }
       val longKeyIds =
@@ -228,8 +225,8 @@ class PGPKeyManagerTest {
       for (idCollection in arrayOf(longKeyIds, userIds)) {
         val alice1 = keyManager.getKeyById(idCollection[0])
         val bobby1 = keyManager.getKeyById(idCollection[1])
-        assertIs<Ok<PGPKey>>(alice1)
-        assertIs<Ok<PGPKey>>(bobby1)
+        assertTrue(alice1.isOk)
+        assertTrue(bobby1.isOk)
         assertNotEquals(alice1.value.contents, bobby1.value.contents)
       }
     }

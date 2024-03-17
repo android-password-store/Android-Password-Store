@@ -5,8 +5,6 @@
 package app.passwordstore.util.extensions
 
 import app.passwordstore.data.repo.PasswordRepository
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import java.io.File
@@ -68,8 +66,3 @@ fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE) { ini
 
 /** A convenience extension to turn a [Throwable] with a message into a loggable string. */
 fun Throwable.asLog(message: String): String = "$message\n${asLog()}"
-
-/** Extension on [Result] that returns if the type is [Err] */
-fun <V, E> Result<V, E>.isErr(): Boolean {
-  return this is Err<E>
-}
