@@ -27,8 +27,6 @@ import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
@@ -214,18 +212,16 @@ class DecryptActivity : BasePGPActivity() {
     authResult: BiometricResult,
     onSuccess: suspend () -> Unit = {},
   ) {
-    when (val result = decryptPGPStream(passphrase, identifiers)) {
-      is Ok -> {
-        val entry = passwordEntryFactory.create(result.value.toByteArray())
-        passwordEntry = entry
-        createPasswordUI(entry)
-        startAutoDismissTimer()
-        onSuccess()
-      }
-      is Err -> {
-        logcat(ERROR) { result.error.stackTraceToString() }
-        decrypt(isError = true, authResult = authResult)
-      }
+    val result = decryptPGPStream(passphrase, identifiers)
+    if (result.isOk) {
+      val entry = passwordEntryFactory.create(result.value.toByteArray())
+      passwordEntry = entry
+      createPasswordUI(entry)
+      startAutoDismissTimer()
+      onSuccess()
+    } else {
+      logcat(ERROR) { result.error.stackTraceToString() }
+      decrypt(isError = true, authResult = authResult)
     }
   }
 
@@ -242,10 +238,7 @@ class DecryptActivity : BasePGPActivity() {
         message,
         outputStream,
       )
-    when (result) {
-      is Ok -> outputStream
-      is Err -> throw result.error
-    }
+    if (result.isOk) outputStream else throw result.error
   }
 
   private suspend fun createPasswordUI(entry: PasswordEntry) =

@@ -9,8 +9,6 @@ package app.passwordstore.crypto
 import app.passwordstore.crypto.CryptoConstants.KEY_PASSPHRASE
 import app.passwordstore.crypto.CryptoConstants.PLAIN_TEXT
 import app.passwordstore.crypto.errors.IncorrectPassphraseException
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.getError
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
@@ -48,7 +46,7 @@ class PGPainlessCryptoHandlerTest {
         ciphertextStream,
         PGPEncryptOptions.Builder().build(),
       )
-    assertIs<Ok<Unit>>(encryptRes)
+    assertTrue(encryptRes.isOk)
     val plaintextStream = ByteArrayOutputStream()
     val decryptRes =
       cryptoHandler.decrypt(
@@ -58,7 +56,7 @@ class PGPainlessCryptoHandlerTest {
         plaintextStream,
         PGPDecryptOptions.Builder().build(),
       )
-    assertIs<Ok<Unit>>(decryptRes)
+    assertTrue(decryptRes.isOk)
     assertEquals(PLAIN_TEXT, plaintextStream.toString(Charsets.UTF_8))
   }
 
@@ -72,7 +70,7 @@ class PGPainlessCryptoHandlerTest {
         ciphertextStream,
         PGPEncryptOptions.Builder().build(),
       )
-    assertIs<Ok<Unit>>(encryptRes)
+    assertTrue(encryptRes.isOk)
     val plaintextStream = ByteArrayOutputStream()
     val result =
       cryptoHandler.decrypt(
@@ -82,7 +80,7 @@ class PGPainlessCryptoHandlerTest {
         plaintextStream,
         PGPDecryptOptions.Builder().build(),
       )
-    assertIs<Err<Throwable>>(result)
+    assertTrue(result.isErr)
     assertIs<IncorrectPassphraseException>(result.getError())
   }
 
@@ -96,7 +94,7 @@ class PGPainlessCryptoHandlerTest {
         ciphertextStream,
         PGPEncryptOptions.Builder().withAsciiArmor(true).build(),
       )
-    assertIs<Ok<Unit>>(encryptRes)
+    assertTrue(encryptRes.isOk)
     val ciphertext = ciphertextStream.toString(Charsets.UTF_8)
     assertContains(ciphertext, "Version: PGPainless")
     assertContains(ciphertext, "-----BEGIN PGP MESSAGE-----")
@@ -118,7 +116,7 @@ class PGPainlessCryptoHandlerTest {
         ciphertextStream,
         PGPEncryptOptions.Builder().withAsciiArmor(true).build(),
       )
-    assertIs<Ok<Unit>>(encryptRes)
+    assertTrue(encryptRes.isOk)
     val message = ciphertextStream.toByteArray().decodeToString()
     val info = MessageInspector.determineEncryptionInfoForMessage(message)
     assertTrue(info.isEncrypted)
@@ -135,7 +133,7 @@ class PGPainlessCryptoHandlerTest {
           plaintextStream,
           PGPDecryptOptions.Builder().build(),
         )
-      assertIs<Ok<Unit>>(res)
+      assertTrue(res.isOk)
     }
   }
 

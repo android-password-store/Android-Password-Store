@@ -8,9 +8,8 @@ import androidx.lifecycle.viewModelScope
 import app.passwordstore.crypto.KeyUtils
 import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.crypto.PGPKeyManager
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.map
+import com.github.michaelbull.result.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
@@ -28,15 +27,10 @@ class PGPKeyListViewModel @Inject constructor(private val keyManager: PGPKeyMana
 
   fun updateKeySet() {
     viewModelScope.launch {
-      when (
-        val result =
-          keyManager.getAllKeys().map { keys ->
-            keys.mapNotNull { key -> KeyUtils.tryGetEmail(key) }
-          }
-      ) {
-        is Ok -> keys = result.value.toPersistentList()
-        is Err -> TODO()
-      }
+      keyManager
+        .getAllKeys()
+        .map { keys -> keys.mapNotNull { key -> KeyUtils.tryGetEmail(key) } }
+        .onSuccess { keys = it.toPersistentList() }
     }
   }
 

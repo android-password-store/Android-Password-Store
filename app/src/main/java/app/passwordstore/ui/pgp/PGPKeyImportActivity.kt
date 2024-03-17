@@ -14,8 +14,6 @@ import app.passwordstore.crypto.KeyUtils.tryGetId
 import app.passwordstore.crypto.PGPKey
 import app.passwordstore.crypto.PGPKeyManager
 import app.passwordstore.crypto.errors.KeyAlreadyExistsException
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -69,45 +67,42 @@ class PGPKeyImportActivity : AppCompatActivity() {
   }
 
   private fun handleImportResult(result: Result<PGPKey?, Throwable>) {
-    when (result) {
-      is Ok<PGPKey?> -> {
-        val key = result.value
-        if (key == null) {
-          setResult(RESULT_CANCELED)
+    if (result.isOk) {
+      val key = result.value
+      if (key == null) {
+        setResult(RESULT_CANCELED)
+        finish()
+        // This return convinces Kotlin that the control flow for `key == null` definitely
+        // terminates here and allows for a smart cast below.
+        return
+      }
+      MaterialAlertDialogBuilder(this)
+        .setTitle(getString(R.string.pgp_key_import_succeeded))
+        .setMessage(getString(R.string.pgp_key_import_succeeded_message, tryGetId(key)))
+        .setPositiveButton(android.R.string.ok) { _, _ ->
+          setResult(RESULT_OK)
           finish()
-          // This return convinces Kotlin that the control flow for `key == null` definitely
-          // terminates here and allows for a smart cast below.
-          return
         }
+        .setCancelable(false)
+        .show()
+    } else {
+      if (result.error is KeyAlreadyExistsException && lastBytes != null) {
         MaterialAlertDialogBuilder(this)
-          .setTitle(getString(R.string.pgp_key_import_succeeded))
-          .setMessage(getString(R.string.pgp_key_import_succeeded_message, tryGetId(key)))
-          .setPositiveButton(android.R.string.ok) { _, _ ->
-            setResult(RESULT_OK)
-            finish()
+          .setTitle(getString(R.string.pgp_key_import_failed))
+          .setMessage(getString(R.string.pgp_key_import_failed_replace_message))
+          .setPositiveButton(R.string.dialog_yes) { _, _ ->
+            handleImportResult(runCatching { importKey(lastBytes!!, replace = true) })
           }
+          .setNegativeButton(R.string.dialog_no) { _, _ -> finish() }
           .setCancelable(false)
           .show()
-      }
-      is Err<Throwable> -> {
-        if (result.error is KeyAlreadyExistsException && lastBytes != null) {
-          MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.pgp_key_import_failed))
-            .setMessage(getString(R.string.pgp_key_import_failed_replace_message))
-            .setPositiveButton(R.string.dialog_yes) { _, _ ->
-              handleImportResult(runCatching { importKey(lastBytes!!, replace = true) })
-            }
-            .setNegativeButton(R.string.dialog_no) { _, _ -> finish() }
-            .setCancelable(false)
-            .show()
-        } else {
-          MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.pgp_key_import_failed))
-            .setMessage(result.error.message)
-            .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-            .setCancelable(false)
-            .show()
-        }
+      } else {
+        MaterialAlertDialogBuilder(this)
+          .setTitle(getString(R.string.pgp_key_import_failed))
+          .setMessage(result.error.message)
+          .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
+          .setCancelable(false)
+          .show()
       }
     }
   }
