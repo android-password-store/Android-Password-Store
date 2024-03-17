@@ -48,10 +48,6 @@
         "^com.android.tools:desugar_jdk_libs",
         // Later versions require newer JDKs
         "^commons-codec:commons-codec",
-        // alpha17 and alpha18 have regressions with installing APKs
-        // https://issuetracker.google.com/issues/315337463
-        "com.android.test",
-        "com.android.tools.build:gradle",
       ],
       "enabled": false
     },
