@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.1"
-androidxActivity = "1.9.0-alpha03"
+androidxActivity = "1.9.0-beta01"
 bouncycastle = "1.77"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.5.11-dev-k1.9.23-96ef9dc6af1"
@@ -23,7 +23,7 @@ androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha13"
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-alpha10"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-beta01"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
@@ -50,7 +50,7 @@ build-okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
 build-r8 = "com.android.tools:r8:8.3.37"
 build-semver = "com.vdurmont:semver4j:3.1.0"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.3.1"
-compose-bom = "androidx.compose:compose-bom:2024.02.02"
+compose-bom = "androidx.compose:compose-bom:2024.03.00"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
