@@ -8,7 +8,7 @@ package app.passwordstore.gradle.versioning
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.VariantOutputConfiguration
 import com.android.build.gradle.internal.plugins.AppPlugin
-import com.vdurmont.semver4j.Semver
+import com.github.zafarkhaja.semver.Version
 import java.util.Properties
 import java.util.concurrent.atomic.AtomicBoolean
 import org.gradle.api.Plugin
@@ -56,30 +56,30 @@ class VersioningPlugin : Plugin<Project> {
           }
         }
       }
-      val version = Semver(versionName)
+      val version = Version.parse(versionName)
       tasks.register<VersioningTask>("clearPreRelease") {
         description = "Remove the pre-release suffix from the version"
-        semverString.set(version.withClearedSuffix().toString())
+        semverString.set(version.toStableVersion().toString())
         propertyFile.set(propFile)
       }
       tasks.register<VersioningTask>("bumpMajor") {
         description = "Increment the major version"
-        semverString.set(version.withIncMajor().withClearedSuffix().toString())
+        semverString.set(version.nextMajorVersion().toString())
         propertyFile.set(propFile)
       }
       tasks.register<VersioningTask>("bumpMinor") {
         description = "Increment the minor version"
-        semverString.set(version.withIncMinor().withClearedSuffix().toString())
+        semverString.set(version.nextMinorVersion().toString())
         propertyFile.set(propFile)
       }
       tasks.register<VersioningTask>("bumpPatch") {
         description = "Increment the patch version"
-        semverString.set(version.withIncPatch().withClearedSuffix().toString())
+        semverString.set(version.nextPatchVersion().toString())
         propertyFile.set(propFile)
       }
       tasks.register<VersioningTask>("bumpSnapshot") {
         description = "Increment the minor version and add the `SNAPSHOT` suffix"
-        semverString.set(version.withIncMinor().withSuffix("SNAPSHOT").toString())
+        semverString.set(version.nextMinorVersion("SNAPSHOT").toString())
         propertyFile.set(propFile)
       }
       afterEvaluate {
