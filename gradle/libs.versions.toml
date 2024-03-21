@@ -4,24 +4,24 @@ androidxActivity = "1.9.0-beta01"
 bouncycastle = "1.77"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.5.11-dev-k1.9.23-96ef9dc6af1"
-coroutines = "1.8.0"
+coroutines = "1.8.1-Beta"
 flowbinding = "1.2.0"
 hilt = "2.51"
 kotlin = "1.9.23"
 kotlinResult = "2.0.0"
-lifecycle = "2.7.0"
+lifecycle = "2.8.0-alpha03"
 moshi = "1.15.1"
 
 [libraries]
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.4"
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidxActivity" }
-androidx-annotation = "androidx.annotation:annotation:1.7.1"
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+androidx-annotation = "androidx.annotation:annotation:1.8.0-alpha02"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
 androidx-autofill = "androidx.autofill:autofill:1.3.0-alpha01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha13"
-androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.13.0-beta01"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-beta01"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
@@ -30,7 +30,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-material = "com.google.android.material:material:1.12.0-beta01"
 androidx-preference = "androidx.preference:preference:1.2.1"
-androidx-recyclerview = "androidx.recyclerview:recyclerview:1.3.2"
+androidx-recyclerview = "androidx.recyclerview:recyclerview:1.4.0-alpha01"
 androidx-recyclerviewSelection = "androidx.recyclerview:recyclerview-selection:1.2.0-alpha01"
 androidx-security = "androidx.security:security-crypto-ktx:1.1.0-alpha06"
 androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
@@ -46,8 +46,8 @@ build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.28.0"
 build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.5"
 build-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 build-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
-build-okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
-build-r8 = "com.android.tools:r8:8.3.37"
+build-okhttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.12"
+build-r8 = "com.android.tools:r8:8.4.6-dev"
 build-semver = "com.github.zafarkhaja:java-semver:0.10.2"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.3.1"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.4"
@@ -86,7 +86,7 @@ thirdparty-kotlinResult = { module = "com.michael-bull.kotlin-result:kotlin-resu
 thirdparty-kotlinResult-coroutines = { module = "com.michael-bull.kotlin-result:kotlin-result-coroutines", version.ref = "kotlinResult" }
 thirdparty-leakcanary-plumber = "com.squareup.leakcanary:plumber-android-startup:2.13"
 thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
-thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.2"
+thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.4.0-beta1"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.2"
 thirdparty-nonfree-sentry = "io.sentry:sentry-android:7.6.0"
 thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.7"

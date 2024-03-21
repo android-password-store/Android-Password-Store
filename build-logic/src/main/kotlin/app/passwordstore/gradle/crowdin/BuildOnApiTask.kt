@@ -32,7 +32,7 @@ abstract class BuildOnApiTask : DefaultTask() {
         .get()
         .build()
     OkHttp.CLIENT.newCall(projectRequest).execute().use { response ->
-      val projects = projectAdapter.fromJson(response.body!!.source())
+      val projects = projectAdapter.fromJson(response.body.source())
       if (projects != null) {
         val identifier =
           projects.projects
