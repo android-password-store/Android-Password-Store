@@ -27,6 +27,8 @@ import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
+import com.github.michaelbull.result.flatten
+import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
@@ -228,18 +230,21 @@ class DecryptActivity : BasePGPActivity() {
   private suspend fun decryptPGPStream(
     passphrase: String,
     gpgIdentifiers: List<PGPIdentifier>,
-  ) = runCatching {
-    val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
-    val outputStream = ByteArrayOutputStream()
-    val result =
-      repository.decrypt(
-        passphrase,
-        gpgIdentifiers,
-        message,
-        outputStream,
-      )
-    if (result.isOk) outputStream else throw result.error
-  }
+  ) =
+    runCatching {
+        val message =
+          withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
+        val outputStream = ByteArrayOutputStream()
+        repository
+          .decrypt(
+            passphrase,
+            gpgIdentifiers,
+            message,
+            outputStream,
+          )
+          .map { outputStream }
+      }
+      .flatten()
 
   private suspend fun createPasswordUI(entry: PasswordEntry) =
     withContext(dispatcherProvider.main()) {

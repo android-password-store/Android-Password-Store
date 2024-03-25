@@ -8,6 +8,7 @@ package app.passwordstore.crypto
 import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.crypto.errors.IncorrectPassphraseException
 import app.passwordstore.crypto.errors.NoKeysProvidedException
+import app.passwordstore.crypto.errors.NonStandardAEAD
 import app.passwordstore.crypto.errors.UnknownError
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
@@ -15,6 +16,7 @@ import com.github.michaelbull.result.runCatching
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
+import org.bouncycastle.openpgp.PGPKeyValidationException
 import org.bouncycastle.openpgp.PGPPublicKeyRing
 import org.bouncycastle.openpgp.PGPPublicKeyRingCollection
 import org.bouncycastle.openpgp.PGPSecretKeyRing
@@ -75,7 +77,14 @@ public class PGPainlessCryptoHandler @Inject constructor() :
         when (error) {
           is WrongPassphraseException -> IncorrectPassphraseException(error)
           is CryptoHandlerException -> error
-          else -> UnknownError(error)
+          is PGPKeyValidationException -> {
+            if (error.message?.contains("Symmetrically Encrypted Data") == true) {
+              NonStandardAEAD(error)
+            } else {
+              UnknownError(error, "message=${error.message}")
+            }
+          }
+          else -> UnknownError(error, "message=DIDNOTHIT PGPKeyValidationException")
         }
       }
 
