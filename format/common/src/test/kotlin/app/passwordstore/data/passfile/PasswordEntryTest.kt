@@ -13,6 +13,7 @@ import app.passwordstore.util.totp.UriTotpFinder
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -179,6 +180,13 @@ class PasswordEntryTest {
       assertEquals(3, events.size)
       assertTrue { events.all { event -> event is Event.Item<Totp> } }
     }
+  }
+
+  // https://github.com/android-password-store/Android-Password-Store/issues/2949
+  @Test
+  fun disablesTotpForInvalidUri() = runTest {
+    val entry = makeEntry("password\notpauth://totp/otp-secret?secret=")
+    assertFalse(entry.hasTotp())
   }
 
   @Test

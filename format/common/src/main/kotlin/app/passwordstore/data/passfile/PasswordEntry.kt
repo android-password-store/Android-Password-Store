@@ -9,6 +9,9 @@ import androidx.annotation.VisibleForTesting
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.Otp
 import app.passwordstore.util.totp.TotpFinder
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapBoth
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -60,14 +63,22 @@ constructor(
     require(totpSecret != null) { "Cannot collect this flow without a TOTP secret" }
     do {
       val otp = calculateTotp()
-      emit(otp)
-      delay(THOUSAND_MILLIS.milliseconds)
+      if (otp.isOk) {
+        emit(otp.value)
+        delay(THOUSAND_MILLIS.milliseconds)
+      } else {
+        throw otp.error
+      }
     } while (coroutineContext.isActive)
   }
 
   /** Obtain the [Totp.value] for this [PasswordEntry] at the current time. */
   public val currentOtp: String
-    get() = calculateTotp().value
+    get() {
+      val otp = calculateTotp()
+      check(otp.isOk)
+      return otp.value.value
+    }
 
   /**
    * String representation of [extraContent] but with authentication related data such as TOTP URIs
@@ -83,7 +94,14 @@ constructor(
     extraContentWithoutAuthData = generateExtraContentWithoutAuthData()
     extraContent = generateExtraContentPairs()
     username = findUsername()
-    totpSecret = totpFinder.findSecret(content)
+    // Verify the TOTP secret is valid and disable TOTP if not.
+    val secret = totpFinder.findSecret(content)
+    totpSecret =
+      if (secret != null && calculateTotp(secret).isOk) {
+        secret
+      } else {
+        null
+      }
   }
 
   public fun hasTotp(): Boolean {
@@ -175,26 +193,21 @@ constructor(
     return null
   }
 
-  private fun calculateTotp(): Totp {
+  private fun calculateTotp(secret: String = totpSecret!!): Result<Totp, Throwable> {
     val digits = totpFinder.findDigits(content)
     val totpPeriod = totpFinder.findPeriod(content)
     val totpAlgorithm = totpFinder.findAlgorithm(content)
     val issuer = totpFinder.findIssuer(content)
     val millis = clock.millis()
     val remainingTime = (totpPeriod - ((millis / THOUSAND_MILLIS) % totpPeriod)).seconds
-    Otp.calculateCode(
-        totpSecret!!,
+    return Otp.calculateCode(
+        secret,
         millis / (THOUSAND_MILLIS * totpPeriod),
         totpAlgorithm,
         digits,
         issuer
       )
-      .mapBoth(
-        { code ->
-          return Totp(code, remainingTime)
-        },
-        { throwable -> throw throwable }
-      )
+      .mapBoth({ code -> Ok(Totp(code, remainingTime)) }, ::Err)
   }
 
   @AssistedFactory
