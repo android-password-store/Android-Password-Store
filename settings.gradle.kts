@@ -20,8 +20,8 @@ pluginManagement {
     exclusiveContent {
       forRepository { gradlePluginPortal() }
       filter {
-        includeModule("com.gradle", "gradle-enterprise-gradle-plugin")
-        includeModule("com.gradle.enterprise", "com.gradle.enterprise.gradle.plugin")
+        includeModule("com.gradle", "develocity-gradle-plugin")
+        includeModule("com.gradle.develocity", "com.gradle.develocity.gradle.plugin")
         includeModule("me.tylerbwong.gradle.metalava", "plugin")
         includeModule(
           "org.gradle.toolchains.foojay-resolver-convention",
@@ -40,14 +40,14 @@ pluginManagement {
 
 plugins {
   id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-  id("com.gradle.enterprise") version "3.16.2"
+  id("com.gradle.develocity") version "3.17"
 }
 
-gradleEnterprise {
+develocity {
   buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = if (System.getenv("GITHUB_WORKFLOW").isNullOrEmpty()) "no" else "yes"
-    publishOnFailureIf(!System.getenv("GITHUB_WORKFLOW").isNullOrEmpty())
+    termsOfUseUrl = "https://gradle.com/legal/terms-of-use/"
+    termsOfUseAgree = if (System.getenv("GITHUB_WORKFLOW").isNullOrEmpty()) "no" else "yes"
+    publishing.onlyIf { !System.getenv("GITHUB_WORKFLOW").isNullOrEmpty() }
   }
 }
 
