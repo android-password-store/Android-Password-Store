@@ -30,7 +30,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Check codestyle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3
+        uses: gradle/actions/setup-gradle@e24011a3b5db78bd5ab798036042d9312002f252 # v3
         with:
           arguments: ktfmtCheck
           gradle-home-cache-cleanup: true
@@ -60,7 +60,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Run unit tests
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3
+        uses: gradle/actions/setup-gradle@e24011a3b5db78bd5ab798036042d9312002f252 # v3
         with:
           arguments: test -PslimTests
           gradle-home-cache-cleanup: true
@@ -97,7 +97,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Build debug APKs
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3
+        uses: gradle/actions/setup-gradle@e24011a3b5db78bd5ab798036042d9312002f252 # v3
         with:
           arguments: assembleFreeDebug assembleNonFreeDebug assembleNonFreeRelease
           gradle-home-cache-cleanup: true
@@ -127,7 +127,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Check library API
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3
+        uses: gradle/actions/setup-gradle@e24011a3b5db78bd5ab798036042d9312002f252 # v3
         with:
           arguments: metalavaCheckCompatibilityRelease
           gradle-home-cache-cleanup: true
@@ -157,7 +157,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Run Lint
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3
+        uses: gradle/actions/setup-gradle@e24011a3b5db78bd5ab798036042d9312002f252 # v3
         with:
           arguments: lint
           gradle-home-cache-cleanup: true
