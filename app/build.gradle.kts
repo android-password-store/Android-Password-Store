@@ -34,6 +34,8 @@ android {
     useLiveLiterals = false
     kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
   }
+
+  packaging { resources.excludes.add("META-INF/versions/**") }
 }
 
 dependencies {
