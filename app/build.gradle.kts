@@ -34,6 +34,8 @@ android {
     useLiveLiterals = false
     kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
   }
+
+  packaging { resources.excludes.add("META-INF/versions/**") }
 }
 
 dependencies {
@@ -87,6 +89,7 @@ dependencies {
   implementation(libs.thirdparty.leakcanary.plumber)
   implementation(libs.thirdparty.sshj)
   implementation(libs.thirdparty.bouncycastle.bcprov)
+  implementation(libs.thirdparty.bouncycastle.bcutil)
 
   implementation(libs.thirdparty.slf4j.api) {
     because("SSHJ now uses SLF4J 2.0 which we don't want")

@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.1"
 androidxActivity = "1.9.0-rc01"
-bouncycastle = "1.77"
+bouncycastle = "1.78"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.5.11-dev-k1.9.23-96ef9dc6af1"
 coroutines = "1.8.1-Beta"
@@ -72,6 +72,7 @@ testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-
 testing-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.15"
 testing-turbine = "app.cash.turbine:turbine:1.1.0"
 thirdparty-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+thirdparty-bouncycastle-bcutil = { module = "org.bouncycastle:bcutil-jdk18on", version.ref = "bouncycastle" }
 # We're fine with the current version.
 # noinspection GradleDependency
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
