@@ -43,7 +43,7 @@ jobs:
           java-version: 20
 
       - name: Update changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@3c29bb3f8c3cbe3cf015ea6691a06ea9942dc315 # 2.0.0
+        uses: thomaseizinger/keep-a-changelog-new-release@77ac767b2f7f6edf2ee72ab3364ed26667086f96 # 3.0.0
         with:
           version: ${{ github.event.milestone.title }}
 
