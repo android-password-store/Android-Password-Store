@@ -5,6 +5,11 @@
     "helpers:pinGitHubActionDigests",
   ],
   "branchConcurrentLimit": 15,
+  "github-actions": {
+    "fileMatch": [
+       ".github/reusable-workflows/.+\\.ya?ml$",
+    ],
+  },
   "packageRules": [
     {
       matchDatasources: [

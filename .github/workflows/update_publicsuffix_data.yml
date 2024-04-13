@@ -8,30 +8,21 @@ jobs:
   update-publicsuffix-data:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-      - name: Set up JDK
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: temurin
-          java-version: 20
+      - name: Setup build environment
+        uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
       - name: Download new publicsuffix data
-        uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
-        with:
-          arguments: updatePSL
-          gradle-home-cache-cleanup: true
+        shell: bash
+        run: ./gradlew updatePSL
 
       - name: Check if PR is required
+        shell: bash
         run: if [[ $(git status -s) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
 
       - name: Verify update publicsuffixes file
-        uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
         if: "${{ env.UPDATED == 'true' }}"
-        with:
-          arguments: :autofill-parser:test -PslimTests
-          gradle-home-cache-cleanup: true
+        shell: bash
+        run: ./gradlew :autofill-parser:test -PslimTests
 
       - name: Create Pull Request
         id: cpr

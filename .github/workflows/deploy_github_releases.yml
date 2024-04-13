@@ -9,28 +9,18 @@ jobs:
     name: Build release binaries
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-    - name: Set up JDK
-      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-      with:
-        distribution: temurin
-        java-version: 20
+    - name: Setup build environment
+      uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
     - name: Decrypt secrets
+      shell: bash
       run: scripts/signing-setup.sh "$ENCRYPT_KEY"
       env:
         ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
-    - name: Copy CI gradle.properties
-      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
     - name: Build release binaries
-      uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
-      with:
-        arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
-        gradle-home-cache-cleanup: true
+      shell: bash
+      run: ./gradlew :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
       env:
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
@@ -103,7 +93,8 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: Upload Non-Free Release Apk
         uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2

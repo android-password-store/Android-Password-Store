@@ -18,40 +18,32 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - name: Setup build environment
+      uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
       with:
         fetch-depth: 0
-
-    - name: Set up JDK
-      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-      with:
-        distribution: temurin
-        java-version: 20
+        dependency-graph: generate-and-submit
 
     - name: Decrypt secrets
+      shell: bash
       run: scripts/signing-setup.sh "$ENCRYPT_KEY"
       env:
         ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
-    - name: Copy CI gradle.properties
-      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
     - name: Build release app
-      uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
+      shell: bash
+      run: ./gradlew collectFreeReleaseApks collectNonFreeReleaseApks bundleFreeRelease bundleNonFreeRelease -PsentryUploadMappings
       env:
         SNAPSHOT: "true"
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      with:
-        arguments: collectFreeReleaseApks collectNonFreeReleaseApks bundleFreeRelease bundleNonFreeRelease -PsentryUploadMappings
-        gradle-home-cache-cleanup: true
-        dependency-graph: generate-and-submit
 
     - name: Clean secrets
+      shell: bash
       run: scripts/signing-cleanup.sh
 
     - name: Deploy snapshot
+      shell: bash
       run: scripts/deploy-snapshot.sh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

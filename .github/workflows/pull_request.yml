@@ -15,25 +15,12 @@ jobs:
   check-codestyle:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: temurin
-          java-version: 20
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Setup build environment
+        uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
       - name: Check codestyle
-        uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
-        with:
-          arguments: ktfmtCheck
-          gradle-home-cache-cleanup: true
+        shell: bash
+        run: ./gradlew ktfmtCheck
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
@@ -45,25 +32,12 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: temurin
-          java-version: 20
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Setup build environment
+        uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
       - name: Run unit tests
-        uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
-        with:
-          arguments: test -PslimTests
-          gradle-home-cache-cleanup: true
+        shell: bash
+        run: ./gradlew test -PslimTests
 
       - name: (Fail-only) Upload test report
         if: "${{ failure() }}"
@@ -82,25 +56,12 @@ jobs:
   build-apks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: temurin
-          java-version: 20
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Setup build environment
+        uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
       - name: Build debug APKs
-        uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
-        with:
-          arguments: assembleFreeDebug assembleNonFreeDebug assembleNonFreeRelease
-          gradle-home-cache-cleanup: true
+        shell: bash
+        run: ./gradlew assembleFreeDebug assembleNonFreeDebug assembleNonFreeRelease
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
@@ -112,25 +73,12 @@ jobs:
   check-api:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: temurin
-          java-version: 20
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Setup build environment
+        uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
       - name: Check library API
-        uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
-        with:
-          arguments: metalavaCheckCompatibilityRelease
-          gradle-home-cache-cleanup: true
+        shell: bash
+        run: ./gradlew metalavaCheckCompatibilityRelease
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
@@ -142,25 +90,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
-        with:
-          distribution: temurin
-          java-version: 20
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Setup build environment
+        uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
       - name: Run Lint
-        uses: gradle/actions/setup-gradle@6cec5d49d4d6d4bb982fbed7047db31ea6d38f11 # v3
-        with:
-          arguments: lint
-          gradle-home-cache-cleanup: true
+        shell: bash
+        run: ./gradlew lint
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
