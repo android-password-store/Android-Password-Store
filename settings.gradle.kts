@@ -45,7 +45,7 @@ plugins {
 
 develocity {
   buildScan {
-    termsOfUseUrl = "https://gradle.com/legal/terms-of-use/"
+    termsOfUseUrl = "https://gradle.com/help/legal-terms-of-use"
     termsOfUseAgree = if (System.getenv("GITHUB_WORKFLOW").isNullOrEmpty()) "no" else "yes"
     publishing.onlyIf { !System.getenv("GITHUB_WORKFLOW").isNullOrEmpty() }
   }
