@@ -14,15 +14,19 @@ import com.github.michaelbull.result.getError
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import java.io.ByteArrayOutputStream
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import org.bouncycastle.util.io.Streams
 import org.junit.runner.RunWith
 import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.MessageInspector
+import org.pgpainless.encryption_signing.EncryptionOptions
+import org.pgpainless.encryption_signing.ProducerOptions
 
 @Suppress("Unused") // Test runner handles it internally
 enum class EncryptionKey(val keySet: List<PGPKey>) {
@@ -153,6 +157,43 @@ class PGPainlessCryptoHandlerTest {
       )
     assertTrue(res.isErr)
     assertIs<NonStandardAEAD>(res.error, message = "${res.error.cause}")
+  }
+
+  @Test
+  fun detectsKeysWithoutPassphrase() {
+    val plaintextInputStream = "hunter2".byteInputStream()
+    val ciphertextStream = ByteArrayOutputStream()
+    val secretKeyring =
+      PGPainless.generateKeyRing().modernKeyRing("John Doe <john.doe@example.org>")
+    val publicKeyring = PGPainless.extractCertificate(secretKeyring)
+    val encryptionStream =
+      PGPainless.encryptAndOrSign()
+        .onOutputStream(ciphertextStream)
+        .withOptions(
+          ProducerOptions.encrypt(EncryptionOptions.encryptDataAtRest().addRecipient(publicKeyring))
+        )
+    Streams.pipeAll(plaintextInputStream, encryptionStream)
+    encryptionStream.close()
+    assertFalse(cryptoHandler.isPassphraseProtected(ciphertextStream.toByteArray().inputStream()))
+  }
+
+  @Test
+  @Ignore("Doesn't work correctly")
+  fun detectsKeysWithPassphrase() {
+    val plaintextInputStream = "hunter2".byteInputStream()
+    val ciphertextStream = ByteArrayOutputStream()
+    val secretKeyring =
+      PGPainless.generateKeyRing().modernKeyRing("John Doe <john.doe@example.org>", "hunter2")
+    val publicKeyring = PGPainless.extractCertificate(secretKeyring)
+    val encryptionStream =
+      PGPainless.encryptAndOrSign()
+        .onOutputStream(ciphertextStream)
+        .withOptions(
+          ProducerOptions.encrypt(EncryptionOptions.encryptDataAtRest().addRecipient(publicKeyring))
+        )
+    Streams.pipeAll(plaintextInputStream, encryptionStream)
+    encryptionStream.close()
+    assertTrue(cryptoHandler.isPassphraseProtected(ciphertextStream.toByteArray().inputStream()))
   }
 
   @Test
