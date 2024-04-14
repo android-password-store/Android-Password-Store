@@ -8,6 +8,7 @@ package app.passwordstore.crypto
 import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.crypto.errors.IncorrectPassphraseException
 import app.passwordstore.crypto.errors.NoKeysProvidedException
+import app.passwordstore.crypto.errors.NonStandardAEAD
 import app.passwordstore.crypto.errors.UnknownError
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapError
@@ -24,6 +25,7 @@ import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.ConsumerOptions
 import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.ProducerOptions
+import org.pgpainless.exception.MessageNotIntegrityProtectedException
 import org.pgpainless.exception.WrongPassphraseException
 import org.pgpainless.key.protection.SecretKeyRingProtector
 import org.pgpainless.util.Passphrase
@@ -75,6 +77,13 @@ public class PGPainlessCryptoHandler @Inject constructor() :
         when (error) {
           is WrongPassphraseException -> IncorrectPassphraseException(error)
           is CryptoHandlerException -> error
+          is MessageNotIntegrityProtectedException -> {
+            if (error.message?.contains("Symmetrically Encrypted Data") == true) {
+              NonStandardAEAD(error)
+            } else {
+              UnknownError(error)
+            }
+          }
           else -> UnknownError(error)
         }
       }

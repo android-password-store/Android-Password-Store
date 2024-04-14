@@ -13,11 +13,14 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
+import app.passwordstore.crypto.errors.CryptoHandlerException
+import app.passwordstore.crypto.errors.NonStandardAEAD
 import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.DecryptLayoutBinding
 import app.passwordstore.ui.adapters.FieldItemAdapter
+import app.passwordstore.ui.dialogs.BasicBottomSheet
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result as BiometricResult
 import app.passwordstore.util.extensions.getString
@@ -27,7 +30,8 @@ import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
-import com.github.michaelbull.result.runCatching
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.map
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -198,7 +202,7 @@ class DecryptActivity : BasePGPActivity() {
             passphraseCache.cachePassphrase(
               this@DecryptActivity,
               gpgIdentifiers.first(),
-              passphrase
+              passphrase,
             )
           }
         }
@@ -221,24 +225,36 @@ class DecryptActivity : BasePGPActivity() {
       onSuccess()
     } else {
       logcat(ERROR) { result.error.stackTraceToString() }
-      decrypt(isError = true, authResult = authResult)
+      when (result.error) {
+        is NonStandardAEAD -> {
+          BasicBottomSheet.Builder(this)
+            .setTitle(getString(R.string.aead_detect_title))
+            .setMessage(getString(R.string.aead_detect_message, result.error.message))
+            .setPositiveButtonClickListener(getString(R.string.dialog_ok)) {
+              setResult(RESULT_CANCELED)
+              finish()
+            }
+            .setOnDismissListener {
+              setResult(RESULT_CANCELED)
+              finish()
+            }
+            .build()
+            .show(supportFragmentManager, "AEAD_INFO_SHEET")
+        }
+        else -> decrypt(isError = true, authResult = authResult)
+      }
     }
   }
 
   private suspend fun decryptPGPStream(
     passphrase: String,
     gpgIdentifiers: List<PGPIdentifier>,
-  ) = runCatching {
+  ): Result<ByteArrayOutputStream, CryptoHandlerException> {
     val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
     val outputStream = ByteArrayOutputStream()
-    val result =
-      repository.decrypt(
-        passphrase,
-        gpgIdentifiers,
-        message,
-        outputStream,
-      )
-    if (result.isOk) outputStream else throw result.error
+    return repository.decrypt(passphrase, gpgIdentifiers, message, outputStream).map {
+      outputStream
+    }
   }
 
   private suspend fun createPasswordUI(entry: PasswordEntry) =

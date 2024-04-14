@@ -6,6 +6,7 @@
 package app.passwordstore.ui.dialogs
 
 import android.content.Context
+import android.content.DialogInterface.OnDismissListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ private constructor(
   val negativeButtonLabel: String?,
   val positiveButtonClickListener: View.OnClickListener?,
   val negativeButtonClickListener: View.OnClickListener?,
+  val onDismissListener: OnDismissListener?,
 ) : BottomSheetDialogFragment() {
 
   private val binding by viewBinding(BasicBottomSheetBinding::bind)
@@ -94,6 +96,9 @@ private constructor(
               dismiss()
             }
           }
+          if (onDismissListener != null) {
+            dialog.setOnDismissListener(onDismissListener)
+          }
         }
       }
     )
@@ -112,6 +117,7 @@ private constructor(
     private var negativeButtonLabel: String? = null
     private var positiveButtonClickListener: View.OnClickListener? = null
     private var negativeButtonClickListener: View.OnClickListener? = null
+    private var onDismissListener: OnDismissListener? = null
 
     fun setTitleRes(@StringRes titleRes: Int): Builder {
       this.title = context.resources.getString(titleRes)
@@ -135,7 +141,7 @@ private constructor(
 
     fun setPositiveButtonClickListener(
       buttonLabel: String? = null,
-      listener: View.OnClickListener
+      listener: View.OnClickListener,
     ): Builder {
       this.positiveButtonClickListener = listener
       this.positiveButtonLabel = buttonLabel
@@ -144,10 +150,17 @@ private constructor(
 
     fun setNegativeButtonClickListener(
       buttonLabel: String? = null,
-      listener: View.OnClickListener
+      listener: View.OnClickListener,
     ): Builder {
       this.negativeButtonClickListener = listener
       this.negativeButtonLabel = buttonLabel
+      return this
+    }
+
+    fun setOnDismissListener(
+      onDismissListener: OnDismissListener,
+    ): Builder {
+      this.onDismissListener = onDismissListener
       return this
     }
 
@@ -159,7 +172,8 @@ private constructor(
         positiveButtonLabel,
         negativeButtonLabel,
         positiveButtonClickListener,
-        negativeButtonClickListener
+        negativeButtonClickListener,
+        onDismissListener,
       )
     }
   }

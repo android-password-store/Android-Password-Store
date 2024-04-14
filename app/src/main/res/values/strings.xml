@@ -377,4 +377,6 @@
   <string name="no_keys_imported_dialog_title">No keys imported</string>
   <string name="no_keys_imported_dialog_message">There are no PGP keys imported in the app yet, press the button below to pick a key file</string>
   <string name="biometric_prompt_title_gpg_passphrase_cache">Unlock passphrase cache</string>
+  <string name="aead_detect_title">AEAD encryption detected</string>
+  <string name="aead_detect_message">%1$s, see https://passwordstore.app/fix-aead for more information</string>
 </resources>

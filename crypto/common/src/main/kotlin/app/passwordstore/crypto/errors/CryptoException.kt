@@ -41,8 +41,13 @@ public sealed class CryptoHandlerException(message: String? = null, cause: Throw
 /** The passphrase provided for decryption was incorrect. */
 public class IncorrectPassphraseException(cause: Throwable) : CryptoHandlerException(null, cause)
 
+/** The encrypted material is using an incompatible variant of PGP's AEAD standard. */
+public class NonStandardAEAD(cause: Throwable) :
+  CryptoHandlerException("GnuPG's AEAD implementation is non-standard and unsupported", cause)
+
 /** No keys were passed to the encrypt/decrypt operation. */
 public data object NoKeysProvidedException : CryptoHandlerException(null, null)
 
 /** An unexpected error that cannot be mapped to a known type. */
-public class UnknownError(cause: Throwable) : CryptoHandlerException(null, cause)
+public class UnknownError(cause: Throwable, message: String? = null) :
+  CryptoHandlerException(message, cause)
