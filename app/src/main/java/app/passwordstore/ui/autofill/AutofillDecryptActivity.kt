@@ -14,8 +14,10 @@ import android.view.autofill.AutofillManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
+import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
+import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.crypto.PasswordDialog
 import app.passwordstore.util.auth.BiometricAuthenticator
@@ -92,7 +94,10 @@ class AutofillDecryptActivity : BasePGPActivity() {
     action: AutofillAction,
     authResult: Result,
   ) {
-    val gpgIdentifiers = getPGPIdentifiers("") ?: return
+    val gpgIdentifiers =
+      getPGPIdentifiers(
+        getParentPath(filePath, PasswordRepository.getRepositoryDirectory().toString())
+      ) ?: return
     lifecycleScope.launch(dispatcherProvider.main()) {
       when (authResult) {
         // Internally handled by the prompt dialog
@@ -101,7 +106,8 @@ class AutofillDecryptActivity : BasePGPActivity() {
         is Result.CanceledBySystem,
         is Result.CanceledByUser,
         is Result.Failure,
-        is Result.HardwareUnavailableOrDisabled -> askPassphrase(filePath, clientState, action)
+        is Result.HardwareUnavailableOrDisabled ->
+          askPassphrase(filePath, gpgIdentifiers, clientState, action)
         //
         is Result.Success -> {
           val cachedPassphrase =
@@ -110,23 +116,34 @@ class AutofillDecryptActivity : BasePGPActivity() {
               gpgIdentifiers.first()
             )
           if (cachedPassphrase != null) {
-            decryptWithPassphrase(File(filePath), clientState, action, cachedPassphrase)
+            decryptWithPassphrase(
+              File(filePath),
+              gpgIdentifiers,
+              clientState,
+              action,
+              cachedPassphrase
+            )
           } else {
-            askPassphrase(filePath, clientState, action)
+            askPassphrase(filePath, gpgIdentifiers, clientState, action)
           }
         }
       }
     }
   }
 
-  private fun askPassphrase(filePath: String, clientState: Bundle, action: AutofillAction) {
+  private fun askPassphrase(
+    filePath: String,
+    identifiers: List<PGPIdentifier>,
+    clientState: Bundle,
+    action: AutofillAction,
+  ) {
     val dialog = PasswordDialog()
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
       if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
         val value = bundle.getString(PasswordDialog.PASSWORD_RESULT_KEY)!!
         lifecycleScope.launch(dispatcherProvider.main()) {
-          decryptWithPassphrase(File(filePath), clientState, action, value)
+          decryptWithPassphrase(File(filePath), identifiers, clientState, action, value)
         }
       }
     }
@@ -134,11 +151,12 @@ class AutofillDecryptActivity : BasePGPActivity() {
 
   private suspend fun decryptWithPassphrase(
     filePath: File,
+    identifiers: List<PGPIdentifier>,
     clientState: Bundle,
     action: AutofillAction,
     password: String,
   ) {
-    val credentials = decryptCredential(filePath, password)
+    val credentials = decryptCredential(filePath, password, identifiers)
     if (credentials == null) {
       setResult(RESULT_CANCELED)
     } else {
@@ -159,8 +177,11 @@ class AutofillDecryptActivity : BasePGPActivity() {
     withContext(dispatcherProvider.main()) { finish() }
   }
 
-  private suspend fun decryptCredential(file: File, password: String): Credentials? {
-    val gpgIdentifiers = getPGPIdentifiers("") ?: return null
+  private suspend fun decryptCredential(
+    file: File,
+    password: String,
+    identifiers: List<PGPIdentifier>,
+  ): Credentials? {
     runCatching { file.readBytes().inputStream() }
       .onFailure { e ->
         logcat(ERROR) { e.asLog("File to decrypt not found") }
@@ -172,7 +193,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
               val outputStream = ByteArrayOutputStream()
               repository.decrypt(
                 password,
-                gpgIdentifiers,
+                identifiers,
                 encryptedInput,
                 outputStream,
               )
@@ -185,7 +206,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
           }
           .onSuccess { result ->
             return runCatching {
-                passphraseCache.cachePassphrase(this, gpgIdentifiers.first(), password)
+                passphraseCache.cachePassphrase(this, identifiers.first(), password)
                 val entry = passwordEntryFactory.create(result.toByteArray())
                 AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
               }

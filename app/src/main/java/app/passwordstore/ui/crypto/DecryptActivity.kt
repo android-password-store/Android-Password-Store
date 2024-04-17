@@ -154,7 +154,7 @@ class DecryptActivity : BasePGPActivity() {
   }
 
   private fun decrypt(isError: Boolean, authResult: BiometricResult) {
-    val gpgIdentifiers = getPGPIdentifiers("") ?: return
+    val gpgIdentifiers = getPGPIdentifiers(relativeParentPath) ?: return
     lifecycleScope.launch(dispatcherProvider.main()) {
       when (authResult) {
         // Internally handled by the prompt dialog
@@ -199,11 +199,13 @@ class DecryptActivity : BasePGPActivity() {
         val passphrase = bundle.getString(PasswordDialog.PASSWORD_RESULT_KEY)!!
         lifecycleScope.launch(dispatcherProvider.main()) {
           decryptWithPassphrase(passphrase, gpgIdentifiers, authResult) {
-            passphraseCache.cachePassphrase(
-              this@DecryptActivity,
-              gpgIdentifiers.first(),
-              passphrase,
-            )
+            if (authResult is BiometricResult.Success) {
+              passphraseCache.cachePassphrase(
+                this@DecryptActivity,
+                gpgIdentifiers.first(),
+                passphrase,
+              )
+            }
           }
         }
       }
