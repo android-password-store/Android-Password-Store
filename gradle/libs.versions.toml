@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.2"
-androidxActivity = "1.9.0-rc01"
+androidxActivity = "1.9.0"
 bouncycastle = "1.78"
 # @keep used for kotlinCompilerExtensionVersion
 composeCompiler = "1.5.11-dev-k1.9.23-96ef9dc6af1"
@@ -9,21 +9,21 @@ flowbinding = "1.2.0"
 hilt = "2.51.1"
 kotlin = "1.9.23"
 kotlinResult = "2.0.0"
-lifecycle = "2.8.0-alpha04"
+lifecycle = "2.8.0-beta01"
 moshi = "1.15.1"
 
 [libraries]
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.4"
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidxActivity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
-androidx-annotation = "androidx.annotation:annotation:1.8.0-beta01"
+androidx-annotation = "androidx.annotation:annotation:1.8.0-beta02"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
 androidx-autofill = "androidx.autofill:autofill:1.3.0-alpha01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha13"
 androidx-core-ktx = "androidx.core:core-ktx:1.13.0-rc01"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-rc01"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-rc02"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
