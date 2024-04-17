@@ -21,7 +21,7 @@ androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
 androidx-autofill = "androidx.autofill:autofill:1.3.0-alpha01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-alpha13"
-androidx-core-ktx = "androidx.core:core-ktx:1.13.0-rc01"
+androidx-core-ktx = "androidx.core:core-ktx:1.13.0"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0-rc02"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
@@ -51,7 +51,7 @@ build-r8 = "com.android.tools:r8:8.4.6-dev"
 build-semver = "com.github.zafarkhaja:java-semver:0.10.2"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.4.1"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.4"
-compose-bom = "androidx.compose:compose-bom:2024.04.00"
+compose-bom = "androidx.compose:compose-bom:2024.04.01"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
