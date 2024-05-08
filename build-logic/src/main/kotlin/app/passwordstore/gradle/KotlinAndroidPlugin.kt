@@ -30,10 +30,14 @@ class KotlinAndroidPlugin : Plugin<Project> {
     val kotlinVersion = libs.versions.kotlin.get()
     val matches = COMPOSE_COMPILER_VERSION_REGEX.find(composeCompilerVersion)
 
-    if (matches != null) {
-      val (compilerKotlinVersion) = matches.destructured
-      if (compilerKotlinVersion != kotlinVersion) {
-        project.tasks.withType<KotlinCompile>().configureEach {
+    project.tasks.withType<KotlinCompile>().configureEach {
+      compilerOptions.freeCompilerArgs.addAll(
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=StrongSkipping",
+      )
+      if (matches != null) {
+        val (compilerKotlinVersion) = matches.destructured
+        if (compilerKotlinVersion != kotlinVersion) {
           compilerOptions.freeCompilerArgs.addAll(
             "-P",
             "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=$kotlinVersion",
