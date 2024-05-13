@@ -6,6 +6,7 @@
 package app.passwordstore.ui.crypto
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -94,8 +95,13 @@ open class BasePGPActivity : AppCompatActivity() {
   ) {
     val clipboard = clipboard ?: return
     val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
-    clip.description.extras =
-      PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      clip.description.extras =
+        PersistableBundle().apply { putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true) }
+    } else {
+      clip.description.extras =
+        PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
+    }
     clipboard.setPrimaryClip(clip)
     if (showSnackbar && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
       snackbar(message = resources.getString(snackbarTextRes))
