@@ -13,6 +13,7 @@ plugins {
   id("com.github.android-password-store.sentry")
   id("com.github.android-password-store.rename-artifacts")
   alias(libs.plugins.hilt)
+  alias(libs.plugins.kotlin.composeCompiler)
 }
 
 crowdin {
@@ -30,10 +31,7 @@ android {
   }
 
   buildFeatures { compose = true }
-  composeOptions {
-    useLiveLiterals = false
-    kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-  }
+  composeOptions { useLiveLiterals = false }
 
   packaging { resources.excludes.add("META-INF/versions/**") }
 }
