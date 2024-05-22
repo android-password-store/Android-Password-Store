@@ -5,6 +5,7 @@
 plugins {
   id("com.github.android-password-store.android-library")
   id("com.github.android-password-store.kotlin-android")
+  alias(libs.plugins.kotlin.composeCompiler)
 }
 
 android {
@@ -12,10 +13,7 @@ android {
     compose = true
     androidResources = true
   }
-  composeOptions {
-    useLiveLiterals = false
-    kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-  }
+  composeOptions { useLiveLiterals = false }
   namespace = "app.passwordstore.ui.compose"
 }
 

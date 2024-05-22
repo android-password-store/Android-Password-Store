@@ -160,3 +160,6 @@ fabric.properties
 
 # Default output directory for APK and Bundle collection tasks
 app/outputs
+
+# K2 generated directory
+.kotlin/
