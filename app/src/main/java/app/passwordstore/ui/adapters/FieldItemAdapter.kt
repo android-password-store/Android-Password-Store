@@ -5,6 +5,7 @@
 
 package app.passwordstore.ui.adapters
 
+import android.graphics.Typeface
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -82,6 +83,9 @@ class FieldItemAdapter(
                 } else {
                   null
                 }
+              if (fieldItem.key == FieldItem.ItemType.PASSWORD.type) {
+                typeface = Typeface.create("monospace", Typeface.NORMAL)
+              }
               setOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }
           }
