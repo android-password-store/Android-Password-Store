@@ -66,11 +66,6 @@ public class PGPainlessCryptoHandler @Inject constructor() :
             )
         Streams.pipeAll(decryptionStream, outputStream)
         decryptionStream.close()
-        keyringCollection.forEach { keyRing ->
-          check(decryptionStream.metadata.isEncryptedFor(keyRing)) {
-            "Stream should be encrypted for ${keyRing.secretKey.keyID} but wasn't"
-          }
-        }
         return@runCatching
       }
       .mapError { error ->
