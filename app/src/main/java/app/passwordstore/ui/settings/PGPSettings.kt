@@ -60,6 +60,12 @@ class PGPSettings(
           true
         }
       }
+      switch(PreferenceKeys.CLEAR_PASSPHRASE_CACHE) {
+        dependency = Feature.EnablePGPPassphraseCache.configKey
+        titleRes = R.string.pref_passphrase_cache_auto_clear_title
+        summaryRes = R.string.pref_passphrase_cache_auto_clear_summary
+        defaultValue = false
+      }
     }
   }
 }

@@ -4,12 +4,18 @@
  */
 package app.passwordstore
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate.*
+import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.injection.context.FilesDirPath
 import app.passwordstore.injection.prefs.SettingsPreferences
+import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.features.Feature
 import app.passwordstore.util.features.Features
@@ -24,6 +30,10 @@ import io.sentry.Sentry
 import io.sentry.protocol.User
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority.DEBUG
 import logcat.LogPriority.VERBOSE
@@ -36,8 +46,10 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
 
   @Inject @SettingsPreferences lateinit var prefs: SharedPreferences
   @Inject @FilesDirPath lateinit var filesDirPath: String
-  @Inject lateinit var proxyUtils: ProxyUtils
+  @Inject lateinit var dispatcherProvider: DispatcherProvider
+  @Inject lateinit var passphraseCache: PGPPassphraseCache
   @Inject lateinit var gitSettings: GitSettings
+  @Inject lateinit var proxyUtils: ProxyUtils
   @Inject lateinit var features: Features
 
   override fun onCreate() {
@@ -63,6 +75,27 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
           "features.${feature.configKey}" to features.isEnabled(feature).toString()
         }
       scope.user = user
+    }
+    setupPassphraseCacheClearAction()
+  }
+
+  @OptIn(DelicateCoroutinesApi::class)
+  private fun setupPassphraseCacheClearAction() {
+    if (prefs.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, false)) {
+      val screenOffReceiver: BroadcastReceiver =
+        object : BroadcastReceiver() {
+          override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == Intent.ACTION_SCREEN_OFF) {
+              GlobalScope.launch {
+                withContext(dispatcherProvider.main()) {
+                  passphraseCache.clearAllCachedPassphrases(context)
+                }
+              }
+            }
+          }
+        }
+      val filter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+      registerReceiver(screenOffReceiver, filter)
     }
   }
 

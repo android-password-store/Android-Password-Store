@@ -91,4 +91,5 @@ object PreferenceKeys {
   const val DICEWARE_LENGTH = "diceware_length"
   const val DISABLE_SYNC_ACTION = "disable_sync_action"
   const val ASCII_ARMOR = "pgpainless_ascii_armor"
+  const val CLEAR_PASSPHRASE_CACHE = "pgpainless_auto_clear_passphrase_cache_screen_off"
 }
