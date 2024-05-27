@@ -11,6 +11,7 @@ import app.passwordstore.crypto.errors.NoKeysProvidedException
 import app.passwordstore.crypto.errors.NonStandardAEAD
 import app.passwordstore.crypto.errors.UnknownError
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.mapBoth
 import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
 import java.io.InputStream
@@ -23,7 +24,6 @@ import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
 import org.bouncycastle.util.io.Streams
 import org.pgpainless.PGPainless
 import org.pgpainless.decryption_verification.ConsumerOptions
-import org.pgpainless.decryption_verification.MessageInspector
 import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.ProducerOptions
 import org.pgpainless.exception.MessageNotIntegrityProtectedException
@@ -142,8 +142,13 @@ public class PGPainlessCryptoHandler @Inject constructor() :
     return fileName.substringAfterLast('.', "") == "gpg"
   }
 
-  public override fun isPassphraseProtected(message: InputStream): Boolean {
-    val info = MessageInspector.determineEncryptionInfoForMessage(message)
-    return info.isPassphraseEncrypted
-  }
+  public override fun isPassphraseProtected(keys: List<PGPKey>): Boolean =
+    keys
+      .mapNotNull { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
+      .map(::keyringHasPassphrase)
+      .all { it }
+
+  internal fun keyringHasPassphrase(keyRing: PGPSecretKeyRing) =
+    runCatching { keyRing.secretKey.extractPrivateKey(null) }
+      .mapBoth(success = { false }, failure = { true })
 }

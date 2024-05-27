@@ -189,9 +189,7 @@ class DecryptActivity : BasePGPActivity() {
     } else {
       finish()
     }
-    val passFileContents =
-      withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
-    if (!repository.isPasswordProtected(passFileContents)) {
+    if (!repository.isPasswordProtected(gpgIdentifiers)) {
       decryptWithPassphrase(passphrase = "", gpgIdentifiers, authResult)
       return
     }
