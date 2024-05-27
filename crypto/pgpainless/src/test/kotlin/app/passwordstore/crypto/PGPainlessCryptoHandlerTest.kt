@@ -156,6 +156,26 @@ class PGPainlessCryptoHandlerTest {
   }
 
   @Test
+  fun detectsKeysWithPassphrase() {
+    assertTrue(cryptoHandler.isPassphraseProtected(listOf(PGPKey(TestUtils.getArmoredSecretKey()))))
+    assertTrue(
+      cryptoHandler.isPassphraseProtected(
+        listOf(PGPKey(TestUtils.getArmoredSecretKeyWithMultipleIdentities()))
+      )
+    )
+  }
+
+  @Test
+  fun detectsKeysWithoutPassphrase() {
+    // Uses the internal method instead of the public API because GnuPG seems to have made it
+    // impossible to generate a key without a passphrase and I can't care to find a magical
+    // incantation to convince it I am smarter than whatever they are protecting against.
+    assertFalse(
+      cryptoHandler.keyringHasPassphrase(PGPainless.generateKeyRing().modernKeyRing("John Doe"))
+    )
+  }
+
+  @Test
   fun canHandleFiltersFormats() {
     assertFalse { cryptoHandler.canHandle("example.com") }
     assertTrue { cryptoHandler.canHandle("example.com.gpg") }

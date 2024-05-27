@@ -131,12 +131,16 @@ class AutofillDecryptActivity : BasePGPActivity() {
     }
   }
 
-  private fun askPassphrase(
+  private suspend fun askPassphrase(
     filePath: String,
     identifiers: List<PGPIdentifier>,
     clientState: Bundle,
     action: AutofillAction,
   ) {
+    if (!repository.isPasswordProtected(identifiers)) {
+      decryptWithPassphrase(File(filePath), identifiers, clientState, action, password = "")
+      return
+    }
     val dialog = PasswordDialog()
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->

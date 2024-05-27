@@ -179,7 +179,7 @@ class DecryptActivity : BasePGPActivity() {
     }
   }
 
-  private fun askPassphrase(
+  private suspend fun askPassphrase(
     isError: Boolean,
     gpgIdentifiers: List<PGPIdentifier>,
     authResult: BiometricResult,
@@ -188,6 +188,10 @@ class DecryptActivity : BasePGPActivity() {
       retries += 1
     } else {
       finish()
+    }
+    if (!repository.isPasswordProtected(gpgIdentifiers)) {
+      decryptWithPassphrase(passphrase = "", gpgIdentifiers, authResult)
+      return
     }
     val dialog = PasswordDialog()
     if (isError) {

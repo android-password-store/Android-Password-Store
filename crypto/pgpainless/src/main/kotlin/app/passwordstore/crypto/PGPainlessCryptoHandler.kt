@@ -11,6 +11,7 @@ import app.passwordstore.crypto.errors.NoKeysProvidedException
 import app.passwordstore.crypto.errors.NonStandardAEAD
 import app.passwordstore.crypto.errors.UnknownError
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.mapBoth
 import com.github.michaelbull.result.mapError
 import com.github.michaelbull.result.runCatching
 import java.io.InputStream
@@ -140,4 +141,14 @@ public class PGPainlessCryptoHandler @Inject constructor() :
   public override fun canHandle(fileName: String): Boolean {
     return fileName.substringAfterLast('.', "") == "gpg"
   }
+
+  public override fun isPassphraseProtected(keys: List<PGPKey>): Boolean =
+    keys
+      .mapNotNull { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
+      .map(::keyringHasPassphrase)
+      .all { it }
+
+  internal fun keyringHasPassphrase(keyRing: PGPSecretKeyRing) =
+    runCatching { keyRing.secretKey.extractPrivateKey(null) }
+      .mapBoth(success = { false }, failure = { true })
 }
