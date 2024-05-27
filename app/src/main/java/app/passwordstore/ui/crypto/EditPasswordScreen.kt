@@ -10,7 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -20,7 +19,7 @@ import app.passwordstore.R
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.PasswordField
-import app.passwordstore.ui.compose.theme.APSThemePreview
+import app.passwordstore.ui.compose.theme.APSTheme
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.UriTotpFinder
 
@@ -75,7 +74,7 @@ private fun ExtraContent(
 @Preview
 @Composable
 private fun EditPasswordScreenPreview() {
-  APSThemePreview {
+  APSTheme {
     EditPasswordScreen(
       entryName = "Test Entry",
       entry = createTestEntry(),

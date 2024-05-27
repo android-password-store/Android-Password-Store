@@ -24,7 +24,7 @@ import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.CopyButton
 import app.passwordstore.ui.compose.PasswordField
-import app.passwordstore.ui.compose.theme.APSThemePreview
+import app.passwordstore.ui.compose.theme.APSTheme
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.UriTotpFinder
 import kotlinx.coroutines.flow.first
@@ -106,7 +106,7 @@ private fun ExtraContent(
 @Preview
 @Composable
 private fun ViewPasswordScreenPreview() {
-  APSThemePreview {
+  APSTheme {
     ViewPasswordScreen(
       entryName = "Test Entry",
       entry = createTestEntry(),

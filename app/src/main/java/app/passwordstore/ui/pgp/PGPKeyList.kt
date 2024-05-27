@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
-import app.passwordstore.ui.compose.theme.APSThemePreview
+import app.passwordstore.ui.compose.theme.APSTheme
 import app.passwordstore.util.extensions.conditional
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -139,7 +139,7 @@ private inline fun DeleteConfirmationDialog(
 @Preview
 @Composable
 private fun KeyListPreview() {
-  APSThemePreview {
+  APSTheme {
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
       KeyList(
         identifiers =
@@ -157,7 +157,7 @@ private fun KeyListPreview() {
 @Preview
 @Composable
 private fun EmptyKeyListPreview() {
-  APSThemePreview {
+  APSTheme {
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
       KeyList(identifiers = persistentListOf(), onItemClick = {})
     }

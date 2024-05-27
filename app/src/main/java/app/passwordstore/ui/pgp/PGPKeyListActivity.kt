@@ -13,13 +13,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import app.passwordstore.R
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.theme.APSTheme
-import app.passwordstore.ui.compose.theme.decideColorScheme
 import app.passwordstore.util.viewmodel.PGPKeyListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,8 +36,7 @@ class PGPKeyListActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     val isSelecting = intent.extras?.getBoolean(EXTRA_KEY_SELECTION) ?: false
     setContent {
-      val context = LocalContext.current
-      APSTheme(colors = decideColorScheme(context)) {
+      APSTheme {
         Scaffold(
           topBar = {
             APSAppBar(

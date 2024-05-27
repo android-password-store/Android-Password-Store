@@ -23,4 +23,5 @@ dependencies {
   api(libs.compose.foundation.layout)
   api(libs.compose.material3)
   api(libs.compose.ui.core)
+  implementation(libs.androidx.core.ktx)
 }
