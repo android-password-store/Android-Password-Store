@@ -7,7 +7,6 @@ package app.passwordstore.ui.settings
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BundleCompat
 import app.passwordstore.R
@@ -102,11 +101,6 @@ class SettingsActivity : AppCompatActivity() {
     binding.preferenceRecyclerView.adapter = adapter
   }
 
-  override fun onStart() {
-    super.onStart()
-    onBackPressedDispatcher.addCallback { isEnabled = !preferencesAdapter.goBack() }
-  }
-
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putParcelable("adapter", preferencesAdapter.getSavedState())
@@ -122,5 +116,11 @@ class SettingsActivity : AppCompatActivity() {
         }
       else -> super.onOptionsItemSelected(item)
     }
+  }
+
+  @Deprecated("Deprecated in Java")
+  @Suppress("DEPRECATION")
+  override fun onBackPressed() {
+    if (!preferencesAdapter.goBack()) super.onBackPressed()
   }
 }
