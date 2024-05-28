@@ -38,7 +38,7 @@ public fun APSAppBar(
     title = { Text(text = title) },
     navigationIcon = {
       if (navigationIcon != null) {
-        IconButton(onClick = { onNavigationIconClick.invoke() }) {
+        IconButton(onClick = onNavigationIconClick) {
           Icon(painter = navigationIcon, contentDescription = null)
         }
       }
