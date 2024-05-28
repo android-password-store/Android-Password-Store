@@ -14,3 +14,5 @@ aaf6ceb8ecbc71f6948c84b1a19fb83abfe8a418
 afd0eebdd3287d932c53879fa1ac88f430080ef5
 # Restructure modules into groups
 959a56d7ffbc20db60721d7a09f399c8bdefe07e
+# Reformatted to allow ktfmt to manage trailing commas
+c980c898de8417e16942741d469ebef8532b822a
