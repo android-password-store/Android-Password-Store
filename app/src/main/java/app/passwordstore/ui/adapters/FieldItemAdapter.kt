@@ -5,17 +5,18 @@
 
 package app.passwordstore.ui.adapters
 
-import android.graphics.Typeface
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.passwordstore.R
 import app.passwordstore.data.passfile.Totp
 import app.passwordstore.data.password.FieldItem
 import app.passwordstore.databinding.ItemFieldBinding
+import app.passwordstore.ui.compose.R as composeR
 import com.google.android.material.textfield.TextInputLayout
 
 class FieldItemAdapter(
@@ -84,7 +85,11 @@ class FieldItemAdapter(
                   null
                 }
               if (fieldItem.key == FieldItem.ItemType.PASSWORD.type) {
-                typeface = Typeface.create("monospace", Typeface.NORMAL)
+                typeface =
+                  ResourcesCompat.getFont(
+                    binding.root.context,
+                    composeR.font.jetbrainsmono_nl_regular,
+                  )
               }
               setOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }

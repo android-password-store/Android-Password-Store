@@ -158,7 +158,7 @@
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:layout_marginTop="16dp"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:fontFamily="monospace"
+    android:fontFamily="@font/jetbrainsmono_nl_regular"
     android:gravity="center_horizontal"
     android:textIsSelectable="true"
     android:textSize="10sp"
