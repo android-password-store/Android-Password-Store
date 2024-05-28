@@ -77,11 +77,6 @@ constructor(
         .withAsciiArmor(settings.getBoolean(PreferenceKeys.ASCII_ARMOR, false))
         .build()
     val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.filterValues()
-    return pgpCryptoHandler.encrypt(
-      keys,
-      content,
-      out,
-      encryptionOptions,
-    )
+    return pgpCryptoHandler.encrypt(keys, content, out, encryptionOptions)
   }
 }

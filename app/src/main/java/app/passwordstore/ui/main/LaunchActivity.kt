@@ -58,11 +58,11 @@ class LaunchActivity : AppCompatActivity() {
         getDecryptIntent().apply {
           putExtra(
             BasePGPActivity.EXTRA_FILE_PATH,
-            intent.getStringExtra(BasePGPActivity.EXTRA_FILE_PATH)
+            intent.getStringExtra(BasePGPActivity.EXTRA_FILE_PATH),
           )
           putExtra(
             BasePGPActivity.EXTRA_REPO_PATH,
-            intent.getStringExtra(BasePGPActivity.EXTRA_REPO_PATH)
+            intent.getStringExtra(BasePGPActivity.EXTRA_REPO_PATH),
           )
         }
       else Intent(this, PasswordStore::class.java).setAction(Intent.ACTION_VIEW)

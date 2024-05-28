@@ -92,17 +92,17 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
       resetButton.setOnClickListener {
         AutofillMatcher.clearMatchesFor(
           this@AutofillPublisherChangedActivity,
-          FormOrigin.App(appPackage)
+          FormOrigin.App(appPackage),
         )
         val fillResponse =
           IntentCompat.getParcelableExtra(
             intent,
             EXTRA_FILL_RESPONSE_AFTER_RESET,
-            FillResponse::class.java
+            FillResponse::class.java,
           )
         setResult(
           RESULT_OK,
-          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse) }
+          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse) },
         )
         finish()
       }
@@ -122,7 +122,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
           warningAppName.text =
             getString(
               R.string.oreo_autofill_warning_publisher_app_name,
-              packageManager.getApplicationLabel(appInfo)
+              packageManager.getApplicationLabel(appInfo),
             )
 
           val currentHash =
@@ -131,7 +131,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
             getString(
               R.string.oreo_autofill_warning_publisher_advanced_info_template,
               appPackage,
-              currentHash
+              currentHash,
             )
         }
       }

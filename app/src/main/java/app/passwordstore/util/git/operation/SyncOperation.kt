@@ -7,10 +7,8 @@ package app.passwordstore.util.git.operation
 import androidx.appcompat.app.AppCompatActivity
 import org.eclipse.jgit.api.GitCommand
 
-class SyncOperation(
-  callingActivity: AppCompatActivity,
-  rebase: Boolean,
-) : GitOperation(callingActivity) {
+class SyncOperation(callingActivity: AppCompatActivity, rebase: Boolean) :
+  GitOperation(callingActivity) {
 
   override val commands: Array<GitCommand<out Any>> =
     arrayOf(

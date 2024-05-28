@@ -26,7 +26,7 @@ interface AutofillResponseBuilder {
       context: Context,
       credentials: Credentials,
       clientState: Bundle,
-      action: AutofillAction
+      action: AutofillAction,
     ): Dataset {
       val scenario = AutofillScenario.fromClientState(clientState)
       // Before Android P, Datasets used for fill-in had to come with a RemoteViews, even

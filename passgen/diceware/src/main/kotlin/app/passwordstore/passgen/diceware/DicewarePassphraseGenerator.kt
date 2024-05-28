@@ -14,10 +14,7 @@ import javax.inject.Inject
  */
 public class DicewarePassphraseGenerator
 @Inject
-constructor(
-  private val die: Die,
-  wordList: InputStream,
-) {
+constructor(private val die: Die, wordList: InputStream) {
 
   private val wordMap = WordListParser.parse(wordList)
 

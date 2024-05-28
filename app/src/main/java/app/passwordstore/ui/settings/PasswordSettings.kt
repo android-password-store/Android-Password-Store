@@ -22,10 +22,7 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
       val values = activity.resources.getStringArray(R.array.pwgen_provider_values)
       val labels = activity.resources.getStringArray(R.array.pwgen_provider_labels)
       val items = values.zip(labels).map { SelectionItem(it.first, it.second, null) }
-      singleChoice(
-        PreferenceKeys.PREF_KEY_PWGEN_TYPE,
-        items,
-      ) {
+      singleChoice(PreferenceKeys.PREF_KEY_PWGEN_TYPE, items) {
         initialSelection = "diceware"
         titleRes = R.string.pref_password_generator_type_title
       }

@@ -116,7 +116,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
   private fun registerAuthProviders(
     authMethod: SshAuthMethod,
-    credentialsProvider: CredentialsProvider? = null
+    credentialsProvider: CredentialsProvider? = null,
   ) {
     sshSessionFactory =
       SshjSessionFactory(authMethod, hostKeyFile, hiltEntryPoint.dispatcherProvider())
@@ -134,12 +134,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     if (!preExecute()) {
       return Ok(Unit)
     }
-    val operationResult =
-      GitCommandExecutor(
-          callingActivity,
-          this,
-        )
-        .execute()
+    val operationResult = GitCommandExecutor(callingActivity, this).execute()
     postExecute()
     return operationResult
   }
@@ -174,7 +169,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                 suspendCoroutine { cont ->
                   BiometricAuthenticator.authenticate(
                     callingActivity,
-                    R.string.biometric_prompt_title_ssh_auth
+                    R.string.biometric_prompt_title_ssh_auth,
                   ) { result ->
                     if (result !is Failure && result !is Retry) cont.resume(result)
                   }
@@ -199,7 +194,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                 Toast.makeText(
                     callingActivity,
                     R.string.biometric_auth_generic_failure,
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_LONG,
                   )
                   .show()
                 callingActivity.finish()
@@ -220,7 +215,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             CredentialFinder(
               callingActivity,
               AuthMode.Password,
-              hiltEntryPoint.dispatcherProvider()
+              hiltEntryPoint.dispatcherProvider(),
             )
           )
         registerAuthProviders(SshAuthMethod.Password(authActivity), httpsCredentialProvider)

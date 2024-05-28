@@ -6,5 +6,5 @@ public enum class PasswordOption(public val key: String) {
   NoAmbiguousCharacters("B"),
   FullyRandom("s"),
   AtLeastOneSymbol("y"),
-  NoLowercaseLetters("L")
+  NoLowercaseLetters("L"),
 }

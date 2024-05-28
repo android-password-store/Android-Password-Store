@@ -52,10 +52,10 @@ class PGPKeyListActivity : ComponentActivity() {
             ) {
               Icon(
                 painter = painterResource(R.drawable.ic_add_48dp),
-                stringResource(R.string.pref_import_pgp_key_title)
+                stringResource(R.string.pref_import_pgp_key_title),
               )
             }
-          }
+          },
         ) { paddingValues ->
           KeyList(
             identifiers = viewModel.keys,

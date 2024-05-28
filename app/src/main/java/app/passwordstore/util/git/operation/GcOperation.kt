@@ -12,9 +12,7 @@ import org.eclipse.jgit.api.GitCommand
  * Run an aggressive garbage collection job on the repository, expiring every loose object to
  * achieve the best compression.
  */
-class GcOperation(
-  callingActivity: AppCompatActivity,
-) : GitOperation(callingActivity) {
+class GcOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
   override val requiresAuth: Boolean = false
   override val commands: Array<GitCommand<out Any>> =

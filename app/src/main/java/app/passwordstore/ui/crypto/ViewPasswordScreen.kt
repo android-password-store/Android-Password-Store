@@ -46,7 +46,7 @@ fun ViewPasswordScreen(
         onNavigationIconClick = onNavigateUp,
         backgroundColor = MaterialTheme.colorScheme.surface,
       )
-    },
+    }
   ) { paddingValues ->
     Box(modifier = modifier.padding(paddingValues)) {
       Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp).fillMaxSize()) {
@@ -87,10 +87,7 @@ fun ViewPasswordScreen(
 }
 
 @Composable
-private fun ExtraContent(
-  entry: PasswordEntry,
-  modifier: Modifier = Modifier,
-) {
+private fun ExtraContent(entry: PasswordEntry, modifier: Modifier = Modifier) {
   entry.extraContent.forEach { (label, value) ->
     TextField(
       value = value,
@@ -107,11 +104,7 @@ private fun ExtraContent(
 @Composable
 private fun ViewPasswordScreenPreview() {
   APSTheme {
-    ViewPasswordScreen(
-      entryName = "Test Entry",
-      entry = createTestEntry(),
-      onNavigateUp = {},
-    )
+    ViewPasswordScreen(entryName = "Test Entry", entry = createTestEntry(), onNavigateUp = {})
   }
 }
 
@@ -126,5 +119,5 @@ private fun createTestEntry() =
     |URL: example.com
   """
       .trimMargin()
-      .encodeToByteArray()
+      .encodeToByteArray(),
   )

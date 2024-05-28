@@ -156,7 +156,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
               resources.getQuantityString(
                 R.plurals.delete_title,
                 selection.size(),
-                selection.size()
+                selection.size(),
               )
             actionMode!!.invalidate()
           } else {
@@ -256,7 +256,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             val passwordItem = recyclerAdapter.getSelectedItems()[0]
             shortcutHandler.addPinnedShortcut(
               passwordItem,
-              passwordItem.createAuthEnabledIntent(requireContext())
+              passwordItem.createAuthEnabledIntent(requireContext()),
             )
             false
           }
@@ -372,7 +372,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     requireStore().clearSearch()
     model.navigateTo(
       file,
-      recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
+      recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState(),
     )
     requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }

@@ -167,7 +167,7 @@ object PasswordRepository {
   fun getPasswords(
     path: File,
     rootDir: File,
-    sortOrder: PasswordSortOrder
+    sortOrder: PasswordSortOrder,
   ): ArrayList<PasswordItem> {
     // We need to recover the passwords then parse the files
     val passList = getFilesList(path).also { it.sortBy { f -> f.name } }

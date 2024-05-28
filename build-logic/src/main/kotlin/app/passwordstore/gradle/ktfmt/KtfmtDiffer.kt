@@ -10,7 +10,7 @@ object KtfmtDiffer {
   fun computeDiff(
     inputFile: File,
     formattedCode: String,
-    pathNormalizer: (File) -> String
+    pathNormalizer: (File) -> String,
   ): List<KtfmtDiffEntry> {
     val originCode = inputFile.readText()
     return DiffUtils.diff(originCode, formattedCode, null).deltas.map {

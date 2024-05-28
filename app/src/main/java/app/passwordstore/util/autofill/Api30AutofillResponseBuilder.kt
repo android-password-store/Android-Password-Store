@@ -33,15 +33,12 @@ import logcat.logcat
 
 /** Implements [AutofillResponseBuilder]'s methods for API 30 and above */
 @RequiresApi(Build.VERSION_CODES.R)
-class Api30AutofillResponseBuilder
-private constructor(
-  form: FillableForm,
-) : AutofillResponseBuilder {
+class Api30AutofillResponseBuilder private constructor(form: FillableForm) :
+  AutofillResponseBuilder {
 
   object Factory : AutofillResponseBuilder.Factory {
-    override fun create(
-      form: FillableForm,
-    ): AutofillResponseBuilder = Api30AutofillResponseBuilder(form)
+    override fun create(form: FillableForm): AutofillResponseBuilder =
+      Api30AutofillResponseBuilder(form)
   }
 
   private val formOrigin = form.formOrigin
@@ -127,7 +124,7 @@ private constructor(
   private fun makeMatchDataset(
     context: Context,
     file: File,
-    imeSpec: InlinePresentationSpec?
+    imeSpec: InlinePresentationSpec?,
   ): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
@@ -151,7 +148,7 @@ private constructor(
 
   private fun makeFillOtpFromSmsDataset(
     context: Context,
-    imeSpec: InlinePresentationSpec?
+    imeSpec: InlinePresentationSpec?,
   ): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
     if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
@@ -162,14 +159,14 @@ private constructor(
       AutofillAction.FillOtpFromSms,
       intentSender,
       metadata,
-      imeSpec
+      imeSpec,
     )
   }
 
   private fun makePublisherChangedDataset(
     context: Context,
     publisherChangedException: AutofillPublisherChangedException,
-    imeSpec: InlinePresentationSpec?
+    imeSpec: InlinePresentationSpec?,
   ): Dataset {
     val metadata = makeWarningMetadata(context)
     // If the user decides to trust the new publisher, they can choose reset the list of
@@ -181,7 +178,7 @@ private constructor(
       AutofillPublisherChangedActivity.makePublisherChangedIntentSender(
         context,
         publisherChangedException,
-        fillResponseAfterReset
+        fillResponseAfterReset,
       )
     return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata, imeSpec)
   }
@@ -189,7 +186,7 @@ private constructor(
   private fun makePublisherChangedResponse(
     context: Context,
     inlineSuggestionsRequest: InlineSuggestionsRequest?,
-    publisherChangedException: AutofillPublisherChangedException
+    publisherChangedException: AutofillPublisherChangedException,
   ): FillResponse {
     val imeSpec = inlineSuggestionsRequest?.inlinePresentationSpecs?.firstOrNull()
     return FillResponse.Builder().run {
@@ -202,7 +199,7 @@ private constructor(
   private fun makeFillResponse(
     context: Context,
     inlineSuggestionsRequest: InlineSuggestionsRequest?,
-    matchedFiles: List<File>
+    matchedFiles: List<File>,
   ): FillResponse? {
     var datasetCount = 0
     val imeSpecs = inlineSuggestionsRequest?.inlinePresentationSpecs ?: emptyList()
@@ -229,7 +226,7 @@ private constructor(
       setHeader(
         makeRemoteView(
           context,
-          makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))
+          makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true)),
         )
       )
       makeSaveInfo()?.let { setSaveInfo(it) }
@@ -271,7 +268,7 @@ private constructor(
           callback.onSuccess(
             makePublisherChangedResponse(context, fillRequest.inlineSuggestionsRequest, e)
           )
-        }
+        },
       )
   }
 }

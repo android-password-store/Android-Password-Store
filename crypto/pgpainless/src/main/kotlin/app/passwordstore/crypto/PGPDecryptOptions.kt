@@ -1,10 +1,8 @@
 package app.passwordstore.crypto
 
 /** [CryptoOptions] implementation for PGPainless decrypt operations. */
-public class PGPDecryptOptions
-private constructor(
-  private val values: Map<String, Boolean>,
-) : CryptoOptions {
+public class PGPDecryptOptions private constructor(private val values: Map<String, Boolean>) :
+  CryptoOptions {
 
   override fun isOptionEnabled(option: String): Boolean {
     return values.getOrDefault(option, false)

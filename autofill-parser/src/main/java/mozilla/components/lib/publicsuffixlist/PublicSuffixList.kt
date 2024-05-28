@@ -29,7 +29,7 @@ import kotlinx.coroutines.async
 internal class PublicSuffixList(
   context: Context,
   dispatcher: CoroutineDispatcher = Dispatchers.IO,
-  private val scope: CoroutineScope = CoroutineScope(dispatcher)
+  private val scope: CoroutineScope = CoroutineScope(dispatcher),
 ) {
 
   private val data: PublicSuffixListData by

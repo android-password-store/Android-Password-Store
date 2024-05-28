@@ -28,7 +28,7 @@ class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
     val args = Bundle()
     args.putString(
       PasswordStore.REQUEST_ARG_PATH,
-      PasswordRepository.getRepositoryDirectory().absolutePath
+      PasswordRepository.getRepositoryDirectory().absolutePath,
     )
 
     passwordList.arguments = args

@@ -48,7 +48,7 @@ abstract class GitHooks : DefaultTask() {
         GROUP_EXECUTE,
         OTHERS_READ,
         OTHERS_EXECUTE,
-      )
+      ),
     )
   }
 }

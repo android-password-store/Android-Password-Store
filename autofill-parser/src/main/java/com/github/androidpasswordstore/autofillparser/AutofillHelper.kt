@@ -57,7 +57,7 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         context.packageManager.getPackageInfo(
           appPackage,
-          PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
+          PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong()),
         )
       } else {
         context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNING_CERTIFICATES)
@@ -121,7 +121,7 @@ private fun visitViewNodes(structure: AssistStructure, block: (AssistStructure.V
 
 private fun visitViewNode(
   node: AssistStructure.ViewNode,
-  block: (AssistStructure.ViewNode) -> Unit
+  block: (AssistStructure.ViewNode) -> Unit,
 ) {
   block(node)
   for (i in 0 until node.childCount) {

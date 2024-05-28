@@ -113,7 +113,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
           val cachedPassphrase =
             passphraseCache.retrieveCachedPassphrase(
               this@AutofillDecryptActivity,
-              gpgIdentifiers.first()
+              gpgIdentifiers.first(),
             )
           if (cachedPassphrase != null) {
             decryptWithPassphrase(
@@ -121,7 +121,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
               gpgIdentifiers,
               clientState,
               action,
-              cachedPassphrase
+              cachedPassphrase,
             )
           } else {
             askPassphrase(filePath, gpgIdentifiers, clientState, action)
@@ -169,12 +169,12 @@ class AutofillDecryptActivity : BasePGPActivity() {
           this@AutofillDecryptActivity,
           credentials,
           clientState,
-          action
+          action,
         )
       withContext(dispatcherProvider.main()) {
         setResult(
           RESULT_OK,
-          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
+          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) },
         )
       }
     }
@@ -195,12 +195,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
         runCatching {
             withContext(dispatcherProvider.io()) {
               val outputStream = ByteArrayOutputStream()
-              repository.decrypt(
-                password,
-                identifiers,
-                encryptedInput,
-                outputStream,
-              )
+              repository.decrypt(password, identifiers, encryptedInput, outputStream)
               outputStream
             }
           }

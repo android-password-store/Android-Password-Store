@@ -47,7 +47,7 @@ class AutofillSaveActivity : AppCompatActivity() {
     fun makeSaveIntentSender(
       context: Context,
       credentials: Credentials?,
-      formOrigin: FormOrigin
+      formOrigin: FormOrigin,
     ): IntentSender {
       val identifier = formOrigin.getPrettyIdentifier(context, untrusted = false)
       // Prevent directory traversals
@@ -58,12 +58,12 @@ class AutofillSaveActivity : AppCompatActivity() {
       val folderName =
         directoryStructure.getSaveFolderName(
           sanitizedIdentifier = sanitizedIdentifier,
-          username = credentials?.username
+          username = credentials?.username,
         )
       val fileName =
         directoryStructure.getSaveFileName(
           username = credentials?.username,
-          identifier = identifier
+          identifier = identifier,
         )
       val intent =
         Intent(context, AutofillSaveActivity::class.java).apply {
@@ -76,7 +76,7 @@ class AutofillSaveActivity : AppCompatActivity() {
                 formOrigin.identifier.takeIf { formOrigin is FormOrigin.App },
               EXTRA_SHOULD_MATCH_WEB to
                 formOrigin.identifier.takeIf { formOrigin is FormOrigin.Web },
-              EXTRA_GENERATE_PASSWORD to (credentials == null)
+              EXTRA_GENERATE_PASSWORD to (credentials == null),
             )
           )
         }
@@ -84,7 +84,7 @@ class AutofillSaveActivity : AppCompatActivity() {
           context,
           saveRequestCode++,
           intent,
-          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
         .intentSender
     }
@@ -114,7 +114,7 @@ class AutofillSaveActivity : AppCompatActivity() {
             PasswordCreationActivity.EXTRA_FILE_NAME to intent.getStringExtra(EXTRA_NAME),
             PasswordCreationActivity.EXTRA_PASSWORD to intent.getStringExtra(EXTRA_PASSWORD),
             PasswordCreationActivity.EXTRA_GENERATE_PASSWORD to
-              intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
+              intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false),
           )
         )
       }
@@ -141,7 +141,7 @@ class AutofillSaveActivity : AppCompatActivity() {
                   this,
                   credentials,
                   clientState,
-                  AutofillAction.Generate
+                  AutofillAction.Generate,
                 )
               Intent().apply {
                 putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)

@@ -17,7 +17,7 @@ class UriTotpFinderTest {
     assertEquals("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ", totpFinder.findSecret(TOTP_URI))
     assertEquals(
       "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ",
-      totpFinder.findSecret("name\npassword\ntotp: HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
+      totpFinder.findSecret("name\npassword\ntotp: HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"),
     )
     assertEquals("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ", totpFinder.findSecret(PASS_FILE_CONTENT))
   }

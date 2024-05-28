@@ -10,7 +10,7 @@ import app.passwordstore.data.passfile.Totp
 class FieldItem(val key: String, val value: String, val action: ActionType) {
   enum class ActionType {
     COPY,
-    HIDE
+    HIDE,
   }
 
   enum class ItemType(val type: String, val label: String) {

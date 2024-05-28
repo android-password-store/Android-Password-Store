@@ -61,7 +61,7 @@ class AutofillFilterView : AppCompatActivity() {
 
     fun makeMatchAndDecryptFileIntentSender(
       context: Context,
-      formOrigin: FormOrigin
+      formOrigin: FormOrigin,
     ): IntentSender {
       val intent =
         Intent(context, AutofillFilterView::class.java).apply {
@@ -193,7 +193,7 @@ class AutofillFilterView : AppCompatActivity() {
       shouldMatch.text =
         getString(
           R.string.oreo_autofill_match_with,
-          formOrigin.getPrettyIdentifier(applicationContext)
+          formOrigin.getPrettyIdentifier(applicationContext),
         )
       lifecycleScope.launch { handleSearchResults() }
     }
@@ -222,7 +222,7 @@ class AutofillFilterView : AppCompatActivity() {
       filterMode =
         if (binding.strictDomainSearch.isChecked) FilterMode.StrictDomain else FilterMode.Fuzzy,
       searchMode = SearchMode.RecursivelyInSubdirectories,
-      listMode = ListMode.FilesOnly
+      listMode = ListMode.FilesOnly,
     )
   }
 

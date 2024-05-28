@@ -17,7 +17,7 @@ internal enum class CertaintyLevel {
   Impossible,
   Possible,
   Likely,
-  Certain
+  Certain,
 }
 
 /**
@@ -29,31 +29,19 @@ internal class FormField(
   node: AssistStructure.ViewNode,
   private val index: Int,
   passDownWebViewOrigins: Boolean,
-  passedDownWebOrigin: String? = null
+  passedDownWebOrigin: String? = null,
 ) {
 
   companion object {
 
     private val HINTS_USERNAME =
-      listOf(
-        HintConstants.AUTOFILL_HINT_USERNAME,
-        HintConstants.AUTOFILL_HINT_NEW_USERNAME,
-      )
-    private val HINTS_NEW_PASSWORD =
-      listOf(
-        HintConstants.AUTOFILL_HINT_NEW_PASSWORD,
-      )
+      listOf(HintConstants.AUTOFILL_HINT_USERNAME, HintConstants.AUTOFILL_HINT_NEW_USERNAME)
+    private val HINTS_NEW_PASSWORD = listOf(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
     private val HINTS_PASSWORD =
       HINTS_NEW_PASSWORD +
-        listOf(
-          HintConstants.AUTOFILL_HINT_PASSWORD,
-          HintConstants.AUTOFILL_HINT_WIFI_PASSWORD,
-        )
+        listOf(HintConstants.AUTOFILL_HINT_PASSWORD, HintConstants.AUTOFILL_HINT_WIFI_PASSWORD)
     private val HINTS_OTP =
-      listOf(
-        HintConstants.AUTOFILL_HINT_SMS_OTP,
-        HintConstants.AUTOFILL_HINT_2FA_APP_OTP,
-      )
+      listOf(HintConstants.AUTOFILL_HINT_SMS_OTP, HintConstants.AUTOFILL_HINT_2FA_APP_OTP)
 
     @Suppress("DEPRECATION")
     private val HINTS_FILLABLE =
@@ -93,21 +81,9 @@ internal class FormField(
       }
     }
 
-    private val HTML_INPUT_FIELD_TYPES_USERNAME =
-      listOf(
-        "email",
-        "tel",
-        "text",
-      )
-    private val HTML_INPUT_FIELD_TYPES_PASSWORD =
-      listOf(
-        "password",
-      )
-    private val HTML_INPUT_FIELD_TYPES_OTP =
-      listOf(
-        "tel",
-        "text",
-      )
+    private val HTML_INPUT_FIELD_TYPES_USERNAME = listOf("email", "tel", "text")
+    private val HTML_INPUT_FIELD_TYPES_PASSWORD = listOf("password")
+    private val HTML_INPUT_FIELD_TYPES_OTP = listOf("tel", "text")
     private val HTML_INPUT_FIELD_TYPES_FILLABLE =
       (HTML_INPUT_FIELD_TYPES_USERNAME +
           HTML_INPUT_FIELD_TYPES_PASSWORD +
@@ -128,33 +104,11 @@ internal class FormField(
         "captcha",
         "postal", // Prevent postal code fields from being mistaken for OTP fields
       )
-    private val PASSWORD_HEURISTIC_TERMS =
-      listOf(
-        "pass",
-        "pswd",
-        "pwd",
-      )
+    private val PASSWORD_HEURISTIC_TERMS = listOf("pass", "pswd", "pwd")
     private val USERNAME_HEURISTIC_TERMS =
-      listOf(
-        "alias",
-        "benutzername",
-        "e-mail",
-        "email",
-        "mail",
-        "login",
-        "user",
-      )
-    private val OTP_HEURISTIC_TERMS =
-      listOf(
-        "einmal",
-        "otp",
-        "challenge",
-        "verification",
-      )
-    private val OTP_WEAK_HEURISTIC_TERMS =
-      listOf(
-        "code",
-      )
+      listOf("alias", "benutzername", "e-mail", "email", "mail", "login", "user")
+    private val OTP_HEURISTIC_TERMS = listOf("einmal", "otp", "challenge", "verification")
+    private val OTP_WEAK_HEURISTIC_TERMS = listOf("code")
   }
 
   private val List<String>.anyMatchesFieldInfo

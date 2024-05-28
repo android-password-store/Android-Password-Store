@@ -23,10 +23,7 @@ object KeyManagerModule {
     @PGPKeyDir keyDir: String,
     dispatcherProvider: DispatcherProvider,
   ): PGPKeyManager {
-    return PGPKeyManager(
-      keyDir,
-      dispatcherProvider.io(),
-    )
+    return PGPKeyManager(keyDir, dispatcherProvider.io())
   }
 
   @Provides

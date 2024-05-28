@@ -21,8 +21,7 @@ import org.eclipse.jgit.transport.URIish
 
 enum class Protocol(val pref: String) {
   Ssh("ssh://"),
-  Https("https://"),
-  ;
+  Https("https://");
 
   companion object {
 
@@ -36,8 +35,7 @@ enum class Protocol(val pref: String) {
 enum class AuthMode(val pref: String) {
   SshKey("ssh-key"),
   Password("username/password"),
-  None("None"),
-  ;
+  None("None");
 
   companion object {
 
@@ -140,7 +138,7 @@ constructor(
 
   fun updateConnectionSettingsIfValid(
     newAuthMode: AuthMode,
-    newUrl: String
+    newUrl: String,
   ): UpdateConnectionSettingsResult {
     val parsedUrl =
       runCatching { URIish(newUrl) }

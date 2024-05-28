@@ -135,8 +135,7 @@ object SshKey {
     KeystoreWrappedEd25519("keystore_wrapped_ed25519"),
 
     // Behaves like `Imported`, but allows to view the public key.
-    LegacyGenerated("legacy_generated"),
-    ;
+    LegacyGenerated("legacy_generated");
 
     companion object {
 
@@ -146,7 +145,7 @@ object SshKey {
 
   enum class Algorithm(
     val algorithm: String,
-    val applyToSpec: KeyGenParameterSpec.Builder.() -> Unit
+    val applyToSpec: KeyGenParameterSpec.Builder.() -> Unit,
   ) {
     Rsa(
       KeyProperties.KEY_ALGORITHM_RSA,
@@ -156,9 +155,9 @@ object SshKey {
         setDigests(
           KeyProperties.DIGEST_SHA1,
           KeyProperties.DIGEST_SHA256,
-          KeyProperties.DIGEST_SHA512
+          KeyProperties.DIGEST_SHA512,
         )
-      }
+      },
     ),
     Ecdsa(
       KeyProperties.KEY_ALGORITHM_EC,
@@ -169,7 +168,7 @@ object SshKey {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
           setIsStrongBoxBacked(isStrongBoxSupported)
         }
-      }
+      },
     ),
   }
 
@@ -250,7 +249,7 @@ object SshKey {
           context,
           privateKeyFile,
           getOrCreateWrappingMasterKey(requireAuthentication),
-          EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
+          EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB,
         )
         .setKeysetPrefName(ANDROIDX_SECURITY_KEYSET_PREF_NAME)
         .build()
@@ -319,7 +318,7 @@ object SshKey {
           logcat { error.asLog() }
           throw IOException(
             "Failed to get public key '$KEYSTORE_ALIAS' from Android Keystore",
-            error
+            error,
           )
         }
 
@@ -329,7 +328,7 @@ object SshKey {
           logcat { error.asLog() }
           throw IOException(
             "Failed to access private key '$KEYSTORE_ALIAS' from Android Keystore",
-            error
+            error,
           )
         }
 

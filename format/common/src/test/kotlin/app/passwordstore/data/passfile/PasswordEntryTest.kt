@@ -26,11 +26,7 @@ class PasswordEntryTest {
   private val totpFinder = UriTotpFinder()
 
   private fun makeEntry(content: String, clock: UserClock = fakeClock) =
-    PasswordEntry(
-      clock,
-      totpFinder,
-      content.encodeToByteArray(),
-    )
+    PasswordEntry(clock, totpFinder, content.encodeToByteArray())
 
   @Test
   fun getPassword() {
@@ -62,7 +58,7 @@ class PasswordEntryTest {
     assertEquals("blubb", makeEntry("password: foo\nblubb").extraContentString)
     assertEquals(
       "blubb\nusername: bar",
-      makeEntry("blubb\npassword: foo\nusername: bar").extraContentString
+      makeEntry("blubb\npassword: foo\nusername: bar").extraContentString,
     )
     assertEquals("", makeEntry("\n").extraContentString)
     assertEquals("", makeEntry("").extraContentString)
@@ -107,7 +103,7 @@ class PasswordEntryTest {
       assertEquals("username", makeEntry("\n$field username").username)
       assertEquals(
         "username",
-        makeEntry("\n${field.uppercase(Locale.getDefault())} username").username
+        makeEntry("\n${field.uppercase(Locale.getDefault())} username").username,
       )
     }
     assertEquals("username", makeEntry("secret\nextra\nlogin: username\ncontent\n").username)

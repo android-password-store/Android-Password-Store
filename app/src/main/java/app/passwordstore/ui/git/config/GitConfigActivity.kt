@@ -61,7 +61,7 @@ class GitConfigActivity : BaseGitActivity() {
         Snackbar.make(
             binding.root,
             getString(R.string.git_server_config_save_success),
-            Snackbar.LENGTH_SHORT
+            Snackbar.LENGTH_SHORT,
           )
           .show()
         Handler(Looper.getMainLooper()).postDelayed(500) { finish() }

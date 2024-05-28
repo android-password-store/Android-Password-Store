@@ -11,9 +11,7 @@ import javax.inject.Inject
 
 class Features
 @Inject
-constructor(
-  @SettingsPreferences private val preferences: SharedPreferences,
-) {
+constructor(@SettingsPreferences private val preferences: SharedPreferences) {
 
   fun isEnabled(feature: Feature): Boolean {
     return preferences.getBoolean(feature.configKey, feature.defaultValue)

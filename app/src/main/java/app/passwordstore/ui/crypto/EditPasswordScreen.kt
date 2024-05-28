@@ -40,7 +40,7 @@ fun EditPasswordScreen(
         onNavigationIconClick = onNavigateUp,
         backgroundColor = MaterialTheme.colorScheme.surface,
       )
-    },
+    }
   ) { paddingValues ->
     Box(modifier = modifier.padding(paddingValues)) {
       Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp).fillMaxSize()) {
@@ -59,10 +59,7 @@ fun EditPasswordScreen(
 }
 
 @Composable
-private fun ExtraContent(
-  entry: PasswordEntry,
-  modifier: Modifier = Modifier,
-) {
+private fun ExtraContent(entry: PasswordEntry, modifier: Modifier = Modifier) {
   TextField(
     value = entry.extraContentString,
     onValueChange = {},
@@ -95,5 +92,5 @@ private fun createTestEntry() =
     |URL: example.com
   """
       .trimMargin()
-      .encodeToByteArray()
+      .encodeToByteArray(),
   )

@@ -31,10 +31,8 @@ import org.pgpainless.util.selection.userid.SelectUserId
 
 public class PGPKeyManager
 @Inject
-constructor(
-  filesDir: String,
-  private val dispatcher: CoroutineDispatcher,
-) : KeyManager<PGPKey, PGPIdentifier> {
+constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
+  KeyManager<PGPKey, PGPIdentifier> {
 
   private val keyDir = File(filesDir, KEY_DIR_NAME)
 

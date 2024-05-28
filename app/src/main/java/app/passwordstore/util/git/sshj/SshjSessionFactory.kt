@@ -79,7 +79,7 @@ class SshjSessionFactory(
     uri: URIish,
     credentialsProvider: CredentialsProvider?,
     fs: FS?,
-    tms: Int
+    tms: Int,
   ): RemoteSession {
     return currentSession
       ?: SshjSession(uri, uri.user, authMethod, hostKeyFile, dispatcherProvider).connect().also {
@@ -164,7 +164,7 @@ private class SshjSession(
           AuthPublickey(
             SshKey.provide(
               ssh,
-              CredentialFinder(authMethod.activity, AuthMode.SshKey, dispatcherProvider)
+              CredentialFinder(authMethod.activity, AuthMode.SshKey, dispatcherProvider),
             )
           )
         ssh.auth(username, pubkeyAuth, passwordAuth)

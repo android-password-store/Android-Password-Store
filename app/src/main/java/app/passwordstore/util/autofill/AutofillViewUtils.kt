@@ -45,7 +45,7 @@ fun makeRemoteView(context: Context, metadata: DatasetMetadata): RemoteViews {
 fun makeInlinePresentation(
   context: Context,
   imeSpec: InlinePresentationSpec,
-  metadata: DatasetMetadata
+  metadata: DatasetMetadata,
 ): InlinePresentation? {
   if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
 
@@ -91,21 +91,21 @@ fun makeSearchAndFillMetadata(context: Context) =
   DatasetMetadata(
     context.getString(R.string.oreo_autofill_search_in_store),
     null,
-    R.drawable.ic_search_black_24dp
+    R.drawable.ic_search_black_24dp,
   )
 
 fun makeGenerateAndFillMetadata(context: Context) =
   DatasetMetadata(
     context.getString(R.string.oreo_autofill_generate_password),
     null,
-    R.drawable.ic_autofill_new_password
+    R.drawable.ic_autofill_new_password,
   )
 
 fun makeFillOtpFromSmsMetadata(context: Context) =
   DatasetMetadata(
     context.getString(R.string.oreo_autofill_fill_otp_from_sms),
     null,
-    R.drawable.ic_autofill_sms
+    R.drawable.ic_autofill_sms,
   )
 
 fun makeEmptyMetadata() = DatasetMetadata("PLACEHOLDER", "PLACEHOLDER", R.mipmap.ic_launcher)
@@ -114,7 +114,7 @@ fun makeWarningMetadata(context: Context) =
   DatasetMetadata(
     context.getString(R.string.oreo_autofill_warning_publisher_dataset_title),
     context.getString(R.string.oreo_autofill_warning_publisher_dataset_summary),
-    R.drawable.ic_warning_red_24dp
+    R.drawable.ic_warning_red_24dp,
   )
 
 fun makeHeaderMetadata(title: String) = DatasetMetadata(title, null, 0)

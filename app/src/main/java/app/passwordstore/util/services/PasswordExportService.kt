@@ -134,7 +134,7 @@ class PasswordExportService : Service() {
       NotificationChannel(
         CHANNEL_ID,
         getString(R.string.app_name),
-        NotificationManager.IMPORTANCE_LOW
+        NotificationManager.IMPORTANCE_LOW,
       )
     val manager = getSystemService<NotificationManager>()
     if (manager != null) {

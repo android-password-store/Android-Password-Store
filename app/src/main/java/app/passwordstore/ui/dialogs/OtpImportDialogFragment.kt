@@ -25,7 +25,7 @@ class OtpImportDialogFragment : DialogFragment() {
     builder.setPositiveButton(android.R.string.ok) { _, _ ->
       setFragmentResult(
         PasswordCreationActivity.OTP_RESULT_REQUEST_KEY,
-        bundleOf(PasswordCreationActivity.RESULT to getTOTPUri(binding))
+        bundleOf(PasswordCreationActivity.RESULT to getTOTPUri(binding)),
       )
     }
     val dialog = builder.create()

@@ -134,7 +134,7 @@ object AutofillPreferences {
     context: Context,
     file: File,
     entry: PasswordEntry,
-    directoryStructure: DirectoryStructure
+    directoryStructure: DirectoryStructure,
   ): Credentials {
     // Always give priority to a username stored in the encrypted extras
     val username =

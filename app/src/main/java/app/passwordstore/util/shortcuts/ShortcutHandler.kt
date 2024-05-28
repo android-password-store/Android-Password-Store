@@ -19,11 +19,7 @@ import javax.inject.Inject
 import logcat.logcat
 
 @Reusable
-class ShortcutHandler
-@Inject
-constructor(
-  @ApplicationContext val context: Context,
-) {
+class ShortcutHandler @Inject constructor(@ApplicationContext val context: Context) {
 
   private companion object {
 

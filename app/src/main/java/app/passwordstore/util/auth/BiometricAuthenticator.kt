@@ -57,7 +57,7 @@ object BiometricAuthenticator {
   fun authenticate(
     activity: FragmentActivity,
     @StringRes dialogTitleRes: Int = R.string.biometric_prompt_title,
-    callback: (Result) -> Unit
+    callback: (Result) -> Unit,
   ) {
     val authCallback = createPromptAuthenticationCallback(activity, callback)
     val deviceHasKeyguard = activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
@@ -94,14 +94,14 @@ object BiometricAuthenticator {
             callback(
               Result.Failure(
                 errorCode,
-                activity.getString(R.string.biometric_auth_error_reason, errString)
+                activity.getString(R.string.biometric_auth_error_reason, errString),
               )
             )
           BiometricPrompt.ERROR_NO_SPACE ->
             callback(
               Result.Failure(
                 errorCode,
-                activity.getString(R.string.biometric_auth_error_reason, errString)
+                activity.getString(R.string.biometric_auth_error_reason, errString),
               )
             )
           BiometricPrompt.ERROR_CANCELED -> callback(Result.CanceledBySystem)
@@ -109,21 +109,21 @@ object BiometricAuthenticator {
             callback(
               Result.Failure(
                 errorCode,
-                activity.getString(R.string.biometric_auth_error_reason, errString)
+                activity.getString(R.string.biometric_auth_error_reason, errString),
               )
             )
           BiometricPrompt.ERROR_VENDOR ->
             callback(
               Result.Failure(
                 errorCode,
-                activity.getString(R.string.biometric_auth_error_reason, errString)
+                activity.getString(R.string.biometric_auth_error_reason, errString),
               )
             )
           BiometricPrompt.ERROR_LOCKOUT_PERMANENT ->
             callback(
               Result.Failure(
                 errorCode,
-                activity.getString(R.string.biometric_auth_error_reason, errString)
+                activity.getString(R.string.biometric_auth_error_reason, errString),
               )
             )
           BiometricPrompt.ERROR_USER_CANCELED -> callback(Result.CanceledByUser)
@@ -138,7 +138,7 @@ object BiometricAuthenticator {
             callback(
               Result.Failure(
                 errorCode,
-                activity.getString(R.string.biometric_auth_error_reason, errString)
+                activity.getString(R.string.biometric_auth_error_reason, errString),
               )
             )
           }

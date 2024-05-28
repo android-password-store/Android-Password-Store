@@ -26,15 +26,12 @@ import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
 
-class Api26AutofillResponseBuilder
-private constructor(
-  form: FillableForm,
-) : AutofillResponseBuilder {
+class Api26AutofillResponseBuilder private constructor(form: FillableForm) :
+  AutofillResponseBuilder {
 
   object Factory : AutofillResponseBuilder.Factory {
-    override fun create(
-      form: FillableForm,
-    ): AutofillResponseBuilder = Api26AutofillResponseBuilder(form)
+    override fun create(form: FillableForm): AutofillResponseBuilder =
+      Api26AutofillResponseBuilder(form)
   }
 
   private val formOrigin = form.formOrigin
@@ -104,14 +101,14 @@ private constructor(
       AutofillPublisherChangedActivity.makePublisherChangedIntentSender(
         context,
         publisherChangedException,
-        fillResponseAfterReset
+        fillResponseAfterReset,
       )
     return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata)
   }
 
   private fun makePublisherChangedResponse(
     context: Context,
-    publisherChangedException: AutofillPublisherChangedException
+    publisherChangedException: AutofillPublisherChangedException,
   ): FillResponse {
     return FillResponse.Builder().run {
       addDataset(makePublisherChangedDataset(context, publisherChangedException))
@@ -164,7 +161,7 @@ private constructor(
         setHeader(
           makeRemoteView(
             context,
-            makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))
+            makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true)),
           )
         )
       }
@@ -183,7 +180,7 @@ private constructor(
         failure = { e ->
           logcat(ERROR) { e.asLog() }
           callback.onSuccess(makePublisherChangedResponse(context, e))
-        }
+        },
       )
   }
 }

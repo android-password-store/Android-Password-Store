@@ -47,7 +47,7 @@ public sealed class FormOrigin(public open val identifier: String) {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.packageManager.getApplicationInfo(
               identifier,
-              ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong())
+              ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong()),
             )
           } else {
             context.packageManager.getApplicationInfo(identifier, PackageManager.GET_META_DATA)
@@ -74,7 +74,7 @@ private class AutofillFormParser(
   context: Context,
   structure: AssistStructure,
   isManualRequest: Boolean,
-  private val customSuffixes: Sequence<String>
+  private val customSuffixes: Sequence<String>,
 ) {
 
   companion object {
@@ -136,7 +136,7 @@ private class AutofillFormParser(
     autofillStrategy.match(
       relevantFields,
       singleOriginMode = trustedBrowserInfo?.multiOriginMethod == BrowserMultiOriginMethod.None,
-      isManualRequest = isManualRequest
+      isManualRequest = isManualRequest,
     )
 
   private fun trackOrigin(node: AssistStructure.ViewNode) {
@@ -187,7 +187,7 @@ private class AutofillFormParser(
         // situation is uncertain and Autofill should not be offered.
         webOriginToFormOrigin(
           context,
-          scenario.allFields.map { it.webOrigin }.toSet().singleOrNull() ?: return null
+          scenario.allFields.map { it.webOrigin }.toSet().singleOrNull() ?: return null,
         )
       }
     }
@@ -206,7 +206,7 @@ private constructor(
   public val formOrigin: FormOrigin,
   public val scenario: AutofillScenario<AutofillId>,
   public val ignoredIds: List<AutofillId>,
-  public val saveFlags: Int?
+  public val saveFlags: Int?,
 ) {
   public companion object {
     /** Returns a [FillableForm] if a login form could be detected in [structure]. */
@@ -222,7 +222,7 @@ private constructor(
         form.formOrigin,
         form.scenario.map { it.autofillId },
         form.ignoredIds,
-        form.saveFlags
+        form.saveFlags,
       )
     }
   }

@@ -1,10 +1,8 @@
 package app.passwordstore.crypto
 
 /** [CryptoOptions] implementation for PGPainless encrypt operations. */
-public class PGPEncryptOptions
-private constructor(
-  private val values: Map<String, Boolean>,
-) : CryptoOptions {
+public class PGPEncryptOptions private constructor(private val values: Map<String, Boolean>) :
+  CryptoOptions {
 
   internal companion object {
     const val ASCII_ARMOR = "ASCII_ARMOR"

@@ -21,7 +21,7 @@ public enum class AutofillAction {
   Match,
   Search,
   Generate,
-  FillOtpFromSms
+  FillOtpFromSms,
 }
 
 /**
@@ -46,8 +46,8 @@ public sealed class AutofillScenario<out T : Any> {
       "Use `fromClientState` instead.",
       ReplaceWith(
         "fromClientState(clientState)",
-        "com.github.androidpasswordstore.autofillparser.AutofillScenario.Companion.fromClientState"
-      )
+        "com.github.androidpasswordstore.autofillparser.AutofillScenario.Companion.fromClientState",
+      ),
     )
     public fun fromBundle(clientState: Bundle): AutofillScenario<AutofillId>? {
       return fromClientState(clientState)
@@ -61,7 +61,7 @@ public sealed class AutofillScenario<out T : Any> {
               BundleCompat.getParcelable(
                 clientState,
                 BUNDLE_KEY_USERNAME_ID,
-                AutofillId::class.java
+                AutofillId::class.java,
               )
             fillUsername = clientState.getBoolean(BUNDLE_KEY_FILL_USERNAME)
             otp = BundleCompat.getParcelable(clientState, BUNDLE_KEY_OTP_ID, AutofillId::class.java)
@@ -69,21 +69,21 @@ public sealed class AutofillScenario<out T : Any> {
               BundleCompat.getParcelableArrayList(
                 clientState,
                 BUNDLE_KEY_CURRENT_PASSWORD_IDS,
-                AutofillId::class.java
+                AutofillId::class.java,
               ) ?: emptyList()
             )
             newPassword.addAll(
               BundleCompat.getParcelableArrayList(
                 clientState,
                 BUNDLE_KEY_NEW_PASSWORD_IDS,
-                AutofillId::class.java
+                AutofillId::class.java,
               ) ?: emptyList()
             )
             genericPassword.addAll(
               BundleCompat.getParcelableArrayList(
                 clientState,
                 BUNDLE_KEY_GENERIC_PASSWORD_IDS,
-                AutofillId::class.java
+                AutofillId::class.java,
               ) ?: emptyList()
             )
           }
@@ -114,14 +114,14 @@ public sealed class AutofillScenario<out T : Any> {
           fillUsername = fillUsername,
           otp = otp,
           currentPassword = currentPassword,
-          newPassword = newPassword
+          newPassword = newPassword,
         )
       } else {
         GenericAutofillScenario(
           username = username,
           fillUsername = fillUsername,
           otp = otp,
-          genericPassword = genericPassword
+          genericPassword = genericPassword,
         )
       }
     }
@@ -193,7 +193,7 @@ internal data class ClassifiedAutofillScenario<T : Any>(
   override val fillUsername: Boolean,
   override val otp: T?,
   val currentPassword: List<T>,
-  val newPassword: List<T>
+  val newPassword: List<T>,
 ) : AutofillScenario<T>() {
 
   override val allPasswordFields
@@ -217,7 +217,7 @@ internal data class GenericAutofillScenario<T : Any>(
   override val username: T?,
   override val fillUsername: Boolean,
   override val otp: T?,
-  val genericPassword: List<T>
+  val genericPassword: List<T>,
 ) : AutofillScenario<T>() {
 
   override val allPasswordFields
@@ -254,7 +254,7 @@ internal fun AutofillScenario<FormField>.passesOriginCheck(singleOriginMode: Boo
 public fun Dataset.Builder.fillWith(
   scenario: AutofillScenario<AutofillId>,
   action: AutofillAction,
-  credentials: Credentials?
+  credentials: Credentials?,
 ) {
   val credentialsToFill = credentials ?: Credentials("USERNAME", "PASSWORD", "OTP")
   for (field in scenario.fieldsToFillOn(action)) {
@@ -303,7 +303,7 @@ internal fun AutofillScenario<AutofillId>.toBundle(): Bundle =
         putParcelable(AutofillScenario.BUNDLE_KEY_OTP_ID, otp)
         putParcelableArrayList(
           AutofillScenario.BUNDLE_KEY_CURRENT_PASSWORD_IDS,
-          ArrayList(currentPassword)
+          ArrayList(currentPassword),
         )
         putParcelableArrayList(AutofillScenario.BUNDLE_KEY_NEW_PASSWORD_IDS, ArrayList(newPassword))
       }
@@ -315,7 +315,7 @@ internal fun AutofillScenario<AutofillId>.toBundle(): Bundle =
         putParcelable(AutofillScenario.BUNDLE_KEY_OTP_ID, otp)
         putParcelableArrayList(
           AutofillScenario.BUNDLE_KEY_GENERIC_PASSWORD_IDS,
-          ArrayList(genericPassword)
+          ArrayList(genericPassword),
         )
       }
     }

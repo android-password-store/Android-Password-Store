@@ -56,10 +56,7 @@ private fun ToggleButton(
     val icon =
       if (visible) painterResource(id = R.drawable.baseline_visibility_off_24)
       else painterResource(id = R.drawable.baseline_visibility_24)
-    Icon(
-      painter = icon,
-      contentDescription = contentDescription,
-    )
+    Icon(painter = icon, contentDescription = contentDescription)
   }
 }
 
@@ -70,10 +67,7 @@ public fun CopyButton(
   modifier: Modifier = Modifier,
 ) {
   val clipboard = LocalClipboardManager.current
-  IconButton(
-    onClick = { clipboard.setText(AnnotatedString(textToCopy)) },
-    modifier = modifier,
-  ) {
+  IconButton(onClick = { clipboard.setText(AnnotatedString(textToCopy)) }, modifier = modifier) {
     Icon(
       painter = painterResource(R.drawable.ic_content_copy),
       contentDescription = stringResource(buttonLabelRes),

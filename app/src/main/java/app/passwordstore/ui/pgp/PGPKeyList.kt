@@ -54,7 +54,7 @@ fun KeyList(
     ) {
       Image(
         painter = painterResource(id = R.drawable.ic_launcher_foreground),
-        contentDescription = "Password Store logo"
+        contentDescription = "Password Store logo",
       )
       Text(stringResource(R.string.pgp_key_manager_no_keys_guidance))
     }
@@ -81,7 +81,7 @@ private fun KeyItem(
     onConfirm = {
       onItemClick(identifier)
       isDeleting = false
-    }
+    },
   )
   val label =
     when (identifier) {
@@ -106,7 +106,7 @@ private fun KeyItem(
       IconButton(onClick = { isDeleting = true }, modifier = Modifier.requiredSize(24.dp)) {
         Icon(
           painter = painterResource(R.drawable.ic_delete_24dp),
-          stringResource(id = R.string.delete)
+          stringResource(id = R.string.delete),
         )
       }
     }
@@ -148,7 +148,7 @@ private fun KeyListPreview() {
               PGPIdentifier.fromString("0xB950AE2813841585"),
             )
             .toPersistentList(),
-        onItemClick = {}
+        onItemClick = {},
       )
     }
   }

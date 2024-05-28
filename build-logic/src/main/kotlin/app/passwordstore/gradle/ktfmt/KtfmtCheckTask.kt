@@ -57,7 +57,7 @@ abstract class KtfmtCheckTask : SourceTask() {
           maxWidth = 100,
           continuationIndent = 2,
         ),
-        originCode
+        originCode,
       )
     val pathNormalizer = { file: File -> file.toRelativeString(projectDirectory.asFile.get()) }
     return (originCode != formattedCode) to

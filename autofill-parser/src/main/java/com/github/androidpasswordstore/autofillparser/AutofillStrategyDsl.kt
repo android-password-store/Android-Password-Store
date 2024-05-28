@@ -75,7 +75,7 @@ internal interface FieldMatcher {
 @RequiresApi(Build.VERSION_CODES.O)
 internal class SingleFieldMatcher(
   private val take: (FormField, List<FormField>) -> Boolean,
-  private val tieBreakers: List<(FormField, List<FormField>) -> Boolean>
+  private val tieBreakers: List<(FormField, List<FormField>) -> Boolean>,
 ) : FieldMatcher {
 
   @AutofillDsl
@@ -100,7 +100,7 @@ internal class SingleFieldMatcher(
     fun build() =
       SingleFieldMatcher(
         takeSingle ?: throw IllegalArgumentException("Every block needs a take{Single,Pair} block"),
-        tieBreakersSingle
+        tieBreakersSingle,
       )
   }
 
@@ -139,7 +139,7 @@ internal class SingleFieldMatcher(
 @RequiresApi(Build.VERSION_CODES.O)
 private class PairOfFieldsMatcher(
   private val take: (Pair<FormField, FormField>, List<FormField>) -> Boolean,
-  private val tieBreakers: List<(Pair<FormField, FormField>, List<FormField>) -> Boolean>
+  private val tieBreakers: List<(Pair<FormField, FormField>, List<FormField>) -> Boolean>,
 ) : FieldMatcher {
 
   override fun match(fields: List<FormField>, alreadyMatched: List<FormField>): List<FormField>? {
@@ -180,14 +180,14 @@ private constructor(
   private val matchers: List<AutofillRuleMatcher>,
   private val applyInSingleOriginMode: Boolean,
   private val applyOnManualRequestOnly: Boolean,
-  private val name: String
+  private val name: String,
 ) {
 
   data class AutofillRuleMatcher(
     val type: FillableFieldType,
     val matcher: FieldMatcher,
     val optional: Boolean,
-    val matchHidden: Boolean
+    val matchHidden: Boolean,
   )
 
   enum class FillableFieldType {
@@ -201,7 +201,7 @@ private constructor(
   @AutofillDsl
   class Builder(
     private val applyInSingleOriginMode: Boolean,
-    private val applyOnManualRequestOnly: Boolean
+    private val applyOnManualRequestOnly: Boolean,
   ) {
 
     companion object {
@@ -215,7 +215,7 @@ private constructor(
     fun username(
       optional: Boolean = false,
       matchHidden: Boolean = false,
-      block: SingleFieldMatcher.Builder.() -> Unit
+      block: SingleFieldMatcher.Builder.() -> Unit,
     ) {
       require(matchers.none { it.type == FillableFieldType.Username }) {
         "Every rule block can only have at most one username block"
@@ -225,7 +225,7 @@ private constructor(
           type = FillableFieldType.Username,
           matcher = SingleFieldMatcher.Builder().apply(block).build(),
           optional = optional,
-          matchHidden = matchHidden
+          matchHidden = matchHidden,
         )
       )
     }
@@ -239,7 +239,7 @@ private constructor(
           type = FillableFieldType.Otp,
           matcher = SingleFieldMatcher.Builder().apply(block).build(),
           optional = optional,
-          matchHidden = false
+          matchHidden = false,
         )
       )
     }
@@ -247,7 +247,7 @@ private constructor(
     fun currentPassword(
       optional: Boolean = false,
       matchHidden: Boolean = false,
-      block: FieldMatcher.Builder.() -> Unit
+      block: FieldMatcher.Builder.() -> Unit,
     ) {
       require(matchers.none { it.type == FillableFieldType.GenericPassword }) {
         "Every rule block can only have either genericPassword or {current,new}Password blocks"
@@ -257,7 +257,7 @@ private constructor(
           type = FillableFieldType.CurrentPassword,
           matcher = FieldMatcher.Builder().apply(block).build(),
           optional = optional,
-          matchHidden = matchHidden
+          matchHidden = matchHidden,
         )
       )
     }
@@ -271,7 +271,7 @@ private constructor(
           type = FillableFieldType.NewPassword,
           matcher = FieldMatcher.Builder().apply(block).build(),
           optional = optional,
-          matchHidden = false
+          matchHidden = false,
         )
       )
     }
@@ -279,11 +279,7 @@ private constructor(
     fun genericPassword(optional: Boolean = false, block: FieldMatcher.Builder.() -> Unit) {
       require(
         matchers.none {
-          it.type in
-            listOf(
-              FillableFieldType.CurrentPassword,
-              FillableFieldType.NewPassword,
-            )
+          it.type in listOf(FillableFieldType.CurrentPassword, FillableFieldType.NewPassword)
         }
       ) {
         "Every rule block can only have either genericPassword or {current,new}Password blocks"
@@ -293,7 +289,7 @@ private constructor(
           type = FillableFieldType.GenericPassword,
           matcher = FieldMatcher.Builder().apply(block).build(),
           optional = optional,
-          matchHidden = false
+          matchHidden = false,
         )
       )
     }
@@ -314,7 +310,7 @@ private constructor(
           matchers,
           applyInSingleOriginMode,
           applyOnManualRequestOnly,
-          name ?: "Rule #$ruleId"
+          name ?: "Rule #$ruleId",
         )
         .also { ruleId++ }
     }
@@ -325,7 +321,7 @@ private constructor(
     allUsername: List<FormField>,
     allOtp: List<FormField>,
     singleOriginMode: Boolean,
-    isManualRequest: Boolean
+    isManualRequest: Boolean,
   ): AutofillScenario<FormField>? {
     if (singleOriginMode && !applyInSingleOriginMode) {
       logcat { "$name: Skipped in single origin mode" }
@@ -399,12 +395,12 @@ internal class AutofillStrategy private constructor(private val rules: List<Auto
     fun rule(
       applyInSingleOriginMode: Boolean = false,
       applyOnManualRequestOnly: Boolean = false,
-      block: AutofillRule.Builder.() -> Unit
+      block: AutofillRule.Builder.() -> Unit,
     ) {
       rules.add(
         AutofillRule.Builder(
             applyInSingleOriginMode = applyInSingleOriginMode,
-            applyOnManualRequestOnly = applyOnManualRequestOnly
+            applyOnManualRequestOnly = applyOnManualRequestOnly,
           )
           .apply(block)
           .build()
@@ -417,7 +413,7 @@ internal class AutofillStrategy private constructor(private val rules: List<Auto
   fun match(
     fields: List<FormField>,
     singleOriginMode: Boolean,
-    isManualRequest: Boolean
+    isManualRequest: Boolean,
   ): AutofillScenario<FormField>? {
     val possiblePasswordFields = fields.filter { it.passwordCertainty >= CertaintyLevel.Possible }
     logcat { "Possible password fields: ${possiblePasswordFields.size}" }
@@ -433,7 +429,7 @@ internal class AutofillStrategy private constructor(private val rules: List<Auto
         possibleUsernameFields,
         possibleOtpFields,
         singleOriginMode = singleOriginMode,
-        isManualRequest = isManualRequest
+        isManualRequest = isManualRequest,
       ) ?: continue
     }
     return null

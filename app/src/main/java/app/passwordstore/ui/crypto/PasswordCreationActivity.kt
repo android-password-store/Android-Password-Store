@@ -147,7 +147,7 @@ class PasswordCreationActivity : BasePGPActivity() {
       otpImportButton.setOnClickListener {
         supportFragmentManager.setFragmentResultListener(
           OTP_RESULT_REQUEST_KEY,
-          this@PasswordCreationActivity
+          this@PasswordCreationActivity,
         ) { requestKey, bundle ->
           if (requestKey == OTP_RESULT_REQUEST_KEY) {
             val contents = bundle.getString(RESULT)

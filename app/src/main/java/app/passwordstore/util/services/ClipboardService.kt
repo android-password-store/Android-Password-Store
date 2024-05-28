@@ -125,7 +125,7 @@ class ClipboardService : Service() {
           PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         } else {
           PendingIntent.FLAG_UPDATE_CURRENT
-        }
+        },
       )
     val notification = createNotification(pendingIntent, clearTimeMs)
 
@@ -152,7 +152,7 @@ class ClipboardService : Service() {
       NotificationChannel(
         CHANNEL_ID,
         getString(R.string.app_name),
-        NotificationManager.IMPORTANCE_LOW
+        NotificationManager.IMPORTANCE_LOW,
       )
     val manager = getSystemService<NotificationManager>()
     if (manager != null) {

@@ -91,7 +91,7 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettin
     url == null ||
       gitSettings.updateConnectionSettingsIfValid(
         newAuthMode = gitSettings.authMode,
-        newUrl = url
+        newUrl = url,
       ) != GitSettings.UpdateConnectionSettingsResult.Valid
   ) {
     logcat(TAG, ERROR) { "Failed to migrate to URL-based Git config, generated URL is invalid" }
@@ -128,7 +128,7 @@ private fun migrateToClipboardHistory(sharedPrefs: SharedPreferences) {
     sharedPrefs.edit {
       putBoolean(
         PreferenceKeys.CLEAR_CLIPBOARD_HISTORY,
-        sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
+        sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false),
       )
       remove(PreferenceKeys.CLEAR_CLIPBOARD_20X)
     }

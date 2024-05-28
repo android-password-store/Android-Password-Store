@@ -10,7 +10,5 @@ import org.eclipse.jgit.api.GitCommand
 class PushOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
   override val commands: Array<GitCommand<out Any>> =
-    arrayOf(
-      git.push().setPushAll().setRemote("origin"),
-    )
+    arrayOf(git.push().setPushAll().setRemote("origin"))
 }

@@ -205,7 +205,7 @@ constructor(
         millis / (THOUSAND_MILLIS * totpPeriod),
         totpAlgorithm,
         digits,
-        issuer
+        issuer,
       )
       .mapBoth({ code -> Ok(Totp(code, remainingTime)) }, ::Err)
   }
@@ -233,12 +233,7 @@ constructor(
         "identity:",
       )
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public val PASSWORD_FIELDS: Array<String> =
-      arrayOf(
-        "password:",
-        "secret:",
-        "pass:",
-      )
+    public val PASSWORD_FIELDS: Array<String> = arrayOf("password:", "secret:", "pass:")
     private const val THOUSAND_MILLIS = 1000L
   }
 }

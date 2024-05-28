@@ -7,10 +7,8 @@ package app.passwordstore.util.git.operation
 import androidx.appcompat.app.AppCompatActivity
 import org.eclipse.jgit.api.GitCommand
 
-class PullOperation(
-  callingActivity: AppCompatActivity,
-  rebase: Boolean,
-) : GitOperation(callingActivity) {
+class PullOperation(callingActivity: AppCompatActivity, rebase: Boolean) :
+  GitOperation(callingActivity) {
 
   /**
    * The story of why the pull operation is committing files goes like this: Once upon a time when

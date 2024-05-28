@@ -54,7 +54,7 @@ private constructor(
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     if (savedInstanceState != null) dismiss()
     return layoutInflater.inflate(R.layout.basic_bottom_sheet, container, false)
@@ -157,9 +157,7 @@ private constructor(
       return this
     }
 
-    fun setOnDismissListener(
-      onDismissListener: OnDismissListener,
-    ): Builder {
+    fun setOnDismissListener(onDismissListener: OnDismissListener): Builder {
       this.onDismissListener = onDismissListener
       return this
     }

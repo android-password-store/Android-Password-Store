@@ -90,7 +90,7 @@ open class BasePGPActivity : AppCompatActivity() {
   fun copyTextToClipboard(
     text: String?,
     showSnackbar: Boolean = true,
-    @StringRes snackbarTextRes: Int = R.string.clipboard_copied_text
+    @StringRes snackbarTextRes: Int = R.string.clipboard_copied_text,
   ) {
     val clipboard = clipboard ?: return
     val clip = ClipData.newPlainText("pgp_handler_result_pm", text)

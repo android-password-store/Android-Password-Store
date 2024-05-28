@@ -14,7 +14,7 @@ import mozilla.components.lib.publicsuffixlist.ext.binarySearch
 /** Class wrapping the public suffix list data and offering methods for accessing rules in it. */
 internal class PublicSuffixListData(
   private val rules: ByteArray,
-  private val exceptions: ByteArray
+  private val exceptions: ByteArray,
 ) {
 
   private fun binarySearchRules(labels: List<ByteArray>, labelIndex: Int): String? {

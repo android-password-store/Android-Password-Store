@@ -16,7 +16,7 @@ data class PasswordItem(
   val parent: PasswordItem? = null,
   val type: Char,
   val file: File,
-  val rootDir: File
+  val rootDir: File,
 ) : Comparable<PasswordItem> {
 
   val fullPathToParent = file.absolutePath.replace(rootDir.absolutePath, "").replace(file.name, "")

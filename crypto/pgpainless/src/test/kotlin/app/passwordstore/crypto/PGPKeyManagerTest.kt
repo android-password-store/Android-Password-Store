@@ -217,10 +217,7 @@ class PGPKeyManagerTest {
           KeyId(-961222705095032109), // Bobby
         )
       val userIds =
-        arrayOf(
-          UserId("Alice <owner@example.com>"),
-          UserId("Bobby <owner@example.com>"),
-        )
+        arrayOf(UserId("Alice <owner@example.com>"), UserId("Bobby <owner@example.com>"))
 
       for (idCollection in arrayOf(longKeyIds, userIds)) {
         val alice1 = keyManager.getKeyById(idCollection[0])

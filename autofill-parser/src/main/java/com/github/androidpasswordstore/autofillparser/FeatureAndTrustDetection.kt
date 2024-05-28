@@ -59,7 +59,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "com.duckduckgo.mobile.android" to
       arrayOf(
         "u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=",
-        "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo="
+        "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo=",
       ),
     "com.jamal2367.styx" to arrayOf("Lph3oaG1C8WLhLiK5PVxOp5+6wTU9ipJSBYlD2bA3VI="),
     "com.microsoft.emmx" to arrayOf("AeGZlxCoLCdJtNUMRF3IXWcLYTYInQp2anOCfIKh6sk="),
@@ -85,7 +85,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "us.spotco.fennec_dos" to
       arrayOf(
         "Jg4KSWeMeLcMAtZTet07bcChcXG73oznX9QCaoo+GNI=",
-        "/4H1vlY5ZZTu5w/vKDIlbhUhQSLiupzt0mAF/9S8qqg="
+        "/4H1vlY5ZZTu5w/vKDIlbhUhQSLiupzt0mAF/9S8qqg=",
       ),
     "com.vivaldi.browser" to arrayOf("6KeFRGVbqMCYF/cydo9WibFmLsSyvFoLwOwTjTPKPR4="),
     "app.vanadium.browser" to arrayOf("xq24uDxtTBfSkq/eVv1IilHTFv+PLBHFQQIjv/in27M="),
@@ -100,7 +100,7 @@ private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
 internal enum class BrowserMultiOriginMethod {
   None,
   WebView,
-  Field
+  Field,
 }
 
 /**
@@ -173,7 +173,7 @@ private fun isNoAccessibilityServiceEnabled(context: Context): Boolean {
   // See https://chromium.googlesource.com/chromium/src/+/447a31e977a65e2eb78804e4a09633699b4ede33
   return Settings.Secure.getString(
       context.contentResolver,
-      Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+      Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
     )
     .isNullOrEmpty()
 }
@@ -187,25 +187,22 @@ private fun getBrowserSaveFlag(context: Context, appPackage: String): Int? =
 
 internal data class BrowserAutofillSupportInfo(
   val multiOriginMethod: BrowserMultiOriginMethod,
-  val saveFlags: Int?
+  val saveFlags: Int?,
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
 internal fun getBrowserAutofillSupportInfoIfTrusted(
   context: Context,
-  appPackage: String
+  appPackage: String,
 ): BrowserAutofillSupportInfo? {
   if (!isTrustedBrowser(context, appPackage)) return null
   return BrowserAutofillSupportInfo(
     multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
-    saveFlags = getBrowserSaveFlag(context, appPackage)
+    saveFlags = getBrowserSaveFlag(context, appPackage),
   )
 }
 
-private val FLAKY_BROWSERS =
-  listOf(
-    "com.kiwibrowser.browser",
-  )
+private val FLAKY_BROWSERS = listOf("com.kiwibrowser.browser")
 
 public enum class BrowserAutofillSupportLevel {
   None,
@@ -219,7 +216,7 @@ public enum class BrowserAutofillSupportLevel {
 @RequiresApi(Build.VERSION_CODES.O)
 private fun getBrowserAutofillSupportLevel(
   context: Context,
-  appPackage: String
+  appPackage: String,
 ): BrowserAutofillSupportLevel {
   val browserInfo = getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
   return when {
@@ -252,7 +249,7 @@ public fun getInstalledBrowsersWithAutofillSupportLevel(
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       context.packageManager.queryIntentActivities(
         testWebIntent,
-        ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong())
+        ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()),
       )
     } else {
       context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)

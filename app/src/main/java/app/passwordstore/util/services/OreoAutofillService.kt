@@ -65,7 +65,7 @@ class OreoAutofillService : AutofillService() {
   override fun onFillRequest(
     request: FillRequest,
     cancellationSignal: CancellationSignal,
-    callback: FillCallback
+    callback: FillCallback,
   ) {
     val structure =
       request.fillContexts.lastOrNull()?.structure
@@ -144,7 +144,7 @@ class OreoAutofillService : AutofillService() {
       AutofillSaveActivity.makeSaveIntentSender(
         this,
         credentials = Credentials(username, password, null),
-        formOrigin = formOrigin
+        formOrigin = formOrigin,
       )
     )
   }

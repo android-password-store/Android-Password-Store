@@ -140,18 +140,10 @@ class SshjConfig : ConfigImpl() {
 
   private fun initMACFactories() {
     macFactories =
-      listOf(
-        Macs.HMACSHA2512Etm(),
-        Macs.HMACSHA2256Etm(),
-        Macs.HMACSHA2512(),
-        Macs.HMACSHA2256(),
-      )
+      listOf(Macs.HMACSHA2512Etm(), Macs.HMACSHA2256Etm(), Macs.HMACSHA2512(), Macs.HMACSHA2256())
   }
 
   private fun initCompressionFactories() {
-    compressionFactories =
-      listOf(
-        NoneCompression.Factory(),
-      )
+    compressionFactories = listOf(NoneCompression.Factory())
   }
 }

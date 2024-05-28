@@ -94,7 +94,7 @@ class GitServerConfigActivity : BaseGitActivity() {
       Snackbar.make(
           binding.root,
           getString(R.string.clear_saved_host_key_success),
-          Snackbar.LENGTH_LONG
+          Snackbar.LENGTH_LONG,
         )
         .show()
       it.isVisible = false
@@ -140,14 +140,14 @@ class GitServerConfigActivity : BaseGitActivity() {
         val updateResult =
           gitSettings.updateConnectionSettingsIfValid(
             newAuthMode = newAuthMode,
-            newUrl = binding.serverUrl.text.toString().trim()
+            newUrl = binding.serverUrl.text.toString().trim(),
           )
       ) {
         GitSettings.UpdateConnectionSettingsResult.FailedToParseUrl -> {
           Snackbar.make(
               binding.root,
               getString(R.string.git_server_config_save_error),
-              Snackbar.LENGTH_LONG
+              Snackbar.LENGTH_LONG,
             )
             .show()
         }
@@ -175,7 +175,7 @@ class GitServerConfigActivity : BaseGitActivity() {
             Snackbar.make(
                 binding.root,
                 getString(R.string.git_server_config_save_success),
-                Snackbar.LENGTH_SHORT
+                Snackbar.LENGTH_SHORT,
               )
               .show()
             Handler(Looper.getMainLooper()).postDelayed(500) { finish() }
@@ -242,7 +242,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                 val snackbar =
                   snackbar(
                     message = getString(R.string.delete_directory_progress_text),
-                    length = Snackbar.LENGTH_INDEFINITE
+                    length = Snackbar.LENGTH_INDEFINITE,
                   )
                 withContext(dispatcherProvider.io()) {
                   localDir.deleteRecursively()
@@ -255,7 +255,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                       setResult(RESULT_OK)
                       finish()
                     },
-                    failure = { err -> promptOnErrorHandler(err) { finish() } }
+                    failure = { err -> promptOnErrorHandler(err) { finish() } },
                   )
               }
             }

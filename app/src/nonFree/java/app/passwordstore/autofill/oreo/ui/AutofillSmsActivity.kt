@@ -87,7 +87,7 @@ class AutofillSmsActivity : AppCompatActivity() {
           context,
           fillOtpFromSmsRequestCode++,
           intent,
-          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
         .intentSender
     }
@@ -159,11 +159,11 @@ class AutofillSmsActivity : AppCompatActivity() {
             this@AutofillSmsActivity,
             Credentials(null, null, smsCode),
             clientState,
-            AutofillAction.FillOtpFromSms
+            AutofillAction.FillOtpFromSms,
           )
         setResult(
           RESULT_OK,
-          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
+          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) },
         )
         finish()
       }

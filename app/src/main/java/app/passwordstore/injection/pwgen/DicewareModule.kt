@@ -32,9 +32,7 @@ object DicewareModule {
   }
 
   @Provides
-  fun provideDie(
-    intGenerator: RandomIntGenerator,
-  ): Die {
+  fun provideDie(intGenerator: RandomIntGenerator): Die {
     return Die(6, intGenerator)
   }
 

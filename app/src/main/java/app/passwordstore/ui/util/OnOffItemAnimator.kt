@@ -23,7 +23,7 @@ class OnOffItemAnimator : DefaultItemAnimator() {
   override fun animateAppearance(
     viewHolder: RecyclerView.ViewHolder,
     preLayoutInfo: ItemHolderInfo?,
-    postLayoutInfo: ItemHolderInfo
+    postLayoutInfo: ItemHolderInfo,
   ): Boolean {
     return if (isEnabled) {
       super.animateAppearance(viewHolder, preLayoutInfo, postLayoutInfo)
@@ -36,7 +36,7 @@ class OnOffItemAnimator : DefaultItemAnimator() {
     oldHolder: RecyclerView.ViewHolder,
     newHolder: RecyclerView.ViewHolder,
     preInfo: ItemHolderInfo,
-    postInfo: ItemHolderInfo
+    postInfo: ItemHolderInfo,
   ): Boolean {
     return if (isEnabled) {
       super.animateChange(oldHolder, newHolder, preInfo, postInfo)
@@ -48,7 +48,7 @@ class OnOffItemAnimator : DefaultItemAnimator() {
   override fun animateDisappearance(
     viewHolder: RecyclerView.ViewHolder,
     preLayoutInfo: ItemHolderInfo,
-    postLayoutInfo: ItemHolderInfo?
+    postLayoutInfo: ItemHolderInfo?,
   ): Boolean {
     return if (isEnabled) {
       super.animateDisappearance(viewHolder, preLayoutInfo, postLayoutInfo)
@@ -60,7 +60,7 @@ class OnOffItemAnimator : DefaultItemAnimator() {
   override fun animatePersistence(
     viewHolder: RecyclerView.ViewHolder,
     preInfo: ItemHolderInfo,
-    postInfo: ItemHolderInfo
+    postInfo: ItemHolderInfo,
   ): Boolean {
     return if (isEnabled) {
       super.animatePersistence(viewHolder, preInfo, postInfo)

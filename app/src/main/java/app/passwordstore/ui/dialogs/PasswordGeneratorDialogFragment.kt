@@ -73,7 +73,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         setPositiveButton(R.string.dialog_ok) { _, _ ->
           setFragmentResult(
             PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
-            bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
+            bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}"),
           )
         }
         setNeutralButton(R.string.dialog_cancel) { _, _ -> }
@@ -123,7 +123,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
       PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
       PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
       PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
-      PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
+      PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) },
     )
   }
 

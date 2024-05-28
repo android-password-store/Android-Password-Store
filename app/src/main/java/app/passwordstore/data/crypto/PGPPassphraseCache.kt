@@ -11,35 +11,21 @@ import javax.inject.Inject
 import kotlinx.coroutines.withContext
 
 /** Implements a rudimentary [EncryptedSharedPreferences]-backed cache for GPG passphrases. */
-class PGPPassphraseCache
-@Inject
-constructor(
-  private val dispatcherProvider: DispatcherProvider,
-) {
+class PGPPassphraseCache @Inject constructor(private val dispatcherProvider: DispatcherProvider) {
 
-  suspend fun cachePassphrase(
-    context: Context,
-    identifier: PGPIdentifier,
-    passphrase: String,
-  ) {
+  suspend fun cachePassphrase(context: Context, identifier: PGPIdentifier, passphrase: String) {
     withContext(dispatcherProvider.io()) {
       getPreferences(context).edit { putString(identifier.toString(), passphrase) }
     }
   }
 
-  suspend fun retrieveCachedPassphrase(
-    context: Context,
-    identifier: PGPIdentifier,
-  ): String? {
+  suspend fun retrieveCachedPassphrase(context: Context, identifier: PGPIdentifier): String? {
     return withContext(dispatcherProvider.io()) {
       getPreferences(context).getString(identifier.toString())
     }
   }
 
-  suspend fun clearCachedPassphrase(
-    context: Context,
-    identifier: PGPIdentifier,
-  ) {
+  suspend fun clearCachedPassphrase(context: Context, identifier: PGPIdentifier) {
     withContext(dispatcherProvider.io()) {
       getPreferences(context).edit { remove(identifier.toString()) }
     }

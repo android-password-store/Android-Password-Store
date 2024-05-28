@@ -56,7 +56,7 @@ private fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
     fileName,
     masterKeyAlias,
     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
   )
 }
 
@@ -79,9 +79,7 @@ fun Context.resolveAttribute(attr: Int): Int {
  * Commit changes to the store from a [FragmentActivity] using a custom implementation of
  * [GitOperation]
  */
-suspend fun FragmentActivity.commitChange(
-  message: String,
-): Result<Unit, Throwable> {
+suspend fun FragmentActivity.commitChange(message: String): Result<Unit, Throwable> {
   if (!PasswordRepository.isInitialized) {
     return Ok(Unit)
   }

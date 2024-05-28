@@ -59,7 +59,7 @@ class DicewarePasswordGeneratorDialogFragment : DialogFragment() {
         setPositiveButton(R.string.dialog_ok) { _, _ ->
           setFragmentResult(
             PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
-            bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
+            bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}"),
           )
         }
         setNeutralButton(R.string.dialog_cancel) { _, _ -> }

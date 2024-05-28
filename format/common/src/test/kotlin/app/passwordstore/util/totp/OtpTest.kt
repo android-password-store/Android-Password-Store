@@ -25,103 +25,36 @@ class OtpTest {
 
   @Test
   fun otpGeneration6Digits() {
-    assertEquals(
-      "953550",
-      generateOtp(
-        counter = 1593333298159 / (1000 * 30),
-      )
-    )
-    assertEquals(
-      "275379",
-      generateOtp(
-        counter = 1593333571918 / (1000 * 30),
-      )
-    )
-    assertEquals(
-      "867507",
-      generateOtp(
-        counter = 1593333600517 / (1000 * 57),
-      )
-    )
+    assertEquals("953550", generateOtp(counter = 1593333298159 / (1000 * 30)))
+    assertEquals("275379", generateOtp(counter = 1593333571918 / (1000 * 30)))
+    assertEquals("867507", generateOtp(counter = 1593333600517 / (1000 * 57)))
   }
 
   @Test
   fun otpGeneration10Digits() {
-    assertEquals(
-      "0740900914",
-      generateOtp(
-        counter = 1593333655044 / (1000 * 30),
-        digits = "10",
-      )
-    )
-    assertEquals(
-      "0070632029",
-      generateOtp(
-        counter = 1593333691405 / (1000 * 30),
-        digits = "10",
-      )
-    )
-    assertEquals(
-      "1017265882",
-      generateOtp(
-        counter = 1593333728893 / (1000 * 83),
-        digits = "10",
-      )
-    )
+    assertEquals("0740900914", generateOtp(counter = 1593333655044 / (1000 * 30), digits = "10"))
+    assertEquals("0070632029", generateOtp(counter = 1593333691405 / (1000 * 30), digits = "10"))
+    assertEquals("1017265882", generateOtp(counter = 1593333728893 / (1000 * 83), digits = "10"))
   }
 
   @Test
   fun otpGenerationIllegalInput() {
-    assertNull(
-      generateOtp(
-        counter = 10000,
-        algorithm = "SHA0",
-        digits = "10",
-      )
-    )
-    assertNull(
-      generateOtp(
-        counter = 10000,
-        digits = "a",
-      )
-    )
-    assertNull(
-      generateOtp(
-        counter = 10000,
-        algorithm = "SHA1",
-        digits = "5",
-      )
-    )
-    assertNull(
-      generateOtp(
-        counter = 10000,
-        digits = "11",
-      )
-    )
-    assertNull(
-      generateOtp(
-        counter = 10000,
-        secret = "JBSWY3DPEHPK3PXPAAAAB",
-        digits = "6",
-      )
-    )
+    assertNull(generateOtp(counter = 10000, algorithm = "SHA0", digits = "10"))
+    assertNull(generateOtp(counter = 10000, digits = "a"))
+    assertNull(generateOtp(counter = 10000, algorithm = "SHA1", digits = "5"))
+    assertNull(generateOtp(counter = 10000, digits = "11"))
+    assertNull(generateOtp(counter = 10000, secret = "JBSWY3DPEHPK3PXPAAAAB", digits = "6"))
   }
 
   @Test
   fun otpGenerationUnusualSecrets() {
     assertEquals(
       "127764",
-      generateOtp(
-        counter = 1593367111963 / (1000 * 30),
-        secret = "JBSWY3DPEHPK3PXPAAAAAAAA",
-      )
+      generateOtp(counter = 1593367111963 / (1000 * 30), secret = "JBSWY3DPEHPK3PXPAAAAAAAA"),
     )
     assertEquals(
       "047515",
-      generateOtp(
-        counter = 1593367171420 / (1000 * 30),
-        secret = "JBSWY3DPEHPK3PXPAAAAA",
-      )
+      generateOtp(counter = 1593367171420 / (1000 * 30), secret = "JBSWY3DPEHPK3PXPAAAAA"),
     )
   }
 

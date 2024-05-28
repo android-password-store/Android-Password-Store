@@ -104,7 +104,7 @@ abstract class PSLUpdateTask : DefaultTask() {
     var totalRuleBytes: Int = 0,
     var totalExceptionRuleBytes: Int = 0,
     val sortedRules: TreeSet<ByteString> = TreeSet(),
-    val sortedExceptionRules: TreeSet<ByteString> = TreeSet()
+    val sortedExceptionRules: TreeSet<ByteString> = TreeSet(),
   )
 
   private companion object {

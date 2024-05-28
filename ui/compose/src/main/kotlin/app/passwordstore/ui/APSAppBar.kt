@@ -39,10 +39,7 @@ public fun APSAppBar(
     navigationIcon = {
       if (navigationIcon != null) {
         IconButton(onClick = { onNavigationIconClick.invoke() }) {
-          Icon(
-            painter = navigationIcon,
-            contentDescription = null,
-          )
+          Icon(painter = navigationIcon, contentDescription = null)
         }
       }
     },
@@ -68,7 +65,7 @@ private fun APSAppBarPreview() {
             contentDescription = "Search items",
           )
         }
-      }
+      },
     )
   }
 }

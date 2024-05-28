@@ -115,7 +115,7 @@ class PasswordStore : BaseGitActivity() {
             getLongName(
               requireNotNull(source.parent) { "$file has no parent" },
               repositoryPath,
-              basename
+              basename,
             )
           val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
           if (destinationFile.exists()) {
@@ -127,7 +127,7 @@ class PasswordStore : BaseGitActivity() {
                   resources.getString(
                     R.string.password_exists_message,
                     destinationLongName,
-                    sourceLongName
+                    sourceLongName,
                   )
                 )
                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
@@ -148,7 +148,7 @@ class PasswordStore : BaseGitActivity() {
               getLongName(
                 requireNotNull(source.parent) { "$basename has no parent" },
                 repositoryPath,
-                basename
+                basename,
               )
             val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
             withContext(dispatcherProvider.main()) {
@@ -156,8 +156,8 @@ class PasswordStore : BaseGitActivity() {
                 resources.getString(
                   R.string.git_commit_move_text,
                   sourceLongName,
-                  destinationLongName
-                ),
+                  destinationLongName,
+                )
               )
             }
           }
@@ -166,7 +166,7 @@ class PasswordStore : BaseGitActivity() {
             val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
             withContext(dispatcherProvider.main()) {
               commitChange(
-                resources.getString(R.string.git_commit_move_multiple_text, relativePath),
+                resources.getString(R.string.git_commit_move_multiple_text, relativePath)
               )
             }
           }
@@ -340,10 +340,7 @@ class PasswordStore : BaseGitActivity() {
   private fun runGitOperation(operation: GitOp) =
     lifecycleScope.launch {
       launchGitOperation(operation)
-        .fold(
-          success = { refreshPasswordList() },
-          failure = { promptOnErrorHandler(it) },
-        )
+        .fold(success = { refreshPasswordList() }, failure = { promptOnErrorHandler(it) })
     }
 
   private fun checkLocalRepository() {
@@ -414,7 +411,7 @@ class PasswordStore : BaseGitActivity() {
     intent.putExtra(BasePGPActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
     intent.putExtra(
       BasePGPActivity.EXTRA_REPO_PATH,
-      PasswordRepository.getRepositoryDirectory().absolutePath
+      PasswordRepository.getRepositoryDirectory().absolutePath,
     )
     listRefreshAction.launch(intent)
   }
@@ -450,9 +447,7 @@ class PasswordStore : BaseGitActivity() {
             item.file.toRelativeString(PasswordRepository.getRepositoryDirectory())
           }
         lifecycleScope.launch {
-          commitChange(
-            resources.getString(R.string.git_commit_remove_text, fmt),
-          )
+          commitChange(resources.getString(R.string.git_commit_remove_text, fmt))
         }
       }
       .setNegativeButton(resources.getString(R.string.dialog_no), null)
@@ -487,7 +482,7 @@ class PasswordStore : BaseGitActivity() {
    */
   private fun renameCategory(
     oldCategory: PasswordItem,
-    error: CategoryRenameError = CategoryRenameError.None
+    error: CategoryRenameError = CategoryRenameError.None,
   ) {
     val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
     val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
@@ -530,8 +525,8 @@ class PasswordStore : BaseGitActivity() {
                     resources.getString(
                       R.string.git_commit_move_text,
                       oldCategory.name,
-                      newCategory.name
-                    ),
+                      newCategory.name,
+                    )
                   )
                 }
               }

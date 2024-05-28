@@ -38,7 +38,7 @@ class GitCommandExecutor(
   private val hiltEntryPoint by unsafeLazy {
     EntryPointAccessors.fromApplication(
       activity.applicationContext,
-      GitCommandExecutorEntryPoint::class.java
+      GitCommandExecutorEntryPoint::class.java,
     )
   }
 
@@ -93,7 +93,7 @@ class GitCommandExecutor(
                     RemoteRefUpdate.Status.REJECTED_NODELETE,
                     RemoteRefUpdate.Status.REJECTED_REMOTE_CHANGED,
                     RemoteRefUpdate.Status.NON_EXISTING,
-                    RemoteRefUpdate.Status.NOT_ATTEMPTED, ->
+                    RemoteRefUpdate.Status.NOT_ATTEMPTED ->
                       throw PushException.Generic(rru.status.name)
                     RemoteRefUpdate.Status.REJECTED_OTHER_REASON -> {
                       throw if ("non-fast-forward" == rru.message) {
@@ -107,7 +107,7 @@ class GitCommandExecutor(
                         Toast.makeText(
                             activity,
                             activity.applicationContext.getString(R.string.git_push_up_to_date),
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                           )
                           .show()
                       }

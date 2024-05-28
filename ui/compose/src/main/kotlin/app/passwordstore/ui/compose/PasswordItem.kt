@@ -34,7 +34,7 @@ public fun PasswordItem(
   label: String,
   type: ItemType,
   onClick: () -> Unit,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
 ) {
   Row(
     modifier =

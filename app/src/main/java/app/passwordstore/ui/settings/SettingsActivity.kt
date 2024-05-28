@@ -103,7 +103,7 @@ class SettingsActivity : AppCompatActivity() {
       BundleCompat.getParcelable(
           savedInstanceState,
           "adapter",
-          PreferencesAdapter.SavedState::class.java
+          PreferencesAdapter.SavedState::class.java,
         )
         ?.let(adapter::loadSavedState)
     }

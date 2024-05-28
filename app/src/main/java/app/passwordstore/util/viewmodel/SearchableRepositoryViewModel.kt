@@ -67,7 +67,7 @@ private val CaseInsensitiveComparator = Collator.getInstance().apply { strength 
 
 private fun PasswordItem.Companion.makeComparator(
   typeSortOrder: PasswordSortOrder,
-  directoryStructure: DirectoryStructure
+  directoryStructure: DirectoryStructure,
 ): Comparator<PasswordItem> {
   return when (typeSortOrder) {
       PasswordSortOrder.FOLDER_FIRST -> compareBy { it.type }
@@ -158,7 +158,7 @@ constructor(
     val listMode: ListMode,
     // This counter can be increased to force a reexecution of the search action even if all
     // other arguments are left unchanged.
-    val updateCounter: Int
+    val updateCounter: Int,
   )
 
   private fun makeSearchAction(
@@ -166,7 +166,7 @@ constructor(
     filter: String,
     filterMode: FilterMode,
     searchMode: SearchMode,
-    listMode: ListMode
+    listMode: ListMode,
   ): SearchAction {
     return SearchAction(
       baseDirectory = baseDirectory,
@@ -174,7 +174,7 @@ constructor(
       filterMode = filterMode,
       searchMode = searchMode,
       listMode = listMode,
-      updateCounter = updateCounter
+      updateCounter = updateCounter,
     )
   }
 
@@ -187,7 +187,7 @@ constructor(
         filter = "",
         filterMode = FilterMode.NoFilter,
         searchMode = SearchMode.InCurrentDirectoryOnly,
-        listMode = ListMode.AllEntries
+        listMode = ListMode.AllEntries,
       )
     )
 
@@ -310,7 +310,7 @@ constructor(
     newDirectory: File = root,
     listMode: ListMode = ListMode.AllEntries,
     recyclerViewState: Parcelable? = null,
-    pushPreviousLocation: Boolean = true
+    pushPreviousLocation: Boolean = true,
   ) {
     if (!newDirectory.exists()) return
     require(newDirectory.isDirectory) { "Can only navigate to a directory" }
@@ -323,7 +323,7 @@ constructor(
         baseDirectory = newDirectory,
         filterMode = FilterMode.NoFilter,
         searchMode = SearchMode.InCurrentDirectoryOnly,
-        listMode = listMode
+        listMode = listMode,
       )
     }
     _currentDir.update { newDirectory }
@@ -356,7 +356,7 @@ constructor(
     baseDirectory: File? = null,
     filterMode: FilterMode = FilterMode.Fuzzy,
     searchMode: SearchMode? = null,
-    listMode: ListMode = ListMode.AllEntries
+    listMode: ListMode = ListMode.AllEntries,
   ) {
     require(baseDirectory?.isDirectory != false) { "Can only search in a directory" }
     searchActionFlow.update {
@@ -365,7 +365,7 @@ constructor(
         baseDirectory = baseDirectory ?: _currentDir.value,
         filterMode = filterMode,
         searchMode = searchMode ?: defaultSearchMode,
-        listMode = listMode
+        listMode = listMode,
       )
     }
   }
@@ -417,7 +417,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
 
   fun <T : ItemDetailsLookup<String>> makeSelectable(
     recyclerView: RecyclerView,
-    itemDetailsLookupCreator: (recyclerView: RecyclerView) -> T
+    itemDetailsLookupCreator: (recyclerView: RecyclerView) -> T,
   ) {
     selectionTracker =
       SelectionTracker.Builder(
@@ -425,7 +425,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
           recyclerView,
           itemKeyProvider,
           itemDetailsLookupCreator(recyclerView),
-          StorageStrategy.createStringStorage()
+          StorageStrategy.createStringStorage(),
         )
         .withSelectionPredicate(SelectionPredicates.createSelectAnything())
         .build()

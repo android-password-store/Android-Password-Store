@@ -55,7 +55,7 @@ internal object RandomPhonemesGenerator {
       Element("w", CONSONANT),
       Element("x", CONSONANT),
       Element("y", CONSONANT),
-      Element("z", CONSONANT)
+      Element("z", CONSONANT),
     )
 
   private class Element(str: String, val flags: Int) {

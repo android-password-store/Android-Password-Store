@@ -25,7 +25,7 @@ fun Fragment.finish() = requireActivity().finish()
  */
 fun FragmentManager.performTransactionWithBackStack(
   destinationFragment: Fragment,
-  @IdRes containerViewId: Int = android.R.id.content
+  @IdRes containerViewId: Int = android.R.id.content,
 ) {
   commit {
     addToBackStack(destinationFragment.tag)
@@ -33,7 +33,7 @@ fun FragmentManager.performTransactionWithBackStack(
       R.animator.slide_in_left,
       R.animator.slide_out_left,
       R.animator.slide_in_right,
-      R.animator.slide_out_right
+      R.animator.slide_out_right,
     )
     replace(containerViewId, destinationFragment)
   }

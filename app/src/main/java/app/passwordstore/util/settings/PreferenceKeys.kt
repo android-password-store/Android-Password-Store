@@ -64,7 +64,7 @@ object PreferenceKeys {
 
   @Deprecated(
     message = "Use SHOW_HIDDEN_CONTENTS instead",
-    replaceWith = ReplaceWith("PreferenceKeys.SHOW_HIDDEN_CONTENTS")
+    replaceWith = ReplaceWith("PreferenceKeys.SHOW_HIDDEN_CONTENTS"),
   )
   const val SHOW_HIDDEN_FOLDERS = "show_hidden_folders"
   const val SHOW_HIDDEN_CONTENTS = "show_hidden_contents"

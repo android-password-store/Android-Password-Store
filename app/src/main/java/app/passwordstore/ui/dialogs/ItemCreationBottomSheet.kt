@@ -38,7 +38,7 @@ class ItemCreationBottomSheet : BottomSheetDialogFragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
-    savedInstanceState: Bundle?
+    savedInstanceState: Bundle?,
   ): View? {
     if (savedInstanceState != null) dismiss()
     return inflater.inflate(R.layout.item_create_sheet, container, false)

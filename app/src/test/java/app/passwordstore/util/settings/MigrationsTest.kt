@@ -61,12 +61,12 @@ class MigrationsTest {
     runMigrations(
       filesDir,
       sharedPrefs,
-      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
     )
     checkOldKeysAreRemoved()
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
-      "ssh://msfjarvis@192.168.0.102:2200/mnt/disk3/pass-repo"
+      "ssh://msfjarvis@192.168.0.102:2200/mnt/disk3/pass-repo",
     )
   }
 
@@ -82,12 +82,12 @@ class MigrationsTest {
     runMigrations(
       filesDir,
       sharedPrefs,
-      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
     )
     checkOldKeysAreRemoved()
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
-      "msfjarvis@192.168.0.102:/mnt/disk3/pass-repo"
+      "msfjarvis@192.168.0.102:/mnt/disk3/pass-repo",
     )
   }
 
@@ -103,12 +103,12 @@ class MigrationsTest {
     runMigrations(
       filesDir,
       sharedPrefs,
-      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
     )
     checkOldKeysAreRemoved()
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
-      "https://github.com/Android-Password-Store/pass-test"
+      "https://github.com/Android-Password-Store/pass-test",
     )
   }
 
@@ -117,7 +117,7 @@ class MigrationsTest {
     runMigrations(
       filesDir,
       sharedPrefs,
-      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
     )
     assertEquals(true, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true))
     assertEquals(false, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
@@ -129,7 +129,7 @@ class MigrationsTest {
     runMigrations(
       filesDir,
       sharedPrefs,
-      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
     )
     assertEquals(false, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false))
     assertEquals(true, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
@@ -141,7 +141,7 @@ class MigrationsTest {
     runMigrations(
       filesDir,
       sharedPrefs,
-      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
     )
     assertEquals(true, sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false))
     assertFalse(sharedPrefs.contains(PreferenceKeys.CLEAR_CLIPBOARD_20X))

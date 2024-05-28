@@ -102,7 +102,7 @@ class AutofillMatcher {
      */
     fun getMatchesFor(
       context: Context,
-      formOrigin: FormOrigin
+      formOrigin: FormOrigin,
     ): Result<List<File>, AutofillPublisherChangedException> {
       if (hasFormOriginHashChanged(context, formOrigin)) {
         return Err(AutofillPublisherChangedException(formOrigin))
@@ -151,7 +151,7 @@ class AutofillMatcher {
         Toast.makeText(
             context,
             context.getString(R.string.oreo_autofill_max_matches_reached, MAX_NUM_MATCHES),
-            Toast.LENGTH_LONG
+            Toast.LENGTH_LONG,
           )
           .show()
         return
@@ -170,7 +170,7 @@ class AutofillMatcher {
     fun updateMatches(
       context: Context,
       moveFromTo: Map<File, File> = emptyMap(),
-      delete: Collection<File> = emptyList()
+      delete: Collection<File> = emptyList(),
     ) {
       val deletePathList = delete.map { it.absolutePath }
       val oldNewPathMap =

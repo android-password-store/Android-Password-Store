@@ -11,10 +11,8 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 
 abstract class KtfmtFormatTask
 @Inject
-constructor(
-  private val workerExecutor: WorkerExecutor,
-  private val projectLayout: ProjectLayout,
-) : SourceTask() {
+constructor(private val workerExecutor: WorkerExecutor, private val projectLayout: ProjectLayout) :
+  SourceTask() {
 
   @TaskAction
   fun execute() {

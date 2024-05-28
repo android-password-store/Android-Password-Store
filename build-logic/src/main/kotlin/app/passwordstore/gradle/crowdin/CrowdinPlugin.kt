@@ -62,10 +62,7 @@ class CrowdinDownloadPlugin : Plugin<Project> {
           if (extension.skipCleanup.getOrElse(false)) {
             emptySet()
           } else {
-            setOf(
-              extractStrings.map { it.source },
-              downloadCrowdin.map { it.outputFiles },
-            )
+            setOf(extractStrings.map { it.source }, downloadCrowdin.map { it.outputFiles })
           }
       }
     }

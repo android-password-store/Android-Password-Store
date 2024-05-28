@@ -10,10 +10,7 @@ import javax.inject.Inject
 /** Basic implementation of a die with configurable number of sides. */
 public class Die
 @Inject
-constructor(
-  private val sides: Int,
-  private val random: RandomIntGenerator,
-) {
+constructor(private val sides: Int, private val random: RandomIntGenerator) {
 
   /** Roll the die to return a single number. */
   public fun roll(): Int {

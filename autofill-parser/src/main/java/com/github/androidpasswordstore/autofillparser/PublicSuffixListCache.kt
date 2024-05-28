@@ -39,7 +39,7 @@ public fun cachePublicSuffixList(context: Context) {
 internal fun getPublicSuffixPlusOne(
   context: Context,
   domain: String,
-  customSuffixes: Sequence<String>
+  customSuffixes: Sequence<String>,
 ) = runBlocking {
   // We only feed valid domain names which are not IP addresses into getPublicSuffixPlusOne.
   // We do not check whether the domain actually exists (actually, not even whether its TLD
@@ -77,7 +77,7 @@ private fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
 private suspend fun getCanonicalSuffix(
   context: Context,
   domain: String,
-  customSuffixes: Sequence<String>
+  customSuffixes: Sequence<String>,
 ): String {
   val publicSuffixList = PublicSuffixListCache.getOrCachePublicSuffixList(context)
   val publicSuffixPlusOne =
