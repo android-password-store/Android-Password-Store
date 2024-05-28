@@ -18,13 +18,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.ui.APSAppBar
 import app.passwordstore.ui.compose.CopyButton
 import app.passwordstore.ui.compose.PasswordField
 import app.passwordstore.ui.compose.theme.APSTheme
+import app.passwordstore.ui.compose.theme.SpacingLarge
+import app.passwordstore.ui.compose.theme.SpacingMedium
 import app.passwordstore.util.time.UserClock
 import app.passwordstore.util.totp.UriTotpFinder
 import kotlinx.coroutines.flow.first
@@ -49,14 +50,17 @@ fun ViewPasswordScreen(
     }
   ) { paddingValues ->
     Box(modifier = modifier.padding(paddingValues)) {
-      Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp).fillMaxSize()) {
+      Column(
+        modifier =
+          Modifier.padding(vertical = SpacingMedium, horizontal = SpacingLarge).fillMaxSize()
+      ) {
         if (entry.password != null) {
           PasswordField(
             value = entry.password!!,
             label = stringResource(R.string.password),
             initialVisibility = false,
             readOnly = true,
-            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
+            modifier = Modifier.padding(bottom = SpacingMedium).fillMaxWidth(),
           )
         }
         if (entry.hasTotp()) {
@@ -67,7 +71,7 @@ fun ViewPasswordScreen(
             readOnly = true,
             label = { Text("OTP (expires in ${totp.remainingTime.inWholeSeconds}s)") },
             trailingIcon = { CopyButton(totp.value, R.string.copy_label) },
-            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
+            modifier = Modifier.padding(bottom = SpacingMedium).fillMaxWidth(),
           )
         }
         if (entry.username != null) {
@@ -77,7 +81,7 @@ fun ViewPasswordScreen(
             readOnly = true,
             label = { Text(stringResource(R.string.username)) },
             trailingIcon = { CopyButton(entry.username!!, R.string.copy_label) },
-            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
+            modifier = Modifier.padding(bottom = SpacingMedium).fillMaxWidth(),
           )
         }
         ExtraContent(entry = entry)
@@ -95,7 +99,7 @@ private fun ExtraContent(entry: PasswordEntry, modifier: Modifier = Modifier) {
       readOnly = true,
       label = { Text(label.capitalize(Locale.current)) },
       trailingIcon = { CopyButton(value, R.string.copy_label) },
-      modifier = modifier.padding(bottom = 8.dp).fillMaxWidth(),
+      modifier = modifier.padding(bottom = SpacingMedium).fillMaxWidth(),
     )
   }
 }

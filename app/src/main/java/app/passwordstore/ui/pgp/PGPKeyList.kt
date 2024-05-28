@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -30,10 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.ui.compose.theme.APSTheme
+import app.passwordstore.ui.compose.theme.SpacingLarge
 import app.passwordstore.util.extensions.conditional
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -90,7 +89,7 @@ private fun KeyItem(
     }
   Row(
     modifier =
-      modifier.padding(16.dp).fillMaxWidth().conditional(onKeySelected != null) {
+      modifier.padding(SpacingLarge).fillMaxWidth().conditional(onKeySelected != null) {
         clickable { onKeySelected?.invoke(identifier) }
       },
     horizontalArrangement = Arrangement.SpaceBetween,
@@ -103,7 +102,7 @@ private fun KeyItem(
       maxLines = 1,
     )
     if (onKeySelected == null) {
-      IconButton(onClick = { isDeleting = true }, modifier = Modifier.requiredSize(24.dp)) {
+      IconButton(onClick = { isDeleting = true }) {
         Icon(
           painter = painterResource(R.drawable.ic_delete_24dp),
           stringResource(id = R.string.delete),

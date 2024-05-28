@@ -18,10 +18,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.unit.dp
 import app.passwordstore.ui.compose.preview.DevicePreviews
 import app.passwordstore.ui.compose.preview.ThemePreviews
 import app.passwordstore.ui.compose.theme.APSTheme
+import app.passwordstore.ui.compose.theme.SpacingMedium
 
 @SuppressLint("ComposableLambdaParameterNaming") // The lint doesn't really apply to `actions`
 @Composable
@@ -39,13 +39,13 @@ public fun APSAppBar(
     navigationIcon = {
       if (navigationIcon != null) {
         IconButton(onClick = onNavigationIconClick) {
-          Icon(painter = navigationIcon, contentDescription = null)
+          Icon(painter = navigationIcon, contentDescription = "Back navigation button")
         }
       }
     },
     actions = actions,
     colors = TopAppBarDefaults.topAppBarColors(containerColor = backgroundColor),
-    modifier = modifier.shadow(8.dp),
+    modifier = modifier.shadow(SpacingMedium),
   )
 }
 

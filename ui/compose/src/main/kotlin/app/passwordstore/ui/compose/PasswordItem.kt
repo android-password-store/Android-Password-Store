@@ -19,10 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.unit.dp
 import app.passwordstore.ui.compose.preview.DevicePreviews
 import app.passwordstore.ui.compose.preview.ThemePreviews
 import app.passwordstore.ui.compose.theme.APSTheme
+import app.passwordstore.ui.compose.theme.SpacingLarge
 
 public enum class ItemType {
   File,
@@ -42,7 +42,7 @@ public fun PasswordItem(
         .clickable(enabled = true, onClick = onClick)
         .background(MaterialTheme.colorScheme.background)
         .minimumInteractiveComponentSize()
-        .padding(horizontal = 16.dp)
+        .padding(horizontal = SpacingLarge)
         .fillMaxWidth(),
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically,
