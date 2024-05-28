@@ -28,10 +28,14 @@ abstract class KtfmtWorkerAction : WorkAction<KtfmtWorkerParameters> {
           Formatter.format(
             FormattingOptions(
               style = FormattingOptions.Style.GOOGLE,
-              maxWidth = 100,
+              maxWidth = FormattingOptions.DEFAULT_MAX_WIDTH,
+              blockIndent = 2,
               continuationIndent = 2,
+              removeUnusedImports = true,
+              debuggingPrintOpsAfterFormatting = false,
+              manageTrailingCommas = true,
             ),
-            sourceText
+            sourceText,
           )
 
         if (!formattedText.contentEquals(sourceText)) {
