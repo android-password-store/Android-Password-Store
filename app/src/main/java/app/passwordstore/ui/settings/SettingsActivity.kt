@@ -7,6 +7,7 @@ package app.passwordstore.ui.settings
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BundleCompat
 import app.passwordstore.R
@@ -80,9 +81,17 @@ class SettingsActivity : AppCompatActivity() {
           pgpSettings.provideSettings(this)
         }
       }
+    val backPressedCallback =
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          preferencesAdapter.goBack()
+        }
+      }
+    onBackPressedDispatcher.addCallback(backPressedCallback)
     val adapter = PreferencesAdapter(screen)
     adapter.onScreenChangeListener =
       PreferencesAdapter.OnScreenChangeListener { subScreen, entering ->
+        backPressedCallback.isEnabled = entering
         supportActionBar?.title =
           if (!entering) {
             getString(R.string.action_settings)
@@ -116,11 +125,5 @@ class SettingsActivity : AppCompatActivity() {
         }
       else -> super.onOptionsItemSelected(item)
     }
-  }
-
-  @Deprecated("Deprecated in Java")
-  @Suppress("DEPRECATION")
-  override fun onBackPressed() {
-    if (!preferencesAdapter.goBack()) super.onBackPressed()
   }
 }
