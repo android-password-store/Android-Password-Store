@@ -16,12 +16,14 @@
 
 
 ## :green_heart: How did you test it?
-
+<!-- If you've added a unit test, simply say so in here. -->
+<!-- Most parts of the codebase lack the ability to easily unit test -->
+<!-- logic so you can also put the manual steps to reproduce/confirm the fix -->
 
 ## :pencil: Checklist
 <!--- Put an `x` in the boxes that apply -->
-- [ ] I formatted the code `./gradlew spotlessApply`
-- [ ] I reviewed submitted code
+- [ ] I formatted the code with `./gradlew ktfmtFormat`
+- [ ] I reviewed the submitted code
 - [ ] I added a [CHANGELOG](CHANGELOG.md) entry if applicable
 
 ## :crystal_ball: Next steps
