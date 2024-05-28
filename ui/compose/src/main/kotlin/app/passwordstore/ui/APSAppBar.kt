@@ -1,7 +1,10 @@
 package app.passwordstore.ui
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +23,7 @@ import app.passwordstore.ui.compose.preview.DevicePreviews
 import app.passwordstore.ui.compose.preview.ThemePreviews
 import app.passwordstore.ui.compose.theme.APSTheme
 
+@SuppressLint("ComposableLambdaParameterNaming") // The lint doesn't really apply to `actions`
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 public fun APSAppBar(
@@ -28,6 +32,7 @@ public fun APSAppBar(
   navigationIcon: Painter?,
   modifier: Modifier = Modifier,
   onNavigationIconClick: (() -> Unit) = {},
+  actions: @Composable RowScope.() -> Unit = {},
 ) {
   TopAppBar(
     title = { Text(text = title) },
@@ -41,6 +46,7 @@ public fun APSAppBar(
         }
       }
     },
+    actions = actions,
     colors = TopAppBarDefaults.topAppBarColors(containerColor = backgroundColor),
     modifier = modifier.shadow(8.dp),
   )
@@ -55,6 +61,14 @@ private fun APSAppBarPreview() {
       title = "Preview",
       backgroundColor = MaterialTheme.colorScheme.surface,
       navigationIcon = rememberVectorPainter(Icons.AutoMirrored.Filled.ArrowBack),
+      actions = {
+        IconButton(onClick = {}) {
+          Icon(
+            painter = rememberVectorPainter(Icons.Filled.Search),
+            contentDescription = "Search items",
+          )
+        }
+      }
     )
   }
 }
