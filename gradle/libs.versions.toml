@@ -7,7 +7,7 @@ flowbinding = "1.2.0"
 hilt = "2.51.1"
 kotlin = "2.0.0"
 kotlinResult = "2.0.0"
-lifecycle = "2.8.0"
+lifecycle = "2.8.1"
 moshi = "1.15.1"
 
 [libraries]
