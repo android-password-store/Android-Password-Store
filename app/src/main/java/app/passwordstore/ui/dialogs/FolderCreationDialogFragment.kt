@@ -15,11 +15,15 @@ import app.passwordstore.ui.passwords.PasswordStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
+import kotlin.io.path.createDirectories
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
 
 class FolderCreationDialogFragment : DialogFragment() {
 
-  private lateinit var newFolder: File
+  private lateinit var newFolder: Path
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
@@ -41,15 +45,15 @@ class FolderCreationDialogFragment : DialogFragment() {
     val dialog = requireDialog()
     val folderNameView = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
     val folderNameViewContainer = dialog.findViewById<TextInputLayout>(R.id.folder_name_container)
-    newFolder = File("$currentDir/${folderNameView.text}")
+    newFolder = Paths.get("$currentDir/${folderNameView.text}")
     folderNameViewContainer.error =
       when {
-        newFolder.isFile -> getString(R.string.folder_creation_err_file_exists)
-        newFolder.isDirectory -> getString(R.string.folder_creation_err_folder_exists)
+        newFolder.isRegularFile() -> getString(R.string.folder_creation_err_file_exists)
+        newFolder.isDirectory() -> getString(R.string.folder_creation_err_folder_exists)
         else -> null
       }
     if (folderNameViewContainer.error != null) return
-    newFolder.mkdirs()
+    newFolder.createDirectories()
     (requireActivity() as PasswordStore).refreshPasswordList(newFolder)
     // TODO(msfjarvis): Restore this functionality
     /*

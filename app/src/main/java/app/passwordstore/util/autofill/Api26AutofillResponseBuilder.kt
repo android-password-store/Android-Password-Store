@@ -21,7 +21,7 @@ import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
 import com.github.michaelbull.result.fold
-import java.io.File
+import java.nio.file.Path
 import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
@@ -58,7 +58,7 @@ class Api26AutofillResponseBuilder private constructor(form: FillableForm) :
     }
   }
 
-  private fun makeMatchDataset(context: Context, file: File): Dataset? {
+  private fun makeMatchDataset(context: Context, file: Path): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
     val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
@@ -135,7 +135,7 @@ class Api26AutofillResponseBuilder private constructor(form: FillableForm) :
     }
   }
 
-  private fun makeFillResponse(context: Context, matchedFiles: List<File>): FillResponse? {
+  private fun makeFillResponse(context: Context, matchedFiles: List<Path>): FillResponse? {
     var datasetCount = 0
     return FillResponse.Builder().run {
       for (file in matchedFiles) {

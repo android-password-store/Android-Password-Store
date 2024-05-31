@@ -23,7 +23,8 @@ import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
+import java.nio.file.Paths
+import kotlin.io.path.absolutePathString
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
@@ -109,8 +110,9 @@ class AutofillSaveActivity : AppCompatActivity() {
       Intent(this, PasswordCreationActivity::class.java).apply {
         putExtras(
           bundleOf(
-            "REPO_PATH" to repo.absolutePath,
-            "FILE_PATH" to repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)!!).absolutePath,
+            "REPO_PATH" to repo.absolutePathString(),
+            "FILE_PATH" to
+              repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)!!).absolutePathString(),
             PasswordCreationActivity.EXTRA_FILE_NAME to intent.getStringExtra(EXTRA_NAME),
             PasswordCreationActivity.EXTRA_PASSWORD to intent.getStringExtra(EXTRA_PASSWORD),
             PasswordCreationActivity.EXTRA_GENERATE_PASSWORD to
@@ -122,7 +124,7 @@ class AutofillSaveActivity : AppCompatActivity() {
         val data = result.data
         if (result.resultCode == RESULT_OK && data != null) {
           val createdPath = data.getStringExtra("CREATED_FILE")!!
-          formOrigin?.let { AutofillMatcher.addMatchFor(this, it, File(createdPath)) }
+          formOrigin?.let { AutofillMatcher.addMatchFor(this, it, Paths.get(createdPath)) }
           val password = data.getStringExtra("PASSWORD")
           val resultIntent =
             if (password != null) {

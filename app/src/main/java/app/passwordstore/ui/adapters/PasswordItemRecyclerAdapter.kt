@@ -18,6 +18,9 @@ import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.viewmodel.SearchableRepositoryAdapter
 import app.passwordstore.util.viewmodel.stableId
+import kotlin.io.path.extension
+import kotlin.io.path.isDirectory
+import kotlin.io.path.listDirectoryEntries
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 
@@ -71,7 +74,10 @@ open class PasswordItemRecyclerAdapter(
         folderIndicator.visibility = View.VISIBLE
         val count =
           withContext(dispatcherProvider.io()) {
-            item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
+            item.file
+              .listDirectoryEntries()
+              .filter { it.isDirectory() || it.extension == "gpg" }
+              .size
           }
         childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
         childCount.text = "$count"

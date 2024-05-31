@@ -19,9 +19,17 @@ import app.passwordstore.crypto.errors.NoKeysAvailableException
 import app.passwordstore.crypto.errors.UnusableKeyException
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.coroutines.runSuspendCatching
+import com.github.michaelbull.result.runCatching
 import com.github.michaelbull.result.unwrap
-import java.io.File
+import java.nio.file.Paths
 import javax.inject.Inject
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.exists
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.readBytes
+import kotlin.io.path.writeBytes
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.bouncycastle.openpgp.PGPPublicKeyRing
@@ -34,7 +42,7 @@ public class PGPKeyManager
 constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
   KeyManager<PGPKey, PGPIdentifier> {
 
-  private val keyDir = File(filesDir, KEY_DIR_NAME)
+  private val keyDir = Paths.get(filesDir, KEY_DIR_NAME)
 
   /** @see KeyManager.addKey */
   override suspend fun addKey(key: PGPKey, replace: Boolean): Result<PGPKey, Throwable> =
@@ -43,7 +51,7 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
         val incomingKeyRing = tryParseKeyring(key) ?: throw InvalidKeyException
         if (!isKeyUsable(key)) throw UnusableKeyException
-        val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
+        val keyFile = keyDir.resolve("${tryGetId(key)}.$KEY_EXTENSION")
         if (keyFile.exists()) {
           val existingKeyBytes = keyFile.readBytes()
           val existingKeyRing =
@@ -65,7 +73,7 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
             throw KeyAlreadyExistsException(
               tryGetId(key)?.toString() ?: "Failed to retrieve key ID"
             )
-          if (!keyFile.delete()) throw KeyDeletionFailedException
+          if (!keyFile.deleteIfExists()) throw KeyDeletionFailedException
         }
 
         keyFile.writeBytes(key.contents)
@@ -80,10 +88,8 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
         val key = getKeyById(identifier).unwrap()
-        val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
-        if (keyFile.exists()) {
-          if (!keyFile.delete()) throw KeyDeletionFailedException
-        }
+        val keyFile = keyDir.resolve("${tryGetId(key)}.$KEY_EXTENSION")
+        if (!keyFile.deleteIfExists()) throw KeyDeletionFailedException
       }
     }
 
@@ -92,8 +98,8 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
-        val keyFiles = keyDir.listFiles()
-        if (keyFiles.isNullOrEmpty()) throw NoKeysAvailableException
+        val keyFiles = keyDir.listDirectoryEntries().filter { it.isRegularFile() }
+        if (keyFiles.isEmpty()) throw NoKeysAvailableException
         val keys = keyFiles.map { file -> PGPKey(file.readBytes()) }
 
         val matchResult =
@@ -128,8 +134,8 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
-        val keyFiles = keyDir.listFiles()
-        if (keyFiles.isNullOrEmpty()) return@runSuspendCatching emptyList()
+        val keyFiles = keyDir.listDirectoryEntries().filter { it.isRegularFile() }
+        if (keyFiles.isEmpty()) return@runSuspendCatching emptyList()
         keyFiles.map { keyFile -> PGPKey(keyFile.readBytes()) }.toList()
       }
     }
@@ -139,7 +145,7 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
 
   /** Checks if [keyDir] exists and attempts to create it if not. */
   private fun keyDirExists(): Boolean {
-    return keyDir.exists() || keyDir.mkdirs()
+    return keyDir.exists() || runCatching { keyDir.createDirectories() }.isOk
   }
 
   public companion object {

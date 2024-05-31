@@ -5,10 +5,9 @@
 package app.passwordstore.util.extensions
 
 import app.passwordstore.data.repo.PasswordRepository
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.runCatching
-import java.io.File
+import java.nio.file.Path
 import java.time.Instant
+import kotlin.io.path.absolutePathString
 import logcat.asLog
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
@@ -18,29 +17,14 @@ infix fun Int.hasFlag(flag: Int): Boolean {
   return this and flag == flag
 }
 
-/** Checks whether this [File] is a directory that contains [other]. */
-fun File.contains(other: File): Boolean {
-  if (!isDirectory) return false
-  if (!other.exists()) return false
-  val relativePath =
-    runCatching { other.relativeTo(this) }
-      .getOrElse {
-        return false
-      }
-  // Direct containment is equivalent to the relative path being equal to the filename.
-  return relativePath.path == other.name
-}
-
 /**
- * Checks if this [File] is in the password repository directory as given by
+ * Checks if this [Path] is in the password repository directory as given by
  * [PasswordRepository.getRepositoryDirectory]
  */
-fun File.isInsideRepository(): Boolean {
-  return canonicalPath.contains(PasswordRepository.getRepositoryDirectory().canonicalPath)
+fun Path.isInsideRepository(): Boolean {
+  return absolutePathString()
+    .contains(PasswordRepository.getRepositoryDirectory().absolutePathString())
 }
-
-/** Recursively lists the files in this [File], skipping any directories it encounters. */
-fun File.listFilesRecursively() = walkTopDown().filter { !it.isDirectory }.toList()
 
 /**
  * Unique SHA-1 hash of this commit as hexadecimal string.

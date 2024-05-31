@@ -38,7 +38,7 @@ import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collect
+import kotlin.io.path.relativeTo
 import kotlinx.coroutines.launch
 import logcat.LogPriority.ERROR
 import logcat.logcat

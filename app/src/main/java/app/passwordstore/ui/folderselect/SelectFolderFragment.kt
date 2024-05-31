@@ -25,7 +25,8 @@ import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
@@ -60,7 +61,11 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
       requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH)) {
         "Cannot navigate if ${PasswordStore.REQUEST_ARG_PATH} is not provided"
       }
-    model.navigateTo(File(path), listMode = ListMode.DirectoriesOnly, pushPreviousLocation = false)
+    model.navigateTo(
+      Paths.get(path),
+      listMode = ListMode.DirectoriesOnly,
+      pushPreviousLocation = false,
+    )
     lifecycleScope.launch {
       model.searchResult.flowWithLifecycle(lifecycle).collect { result ->
         recyclerAdapter.submitList(result.passwordItems)
@@ -88,7 +93,7 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
       }
   }
 
-  val currentDir: File
+  val currentDir: Path
     get() = model.currentDir.value
 
   interface OnFragmentInteractionListener {

@@ -26,7 +26,7 @@ import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
 import com.github.michaelbull.result.fold
-import java.io.File
+import java.nio.file.Path
 import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
@@ -123,7 +123,7 @@ class Api30AutofillResponseBuilder private constructor(form: FillableForm) :
 
   private fun makeMatchDataset(
     context: Context,
-    file: File,
+    file: Path,
     imeSpec: InlinePresentationSpec?,
   ): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
@@ -199,7 +199,7 @@ class Api30AutofillResponseBuilder private constructor(form: FillableForm) :
   private fun makeFillResponse(
     context: Context,
     inlineSuggestionsRequest: InlineSuggestionsRequest?,
-    matchedFiles: List<File>,
+    matchedFiles: List<Path>,
   ): FillResponse? {
     var datasetCount = 0
     val imeSpecs = inlineSuggestionsRequest?.inlinePresentationSpecs ?: emptyList()

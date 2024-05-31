@@ -26,8 +26,8 @@ import app.passwordstore.util.extensions.viewBinding
 import app.passwordstore.util.settings.PreferenceKeys
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
 import javax.inject.Inject
+import kotlin.io.path.writeText
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -46,7 +46,7 @@ class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
             ?: return@registerForActivityResult
         lifecycleScope.launch {
           withContext(dispatcherProvider.io()) {
-            val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
+            val gpgIdentifierFile = PasswordRepository.getRepositoryDirectory().resolve(".gpg-id")
             gpgIdentifierFile.writeText(selectedKey)
           }
           settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
