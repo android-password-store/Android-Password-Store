@@ -2,7 +2,10 @@ package app.passwordstore.gradle.ktfmt
 
 import app.passwordstore.gradle.KtfmtPlugin
 import com.facebook.ktfmt.format.Formatter
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.pathString
+import kotlin.io.path.readText
+import kotlin.io.path.relativeTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -35,7 +38,7 @@ abstract class KtfmtCheckTask : SourceTask() {
   fun execute() {
     runBlocking(Dispatchers.IO.limitedParallelism(PARALLEL_TASK_LIMIT)) {
       coroutineScope {
-        val results = inputFiles.map { async { checkFile(it) } }.awaitAll()
+        val results = inputFiles.map { async { checkFile(it.toPath()) } }.awaitAll()
         if (results.any { (notFormatted, _) -> notFormatted }) {
           val prettyDiff =
             results
@@ -48,10 +51,12 @@ abstract class KtfmtCheckTask : SourceTask() {
     }
   }
 
-  private fun checkFile(input: File): Pair<Boolean, List<KtfmtDiffEntry>> {
+  private fun checkFile(input: Path): Pair<Boolean, List<KtfmtDiffEntry>> {
     val originCode = input.readText()
     val formattedCode = Formatter.format(KtfmtPlugin.DEFAULT_FORMATTING_OPTIONS, originCode)
-    val pathNormalizer = { file: File -> file.toRelativeString(projectDirectory.asFile.get()) }
+    val pathNormalizer = { file: Path ->
+      file.relativeTo(projectDirectory.asFile.get().toPath()).pathString
+    }
     return (originCode != formattedCode) to
       KtfmtDiffer.computeDiff(input, formattedCode, pathNormalizer)
   }

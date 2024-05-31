@@ -4,13 +4,14 @@ import com.github.difflib.DiffUtils
 import com.github.difflib.patch.ChangeDelta
 import com.github.difflib.patch.DeleteDelta
 import com.github.difflib.patch.InsertDelta
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.readText
 
 object KtfmtDiffer {
   fun computeDiff(
-    inputFile: File,
+    inputFile: Path,
     formattedCode: String,
-    pathNormalizer: (File) -> String,
+    pathNormalizer: (Path) -> String,
   ): List<KtfmtDiffEntry> {
     val originCode = inputFile.readText()
     return DiffUtils.diff(originCode, formattedCode, null).deltas.map {
