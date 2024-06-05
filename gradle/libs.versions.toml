@@ -47,7 +47,7 @@ build-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref =
 build-okhttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
 build-r8 = "com.android.tools:r8:8.4.6-dev"
 build-semver = "com.github.zafarkhaja:java-semver:0.10.2"
-build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.7.0"
+build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.7.1"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.4"
 compose-bom = "androidx.compose:compose-bom:2024.05.00"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
