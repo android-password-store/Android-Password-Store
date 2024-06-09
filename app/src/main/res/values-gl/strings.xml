@@ -120,6 +120,9 @@
   <string name="pref_pgp_ascii_armor_title">Cifrar co modo ASCII armor</string>
   <string name="pref_passphrase_cache_title">Permitir usar a caché para frase de paso</string>
   <string name="pref_passphrase_cache_summary">AVISO: esta característica funciona ben pero é experimental. Require que a pantalla estea bloqueada.</string>
+  <string name="pref_passphrase_cache_authenticate_clear">Autenticarse para poder baleirar a cache</string>
+  <string name="pref_passphrase_cache_auto_clear_title">Limpar automáticamente a frase de paso da caché</string>
+  <string name="pref_passphrase_cache_auto_clear_summary">Retira automáticamente a frase de paso da caché ao apagarse a pantalla</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Crear contrasinal</string>
   <string name="pwgen_generate">Crear</string>
@@ -343,4 +346,6 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="no_keys_imported_dialog_title">Non se importaron chaves</string>
   <string name="no_keys_imported_dialog_message">Aínda non hai chaves PGP importadas na app, preme no botón inferior para seleccionar un ficheiro de chave</string>
   <string name="biometric_prompt_title_gpg_passphrase_cache">Desbloquear cache da frase de paso</string>
+  <string name="aead_detect_title">Detectada cifraxe AEAD</string>
+  <string name="aead_detect_message">%1$s, le https://passwordstore.app/fix-aead para ter máis información</string>
 </resources>

@@ -116,6 +116,9 @@
   <string name="pref_pgp_key_manager_title">Menedżer kluczy</string>
   <string name="pref_pgp_ascii_armor_title">Szyfruj w trybie ASCII-armor</string>
   <string name="pref_passphrase_cache_summary">UWAGA: ta funkcjonalność powinna działać poprawnie, ale jest bardzo eksperymentalna. Wymaga aktywnej blokady ekranu.</string>
+  <string name="pref_passphrase_cache_authenticate_clear">Uwierzytelnij aby wyczyścić pamięć podręczną</string>
+  <string name="pref_passphrase_cache_auto_clear_title">Automatycznie wyczyść pamięć podręczną haseł</string>
+  <string name="pref_passphrase_cache_auto_clear_summary">Czyści pamięć podręczną haseł po wyłączeniu ekranu</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Generuj hasło</string>
   <string name="pwgen_generate">Wygeneruj</string>
@@ -327,4 +330,6 @@
   <string name="activity_label_pgp_key_manager">Menedżer kluczy PGP</string>
   <string name="pgp_key_manager_delete_confirmation_dialog_title">Usunąć klucz?</string>
   <string name="git_utils_reset_remote_branch_title">Nazwa zdalnej gałęzi</string>
+  <string name="aead_detect_title">Wykryto szyfrowanie AEAD</string>
+  <string name="aead_detect_message">%1$s, zobacz https://passwordstore.app/fix-aead aby uzyskać więcej informacji</string>
 </resources>
