@@ -110,6 +110,7 @@ obj/
 .idea/deploymentTargetSelector.xml
 .idea/kotlinc.xml
 .idea/migrations.xml
+.idea/other.xml
 
 # OS-specific files
 .DS_Store
