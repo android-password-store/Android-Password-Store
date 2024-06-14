@@ -1,7 +1,7 @@
 package app.passwordstore.gradle.ktfmt
 
+import app.passwordstore.gradle.KtfmtPlugin
 import com.facebook.ktfmt.format.Formatter
-import com.facebook.ktfmt.format.FormattingOptions
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,15 +50,7 @@ abstract class KtfmtCheckTask : SourceTask() {
 
   private fun checkFile(input: File): Pair<Boolean, List<KtfmtDiffEntry>> {
     val originCode = input.readText()
-    val formattedCode =
-      Formatter.format(
-        FormattingOptions(
-          style = FormattingOptions.Style.GOOGLE,
-          maxWidth = 100,
-          continuationIndent = 2,
-        ),
-        originCode,
-      )
+    val formattedCode = Formatter.format(KtfmtPlugin.DEFAULT_FORMATTING_OPTIONS, originCode)
     val pathNormalizer = { file: File -> file.toRelativeString(projectDirectory.asFile.get()) }
     return (originCode != formattedCode) to
       KtfmtDiffer.computeDiff(input, formattedCode, pathNormalizer)

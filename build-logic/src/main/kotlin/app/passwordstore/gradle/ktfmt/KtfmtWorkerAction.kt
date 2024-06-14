@@ -1,7 +1,7 @@
 package app.passwordstore.gradle.ktfmt
 
+import app.passwordstore.gradle.KtfmtPlugin
 import com.facebook.ktfmt.format.Formatter
-import com.facebook.ktfmt.format.FormattingOptions
 import java.io.File
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.logging.Logger
@@ -24,19 +24,7 @@ abstract class KtfmtWorkerAction : WorkAction<KtfmtWorkerParameters> {
 
         logger.log(LogLevel.DEBUG, "$name checking format: $relativePath")
 
-        val formattedText =
-          Formatter.format(
-            FormattingOptions(
-              style = FormattingOptions.Style.GOOGLE,
-              maxWidth = FormattingOptions.DEFAULT_MAX_WIDTH,
-              blockIndent = 2,
-              continuationIndent = 2,
-              removeUnusedImports = true,
-              debuggingPrintOpsAfterFormatting = false,
-              manageTrailingCommas = true,
-            ),
-            sourceText,
-          )
+        val formattedText = Formatter.format(KtfmtPlugin.DEFAULT_FORMATTING_OPTIONS, sourceText)
 
         if (!formattedText.contentEquals(sourceText)) {
           logger.log(LogLevel.QUIET, "${file.toRelativeString(projectDirectory)}: Format fixed")

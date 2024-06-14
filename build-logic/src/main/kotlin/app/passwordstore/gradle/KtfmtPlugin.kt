@@ -2,6 +2,7 @@ package app.passwordstore.gradle
 
 import app.passwordstore.gradle.ktfmt.KtfmtCheckTask
 import app.passwordstore.gradle.ktfmt.KtfmtFormatTask
+import com.facebook.ktfmt.format.FormattingOptions
 import java.util.concurrent.Callable
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -20,5 +21,17 @@ class KtfmtPlugin : Plugin<Project> {
       source(input)
       projectDirectory.set(target.layout.projectDirectory)
     }
+  }
+
+  companion object {
+    val DEFAULT_FORMATTING_OPTIONS =
+      FormattingOptions(
+        maxWidth = FormattingOptions.DEFAULT_MAX_WIDTH,
+        blockIndent = 2,
+        continuationIndent = 2,
+        removeUnusedImports = true,
+        debuggingPrintOpsAfterFormatting = false,
+        manageTrailingCommas = true,
+      )
   }
 }
