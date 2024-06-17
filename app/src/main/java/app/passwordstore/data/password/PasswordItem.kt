@@ -11,6 +11,7 @@ import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.main.LaunchActivity
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.name
 import kotlin.io.path.nameWithoutExtension
 import kotlin.io.path.pathString
 import kotlin.io.path.relativeTo
@@ -24,7 +25,7 @@ data class PasswordItem(
 
   val name = file.nameWithoutExtension
 
-  val fullPathToParent = file.relativeTo(rootDir).parent.pathString
+  val fullPathToParent = file.absolutePathString().replace(rootDir.absolutePathString(), "").replace(file.name, "")
 
   val longName =
     BasePGPActivity.getLongName(fullPathToParent, rootDir.absolutePathString(), toString())
