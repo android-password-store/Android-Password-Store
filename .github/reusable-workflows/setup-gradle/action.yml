@@ -48,7 +48,7 @@ runs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@31ae3562f68c96d481c31bc1a8a55cc1be162f83 # v3
+      uses: gradle/actions/setup-gradle@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3
       with:
         add-job-summary: always
         cache-read-only: ${{ inputs.cache-read-only }}
