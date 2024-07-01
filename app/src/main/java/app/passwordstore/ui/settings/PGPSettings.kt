@@ -65,6 +65,22 @@ class PGPSettings(
         titleRes = R.string.pref_passphrase_cache_auto_clear_title
         summaryRes = R.string.pref_passphrase_cache_auto_clear_summary
         defaultValue = false
+        /* clear cache once when unchecking; this is to prevent a malicious user
+         * from bypassing cache clearing via the settings */
+        onCheckedChange { checked ->
+          if (!checked && BiometricAuthenticator.canAuthenticate(activity)) {
+            BiometricAuthenticator.authenticate(
+              activity,
+              R.string.pref_passphrase_cache_authenticate_clear,
+            ) {
+              if (it is BiometricAuthenticator.Result.Success)
+                activity.lifecycleScope.launch {
+                  passphraseCache.clearAllCachedPassphrases(activity)
+                }
+            }
+          }
+          true
+        }
       }
     }
   }
