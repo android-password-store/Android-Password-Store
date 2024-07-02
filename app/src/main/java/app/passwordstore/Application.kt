@@ -30,10 +30,6 @@ import io.sentry.Sentry
 import io.sentry.protocol.User
 import java.util.concurrent.Executors
 import javax.inject.Inject
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority.DEBUG
 import logcat.LogPriority.VERBOSE
@@ -76,27 +72,18 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         }
       scope.user = user
     }
-    setupPassphraseCacheClearAction()
+    setupScreenOffHandler()
   }
 
-  @OptIn(DelicateCoroutinesApi::class)
-  private fun setupPassphraseCacheClearAction() {
-    if (prefs.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, false)) {
-      val screenOffReceiver: BroadcastReceiver =
-        object : BroadcastReceiver() {
-          override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == Intent.ACTION_SCREEN_OFF) {
-              GlobalScope.launch {
-                withContext(dispatcherProvider.main()) {
-                  passphraseCache.clearAllCachedPassphrases(context)
-                }
-              }
-            }
-          }
+  private fun setupScreenOffHandler() {
+    val screenOffReceiver: BroadcastReceiver =
+      object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+          if (intent.action == Intent.ACTION_SCREEN_OFF) screenWasOff = true
         }
-      val filter = IntentFilter(Intent.ACTION_SCREEN_OFF)
-      registerReceiver(screenOffReceiver, filter)
-    }
+      }
+    val filter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+    registerReceiver(screenOffReceiver, filter)
   }
 
   override fun onTerminate() {
@@ -159,5 +146,6 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
   companion object {
 
     lateinit var instance: Application
+    var screenWasOff: Boolean = true
   }
 }

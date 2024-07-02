@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
+import app.passwordstore.Application.Companion.screenWasOff
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.crypto.errors.CryptoHandlerException
@@ -167,6 +168,11 @@ class DecryptActivity : BasePGPActivity() {
           askPassphrase(isError, gpgIdentifiers, authResult)
         //
         is BiometricResult.Success -> {
+          // clear passphrase cache on first use after application startup or if screen was off
+          if (screenWasOff && settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, false)) {
+            passphraseCache.clearAllCachedPassphrases(this@DecryptActivity)
+            screenWasOff = false
+          }
           val cachedPassphrase =
             passphraseCache.retrieveCachedPassphrase(this@DecryptActivity, gpgIdentifiers.first())
           if (cachedPassphrase != null) {
