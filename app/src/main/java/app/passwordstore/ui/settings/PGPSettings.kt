@@ -5,6 +5,7 @@
 
 package app.passwordstore.ui.settings
 
+import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
@@ -12,6 +13,7 @@ import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.ui.pgp.PGPKeyListActivity
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.extensions.launchActivity
+import app.passwordstore.util.extensions.sharedPrefs
 import app.passwordstore.util.features.Feature
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
@@ -46,16 +48,24 @@ class PGPSettings(
         summaryRes = R.string.pref_passphrase_cache_summary
         defaultValue = false
         onCheckedChange { checked ->
-          if (!checked && BiometricAuthenticator.canAuthenticate(activity)) {
-            BiometricAuthenticator.authenticate(
-              activity,
-              R.string.pref_passphrase_cache_authenticate_clear,
-            ) {
-              if (it is BiometricAuthenticator.Result.Success)
-                activity.lifecycleScope.launch {
-                  passphraseCache.clearAllCachedPassphrases(activity)
-                }
-            }
+          if (checked) {
+            if (BiometricAuthenticator.canAuthenticate(activity)) {
+              BiometricAuthenticator.authenticate(
+                activity,
+                R.string.pref_passphrase_cache_authenticate_enable,
+              ) {
+                if (!(it is BiometricAuthenticator.Result.Success))
+                  activity.sharedPrefs.edit {
+                    putBoolean(Feature.EnablePGPPassphraseCache.configKey, false)
+                  }
+              }
+            } else
+              activity.sharedPrefs.edit {
+                putBoolean(Feature.EnablePGPPassphraseCache.configKey, false)
+              }
+          } else {
+            activity.sharedPrefs.edit { remove(PreferenceKeys.CLEAR_PASSPHRASE_CACHE) }
+            activity.lifecycleScope.launch { passphraseCache.clearAllCachedPassphrases(activity) }
           }
           true
         }
@@ -64,21 +74,12 @@ class PGPSettings(
         dependency = Feature.EnablePGPPassphraseCache.configKey
         titleRes = R.string.pref_passphrase_cache_auto_clear_title
         summaryRes = R.string.pref_passphrase_cache_auto_clear_summary
-        defaultValue = false
+        defaultValue = true
         /* clear cache once when unchecking; this is to prevent a malicious user
          * from bypassing cache clearing via the settings */
         onCheckedChange { checked ->
-          if (!checked && BiometricAuthenticator.canAuthenticate(activity)) {
-            BiometricAuthenticator.authenticate(
-              activity,
-              R.string.pref_passphrase_cache_authenticate_clear,
-            ) {
-              if (it is BiometricAuthenticator.Result.Success)
-                activity.lifecycleScope.launch {
-                  passphraseCache.clearAllCachedPassphrases(activity)
-                }
-            }
-          }
+          if (!checked)
+            activity.lifecycleScope.launch { passphraseCache.clearAllCachedPassphrases(activity) }
           true
         }
       }

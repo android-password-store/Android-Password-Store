@@ -168,8 +168,9 @@ class DecryptActivity : BasePGPActivity() {
           askPassphrase(isError, gpgIdentifiers, authResult)
         //
         is BiometricResult.Success -> {
-          // clear passphrase cache on first use after application startup or if screen was off
-          if (screenWasOff && settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, false)) {
+          /* clear passphrase cache on first use after application startup or if screen was off;
+          also make sure to purge a stale cache after caching has been disabled via PGP settings */
+          if (screenWasOff && settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true)) {
             passphraseCache.clearAllCachedPassphrases(this@DecryptActivity)
             screenWasOff = false
           }
