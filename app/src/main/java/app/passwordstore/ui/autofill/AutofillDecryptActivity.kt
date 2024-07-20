@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
+import app.passwordstore.Application.Companion.screenWasOff
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.data.crypto.PGPPassphraseCache
@@ -28,6 +29,7 @@ import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.asLog
 import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
+import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.michaelbull.result.getOrElse
@@ -110,6 +112,12 @@ class AutofillDecryptActivity : BasePGPActivity() {
           askPassphrase(filePath, gpgIdentifiers, clientState, action)
         //
         is Result.Success -> {
+          /* clear passphrase cache on first use after application startup or if screen was off;
+          also make sure to purge a stale cache after caching has been disabled via PGP settings */
+          if (screenWasOff && settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true)) {
+            passphraseCache.clearAllCachedPassphrases(this@AutofillDecryptActivity)
+            screenWasOff = false
+          }
           val cachedPassphrase =
             passphraseCache.retrieveCachedPassphrase(
               this@AutofillDecryptActivity,
