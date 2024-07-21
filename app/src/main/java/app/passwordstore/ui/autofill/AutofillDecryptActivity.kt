@@ -11,6 +11,7 @@ import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
+import androidx.core.content.edit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.Application.Companion.screenWasOff
@@ -53,6 +54,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
   @Inject lateinit var passphraseCache: PGPPassphraseCache
 
   private lateinit var directoryStructure: DirectoryStructure
+  private var clearCache = true
 
   override fun onStart() {
     super.onStart()
@@ -149,11 +151,16 @@ class AutofillDecryptActivity : BasePGPActivity() {
       decryptWithPassphrase(File(filePath), identifiers, clientState, action, password = "")
       return
     }
-    val dialog = PasswordDialog()
+    val dialog =
+      PasswordDialog(
+        features.isEnabled(EnablePGPPassphraseCache),
+        settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true),
+      )
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
       if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
-        val value = bundle.getString(PasswordDialog.PASSWORD_RESULT_KEY)!!
+        val value = bundle.getString(PasswordDialog.PASSWORD_PHRASE_KEY)!!
+        clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY, true)
         lifecycleScope.launch(dispatcherProvider.main()) {
           decryptWithPassphrase(File(filePath), identifiers, clientState, action, value)
         }
@@ -185,6 +192,8 @@ class AutofillDecryptActivity : BasePGPActivity() {
           Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) },
         )
       }
+      if (features.isEnabled(EnablePGPPassphraseCache))
+        settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
     }
     withContext(dispatcherProvider.main()) { finish() }
   }

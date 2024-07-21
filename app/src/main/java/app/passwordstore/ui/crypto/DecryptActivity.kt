@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.edit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.Application.Companion.screenWasOff
@@ -56,6 +57,7 @@ class DecryptActivity : BasePGPActivity() {
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   private var passwordEntry: PasswordEntry? = null
   private var retries = 0
+  private var clearCache = true
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -200,14 +202,19 @@ class DecryptActivity : BasePGPActivity() {
       decryptWithPassphrase(passphrase = "", gpgIdentifiers, authResult)
       return
     }
-    val dialog = PasswordDialog()
+    val dialog =
+      PasswordDialog(
+        features.isEnabled(EnablePGPPassphraseCache),
+        settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true),
+      )
     if (isError) {
       dialog.setError()
     }
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
       if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
-        val passphrase = bundle.getString(PasswordDialog.PASSWORD_RESULT_KEY)!!
+        val passphrase = bundle.getString(PasswordDialog.PASSWORD_PHRASE_KEY)!!
+        clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY, true)
         lifecycleScope.launch(dispatcherProvider.main()) {
           decryptWithPassphrase(passphrase, gpgIdentifiers, authResult) {
             if (authResult is BiometricResult.Success) {
@@ -231,6 +238,8 @@ class DecryptActivity : BasePGPActivity() {
   ) {
     val result = decryptPGPStream(passphrase, identifiers)
     if (result.isOk) {
+      if (features.isEnabled(EnablePGPPassphraseCache))
+        settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
       val entry = passwordEntryFactory.create(result.value.toByteArray())
       passwordEntry = entry
       createPasswordUI(entry)

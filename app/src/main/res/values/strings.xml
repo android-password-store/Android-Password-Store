@@ -381,4 +381,5 @@
   <string name="biometric_prompt_title_gpg_passphrase_cache">Unlock passphrase cache</string>
   <string name="aead_detect_title">AEAD encryption detected</string>
   <string name="aead_detect_message">%1$s, see https://passwordstore.app/fix-aead for more information</string>
+  <string name="clear_cached_password_on_screen_off">Clear cached password on screen-off</string>
 </resources>
