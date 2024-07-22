@@ -153,7 +153,10 @@ class AutofillDecryptActivity : BasePGPActivity() {
       return
     }
     val dialog =
-      PasswordDialog.newInstance(features.isEnabled(EnablePGPPassphraseCache), clearCache)
+      PasswordDialog.newInstance(
+        cacheEnabled = features.isEnabled(EnablePGPPassphraseCache),
+        clearCache = clearCache,
+      )
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
       if (key == PasswordDialog.PASSWORD_RESULT_KEY) {

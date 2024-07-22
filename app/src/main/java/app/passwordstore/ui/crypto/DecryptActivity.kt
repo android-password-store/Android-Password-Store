@@ -204,7 +204,10 @@ class DecryptActivity : BasePGPActivity() {
       return
     }
     val dialog =
-      PasswordDialog.newInstance(features.isEnabled(EnablePGPPassphraseCache), clearCache)
+      PasswordDialog.newInstance(
+        cacheEnabled = features.isEnabled(EnablePGPPassphraseCache),
+        clearCache = clearCache,
+      )
     if (isError) {
       dialog.setError()
     }

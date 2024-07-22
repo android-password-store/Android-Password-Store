@@ -32,13 +32,11 @@ class PasswordDialog : DialogFragment() {
     builder.setView(binding.root)
     builder.setTitle(R.string.password)
 
-    if (requireArguments().getBoolean(ENABLED_CACHE_ARG_EXTRA, false)) {
-      clearCacheChecked = requireArguments().getBoolean(CLEAR_CACHE_ARG_EXTRA)
-      builder.setMultiChoiceItems(
-        arrayOf(getString(R.string.clear_cached_password_on_screen_off)),
-        BooleanArray(1) { clearCacheChecked },
-      ) { _, _, isChecked ->
-        if (isChecked) clearCacheChecked = true else clearCacheChecked = false
+    if (requireArguments().getBoolean(CACHE_ENABLED_EXTRA, false)) {
+      clearCacheChecked = requireArguments().getBoolean(AUTO_CLEAR_CACHE_EXTRA)
+      binding.autoClearCache.isChecked = clearCacheChecked
+      binding.autoClearCache.setOnCheckedChangeListener { _, isChecked ->
+        clearCacheChecked = isChecked
       }
     }
 
@@ -85,16 +83,16 @@ class PasswordDialog : DialogFragment() {
 
   companion object {
 
-    private const val ENABLED_CACHE_ARG_EXTRA = "ENABLED_CACHE_ARG"
-    private const val CLEAR_CACHE_ARG_EXTRA = "CLEAR_CACHE_ARG"
+    private const val CACHE_ENABLED_EXTRA = "CACHE_ENABLED"
+    private const val AUTO_CLEAR_CACHE_EXTRA = "AUTO_CLEAR_CACHE"
 
     const val PASSWORD_RESULT_KEY = "password_result"
     const val PASSWORD_PHRASE_KEY = "password_phrase"
     const val PASSWORD_CLEAR_KEY = "password_clear"
 
-    fun newInstance(enabledCache: Boolean, clearCache: Boolean): PasswordDialog {
+    fun newInstance(cacheEnabled: Boolean, clearCache: Boolean): PasswordDialog {
       val extras =
-        bundleOf(ENABLED_CACHE_ARG_EXTRA to enabledCache, CLEAR_CACHE_ARG_EXTRA to clearCache)
+        bundleOf(CACHE_ENABLED_EXTRA to cacheEnabled, AUTO_CLEAR_CACHE_EXTRA to clearCache)
       val fragment = PasswordDialog()
       fragment.arguments = extras
       return fragment
