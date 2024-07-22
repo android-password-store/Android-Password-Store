@@ -25,11 +25,21 @@ class PasswordDialog : DialogFragment() {
 
   private val binding by unsafeLazy { DialogPasswordEntryBinding.inflate(layoutInflater) }
   private var isError: Boolean = false
+  private var clearCacheChecked: Boolean = true
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val builder = MaterialAlertDialogBuilder(requireContext())
     builder.setView(binding.root)
     builder.setTitle(R.string.password)
+
+    if (requireArguments().getBoolean(CACHE_ENABLED_EXTRA, false)) {
+      clearCacheChecked = requireArguments().getBoolean(AUTO_CLEAR_CACHE_EXTRA)
+      binding.autoClearCache.isChecked = clearCacheChecked
+      binding.autoClearCache.setOnCheckedChangeListener { _, isChecked ->
+        clearCacheChecked = isChecked
+      }
+    }
+
     builder.setPositiveButton(android.R.string.ok) { _, _ -> setPasswordAndDismiss() }
     val dialog = builder.create()
     dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
@@ -64,11 +74,28 @@ class PasswordDialog : DialogFragment() {
 
   private fun setPasswordAndDismiss() {
     val password = binding.passwordEditText.text.toString()
-    setFragmentResult(PASSWORD_RESULT_KEY, bundleOf(PASSWORD_RESULT_KEY to password))
+    setFragmentResult(
+      PASSWORD_RESULT_KEY,
+      bundleOf(PASSWORD_PHRASE_KEY to password, PASSWORD_CLEAR_KEY to clearCacheChecked),
+    )
     dismissAllowingStateLoss()
   }
 
   companion object {
+
+    private const val CACHE_ENABLED_EXTRA = "CACHE_ENABLED"
+    private const val AUTO_CLEAR_CACHE_EXTRA = "AUTO_CLEAR_CACHE"
+
     const val PASSWORD_RESULT_KEY = "password_result"
+    const val PASSWORD_PHRASE_KEY = "password_phrase"
+    const val PASSWORD_CLEAR_KEY = "password_clear"
+
+    fun newInstance(cacheEnabled: Boolean, clearCache: Boolean): PasswordDialog {
+      val extras =
+        bundleOf(CACHE_ENABLED_EXTRA to cacheEnabled, AUTO_CLEAR_CACHE_EXTRA to clearCache)
+      val fragment = PasswordDialog()
+      fragment.arguments = extras
+      return fragment
+    }
   }
 }
