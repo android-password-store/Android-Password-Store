@@ -21,8 +21,7 @@ import app.passwordstore.util.extensions.unsafeLazy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /** [DialogFragment] to request a password from the user and forward it along. */
-class PasswordDialog(private val enabledCache: Boolean, private val clearCache: Boolean) :
-  DialogFragment() {
+class PasswordDialog : DialogFragment() {
 
   private val binding by unsafeLazy { DialogPasswordEntryBinding.inflate(layoutInflater) }
   private var isError: Boolean = false
@@ -33,10 +32,11 @@ class PasswordDialog(private val enabledCache: Boolean, private val clearCache: 
     builder.setView(binding.root)
     builder.setTitle(R.string.password)
 
-    if (enabledCache) {
+    if (requireArguments().getBoolean(ENABLED_CACHE_ARG_EXTRA, false)) {
+      clearCacheChecked = requireArguments().getBoolean(CLEAR_CACHE_ARG_EXTRA)
       builder.setMultiChoiceItems(
         arrayOf(getString(R.string.clear_cached_password_on_screen_off)),
-        BooleanArray(1) { clearCache },
+        BooleanArray(1) { clearCacheChecked },
       ) { _, _, isChecked ->
         if (isChecked) clearCacheChecked = true else clearCacheChecked = false
       }
@@ -84,8 +84,20 @@ class PasswordDialog(private val enabledCache: Boolean, private val clearCache: 
   }
 
   companion object {
+
+    private const val ENABLED_CACHE_ARG_EXTRA = "ENABLED_CACHE_ARG"
+    private const val CLEAR_CACHE_ARG_EXTRA = "CLEAR_CACHE_ARG"
+
     const val PASSWORD_RESULT_KEY = "password_result"
     const val PASSWORD_PHRASE_KEY = "password_phrase"
     const val PASSWORD_CLEAR_KEY = "password_clear"
+
+    fun newInstance(enabledCache: Boolean, clearCache: Boolean): PasswordDialog {
+      val extras =
+        bundleOf(ENABLED_CACHE_ARG_EXTRA to enabledCache, CLEAR_CACHE_ARG_EXTRA to clearCache)
+      val fragment = PasswordDialog()
+      fragment.arguments = extras
+      return fragment
+    }
   }
 }

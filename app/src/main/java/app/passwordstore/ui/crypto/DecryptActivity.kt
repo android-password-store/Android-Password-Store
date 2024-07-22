@@ -172,7 +172,8 @@ class DecryptActivity : BasePGPActivity() {
         is BiometricResult.Success -> {
           /* clear passphrase cache on first use after application startup or if screen was off;
           also make sure to purge a stale cache after caching has been disabled via PGP settings */
-          if (screenWasOff && settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true)) {
+          clearCache = settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true)
+          if (screenWasOff && clearCache) {
             passphraseCache.clearAllCachedPassphrases(this@DecryptActivity)
             screenWasOff = false
           }
@@ -203,10 +204,7 @@ class DecryptActivity : BasePGPActivity() {
       return
     }
     val dialog =
-      PasswordDialog(
-        features.isEnabled(EnablePGPPassphraseCache),
-        settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true),
-      )
+      PasswordDialog.newInstance(features.isEnabled(EnablePGPPassphraseCache), clearCache)
     if (isError) {
       dialog.setError()
     }
@@ -214,7 +212,7 @@ class DecryptActivity : BasePGPActivity() {
     dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
       if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
         val passphrase = bundle.getString(PasswordDialog.PASSWORD_PHRASE_KEY)!!
-        clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY, true)
+        clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY)
         lifecycleScope.launch(dispatcherProvider.main()) {
           decryptWithPassphrase(passphrase, gpgIdentifiers, authResult) {
             if (authResult is BiometricResult.Success) {

@@ -116,7 +116,8 @@ class AutofillDecryptActivity : BasePGPActivity() {
         is Result.Success -> {
           /* clear passphrase cache on first use after application startup or if screen was off;
           also make sure to purge a stale cache after caching has been disabled via PGP settings */
-          if (screenWasOff && settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true)) {
+          clearCache = settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true)
+          if (screenWasOff && clearCache) {
             passphraseCache.clearAllCachedPassphrases(this@AutofillDecryptActivity)
             screenWasOff = false
           }
@@ -152,15 +153,12 @@ class AutofillDecryptActivity : BasePGPActivity() {
       return
     }
     val dialog =
-      PasswordDialog(
-        features.isEnabled(EnablePGPPassphraseCache),
-        settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true),
-      )
+      PasswordDialog.newInstance(features.isEnabled(EnablePGPPassphraseCache), clearCache)
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
     dialog.setFragmentResultListener(PasswordDialog.PASSWORD_RESULT_KEY) { key, bundle ->
       if (key == PasswordDialog.PASSWORD_RESULT_KEY) {
         val value = bundle.getString(PasswordDialog.PASSWORD_PHRASE_KEY)!!
-        clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY, true)
+        clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY)
         lifecycleScope.launch(dispatcherProvider.main()) {
           decryptWithPassphrase(File(filePath), identifiers, clientState, action, value)
         }
