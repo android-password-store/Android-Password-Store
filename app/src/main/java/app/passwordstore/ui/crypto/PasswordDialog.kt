@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.WindowManager
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -32,7 +33,10 @@ class PasswordDialog : DialogFragment() {
     builder.setView(binding.root)
     builder.setTitle(R.string.password)
 
-    if (requireArguments().getBoolean(CACHE_ENABLED_EXTRA, false)) {
+    val cacheEnabled = requireArguments().getBoolean(CACHE_ENABLED_EXTRA, false)
+    binding.autoClearCache.isVisible = cacheEnabled
+
+    if (cacheEnabled) {
       clearCacheChecked = requireArguments().getBoolean(AUTO_CLEAR_CACHE_EXTRA)
       binding.autoClearCache.isChecked = clearCacheChecked
       binding.autoClearCache.setOnCheckedChangeListener { _, isChecked ->
