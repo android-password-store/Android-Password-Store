@@ -58,6 +58,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import javax.inject.Inject
 import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.PathWalkOption
 import kotlin.io.path.absolute
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.createDirectories
@@ -65,12 +66,12 @@ import kotlin.io.path.deleteRecursively
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
-import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.moveTo
 import kotlin.io.path.name
 import kotlin.io.path.nameWithoutExtension
 import kotlin.io.path.pathString
 import kotlin.io.path.relativeTo
+import kotlin.io.path.walk
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -79,6 +80,7 @@ import logcat.logcat
 
 const val PASSWORD_FRAGMENT_TAG = "PasswordsList"
 
+@OptIn(ExperimentalPathApi::class)
 @AndroidEntryPoint
 class PasswordStore : BaseGitActivity() {
 
@@ -446,7 +448,8 @@ class PasswordStore : BaseGitActivity() {
   fun deletePasswords(selectedItems: List<PasswordItem>) {
     var size = 0
     selectedItems.forEach {
-      if (it.file.isRegularFile()) size++ else size += it.file.listDirectoryEntries().size
+      if (it.file.isRegularFile()) size++
+      else size += it.file.walk(PathWalkOption.INCLUDE_DIRECTORIES).toSet().size
     }
     if (size == 0) {
       selectedItems.map { item -> item.file.deleteRecursively() }
@@ -458,7 +461,7 @@ class PasswordStore : BaseGitActivity() {
       .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
         val filesToDelete = arrayListOf<Path>()
         selectedItems.forEach { item ->
-          if (item.file.isDirectory()) filesToDelete.addAll(item.file.listDirectoryEntries())
+          if (item.file.isDirectory()) filesToDelete.addAll(item.file.walk())
           else filesToDelete.add(item.file)
         }
         selectedItems.map { item -> item.file.deleteRecursively() }
@@ -599,9 +602,7 @@ class PasswordStore : BaseGitActivity() {
         // Recursively list all files (not directories) below `source`, then
         // obtain the corresponding target file by resolving the relative path
         // starting at the destination folder.
-        source.listDirectoryEntries().associateWith {
-          destinationFile.resolve(it.relativeTo(source))
-        }
+        source.walk().associateWith { destinationFile.resolve(it.relativeTo(source)) }
       } else {
         mapOf(source to destinationFile)
       }

@@ -161,7 +161,8 @@ open class BasePGPActivity : AppCompatActivity() {
    */
   fun getPGPIdentifiers(subDir: String): List<PGPIdentifier>? {
     val repoRoot = PasswordRepository.getRepositoryDirectory()
-    // This should ideally be `repoRoot.resolve(subDir)` but for some reason doing that returns `/subDir` as the path
+    // This should ideally be `repoRoot.resolve(subDir)` but for some reason doing that returns
+    // `/subDir` as the path
     // which doesn't work inside `findTillRoot`, so we're doing this manual dance.
     val gpgIdentifierFile =
       Paths.get(repoRoot.absolutePathString(), subDir).findTillRoot(".gpg-id", repoRoot)

@@ -23,12 +23,12 @@ import com.github.michaelbull.result.runCatching
 import com.github.michaelbull.result.unwrap
 import java.nio.file.Paths
 import javax.inject.Inject
+import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createDirectories
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
-import kotlin.io.path.isRegularFile
-import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.readBytes
+import kotlin.io.path.walk
 import kotlin.io.path.writeBytes
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -37,6 +37,7 @@ import org.bouncycastle.openpgp.PGPSecretKeyRing
 import org.pgpainless.PGPainless
 import org.pgpainless.util.selection.userid.SelectUserId
 
+@OptIn(ExperimentalPathApi::class)
 public class PGPKeyManager
 @Inject
 constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
@@ -98,7 +99,7 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
-        val keyFiles = keyDir.listDirectoryEntries().filter { it.isRegularFile() }
+        val keyFiles = keyDir.walk().toSet()
         if (keyFiles.isEmpty()) throw NoKeysAvailableException
         val keys = keyFiles.map { file -> PGPKey(file.readBytes()) }
 
@@ -134,7 +135,7 @@ constructor(filesDir: String, private val dispatcher: CoroutineDispatcher) :
     withContext(dispatcher) {
       runSuspendCatching {
         if (!keyDirExists()) throw KeyDirectoryUnavailableException
-        val keyFiles = keyDir.listDirectoryEntries().filter { it.isRegularFile() }
+        val keyFiles = keyDir.walk().toSet()
         if (keyFiles.isEmpty()) return@runSuspendCatching emptyList()
         keyFiles.map { keyFile -> PGPKey(keyFile.readBytes()) }.toList()
       }

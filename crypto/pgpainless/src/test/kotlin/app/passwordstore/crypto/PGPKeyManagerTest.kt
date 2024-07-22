@@ -9,9 +9,10 @@ import app.passwordstore.crypto.errors.NoKeysAvailableException
 import app.passwordstore.crypto.errors.UnusableKeyException
 import com.github.michaelbull.result.unwrap
 import com.github.michaelbull.result.unwrapError
+import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.absolutePathString
-import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.name
+import kotlin.io.path.walk
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -24,6 +25,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 
+@OptIn(ExperimentalPathApi::class)
 class PGPKeyManagerTest {
 
   @get:Rule val temporaryFolder: TemporaryFolder = TemporaryFolder()
@@ -44,9 +46,9 @@ class PGPKeyManagerTest {
       val keyId = keyManager.getKeyId(keyManager.addKey(secretKey).unwrap())
       assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
       // Check if the keys directory have one file
-      assertEquals(1, filesDir.listDirectoryEntries().size)
+      assertEquals(1, filesDir.walk().toSet().size)
       // Check if the file name is correct
-      val keyFile = keysDir.listDirectoryEntries().first()
+      val keyFile = keysDir.walk().toSet().first()
       assertEquals(keyFile.name, "$keyId.${PGPKeyManager.KEY_EXTENSION}")
     }
 
