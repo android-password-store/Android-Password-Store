@@ -17,6 +17,7 @@ import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.filterValues
+import com.github.michaelbull.result.map
 import com.github.michaelbull.result.mapBoth
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -43,7 +44,10 @@ constructor(
     identities: List<PGPIdentifier>,
     message: ByteArrayInputStream,
     out: ByteArrayOutputStream,
-  ) = withContext(dispatcherProvider.io()) { decryptPgp(password, identities, message, out) }
+  ) =
+    withContext(dispatcherProvider.io()) {
+      decryptPgp(password, identities, message, out).map { out }
+    }
 
   suspend fun isPasswordProtected(identifiers: List<PGPIdentifier>): Boolean {
     val keys = identifiers.map { pgpKeyManager.getKeyById(it) }.filterValues()
@@ -54,7 +58,7 @@ constructor(
     identities: List<PGPIdentifier>,
     content: ByteArrayInputStream,
     out: ByteArrayOutputStream,
-  ) = withContext(dispatcherProvider.io()) { encryptPgp(identities, content, out) }
+  ) = withContext(dispatcherProvider.io()) { encryptPgp(identities, content, out).map { out } }
 
   private suspend fun decryptPgp(
     password: String,

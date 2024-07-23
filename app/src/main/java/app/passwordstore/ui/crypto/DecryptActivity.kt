@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import app.passwordstore.Application.Companion.screenWasOff
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
-import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.crypto.errors.NonStandardAEAD
 import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
@@ -32,8 +31,6 @@ import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.map
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -236,7 +233,9 @@ class DecryptActivity : BasePGPActivity() {
     authResult: BiometricResult,
     onSuccess: suspend () -> Unit = {},
   ) {
-    val result = decryptPGPStream(passphrase, identifiers)
+    val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
+    val outputStream = ByteArrayOutputStream()
+    val result = repository.decrypt(passphrase, identifiers, message, outputStream)
     if (result.isOk) {
       if (features.isEnabled(EnablePGPPassphraseCache))
         settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
@@ -265,17 +264,6 @@ class DecryptActivity : BasePGPActivity() {
         }
         else -> decrypt(isError = true, authResult = authResult)
       }
-    }
-  }
-
-  private suspend fun decryptPGPStream(
-    passphrase: String,
-    gpgIdentifiers: List<PGPIdentifier>,
-  ): Result<ByteArrayOutputStream, CryptoHandlerException> {
-    val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
-    val outputStream = ByteArrayOutputStream()
-    return repository.decrypt(passphrase, gpgIdentifiers, message, outputStream).map {
-      outputStream
     }
   }
 
