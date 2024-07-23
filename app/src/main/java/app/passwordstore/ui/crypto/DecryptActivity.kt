@@ -168,7 +168,6 @@ class DecryptActivity : BasePGPActivity() {
         is BiometricResult.Failure,
         is BiometricResult.HardwareUnavailableOrDisabled ->
           askPassphrase(isError, gpgIdentifiers, authResult)
-        //
         is BiometricResult.Success -> {
           /* clear passphrase cache on first use after application startup or if screen was off;
           also make sure to purge a stale cache after caching has been disabled via PGP settings */

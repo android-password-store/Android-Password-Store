@@ -23,7 +23,7 @@ import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.crypto.BasePGPActivity
 import app.passwordstore.ui.crypto.PasswordDialog
 import app.passwordstore.util.auth.BiometricAuthenticator
-import app.passwordstore.util.auth.BiometricAuthenticator.Result
+import app.passwordstore.util.auth.BiometricAuthenticator.Result as BiometricResult
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
 import app.passwordstore.util.autofill.DirectoryStructure
@@ -87,7 +87,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
           decrypt(filePath, clientState, action, authResult)
         }
       } else {
-        decrypt(filePath, clientState, action, Result.CanceledByUser)
+        decrypt(filePath, clientState, action, BiometricResult.CanceledByUser)
       }
     }
   }
@@ -96,7 +96,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
     filePath: String,
     clientState: Bundle,
     action: AutofillAction,
-    authResult: Result,
+    authResult: BiometricResult,
   ) {
     val gpgIdentifiers =
       getPGPIdentifiers(
@@ -105,15 +105,14 @@ class AutofillDecryptActivity : BasePGPActivity() {
     lifecycleScope.launch(dispatcherProvider.main()) {
       when (authResult) {
         // Internally handled by the prompt dialog
-        is Result.Retry -> {}
+        is BiometricResult.Retry -> {}
         // If the dialog is dismissed for any reason, prompt for passphrase
-        is Result.CanceledBySystem,
-        is Result.CanceledByUser,
-        is Result.Failure,
-        is Result.HardwareUnavailableOrDisabled ->
+        is BiometricResult.CanceledBySystem,
+        is BiometricResult.CanceledByUser,
+        is BiometricResult.Failure,
+        is BiometricResult.HardwareUnavailableOrDisabled ->
           askPassphrase(filePath, gpgIdentifiers, clientState, action)
-        //
-        is Result.Success -> {
+        is BiometricResult.Success -> {
           /* clear passphrase cache on first use after application startup or if screen was off;
           also make sure to purge a stale cache after caching has been disabled via PGP settings */
           clearCache = settings.getBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, true)
