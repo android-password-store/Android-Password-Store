@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import app.passwordstore.Application.Companion.screenWasOff
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
+import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.data.crypto.PGPPassphraseCache
 import app.passwordstore.data.passfile.PasswordEntry
 import app.passwordstore.data.repo.PasswordRepository
@@ -33,11 +34,14 @@ import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
+import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.map
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
@@ -209,20 +213,16 @@ class AutofillDecryptActivity : BasePGPActivity() {
         return null
       }
       .onSuccess { encryptedInput ->
-        runCatching {
-            withContext(dispatcherProvider.io()) {
-              val outputStream = ByteArrayOutputStream()
-              repository.decrypt(password, identifiers, encryptedInput, outputStream)
-              outputStream
-            }
-          }
+        decryptPGPStream(encryptedInput, password, identifiers)
           .onFailure { e ->
             logcat(ERROR) { e.asLog("Decryption failed") }
             return null
           }
           .onSuccess { result ->
             return runCatching {
-                passphraseCache.cachePassphrase(this, identifiers.first(), password)
+                if (features.isEnabled(EnablePGPPassphraseCache)) {
+                  passphraseCache.cachePassphrase(this, identifiers.first(), password)
+                }
                 val entry = passwordEntryFactory.create(result.toByteArray())
                 AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
               }
@@ -233,6 +233,17 @@ class AutofillDecryptActivity : BasePGPActivity() {
           }
       }
     return null
+  }
+
+  private suspend fun decryptPGPStream(
+    message: ByteArrayInputStream,
+    passphrase: String,
+    gpgIdentifiers: List<PGPIdentifier>,
+  ): Result<ByteArrayOutputStream, CryptoHandlerException> {
+    val outputStream = ByteArrayOutputStream()
+    return repository.decrypt(passphrase, gpgIdentifiers, message, outputStream).map {
+      outputStream
+    }
   }
 
   companion object {
