@@ -75,11 +75,31 @@ class PGPSettings(
         titleRes = R.string.pref_passphrase_cache_auto_clear_title
         summaryRes = R.string.pref_passphrase_cache_auto_clear_summary
         defaultValue = true
-        /* clear cache once when unchecking; this is to prevent a malicious user
-         * from bypassing cache clearing via the settings */
+        /* Clear the cache once when unchecking; this is to prevent a malicious user (someone
+         * knowing the screen-lock pin, but not knowing the PGP passphrase) from bypassing cache
+         * clearing via the settings. However, clearing EncryptedSharedPreferences requires
+         * authentication, otherwise the app crashes. Thus, the bad user could still bypass cache
+         * clearing by dismissing the auhentication dialog. To prevent this, we enforce cache
+         * clearing to stay enabled in case of any authentication failure. */
         onCheckedChange { checked ->
-          if (!checked)
-            activity.lifecycleScope.launch { passphraseCache.clearAllCachedPassphrases(activity) }
+          if (!checked) {
+            if (BiometricAuthenticator.canAuthenticate(activity)) {
+              BiometricAuthenticator.authenticate(
+                activity,
+                R.string.pref_passphrase_cache_auto_clear_authenticate_disable,
+              ) {
+                if (it is BiometricAuthenticator.Result.Success) {
+                  activity.lifecycleScope.launch {
+                    passphraseCache.clearAllCachedPassphrases(activity)
+                  }
+                } else {
+                  activity.sharedPrefs.edit { remove(PreferenceKeys.CLEAR_PASSPHRASE_CACHE) }
+                }
+              }
+            } else {
+              activity.sharedPrefs.edit { remove(PreferenceKeys.CLEAR_PASSPHRASE_CACHE) }
+            }
+          }
           true
         }
       }
