@@ -38,7 +38,7 @@ jobs:
           ref: ${{ env.CHECKOUT_REF }}
 
       - name: Update changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@77ac767b2f7f6edf2ee72ab3364ed26667086f96 # 3.0.0
+        uses: thomaseizinger/keep-a-changelog-new-release@f62c3c390716df5af712ba5d94f4f4a8efc1306d # 3.1.0
         with:
           version: ${{ github.event.milestone.title }}
 
