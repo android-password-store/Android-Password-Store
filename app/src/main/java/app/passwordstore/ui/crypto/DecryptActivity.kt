@@ -31,6 +31,8 @@ import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -41,6 +43,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
+import logcat.asLog
 import logcat.logcat
 
 @AndroidEntryPoint
@@ -214,13 +217,17 @@ class DecryptActivity : BasePGPActivity() {
         clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY)
         lifecycleScope.launch(dispatcherProvider.main()) {
           decryptWithPassphrase(passphrase, gpgIdentifiers, authResult) {
-            if (authResult is BiometricResult.Success) {
-              passphraseCache.cachePassphrase(
-                this@DecryptActivity,
-                gpgIdentifiers.first(),
-                passphrase,
-              )
-            }
+            runCatching {
+                if (authResult is BiometricResult.Success) {
+                  passphraseCache.cachePassphrase(
+                    this@DecryptActivity,
+                    gpgIdentifiers.first(),
+                    passphrase,
+                  )
+                  settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
+                }
+              }
+              .onFailure { e -> logcat { e.asLog() } }
           }
         }
       }
@@ -237,8 +244,6 @@ class DecryptActivity : BasePGPActivity() {
     val outputStream = ByteArrayOutputStream()
     val result = repository.decrypt(passphrase, identifiers, message, outputStream)
     if (result.isOk) {
-      if (features.isEnabled(EnablePGPPassphraseCache))
-        settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
       val entry = passwordEntryFactory.create(result.value.toByteArray())
       passwordEntry = entry
       createPasswordUI(entry)

@@ -44,6 +44,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
+import logcat.asLog
 import logcat.logcat
 
 @AndroidEntryPoint
@@ -192,8 +193,6 @@ class AutofillDecryptActivity : BasePGPActivity() {
           Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) },
         )
       }
-      if (features.isEnabled(EnablePGPPassphraseCache))
-        settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
     }
     withContext(dispatcherProvider.main()) { finish() }
   }
@@ -218,9 +217,15 @@ class AutofillDecryptActivity : BasePGPActivity() {
           }
           .onSuccess { result ->
             return runCatching {
-                if (features.isEnabled(EnablePGPPassphraseCache)) {
-                  passphraseCache.cachePassphrase(this, identifiers.first(), password)
-                }
+                runCatching {
+                    if (features.isEnabled(EnablePGPPassphraseCache)) {
+                      passphraseCache.cachePassphrase(this, identifiers.first(), password)
+                      settings.edit {
+                        putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache)
+                      }
+                    }
+                  }
+                  .onFailure { e -> logcat { e.asLog() } }
                 val entry = passwordEntryFactory.create(result.toByteArray())
                 AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
               }
