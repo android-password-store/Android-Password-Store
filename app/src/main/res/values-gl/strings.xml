@@ -120,7 +120,6 @@
   <string name="pref_pgp_ascii_armor_title">Cifrar co modo ASCII armor</string>
   <string name="pref_passphrase_cache_title">Permitir usar a caché para frase de paso</string>
   <string name="pref_passphrase_cache_summary">AVISO: esta característica funciona ben pero é experimental. Require que a pantalla estea bloqueada.</string>
-  <string name="pref_passphrase_cache_authenticate_enable">Autenticarse para activar a caché</string>
   <string name="pref_passphrase_cache_auto_clear_title">Limpar automáticamente a frase de paso da caché</string>
   <string name="pref_passphrase_cache_auto_clear_summary">Retira automáticamente a frase de paso da caché ao apagarse a pantalla</string>
   <!-- PasswordGenerator fragment -->
