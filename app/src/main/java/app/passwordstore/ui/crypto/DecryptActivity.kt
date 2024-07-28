@@ -24,6 +24,7 @@ import app.passwordstore.ui.adapters.FieldItemAdapter
 import app.passwordstore.ui.dialogs.BasicBottomSheet
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result as BiometricResult
+import app.passwordstore.util.extensions.asLog
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
@@ -31,6 +32,8 @@ import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
 import app.passwordstore.util.settings.Constants
 import app.passwordstore.util.settings.PreferenceKeys
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -214,13 +217,19 @@ class DecryptActivity : BasePGPActivity() {
         clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY)
         lifecycleScope.launch(dispatcherProvider.main()) {
           decryptWithPassphrase(passphrase, gpgIdentifiers, authResult) {
-            if (authResult is BiometricResult.Success) {
-              passphraseCache.cachePassphrase(
-                this@DecryptActivity,
-                gpgIdentifiers.first(),
-                passphrase,
-              )
-            }
+            runCatching {
+                if (authResult is BiometricResult.Success) {
+                  passphraseCache.cachePassphrase(
+                    this@DecryptActivity,
+                    gpgIdentifiers.first(),
+                    passphrase,
+                  )
+                  settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
+                }
+              }
+              .onFailure { e ->
+                logcat(ERROR) { e.asLog("Failed to write passphrase to the cache") }
+              }
           }
         }
       }
@@ -237,8 +246,6 @@ class DecryptActivity : BasePGPActivity() {
     val outputStream = ByteArrayOutputStream()
     val result = repository.decrypt(passphrase, identifiers, message, outputStream)
     if (result.isOk) {
-      if (features.isEnabled(EnablePGPPassphraseCache))
-        settings.edit { putBoolean(PreferenceKeys.CLEAR_PASSPHRASE_CACHE, clearCache) }
       val entry = passwordEntryFactory.create(result.value.toByteArray())
       passwordEntry = entry
       createPasswordUI(entry)
