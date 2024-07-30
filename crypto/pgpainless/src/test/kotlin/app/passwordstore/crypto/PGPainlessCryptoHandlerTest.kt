@@ -181,4 +181,40 @@ class PGPainlessCryptoHandlerTest {
     assertTrue { cryptoHandler.canHandle("example.com.gpg") }
     assertFalse { cryptoHandler.canHandle("example.com.asc") }
   }
+
+  @Test
+  fun decryptWithPublicKeys() {
+    val alice =
+      PGPainless.generateKeyRing().modernKeyRing("Alice <owner@example.com>", KEY_PASSPHRASE)
+    val bob = PGPainless.generateKeyRing().modernKeyRing("Bob <owner@example.com>", KEY_PASSPHRASE)
+    val bobCertificate = PGPainless.extractCertificate(bob)
+    val aliceKey = PGPKey(PGPainless.asciiArmor(alice).encodeToByteArray())
+    val bobPublicKey = PGPKey(PGPainless.asciiArmor(bobCertificate).encodeToByteArray())
+    val ciphertextStream = ByteArrayOutputStream()
+    val encryptRes =
+      cryptoHandler.encrypt(
+        listOf(aliceKey, bobPublicKey),
+        PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
+        ciphertextStream,
+        PGPEncryptOptions.Builder().withAsciiArmor(true).build(),
+      )
+    assertTrue(encryptRes.isOk)
+    val message = ciphertextStream.toByteArray().decodeToString()
+    val info = MessageInspector.determineEncryptionInfoForMessage(message)
+    assertTrue(info.isEncrypted)
+    assertEquals(2, info.keyIds.size)
+    assertFalse(info.isSignedOnly)
+
+    val ciphertextStreamCopy = message.byteInputStream()
+    val plaintextStream = ByteArrayOutputStream()
+    val res =
+      cryptoHandler.decrypt(
+        listOf(aliceKey, bobPublicKey),
+        KEY_PASSPHRASE,
+        ciphertextStreamCopy,
+        plaintextStream,
+        PGPDecryptOptions.Builder().build(),
+      )
+    assertTrue(res.isOk)
+  }
 }
