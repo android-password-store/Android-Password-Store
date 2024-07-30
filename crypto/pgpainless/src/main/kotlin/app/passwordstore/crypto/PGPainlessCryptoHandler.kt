@@ -54,7 +54,7 @@ public class PGPainlessCryptoHandler @Inject constructor() :
         }
         val keyringCollection =
           keys
-            .map { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
+            .mapNotNull { key -> PGPainless.readKeyRing().secretKeyRing(key.contents) }
             .run(::PGPSecretKeyRingCollection)
         val protector = SecretKeyRingProtector.unlockAnyKeyWith(Passphrase.fromPassword(passphrase))
         val decryptionStream =
