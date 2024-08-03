@@ -62,8 +62,6 @@ class PGPSettings(
                     putBoolean(Feature.EnablePGPPassphraseCache.configKey, checked)
                     if (!checked) remove(PreferenceKeys.CLEAR_PASSPHRASE_CACHE)
                   }
-                  if (!checked)
-                    activity.sharedPrefs.edit { remove(PreferenceKeys.CLEAR_PASSPHRASE_CACHE) }
                 }
                 is BiometricAuthenticator.Result.Retry -> {}
                 else -> {
