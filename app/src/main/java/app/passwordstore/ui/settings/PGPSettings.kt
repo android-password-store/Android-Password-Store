@@ -48,8 +48,8 @@ class PGPSettings(
         defaultValue = false
         onClick {
           if (BiometricAuthenticator.canAuthenticate(activity)) {
-            var promptTitle = R.string.pref_passphrase_cache_authenticate_disable
-            if (checked) promptTitle = R.string.pref_passphrase_cache_authenticate_enable
+            val promptTitle = if (checked) R.string.pref_passphrase_cache_authenticate_enable else R.string.pref_passphrase_cache_authenticate_disable
+            
             BiometricAuthenticator.authenticate(activity, promptTitle) { result ->
               when (result) {
                 is BiometricAuthenticator.Result.Success -> {
