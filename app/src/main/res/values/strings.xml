@@ -138,6 +138,7 @@
   <string name="pref_passphrase_cache_title">Enable passphrase caching</string>
   <string name="pref_passphrase_cache_summary">WARNING: this feature is functional but very experimental. Requires an active screen lock.</string>
   <string name="pref_passphrase_cache_authenticate_enable">Authenticate to enable cache</string>
+  <string name="pref_passphrase_cache_authenticate_disable">Authenticate to disable cache</string>
   <string name="pref_passphrase_cache_auto_clear_authenticate_disable">Authenticate to disable cache clearing</string>
   <string name="pref_passphrase_cache_auto_clear_title">Automatically clear passphrase cache</string>
   <string name="pref_passphrase_cache_auto_clear_summary">Clears the passphrase cache when the screen is turned off</string>
