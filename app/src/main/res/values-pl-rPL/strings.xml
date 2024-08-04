@@ -116,6 +116,7 @@
   <string name="pref_pgp_key_manager_title">Menedżer kluczy</string>
   <string name="pref_pgp_ascii_armor_title">Szyfruj w trybie ASCII-armor</string>
   <string name="pref_passphrase_cache_summary">UWAGA: ta funkcjonalność powinna działać poprawnie, ale jest bardzo eksperymentalna. Wymaga aktywnej blokady ekranu.</string>
+  <string name="pref_passphrase_cache_authenticate_enable">Uwierzytelnij, aby włączyć pamięć podręczną</string>
   <string name="pref_passphrase_cache_auto_clear_title">Automatycznie wyczyść pamięć podręczną haseł</string>
   <string name="pref_passphrase_cache_auto_clear_summary">Czyści pamięć podręczną haseł po wyłączeniu ekranu</string>
   <!-- PasswordGenerator fragment -->
