@@ -33,6 +33,8 @@ android {
   buildFeatures { compose = true }
   composeOptions { useLiveLiterals = false }
 
+  androidResources { generateLocaleConfig = true }
+
   packaging { resources.excludes.add("META-INF/versions/**") }
 }
 
