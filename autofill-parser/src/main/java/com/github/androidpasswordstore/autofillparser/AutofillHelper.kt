@@ -50,7 +50,10 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
   @SuppressLint("PackageManagerGetSignatures")
   @Suppress("DEPRECATION")
   val signaturesOld =
-    context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNATURES).signatures
+    context.packageManager
+      .getPackageInfo(appPackage, PackageManager.GET_SIGNATURES)
+      .signatures
+      .orEmpty()
   val stableHashOld = stableHash(signaturesOld.map { it.toByteArray() })
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     val info =
@@ -63,7 +66,7 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
         context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNING_CERTIFICATES)
       }
     val signaturesNew =
-      info.signingInfo.signingCertificateHistory ?: info.signingInfo.apkContentsSigners
+      info.signingInfo?.signingCertificateHistory ?: info.signingInfo?.apkContentsSigners.orEmpty()
     val stableHashNew = stableHash(signaturesNew.map { it.toByteArray() })
     if (stableHashNew != stableHashOld)
       logcat("CertificatesHash", ERROR) {

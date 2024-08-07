@@ -41,7 +41,9 @@ class ShortcutHandler @Inject constructor(@ApplicationContext val context: Conte
     val shortcuts = shortcutManager.dynamicShortcuts
     // If we're above or equal to the maximum shortcuts allowed, drop the last item.
     if (shortcuts.size >= MAX_SHORTCUT_COUNT) {
-      shortcuts.removeLast()
+      // We'd just do List.removeLast but the Kotlin stdlib extension gets shadowed by the API 35
+      // JDK implementation
+      shortcuts.removeAt(shortcuts.lastIndex)
     }
     // Reverse the list so we can append our new shortcut at the 'end'.
     shortcuts.reverse()
