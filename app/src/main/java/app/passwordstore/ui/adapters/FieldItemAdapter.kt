@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import app.passwordstore.Application.Companion.otpLabelFormat
 import app.passwordstore.R
 import app.passwordstore.data.passfile.Totp
 import app.passwordstore.data.password.FieldItem
@@ -44,7 +45,7 @@ class FieldItemAdapter(
       fieldItemList.mapIndexed { position, item ->
         if (item.key.startsWith(FieldItem.ItemType.OTP.type, true)) {
           otpItemPosition = position
-          return@mapIndexed FieldItem.createOtpField(totp)
+          return@mapIndexed FieldItem.createOtpField(totp, otpLabelFormat)
         }
 
         return@mapIndexed item

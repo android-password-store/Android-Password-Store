@@ -12,6 +12,7 @@ import android.view.MenuItem
 import androidx.core.content.edit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
+import app.passwordstore.Application.Companion.otpLabelFormat
 import app.passwordstore.Application.Companion.screenWasOff
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
@@ -136,8 +137,12 @@ class DecryptActivity : BasePGPActivity() {
     intent.putExtra("FILE_PATH", relativeParentPath)
     intent.putExtra("REPO_PATH", repoPath)
     intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
+    intent.putExtra(PasswordCreationActivity.EXTRA_USERNAME, passwordEntry?.username)
     intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
-    intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContentString)
+    intent.putExtra(
+      PasswordCreationActivity.EXTRA_EXTRA_CONTENT,
+      passwordEntry?.extraContentWithoutUsername,
+    )
     intent.putExtra(PasswordCreationActivity.EXTRA_EDITING, true)
     startActivity(intent)
     finish()
@@ -279,18 +284,19 @@ class DecryptActivity : BasePGPActivity() {
 
       val items = arrayListOf<FieldItem>()
       if (!entry.password.isNullOrBlank()) {
-        items.add(FieldItem.createPasswordField(entry.password!!))
+        items.add(FieldItem.createPasswordField(entry.password!!, getString(R.string.password)))
         if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
           copyPasswordToClipboard(entry.password)
         }
       }
 
+      otpLabelFormat = getString(R.string.otp_label_format)
       if (entry.hasTotp()) {
-        items.add(FieldItem.createOtpField(entry.totp.first()))
+        items.add(FieldItem.createOtpField(entry.totp.first(), otpLabelFormat))
       }
 
       if (!entry.username.isNullOrBlank()) {
-        items.add(FieldItem.createUsernameField(entry.username!!))
+        items.add(FieldItem.createUsernameField(entry.username!!, getString(R.string.username)))
       }
 
       entry.extraContent.forEach { (key, value) ->

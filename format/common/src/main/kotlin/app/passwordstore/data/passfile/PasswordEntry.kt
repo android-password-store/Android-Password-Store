@@ -80,6 +80,9 @@ constructor(
       return otp.value.value
     }
 
+  /** String representation of [extraContent] but with usernames stripped. */
+  public val extraContentWithoutUsername: String
+
   /**
    * String representation of [extraContent] but with authentication related data such as TOTP URIs
    * and usernames stripped.
@@ -91,6 +94,7 @@ constructor(
     val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))
     password = foundPassword
     extraContentString = passContent.joinToString("\n")
+    extraContentWithoutUsername = generateExtraContentWithoutUsername()
     extraContentWithoutAuthData = generateExtraContentWithoutAuthData()
     extraContent = generateExtraContentPairs()
     username = findUsername()
@@ -121,7 +125,7 @@ constructor(
     return Pair(passContent[0], passContent.minus(passContent[0]))
   }
 
-  private fun generateExtraContentWithoutAuthData(): String {
+  private fun generateExtraContentWithoutUsername(): String {
     var foundUsername = false
     return extraContentString
       .lineSequence()
@@ -132,6 +136,19 @@ constructor(
             foundUsername = true
             false
           }
+          else -> {
+            true
+          }
+        }
+      }
+      .joinToString(separator = "\n")
+  }
+
+  private fun generateExtraContentWithoutAuthData(): String {
+    return generateExtraContentWithoutUsername()
+      .lineSequence()
+      .filter { line ->
+        return@filter when {
           TotpFinder.TOTP_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } -> {
             false
           }

@@ -78,6 +78,7 @@ class PasswordCreationActivity : BasePGPActivity() {
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
 
   private val suggestedName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
+  private val suggestedUsername by unsafeLazy { intent.getStringExtra(EXTRA_USERNAME) }
   private val suggestedPass by unsafeLazy { intent.getStringExtra(EXTRA_PASSWORD) }
   private val suggestedExtra by unsafeLazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
   private val shouldGeneratePassword by unsafeLazy {
@@ -205,6 +206,16 @@ class PasswordCreationActivity : BasePGPActivity() {
       } else {
         filename.requestFocus()
       }
+
+      if (
+        AutofillPreferences.directoryStructure(this@PasswordCreationActivity) ==
+          DirectoryStructure.EncryptedUsername || suggestedUsername != null
+      ) {
+        usernameInputLayout.apply { visibility = View.VISIBLE }
+        if (suggestedUsername != null) username.setText(suggestedUsername)
+        else if (suggestedName != null) username.requestFocus()
+      }
+
       // Allow the user to quickly switch between storing the username as the filename or
       // in the encrypted extras. This only makes sense if the directory structure is
       // FileBased.
@@ -217,27 +228,19 @@ class PasswordCreationActivity : BasePGPActivity() {
           visibility = View.VISIBLE
           setOnClickListener {
             if (isChecked) {
-              // User wants to enable username encryption, so we add it to the
-              // encrypted extras as the first line.
-              val username = filename.text.toString()
-              val extras = "username:$username\n${extraContent.text}"
-
+              // User wants to enable username encryption, so we use the filename
+              // as username and insert it into the username input field.
+              val login = filename.text.toString()
               filename.text?.clear()
-              extraContent.setText(extras)
+              username.setText(login)
+              usernameInputLayout.apply { visibility = View.VISIBLE }
             } else {
-              // User wants to disable username encryption, so we extract the
-              // username from the encrypted extras and use it as the filename.
-              val entry =
-                passwordEntryFactory.create("PASSWORD\n${extraContent.text}".encodeToByteArray())
-              val username = entry.username
-
-              // username should not be null here by the logic in
-              // updateViewState, but it could still happen due to
-              // input lag.
-              if (username != null) {
-                filename.setText(username)
-                extraContent.setText(entry.extraContentWithoutAuthData)
-              }
+              // User wants to disable username encryption, so we take the username
+              // from the username text field and insert it into the filename input field.
+              val login = username.text.toString()
+              username.text?.clear()
+              filename.setText(login)
+              usernameInputLayout.apply { visibility = View.GONE }
             }
           }
         }
@@ -252,7 +255,7 @@ class PasswordCreationActivity : BasePGPActivity() {
         password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
       }
     }
-    listOf(binding.filename, binding.extraContent).forEach {
+    listOf(binding.filename, binding.username, binding.extraContent).forEach {
       it.doAfterTextChanged { updateViewState() }
     }
     updateViewState()
@@ -300,16 +303,16 @@ class PasswordCreationActivity : BasePGPActivity() {
 
   private fun updateViewState() =
     with(binding) {
-      // Use PasswordEntry to parse extras for username
-      val entry =
-        passwordEntryFactory.create("PLACEHOLDER\n${extraContent.text}".encodeToByteArray())
       encryptUsername.apply {
         if (visibility != View.VISIBLE) return@apply
         val hasUsernameInFileName = filename.text.toString().isNotBlank()
-        val hasUsernameInExtras = !entry.username.isNullOrBlank()
-        isEnabled = hasUsernameInFileName xor hasUsernameInExtras
-        isChecked = hasUsernameInExtras
+        val usernameIsEncrypted = username.text.toString().isNotEmpty()
+        isEnabled = hasUsernameInFileName xor usernameIsEncrypted
+        isChecked = usernameIsEncrypted
       }
+      // Use PasswordEntry to parse extras for OTP
+      val entry =
+        passwordEntryFactory.create("PLACEHOLDER\n${extraContent.text}".encodeToByteArray())
       otpImportButton.isVisible = !entry.hasTotp()
     }
 
@@ -318,6 +321,7 @@ class PasswordCreationActivity : BasePGPActivity() {
     with(binding) {
       val oldName = suggestedName
       val editName = filename.text.toString().trim()
+      var editUsername = username.text.toString()
       val editPass = password.text.toString()
       val editExtra = extraContent.text.toString()
 
@@ -327,6 +331,10 @@ class PasswordCreationActivity : BasePGPActivity() {
       } else if (editName.contains('/')) {
         snackbar(message = resources.getString(R.string.invalid_filename_text))
         return@with
+      }
+
+      if (!editUsername.isEmpty()) {
+        editUsername = "\nusername:$editUsername"
       }
 
       if (editPass.isEmpty() && editExtra.isEmpty()) {
@@ -340,7 +348,7 @@ class PasswordCreationActivity : BasePGPActivity() {
 
       // pass enters the key ID into `.gpg-id`.
       val gpgIdentifiers = getPGPIdentifiers(directory.text.toString()) ?: return@with
-      val content = "$editPass\n$editExtra"
+      val content = "$editPass$editUsername\n$editExtra"
       val path =
         when {
           // If we allowed the user to edit the relative path, we have to consider it here
@@ -482,6 +490,7 @@ class PasswordCreationActivity : BasePGPActivity() {
     const val RETURN_EXTRA_USERNAME = "USERNAME"
     const val RETURN_EXTRA_PASSWORD = "PASSWORD"
     const val EXTRA_FILE_NAME = "FILENAME"
+    const val EXTRA_USERNAME = "USERNAME"
     const val EXTRA_PASSWORD = "PASSWORD"
     const val EXTRA_EXTRA_CONTENT = "EXTRA_CONTENT"
     const val EXTRA_GENERATE_PASSWORD = "GENERATE_PASSWORD"

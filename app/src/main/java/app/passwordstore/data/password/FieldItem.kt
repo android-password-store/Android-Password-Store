@@ -14,7 +14,7 @@ class FieldItem(val key: String, val value: String, val action: ActionType) {
   }
 
   enum class ItemType(val type: String, val label: String) {
-    USERNAME("Username", "Username"),
+    USERNAME("Username", "User ID"),
     PASSWORD("Password", "Password"),
     OTP("OTP", "OTP (expires in %ds)"),
   }
@@ -22,20 +22,16 @@ class FieldItem(val key: String, val value: String, val action: ActionType) {
   companion object {
 
     // Extra helper methods
-    fun createOtpField(totp: Totp): FieldItem {
-      return FieldItem(
-        ItemType.OTP.label.format(totp.remainingTime.inWholeSeconds),
-        totp.value,
-        ActionType.COPY,
-      )
+    fun createOtpField(totp: Totp, label: String): FieldItem {
+      return FieldItem(label.format(totp.remainingTime.inWholeSeconds), totp.value, ActionType.COPY)
     }
 
-    fun createPasswordField(password: String): FieldItem {
-      return FieldItem(ItemType.PASSWORD.label, password, ActionType.HIDE)
+    fun createPasswordField(password: String, label: String): FieldItem {
+      return FieldItem(label, password, ActionType.HIDE)
     }
 
-    fun createUsernameField(username: String): FieldItem {
-      return FieldItem(ItemType.USERNAME.label, username, ActionType.COPY)
+    fun createUsernameField(username: String, label: String): FieldItem {
+      return FieldItem(label, username, ActionType.COPY)
     }
   }
 }
