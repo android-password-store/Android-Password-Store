@@ -136,8 +136,12 @@ class DecryptActivity : BasePGPActivity() {
     intent.putExtra("FILE_PATH", relativeParentPath)
     intent.putExtra("REPO_PATH", repoPath)
     intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
+    intent.putExtra(PasswordCreationActivity.EXTRA_USERNAME, passwordEntry?.username)
     intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
-    intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContentString)
+    intent.putExtra(
+      PasswordCreationActivity.EXTRA_EXTRA_CONTENT,
+      passwordEntry?.extraContentWithoutUsername,
+    )
     intent.putExtra(PasswordCreationActivity.EXTRA_EDITING, true)
     startActivity(intent)
     finish()
@@ -274,27 +278,28 @@ class DecryptActivity : BasePGPActivity() {
 
   private suspend fun createPasswordUI(entry: PasswordEntry) =
     withContext(dispatcherProvider.main()) {
+      val labelFormat = resources.getString(R.string.otp_label_format)
       val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
       invalidateOptionsMenu()
 
       val items = arrayListOf<FieldItem>()
       if (!entry.password.isNullOrBlank()) {
-        items.add(FieldItem.createPasswordField(entry.password!!))
+        items.add(FieldItem.createPasswordField(getString(R.string.password), entry.password!!))
         if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
           copyPasswordToClipboard(entry.password)
         }
       }
 
       if (entry.hasTotp()) {
-        items.add(FieldItem.createOtpField(entry.totp.first()))
+        items.add(FieldItem.createOtpField(labelFormat, entry.totp.first()))
       }
 
       if (!entry.username.isNullOrBlank()) {
-        items.add(FieldItem.createUsernameField(entry.username!!))
+        items.add(FieldItem.createUsernameField(getString(R.string.username), entry.username!!))
       }
 
       entry.extraContent.forEach { (key, value) ->
-        items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
+        items.add(FieldItem.createFreeformField(key, value))
       }
 
       val adapter = FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
@@ -302,7 +307,7 @@ class DecryptActivity : BasePGPActivity() {
       binding.recyclerView.itemAnimator = null
 
       if (entry.hasTotp()) {
-        lifecycleScope.launch { entry.totp.collect(adapter::updateOTPCode) }
+        lifecycleScope.launch { entry.totp.collect { adapter.updateOTPCode(it, labelFormat) } }
       }
     }
 
