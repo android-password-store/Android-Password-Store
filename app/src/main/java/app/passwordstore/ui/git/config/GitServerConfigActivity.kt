@@ -30,6 +30,12 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteRecursively
+import kotlin.io.path.exists
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.name
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -220,17 +226,16 @@ class GitServerConfigActivity : BaseGitActivity() {
     }
 
   /** Clones the repository, the directory exists, deletes it */
+  @OptIn(ExperimentalPathApi::class)
   private fun cloneRepository() {
     val localDir =
       requireNotNull(PasswordRepository.getRepositoryDirectory()) {
         "Repository directory must be set before cloning"
       }
-    val localDirFiles = localDir.listFiles() ?: emptyArray()
+    val localDirFiles = if (localDir.exists()) localDir.listDirectoryEntries() else listOf()
     // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
     if (
-      localDir.exists() &&
-        localDirFiles.isNotEmpty() &&
-        !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")
+      localDirFiles.isNotEmpty() && !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")
     ) {
       MaterialAlertDialogBuilder(this)
         .setTitle(R.string.dialog_delete_title)
@@ -246,7 +251,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                   )
                 withContext(dispatcherProvider.io()) {
                   localDir.deleteRecursively()
-                  localDir.mkdirs()
+                  localDir.createDirectories()
                 }
                 snackbar.dismiss()
                 launchGitOperation(GitOp.CLONE)

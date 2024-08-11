@@ -9,7 +9,10 @@ import app.passwordstore.crypto.errors.NoKeysAvailableException
 import app.passwordstore.crypto.errors.UnusableKeyException
 import com.github.michaelbull.result.unwrap
 import com.github.michaelbull.result.unwrapError
-import java.io.File
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.name
+import kotlin.io.path.walk
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -22,13 +25,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 
+@OptIn(ExperimentalPathApi::class)
 class PGPKeyManagerTest {
 
   @get:Rule val temporaryFolder: TemporaryFolder = TemporaryFolder()
   private val dispatcher = StandardTestDispatcher()
-  private val filesDir by unsafeLazy { temporaryFolder.root }
-  private val keysDir by unsafeLazy { File(filesDir, PGPKeyManager.KEY_DIR_NAME) }
-  private val keyManager by unsafeLazy { PGPKeyManager(filesDir.absolutePath, dispatcher) }
+  private val filesDir by unsafeLazy { temporaryFolder.root.toPath() }
+  private val keysDir by unsafeLazy { filesDir.resolve(PGPKeyManager.KEY_DIR_NAME) }
+  private val keyManager by unsafeLazy { PGPKeyManager(filesDir.absolutePathString(), dispatcher) }
   private val secretKey = PGPKey(TestUtils.getArmoredSecretKey())
   private val publicKey = PGPKey(TestUtils.getArmoredPublicKey())
 
@@ -42,10 +46,10 @@ class PGPKeyManagerTest {
       val keyId = keyManager.getKeyId(keyManager.addKey(secretKey).unwrap())
       assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
       // Check if the keys directory have one file
-      assertEquals(1, filesDir.list()?.size)
+      assertEquals(1, filesDir.walk().toSet().size)
       // Check if the file name is correct
-      val keyFile = keysDir.listFiles()?.first()
-      assertEquals(keyFile?.name, "$keyId.${PGPKeyManager.KEY_EXTENSION}")
+      val keyFile = keysDir.walk().toSet().first()
+      assertEquals(keyFile.name, "$keyId.${PGPKeyManager.KEY_EXTENSION}")
     }
 
   @Test

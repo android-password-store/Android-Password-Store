@@ -35,8 +35,9 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
-import java.io.File
+import java.nio.file.Paths
 import javax.inject.Inject
+import kotlin.io.path.readBytes
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -240,7 +241,8 @@ class DecryptActivity : BasePGPActivity() {
     authResult: BiometricResult,
     onSuccess: suspend () -> Unit = {},
   ) {
-    val message = withContext(dispatcherProvider.io()) { File(fullPath).readBytes().inputStream() }
+    val message =
+      withContext(dispatcherProvider.io()) { Paths.get(fullPath).readBytes().inputStream() }
     val outputStream = ByteArrayOutputStream()
     val result = repository.decrypt(passphrase, identifiers, message, outputStream)
     if (result.isOk) {

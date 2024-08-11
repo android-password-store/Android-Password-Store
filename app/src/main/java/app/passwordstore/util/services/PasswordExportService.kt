@@ -19,6 +19,7 @@ import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.io.path.pathString
 import logcat.logcat
 
 class PasswordExportService : Service() {
@@ -61,9 +62,9 @@ class PasswordExportService : Service() {
       requireNotNull(PasswordRepository.getRepositoryDirectory()) {
         "Password directory must be set to export them"
       }
-    val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
+    val sourcePassDir = DocumentFile.fromFile(repositoryDirectory.toFile())
 
-    logcat { "Copying ${repositoryDirectory.path} to $targetDirectory" }
+    logcat { "Copying ${repositoryDirectory.pathString} to $targetDirectory" }
 
     val dateString = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
     val passDir = targetDirectory.createDirectory("password_store_$dateString")

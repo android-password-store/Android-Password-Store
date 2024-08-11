@@ -41,6 +41,9 @@ import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import de.Maxr1998.modernpreferences.helpers.switch
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteRecursively
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 
@@ -58,6 +61,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
 
   private var showSshKeyPref: Preference? = null
 
+  @OptIn(ExperimentalPathApi::class)
   override fun provideSettings(builder: PreferenceScreen.Builder) {
     val encryptedPreferences = hiltEntryPoint.encryptedPreferences()
     val gitSettings = hiltEntryPoint.gitSettings()
@@ -164,7 +168,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
                   PasswordRepository.closeRepository()
                   PasswordRepository.getRepositoryDirectory().let { dir ->
                     dir.deleteRecursively()
-                    dir.mkdirs()
+                    dir.createDirectories()
                   }
                 }
                 .onFailure { it.message?.let { message -> activity.snackbar(message = message) } }

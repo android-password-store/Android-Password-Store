@@ -12,8 +12,9 @@ import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.git.sshj.SshKey
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
-import java.io.File
 import java.net.URI
+import java.nio.file.Paths
+import kotlin.io.path.exists
 import logcat.LogPriority.ERROR
 import logcat.LogPriority.INFO
 import logcat.logcat
@@ -108,7 +109,7 @@ private fun migrateToHideAll(sharedPrefs: SharedPreferences) {
 }
 
 private fun migrateToSshKey(filesDirPath: String, sharedPrefs: SharedPreferences) {
-  val privateKeyFile = File(filesDirPath, ".ssh_key")
+  val privateKeyFile = Paths.get(filesDirPath, ".ssh_key")
   if (
     sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
       !SshKey.exists &&

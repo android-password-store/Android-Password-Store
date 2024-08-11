@@ -48,8 +48,13 @@ import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.inject.Inject
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
+import kotlin.io.path.listDirectoryEntries
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
@@ -66,7 +71,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
   private var recyclerViewStateToRestore: Parcelable? = null
   private var actionMode: ActionMode? = null
-  private var scrollTarget: File? = null
+  private var scrollTarget: Path? = null
 
   private val model: SearchableRepositoryViewModel by activityViewModels()
   private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
@@ -76,7 +81,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
       requireStore().refreshPasswordList()
     }
 
-  val currentDir: File
+  val currentDir: Path
     get() = model.currentDir.value
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,9 +102,9 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
   }
 
   private fun initializePasswordList() {
-    val gitDir = File(PasswordRepository.getRepositoryDirectory(), ".git")
+    val gitDir = PasswordRepository.getRepositoryDirectory().resolve(".git")
     val hasGitDir =
-      gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
+      gitDir.exists() && gitDir.isDirectory() && gitDir.listDirectoryEntries().isNotEmpty()
     binding.swipeRefresher.setOnRefreshListener {
       if (!hasGitDir) {
         requireStore().refreshPasswordList()
@@ -179,7 +184,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
       requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH)) {
         "Cannot navigate if ${PasswordStore.REQUEST_ARG_PATH} is not provided"
       }
-    model.navigateTo(File(path), pushPreviousLocation = false)
+    model.navigateTo(Paths.get(path), pushPreviousLocation = false)
     lifecycleScope.launch {
       model.searchResult.flowWithLifecycle(lifecycle).collect { result ->
         // Only run animations when the new list is filtered, i.e., the user submitted a search,
@@ -317,7 +322,10 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 val preferences =
                   context.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
                 preferences.edit {
-                  putString(item.file.absolutePath.base64(), System.currentTimeMillis().toString())
+                  putString(
+                    item.file.absolutePathString().base64(),
+                    System.currentTimeMillis().toString(),
+                  )
                 }
               }
 
@@ -368,7 +376,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
   }
 
-  fun navigateTo(file: File) {
+  fun navigateTo(file: Path) {
     requireStore().clearSearch()
     model.navigateTo(
       file,
@@ -377,7 +385,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
 
-  fun scrollToOnNextRefresh(file: File) {
+  fun scrollToOnNextRefresh(file: Path) {
     scrollTarget = file
   }
 

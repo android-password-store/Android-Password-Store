@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.Selection
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,11 @@ import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.viewmodel.SearchableRepositoryAdapter
 import app.passwordstore.util.viewmodel.stableId
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.PathWalkOption
+import kotlin.io.path.extension
+import kotlin.io.path.isDirectory
+import kotlin.io.path.walk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 
@@ -49,6 +55,7 @@ open class PasswordItemRecyclerAdapter(
     return super.onSelectionChanged(listener) as PasswordItemRecyclerAdapter
   }
 
+  @OptIn(ExperimentalPathApi::class)
   class PasswordItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val name: AppCompatTextView = itemView.findViewById(R.id.label)
@@ -71,9 +78,13 @@ open class PasswordItemRecyclerAdapter(
         folderIndicator.visibility = View.VISIBLE
         val count =
           withContext(dispatcherProvider.io()) {
-            item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
+            item.file
+              .walk(PathWalkOption.INCLUDE_DIRECTORIES)
+              .filter { it.isDirectory() || it.extension == "gpg" }
+              .toSet()
+              .size
           }
-        childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
+        childCount.isVisible = count > 0
         childCount.text = "$count"
       } else {
         childCount.visibility = View.GONE

@@ -14,9 +14,11 @@ import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.extensions.getString
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
-import java.io.File
+import java.nio.file.Paths
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.exists
 import org.eclipse.jgit.transport.URIish
 
 enum class Protocol(val pref: String) {
@@ -174,9 +176,9 @@ constructor(
 
   /** Deletes a previously saved SSH host key */
   fun clearSavedHostKey() {
-    File(hostKeyPath).delete()
+    Paths.get(hostKeyPath).deleteIfExists()
   }
 
   /** Returns true if a host key was previously saved */
-  fun hasSavedHostKey(): Boolean = File(hostKeyPath).exists()
+  fun hasSavedHostKey(): Boolean = Paths.get(hostKeyPath).exists()
 }

@@ -387,7 +387,7 @@ class PasswordCreationActivity : BasePGPActivity() {
               return@runCatching
             }
 
-            if (!passwordFile.toFile().isInsideRepository()) {
+            if (!passwordFile.isInsideRepository()) {
               snackbar(message = getString(R.string.message_error_destination_outside_repo))
               return@runCatching
             }
@@ -414,8 +414,7 @@ class PasswordCreationActivity : BasePGPActivity() {
               val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
               val entry = passwordEntryFactory.create(content.encodeToByteArray())
               returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
-              val username =
-                entry.username ?: directoryStructure.getUsernameFor(passwordFile.toFile())
+              val username = entry.username ?: directoryStructure.getUsernameFor(passwordFile)
               returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
             }
 

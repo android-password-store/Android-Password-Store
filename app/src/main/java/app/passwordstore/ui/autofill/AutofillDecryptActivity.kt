@@ -39,8 +39,11 @@ import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
-import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.inject.Inject
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.readBytes
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -60,12 +63,14 @@ class AutofillDecryptActivity : BasePGPActivity() {
   override fun onStart() {
     super.onStart()
     val filePath =
-      intent?.getStringExtra(EXTRA_FILE_PATH)
-        ?: run {
-          logcat(ERROR) { "AutofillDecryptActivity started without EXTRA_FILE_PATH" }
-          finish()
-          return
-        }
+      Paths.get(
+        intent?.getStringExtra(EXTRA_FILE_PATH)
+          ?: run {
+            logcat(ERROR) { "AutofillDecryptActivity started without EXTRA_FILE_PATH" }
+            finish()
+            return
+          }
+      )
     val clientState =
       intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE)
         ?: run {
@@ -94,14 +99,17 @@ class AutofillDecryptActivity : BasePGPActivity() {
   }
 
   private fun decrypt(
-    filePath: String,
+    filePath: Path,
     clientState: Bundle,
     action: AutofillAction,
     authResult: BiometricResult,
   ) {
     val gpgIdentifiers =
       getPGPIdentifiers(
-        getParentPath(filePath, PasswordRepository.getRepositoryDirectory().toString())
+        getParentPath(
+          filePath.absolutePathString(),
+          PasswordRepository.getRepositoryDirectory().toString(),
+        )
       ) ?: return
     lifecycleScope.launch(dispatcherProvider.main()) {
       when (authResult) {
@@ -127,13 +135,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
               gpgIdentifiers.first(),
             )
           if (cachedPassphrase != null) {
-            decryptWithPassphrase(
-              File(filePath),
-              gpgIdentifiers,
-              clientState,
-              action,
-              cachedPassphrase,
-            )
+            decryptWithPassphrase(filePath, gpgIdentifiers, clientState, action, cachedPassphrase)
           } else {
             askPassphrase(filePath, gpgIdentifiers, clientState, action)
           }
@@ -143,13 +145,13 @@ class AutofillDecryptActivity : BasePGPActivity() {
   }
 
   private suspend fun askPassphrase(
-    filePath: String,
+    filePath: Path,
     identifiers: List<PGPIdentifier>,
     clientState: Bundle,
     action: AutofillAction,
   ) {
     if (!repository.isPasswordProtected(identifiers)) {
-      decryptWithPassphrase(File(filePath), identifiers, clientState, action, password = "")
+      decryptWithPassphrase(filePath, identifiers, clientState, action, password = "")
       return
     }
     val dialog =
@@ -163,14 +165,14 @@ class AutofillDecryptActivity : BasePGPActivity() {
         val value = bundle.getString(PasswordDialog.PASSWORD_PHRASE_KEY)!!
         clearCache = bundle.getBoolean(PasswordDialog.PASSWORD_CLEAR_KEY)
         lifecycleScope.launch(dispatcherProvider.main()) {
-          decryptWithPassphrase(File(filePath), identifiers, clientState, action, value)
+          decryptWithPassphrase(filePath, identifiers, clientState, action, value)
         }
       }
     }
   }
 
   private suspend fun decryptWithPassphrase(
-    filePath: File,
+    filePath: Path,
     identifiers: List<PGPIdentifier>,
     clientState: Bundle,
     action: AutofillAction,
@@ -198,7 +200,7 @@ class AutofillDecryptActivity : BasePGPActivity() {
   }
 
   private suspend fun decryptCredential(
-    file: File,
+    file: Path,
     password: String,
     identifiers: List<PGPIdentifier>,
   ): Credentials? {
@@ -245,19 +247,19 @@ class AutofillDecryptActivity : BasePGPActivity() {
 
     private var decryptFileRequestCode = 1
 
-    fun makeDecryptFileIntent(file: File, forwardedExtras: Bundle, context: Context): Intent {
+    fun makeDecryptFileIntent(file: Path, forwardedExtras: Bundle, context: Context): Intent {
       return Intent(context, AutofillDecryptActivity::class.java).apply {
         putExtras(forwardedExtras)
         putExtra(EXTRA_SEARCH_ACTION, true)
-        putExtra(EXTRA_FILE_PATH, file.absolutePath)
+        putExtra(EXTRA_FILE_PATH, file.absolutePathString())
       }
     }
 
-    fun makeDecryptFileIntentSender(file: File, context: Context): IntentSender {
+    fun makeDecryptFileIntentSender(file: Path, context: Context): IntentSender {
       val intent =
         Intent(context, AutofillDecryptActivity::class.java).apply {
           putExtra(EXTRA_SEARCH_ACTION, false)
-          putExtra(EXTRA_FILE_PATH, file.absolutePath)
+          putExtra(EXTRA_FILE_PATH, file.absolutePathString())
         }
       return PendingIntent.getActivity(
           context,

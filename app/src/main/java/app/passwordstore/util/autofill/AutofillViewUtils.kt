@@ -21,7 +21,8 @@ import androidx.autofill.inline.v1.InlineSuggestionUi
 import app.passwordstore.R
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.passwords.PasswordStore
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.relativeTo
 
 data class DatasetMetadata(val title: String, val subtitle: String?, @DrawableRes val iconRes: Int)
 
@@ -77,7 +78,7 @@ fun makeInlinePresentation(
   return InlinePresentation(slice, imeSpec, false)
 }
 
-fun makeFillMatchMetadata(context: Context, file: File): DatasetMetadata {
+fun makeFillMatchMetadata(context: Context, file: Path): DatasetMetadata {
   val directoryStructure = AutofillPreferences.directoryStructure(context)
   val relativeFile = file.relativeTo(PasswordRepository.getRepositoryDirectory())
   val title =

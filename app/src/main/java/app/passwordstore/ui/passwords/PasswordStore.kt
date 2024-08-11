@@ -35,13 +35,12 @@ import app.passwordstore.ui.git.base.BaseGitActivity
 import app.passwordstore.ui.onboarding.activity.OnboardingActivity
 import app.passwordstore.ui.settings.SettingsActivity
 import app.passwordstore.util.autofill.AutofillMatcher
+import app.passwordstore.util.extensions.asLog
 import app.passwordstore.util.extensions.base64
 import app.passwordstore.util.extensions.commitChange
-import app.passwordstore.util.extensions.contains
 import app.passwordstore.util.extensions.getString
 import app.passwordstore.util.extensions.isInsideRepository
 import app.passwordstore.util.extensions.launchActivity
-import app.passwordstore.util.extensions.listFilesRecursively
 import app.passwordstore.util.extensions.sharedPrefs
 import app.passwordstore.util.settings.AuthMode
 import app.passwordstore.util.settings.PreferenceKeys
@@ -49,13 +48,30 @@ import app.passwordstore.util.shortcuts.ShortcutHandler
 import app.passwordstore.util.viewmodel.SearchableRepositoryViewModel
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
 import java.lang.Character.UnicodeBlock
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.inject.Inject
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.PathWalkOption
+import kotlin.io.path.absolute
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteRecursively
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.moveTo
+import kotlin.io.path.name
+import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.pathString
+import kotlin.io.path.relativeTo
+import kotlin.io.path.walk
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -64,6 +80,7 @@ import logcat.logcat
 
 const val PASSWORD_FRAGMENT_TAG = "PasswordsList"
 
+@OptIn(ExperimentalPathApi::class)
 @AndroidEntryPoint
 class PasswordStore : BaseGitActivity() {
 
@@ -88,13 +105,13 @@ class PasswordStore : BaseGitActivity() {
           "'Files' intent extra must be set"
         }
       val target =
-        File(
+        Paths.get(
           requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")) {
             "'SELECTED_FOLDER_PATH' intent extra must be set"
           }
         )
-      val repositoryPath = PasswordRepository.getRepositoryDirectory().absolutePath
-      if (!target.isDirectory) {
+      val repositoryPath = PasswordRepository.getRepositoryDirectory().absolutePathString()
+      if (!target.isDirectory()) {
         logcat(ERROR) { "Tried moving passwords to a non-existing folder." }
         return@registerForActivityResult
       }
@@ -104,20 +121,21 @@ class PasswordStore : BaseGitActivity() {
 
       lifecycleScope.launch(dispatcherProvider.io()) {
         for (file in filesToMove) {
-          val source = File(file)
+          val source = Paths.get(file)
           if (!source.exists()) {
             logcat(ERROR) { "Tried moving something that appears non-existent." }
             continue
           }
-          val destinationFile = File(target.absolutePath + "/" + source.name)
+          val destinationFile = Paths.get(target.absolutePathString(), source.name)
           val basename = source.nameWithoutExtension
           val sourceLongName =
             getLongName(
-              requireNotNull(source.parent) { "$file has no parent" },
+              requireNotNull(source.parent) { "$file has no parent" }.absolutePathString(),
               repositoryPath,
               basename,
             )
-          val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
+          val destinationLongName =
+            getLongName(target.absolutePathString(), repositoryPath, basename)
           if (destinationFile.exists()) {
             logcat(ERROR) { "Trying to move a file that already exists." }
             withContext(dispatcherProvider.main()) {
@@ -142,15 +160,16 @@ class PasswordStore : BaseGitActivity() {
         }
         when (filesToMove.size) {
           1 -> {
-            val source = File(filesToMove[0])
+            val source = Paths.get(filesToMove[0])
             val basename = source.nameWithoutExtension
             val sourceLongName =
               getLongName(
-                requireNotNull(source.parent) { "$basename has no parent" },
+                requireNotNull(source.parent) { "$basename has no parent" }.pathString,
                 repositoryPath,
                 basename,
               )
-            val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
+            val destinationLongName =
+              getLongName(target.absolutePathString(), repositoryPath, basename)
             withContext(dispatcherProvider.main()) {
               commitChange(
                 resources.getString(
@@ -162,8 +181,8 @@ class PasswordStore : BaseGitActivity() {
             }
           }
           else -> {
-            val repoDir = PasswordRepository.getRepositoryDirectory().absolutePath
-            val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
+            val repoDir = PasswordRepository.getRepositoryDirectory().absolutePathString()
+            val relativePath = getRelativePath("${target.absolutePathString()}/", repoDir)
             withContext(dispatcherProvider.main()) {
               commitChange(
                 resources.getString(R.string.git_commit_move_multiple_text, relativePath)
@@ -203,7 +222,7 @@ class PasswordStore : BaseGitActivity() {
 
     lifecycleScope.launch {
       model.currentDir.flowWithLifecycle(lifecycle).collect { dir ->
-        val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
+        val basePath = PasswordRepository.getRepositoryDirectory().absolute()
         supportActionBar?.apply {
           if (dir != basePath) title = dir.name else setTitle(R.string.app_name)
         }
@@ -348,7 +367,7 @@ class PasswordStore : BaseGitActivity() {
     checkLocalRepository(PasswordRepository.getRepositoryDirectory())
   }
 
-  private fun checkLocalRepository(localDir: File?) {
+  private fun checkLocalRepository(localDir: Path?) {
     if (localDir != null && settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)) {
       // do not push the fragment if we already have it
       if (
@@ -356,7 +375,10 @@ class PasswordStore : BaseGitActivity() {
       ) {
         settings.edit { putBoolean(PreferenceKeys.REPO_CHANGED, false) }
         val args = Bundle()
-        args.putString(REQUEST_ARG_PATH, PasswordRepository.getRepositoryDirectory().absolutePath)
+        args.putString(
+          REQUEST_ARG_PATH,
+          PasswordRepository.getRepositoryDirectory().absolutePathString(),
+        )
 
         // if the activity was started from the autofill settings, the
         // intent is to match a clicked pwd with app. pass this to fragment
@@ -406,25 +428,28 @@ class PasswordStore : BaseGitActivity() {
   fun createPassword() {
     if (!validateState()) return
     val currentDir = currentDir
-    logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
+    logcat(INFO) { "Adding file to : ${currentDir.absolutePathString()}" }
     val intent = Intent(this, PasswordCreationActivity::class.java)
-    intent.putExtra(BasePGPActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
+    intent.putExtra(BasePGPActivity.EXTRA_FILE_PATH, currentDir.absolutePathString())
     intent.putExtra(
       BasePGPActivity.EXTRA_REPO_PATH,
-      PasswordRepository.getRepositoryDirectory().absolutePath,
+      PasswordRepository.getRepositoryDirectory().absolutePathString(),
     )
     listRefreshAction.launch(intent)
   }
 
   fun createFolder() {
     if (!validateState()) return
-    FolderCreationDialogFragment.newInstance(currentDir.path).show(supportFragmentManager, null)
+    FolderCreationDialogFragment.newInstance(currentDir.pathString)
+      .show(supportFragmentManager, null)
   }
 
+  @OptIn(ExperimentalPathApi::class)
   fun deletePasswords(selectedItems: List<PasswordItem>) {
     var size = 0
     selectedItems.forEach {
-      if (it.file.isFile) size++ else size += it.file.listFilesRecursively().size
+      if (it.file.isRegularFile()) size++
+      else size += it.file.walk(PathWalkOption.INCLUDE_DIRECTORIES).toSet().size
     }
     if (size == 0) {
       selectedItems.map { item -> item.file.deleteRecursively() }
@@ -434,9 +459,9 @@ class PasswordStore : BaseGitActivity() {
     MaterialAlertDialogBuilder(this)
       .setMessage(resources.getQuantityString(R.plurals.delete_dialog_text, size, size))
       .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
-        val filesToDelete = arrayListOf<File>()
+        val filesToDelete = arrayListOf<Path>()
         selectedItems.forEach { item ->
-          if (item.file.isDirectory) filesToDelete.addAll(item.file.listFilesRecursively())
+          if (item.file.isDirectory()) filesToDelete.addAll(item.file.walk())
           else filesToDelete.add(item.file)
         }
         selectedItems.map { item -> item.file.deleteRecursively() }
@@ -444,7 +469,7 @@ class PasswordStore : BaseGitActivity() {
         AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
         val fmt =
           selectedItems.joinToString(separator = ", ") { item ->
-            item.file.toRelativeString(PasswordRepository.getRepositoryDirectory())
+            item.file.relativeTo(PasswordRepository.getRepositoryDirectory()).absolutePathString()
           }
         lifecycleScope.launch {
           commitChange(resources.getString(R.string.git_commit_remove_text, fmt))
@@ -456,7 +481,7 @@ class PasswordStore : BaseGitActivity() {
 
   fun movePasswords(values: List<PasswordItem>) {
     val intent = Intent(this, SelectFolderActivity::class.java)
-    val fileLocations = values.map { it.file.absolutePath }.toTypedArray()
+    val fileLocations = values.map { it.file.absolutePathString() }.toTypedArray()
     intent.putExtra("Files", fileLocations)
     passwordMoveAction.launch(intent)
   }
@@ -497,7 +522,7 @@ class PasswordStore : BaseGitActivity() {
         .setView(view)
         .setMessage(getString(R.string.message_rename_folder, oldCategory.name))
         .setPositiveButton(R.string.dialog_ok) { _, _ ->
-          val newCategory = File("${oldCategory.file.parent}/${newCategoryEditText.text}")
+          val newCategory = Paths.get("${oldCategory.file.parent}/${newCategoryEditText.text}")
           when {
             newCategoryEditText.text.isNullOrBlank() ->
               renameCategory(oldCategory, CategoryRenameError.EmptyField)
@@ -512,11 +537,11 @@ class PasswordStore : BaseGitActivity() {
                 // history
                 val preference =
                   getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
-                val timestamp = preference.getString(oldCategory.file.absolutePath.base64())
+                val timestamp = preference.getString(oldCategory.file.absolutePathString().base64())
                 if (timestamp != null) {
                   preference.edit {
-                    remove(oldCategory.file.absolutePath.base64())
-                    putString(newCategory.absolutePath.base64(), timestamp)
+                    remove(oldCategory.file.absolutePathString().base64())
+                    putString(newCategory.absolutePathString().base64(), timestamp)
                   }
                 }
 
@@ -552,14 +577,14 @@ class PasswordStore : BaseGitActivity() {
    * entered if it is a directory or scrolled into view if it is a file (both inside the current
    * directory).
    */
-  fun refreshPasswordList(target: File? = null) {
+  fun refreshPasswordList(target: Path? = null) {
     val plist = getPasswordFragment()
-    if (target?.isDirectory == true && model.currentDir.value.contains(target)) {
+    if (target?.isDirectory() == true && model.currentDir.value.contains(target)) {
       plist?.navigateTo(target)
-    } else if (target?.isFile == true && model.currentDir.value.contains(target)) {
+    } else if (target?.isRegularFile() == true && model.currentDir.value.contains(target)) {
       // Creating new passwords is handled by an activity, so we will refresh in onStart.
       plist?.scrollToOnNextRefresh(target)
-    } else if (model.currentDir.value.isDirectory) {
+    } else if (model.currentDir.value.isDirectory()) {
       model.forceRefresh()
     } else {
       model.reset()
@@ -567,40 +592,39 @@ class PasswordStore : BaseGitActivity() {
     }
   }
 
-  private val currentDir: File
+  private val currentDir: Path
     get() = getPasswordFragment()?.currentDir ?: PasswordRepository.getRepositoryDirectory()
 
-  private suspend fun moveFile(source: File, destinationFile: File) {
+  private suspend fun moveFile(source: Path, destinationFile: Path) {
     val sourceDestinationMap =
-      if (source.isDirectory) {
-        destinationFile.mkdirs()
+      if (source.isDirectory()) {
+        destinationFile.createDirectories()
         // Recursively list all files (not directories) below `source`, then
         // obtain the corresponding target file by resolving the relative path
         // starting at the destination folder.
-        source.listFilesRecursively().associateWith {
-          destinationFile.resolve(it.relativeTo(source))
-        }
+        source.walk().associateWith { destinationFile.resolve(it.relativeTo(source)) }
       } else {
         mapOf(source to destinationFile)
       }
-    if (!source.renameTo(destinationFile)) {
-      logcat(ERROR) { "Something went wrong while moving $source to $destinationFile." }
-      withContext(dispatcherProvider.main()) {
-        MaterialAlertDialogBuilder(this@PasswordStore)
-          .setTitle(R.string.password_move_error_title)
-          .setMessage(getString(R.string.password_move_error_message, source, destinationFile))
-          .setCancelable(true)
-          .setPositiveButton(android.R.string.ok, null)
-          .show()
+    runCatching { source.moveTo(destinationFile) }
+      .onFailure {
+        logcat(ERROR) { it.asLog("Something went wrong while moving $source to $destinationFile.") }
+        withContext(dispatcherProvider.main()) {
+          MaterialAlertDialogBuilder(this@PasswordStore)
+            .setTitle(R.string.password_move_error_title)
+            .setMessage(getString(R.string.password_move_error_message, source, destinationFile))
+            .setCancelable(true)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+        }
       }
-    } else {
-      AutofillMatcher.updateMatches(this, sourceDestinationMap)
-    }
+      .onSuccess { AutofillMatcher.updateMatches(this, sourceDestinationMap) }
   }
 
   fun matchPasswordWithApp(item: PasswordItem) {
     val path =
-      item.file.absolutePath
+      item.file
+        .absolutePathString()
         .replace(PasswordRepository.getRepositoryDirectory().toString() + "/", "")
         .replace(".gpg", "")
     val data = Intent()

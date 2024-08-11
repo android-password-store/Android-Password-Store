@@ -1,7 +1,16 @@
 package app.passwordstore.gradle.crowdin
 
-import java.io.File
+import java.nio.file.Path
 import javax.xml.parsers.DocumentBuilderFactory
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.deleteRecursively
+import kotlin.io.path.inputStream
+import kotlin.io.path.isDirectory
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.name
+import kotlin.io.path.pathString
+import kotlin.io.path.walk
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
@@ -10,6 +19,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.work.DisableCachingByDefault
 import org.w3c.dom.Document
 
+@OptIn(ExperimentalPathApi::class)
 @DisableCachingByDefault(because = "The task runs quickly and has complicated semantics")
 abstract class StringCleanupTask : DefaultTask() {
 
@@ -19,12 +29,12 @@ abstract class StringCleanupTask : DefaultTask() {
   fun clean() {
     val sourceSets = arrayOf("main", "nonFree")
     for (sourceSet in sourceSets) {
-      val fileTreeWalk = sourceDirectory.dir("$sourceSet/res").get().asFile.walkTopDown()
+      val fileTreeWalk = sourceDirectory.dir("$sourceSet/res").get().asFile.toPath().walk()
       val valuesDirectories =
-        fileTreeWalk.filter { it.isDirectory }.filter { it.name.startsWith("values") }
+        fileTreeWalk.filter { it.isDirectory() }.filter { it.name.startsWith("values") }
       val stringFiles = fileTreeWalk.filter { it.name == "strings.xml" }
       val sourceFile =
-        stringFiles.firstOrNull { it.path.endsWith("values/strings.xml") }
+        stringFiles.firstOrNull { it.pathString.endsWith("values/strings.xml") }
           ?: throw GradleException("No root strings.xml found in '$sourceSet' sourceSet")
       val sourceDoc = parseDocument(sourceFile)
       val baselineStringCount = countStrings(sourceDoc)
@@ -34,22 +44,22 @@ abstract class StringCleanupTask : DefaultTask() {
           val doc = parseDocument(file)
           val stringCount = countStrings(doc)
           if (stringCount < threshold) {
-            file.delete()
+            file.deleteIfExists()
           }
         }
       }
       valuesDirectories.forEach { dir ->
-        if (dir.listFiles().isNullOrEmpty()) {
-          dir.delete()
+        if (dir.listDirectoryEntries().isEmpty()) {
+          dir.deleteRecursively()
         }
       }
     }
   }
 
-  private fun parseDocument(file: File): Document {
+  private fun parseDocument(path: Path): Document {
     val dbFactory = DocumentBuilderFactory.newInstance()
     val documentBuilder = dbFactory.newDocumentBuilder()
-    return documentBuilder.parse(file)
+    return documentBuilder.parse(path.inputStream())
   }
 
   private fun countStrings(document: Document): Int {

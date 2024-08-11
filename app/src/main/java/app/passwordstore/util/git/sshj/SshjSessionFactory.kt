@@ -11,15 +11,18 @@ import app.passwordstore.util.git.operation.CredentialFinder
 import app.passwordstore.util.settings.AuthMode
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
-import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.nio.file.Path
 import java.security.PublicKey
 import java.util.Collections
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
+import kotlin.io.path.exists
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority.WARN
 import logcat.logcat
@@ -69,7 +72,7 @@ abstract class InteractivePasswordFinder(private val dispatcherProvider: Dispatc
 
 class SshjSessionFactory(
   private val authMethod: SshAuthMethod,
-  private val hostKeyFile: File,
+  private val hostKeyFile: Path,
   private val dispatcherProvider: DispatcherProvider,
 ) : SshSessionFactory() {
 
@@ -93,7 +96,7 @@ class SshjSessionFactory(
   }
 }
 
-private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
+private fun makeTofuHostKeyVerifier(hostKeyFile: Path): HostKeyVerifier {
   if (!hostKeyFile.exists()) {
     return object : HostKeyVerifier {
       override fun verify(hostname: String?, port: Int, key: PublicKey?): Boolean {
@@ -125,7 +128,7 @@ private class SshjSession(
   uri: URIish,
   private val username: String,
   private val authMethod: SshAuthMethod,
-  private val hostKeyFile: File,
+  private val hostKeyFile: Path,
   private val dispatcherProvider: DispatcherProvider,
 ) : RemoteSession {
 

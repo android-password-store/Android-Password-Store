@@ -15,6 +15,7 @@ import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.ui.passwords.PASSWORD_FRAGMENT_TAG
 import app.passwordstore.ui.passwords.PasswordStore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.io.path.absolutePathString
 
 @AndroidEntryPoint
 class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
@@ -28,7 +29,7 @@ class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
     val args = Bundle()
     args.putString(
       PasswordStore.REQUEST_ARG_PATH,
-      PasswordRepository.getRepositoryDirectory().absolutePath,
+      PasswordRepository.getRepositoryDirectory().absolutePathString(),
     )
 
     passwordList.arguments = args
@@ -60,7 +61,7 @@ class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
   }
 
   private fun selectFolder() {
-    intent.putExtra("SELECTED_FOLDER_PATH", passwordList.currentDir.absolutePath)
+    intent.putExtra("SELECTED_FOLDER_PATH", passwordList.currentDir.absolutePathString())
     setResult(RESULT_OK, intent)
     finish()
   }

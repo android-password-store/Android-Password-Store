@@ -25,7 +25,6 @@ import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
-import java.io.File
 import java.io.IOException
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
@@ -34,6 +33,12 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import javax.crypto.SecretKey
 import javax.crypto.SecretKeyFactory
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.exists
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -113,10 +118,10 @@ object SshKey {
     get() = Application.instance.applicationContext
 
   private val privateKeyFile
-    get() = File(context.filesDir, ".ssh_key")
+    get() = context.filesDir.toPath().resolve(".ssh_key")
 
   private val publicKeyFile
-    get() = File(context.filesDir, ".ssh_key.pub")
+    get() = context.filesDir.toPath().resolve(".ssh_key.pub")
 
   private var type: Type?
     get() = Type.fromValue(context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_KEY_TYPE))
@@ -178,11 +183,11 @@ object SshKey {
     context.getSharedPreferences(ANDROIDX_SECURITY_KEYSET_PREF_NAME, Context.MODE_PRIVATE).edit {
       clear()
     }
-    if (privateKeyFile.isFile) {
-      privateKeyFile.delete()
+    if (privateKeyFile.isRegularFile()) {
+      privateKeyFile.deleteIfExists()
     }
-    if (publicKeyFile.isFile) {
-      publicKeyFile.delete()
+    if (publicKeyFile.isRegularFile()) {
+      publicKeyFile.deleteIfExists()
     }
     context.getEncryptedGitPrefs().edit { remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE) }
     type = null
@@ -247,7 +252,7 @@ object SshKey {
     withContext(Dispatchers.IO) {
       EncryptedFile.Builder(
           context,
-          privateKeyFile,
+          privateKeyFile.toFile(),
           getOrCreateWrappingMasterKey(requireAuthentication),
           EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB,
         )
@@ -304,7 +309,7 @@ object SshKey {
   fun provide(client: SSHClient, passphraseFinder: InteractivePasswordFinder): KeyProvider? =
     when (type) {
       Type.LegacyGenerated,
-      Type.Imported -> client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
+      Type.Imported -> client.loadKeys(privateKeyFile.absolutePathString(), passphraseFinder)
       Type.KeystoreNative -> KeystoreNativeKeyProvider
       Type.KeystoreWrappedEd25519 -> KeystoreWrappedEd25519KeyProvider
       null -> null

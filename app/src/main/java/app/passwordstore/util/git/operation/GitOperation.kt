@@ -65,7 +65,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
   /** Whether the operation requires authentication or not. */
   open val requiresAuth: Boolean = true
-  private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
+  private val hostKeyFile = callingActivity.filesDir.resolve(".host_key").toPath()
   private var sshSessionFactory: SshjSessionFactory? = null
   private val hiltEntryPoint =
     EntryPointAccessors.fromApplication<GitOperationEntryPoint>(callingActivity)
