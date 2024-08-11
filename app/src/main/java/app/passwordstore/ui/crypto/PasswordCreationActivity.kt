@@ -211,7 +211,7 @@ class PasswordCreationActivity : BasePGPActivity() {
         AutofillPreferences.directoryStructure(this@PasswordCreationActivity) ==
           DirectoryStructure.EncryptedUsername || suggestedUsername != null
       ) {
-        usernameInputLayout.apply { visibility = View.VISIBLE }
+        usernameInputLayout.visibility = View.VISIBLE
         if (suggestedUsername != null) username.setText(suggestedUsername)
         else if (suggestedName != null) username.requestFocus()
       }
