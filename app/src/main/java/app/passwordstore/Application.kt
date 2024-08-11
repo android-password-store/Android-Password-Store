@@ -147,6 +147,5 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
 
     lateinit var instance: Application
     var screenWasOff: Boolean = true
-    var otpLabelFormat: String = ""
   }
 }

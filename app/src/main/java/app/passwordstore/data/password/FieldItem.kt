@@ -7,31 +7,45 @@ package app.passwordstore.data.password
 
 import app.passwordstore.data.passfile.Totp
 
-class FieldItem(val key: String, val value: String, val action: ActionType) {
+class FieldItem
+private constructor(
+  val type: ItemType,
+  val label: String,
+  val value: String,
+  val action: ActionType,
+) {
   enum class ActionType {
     COPY,
     HIDE,
   }
 
-  enum class ItemType(val type: String, val label: String) {
-    USERNAME("Username", "User ID"),
-    PASSWORD("Password", "Password"),
-    OTP("OTP", "OTP (expires in %ds)"),
+  enum class ItemType() {
+    USERNAME,
+    PASSWORD,
+    OTP,
+    FREEFORM,
   }
 
   companion object {
-
-    // Extra helper methods
-    fun createOtpField(totp: Totp, label: String): FieldItem {
-      return FieldItem(label.format(totp.remainingTime.inWholeSeconds), totp.value, ActionType.COPY)
+    fun createOtpField(label: String, totp: Totp): FieldItem {
+      return FieldItem(
+        ItemType.OTP,
+        label.format(totp.remainingTime.inWholeSeconds),
+        totp.value,
+        ActionType.COPY,
+      )
     }
 
-    fun createPasswordField(password: String, label: String): FieldItem {
-      return FieldItem(label, password, ActionType.HIDE)
+    fun createPasswordField(label: String, password: String): FieldItem {
+      return FieldItem(ItemType.PASSWORD, label, password, ActionType.HIDE)
     }
 
-    fun createUsernameField(username: String, label: String): FieldItem {
-      return FieldItem(label, username, ActionType.COPY)
+    fun createUsernameField(label: String, username: String): FieldItem {
+      return FieldItem(ItemType.USERNAME, label, username, ActionType.COPY)
+    }
+
+    fun createFreeformField(label: String, content: String): FieldItem {
+      return FieldItem(ItemType.FREEFORM, label, content, ActionType.COPY)
     }
   }
 }

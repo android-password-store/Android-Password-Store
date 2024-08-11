@@ -12,7 +12,6 @@ import android.view.MenuItem
 import androidx.core.content.edit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
-import app.passwordstore.Application.Companion.otpLabelFormat
 import app.passwordstore.Application.Companion.screenWasOff
 import app.passwordstore.R
 import app.passwordstore.crypto.PGPIdentifier
@@ -279,28 +278,28 @@ class DecryptActivity : BasePGPActivity() {
 
   private suspend fun createPasswordUI(entry: PasswordEntry) =
     withContext(dispatcherProvider.main()) {
+      val labelFormat = resources.getString(R.string.otp_label_format)
       val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
       invalidateOptionsMenu()
 
       val items = arrayListOf<FieldItem>()
       if (!entry.password.isNullOrBlank()) {
-        items.add(FieldItem.createPasswordField(entry.password!!, getString(R.string.password)))
+        items.add(FieldItem.createPasswordField(getString(R.string.password), entry.password!!))
         if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
           copyPasswordToClipboard(entry.password)
         }
       }
 
-      otpLabelFormat = getString(R.string.otp_label_format)
       if (entry.hasTotp()) {
-        items.add(FieldItem.createOtpField(entry.totp.first(), otpLabelFormat))
+        items.add(FieldItem.createOtpField(labelFormat, entry.totp.first()))
       }
 
       if (!entry.username.isNullOrBlank()) {
-        items.add(FieldItem.createUsernameField(entry.username!!, getString(R.string.username)))
+        items.add(FieldItem.createUsernameField(getString(R.string.username), entry.username!!))
       }
 
       entry.extraContent.forEach { (key, value) ->
-        items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
+        items.add(FieldItem.createFreeformField(key, value))
       }
 
       val adapter = FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
@@ -308,7 +307,7 @@ class DecryptActivity : BasePGPActivity() {
       binding.recyclerView.itemAnimator = null
 
       if (entry.hasTotp()) {
-        lifecycleScope.launch { entry.totp.collect(adapter::updateOTPCode) }
+        lifecycleScope.launch { entry.totp.collect { adapter.updateOTPCode(it, labelFormat) } }
       }
     }
 
