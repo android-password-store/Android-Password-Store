@@ -302,7 +302,7 @@ class DecryptActivity : BasePGPActivity() {
       binding.recyclerView.itemAnimator = null
 
       if (entry.hasTotp()) {
-        entry.totp.collect(adapter::updateOTPCode)
+        lifecycleScope.launch { entry.totp.collect(adapter::updateOTPCode) }
       }
     }
 
