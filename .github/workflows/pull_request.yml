@@ -20,7 +20,7 @@ jobs:
 
       - name: Check codestyle
         shell: bash
-        run: ./gradlew ktfmtCheck
+        run: ./gradlew spotlessCheck
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"

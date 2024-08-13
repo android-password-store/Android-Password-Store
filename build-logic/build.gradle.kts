@@ -41,10 +41,6 @@ gradlePlugin {
       id = "com.github.android-password-store.kotlin-jvm-library"
       implementationClass = "app.passwordstore.gradle.KotlinJVMLibrary"
     }
-    register("ktfmt") {
-      id = "com.github.android-password-store.ktfmt"
-      implementationClass = "app.passwordstore.gradle.KtfmtPlugin"
-    }
     register("published-android-library") {
       id = "com.github.android-password-store.published-android-library"
       implementationClass = "app.passwordstore.gradle.PublishedAndroidLibraryPlugin"
@@ -60,6 +56,10 @@ gradlePlugin {
     register("sentry") {
       id = "com.github.android-password-store.sentry"
       implementationClass = "app.passwordstore.gradle.SentryPlugin"
+    }
+    register("spotless") {
+      id = "com.github.android-password-store.spotless"
+      implementationClass = "app.passwordstore.gradle.SpotlessPlugin"
     }
     register("versioning") {
       id = "com.github.android-password-store.versioning-plugin"
@@ -79,7 +79,6 @@ dependencies {
   implementation(libs.build.download)
   implementation(libs.build.javapoet)
   implementation(libs.build.kotlin)
-  implementation(libs.build.ktfmt)
   implementation(libs.build.mavenpublish)
   implementation(libs.build.metalava)
   implementation(libs.build.moshi)
@@ -88,6 +87,7 @@ dependencies {
   implementation(libs.build.r8)
   implementation(libs.build.semver)
   implementation(libs.build.sentry)
+  implementation(libs.build.spotless)
   implementation(libs.build.vcu)
   implementation(libs.kotlinx.coroutines.core)
 

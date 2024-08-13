@@ -68,6 +68,16 @@
       "datasourceTemplate": "maven",
       "depNameTemplate": "androidx.compose.compiler:compiler",
       "registryUrlTemplate": "https://maven.google.com",
-    }    
+    },
+    {
+      "fileMatch": [
+        "build-logic/src/main/kotlin/app/passwordstore/gradle/SpotlessPlugin.kt"
+      ],
+      "matchStrings": [
+        "KTFMT_VERSION = \"(?<currentValue>.*)\""
+      ],
+      "datasourceTemplate": "maven",
+      "depNameTemplate": "com.facebook:ktfmt"
+    }
   ]
 }

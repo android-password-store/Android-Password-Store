@@ -6,7 +6,7 @@
 <resources>
   <plurals name="delete_title">
     <item quantity="one">Wybrano %d element</item>
-    <item quantity="few">Wybrano %d elementy 
+    <item quantity="few">Wybrano %d elementy
 (If: 2,3,4)</item>
     <item quantity="many">Wybrano %d elementów</item>
     <item quantity="other">Liczba wybranych elementów: %d</item>

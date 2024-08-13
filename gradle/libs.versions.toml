@@ -39,7 +39,6 @@ build-diffutils = "io.github.java-diff-utils:java-diff-utils:4.12"
 build-download = "de.undercouch:gradle-download-task:5.6.0"
 build-javapoet = "com.squareup:javapoet:1.13.0"
 build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-build-ktfmt = "com.facebook:ktfmt:0.51"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.29.0"
 build-metalava = "me.tylerbwong.gradle.metalava:plugin:0.3.5"
 build-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
@@ -48,6 +47,7 @@ build-okhttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
 build-r8 = "com.android.tools:r8:8.4.6-dev"
 build-semver = "com.github.zafarkhaja:java-semver:0.10.2"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.11.0"
+build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.25.0"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.4"
 compose-bom = "androidx.compose:compose-bom:2024.06.00"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
