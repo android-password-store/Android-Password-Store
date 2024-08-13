@@ -1,5 +1,5 @@
 /*
- * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+ * Copyright © 2014-2024 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: LGPL-3.0-only WITH LGPL-3.0-linking-exception
  */
 @file:Suppress("UnstableApiUsage")

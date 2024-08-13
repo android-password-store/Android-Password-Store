@@ -1,5 +1,5 @@
 /*
- * Copyright © 2014-2022 The Android Password Store Authors. All Rights Reserved.
+ * Copyright © 2014-2024 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
