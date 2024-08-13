@@ -26,10 +26,10 @@ import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result as BiometricResult
 import app.passwordstore.util.autofill.AutofillPreferences
 import app.passwordstore.util.autofill.AutofillResponseBuilder
-import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.asLog
 import app.passwordstore.util.features.Feature.EnablePGPPassphraseCache
 import app.passwordstore.util.features.Features
+import app.passwordstore.util.settings.DirectoryStructure
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials

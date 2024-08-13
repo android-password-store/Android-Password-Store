@@ -25,9 +25,9 @@ import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.data.repo.PasswordRepository
 import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.autofill.AutofillPreferences
-import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.checkMainThread
 import app.passwordstore.util.coroutines.DispatcherProvider
+import app.passwordstore.util.settings.DirectoryStructure
 import app.passwordstore.util.settings.PasswordSortOrder
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy

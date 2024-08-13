@@ -97,6 +97,7 @@
   <string name="ssh_key_error_dialog_text">Mensaxe : \n</string>
   <string name="pref_recursive_filter_title">Filtro recursivo</string>
   <string name="pref_recursive_filter_summary">Atopa as chaves de xeito recursivo no directorio actual.</string>
+  <string name="pref_directory_structure">Organización dos contrasinais</string>
   <string name="pref_sort_order_title">Orde para mostrar contrasinais</string>
   <string name="pref_folder_first_sort_order">Primeiro cartafoles</string>
   <string name="pref_file_first_sort_order">Primeiro ficheiros</string>
@@ -207,7 +208,6 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="oreo_autofill_password_fill_support">Completar contrasinais</string>
   <string name="oreo_autofill_flaky_fill_support">Completa as credenciais (poderías ter que reiniciar o navegador de cando en vez)</string>
   <string name="oreo_autofill_no_support">Sen soporte</string>
-  <string name="oreo_autofill_preference_directory_structure">Organización dos contrasinais</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store pode ofrecerche completar formularios e incluso gardar contrasinais que escribes en apps e sitios web.</string>
   <string name="oreo_autofill_enable_dialog_instructions">Para habilitar esta característica toca en OK e vaite ós axustes de autocompletado. Alí, escolle Password Store da lista e confirma a solicitude premendo no OK.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Soporte de autocompletado cos navegadores:</string>

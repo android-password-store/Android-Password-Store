@@ -24,12 +24,12 @@
     <item>classic</item>
     <item>diceware</item>
   </string-array>
-  <string-array name="oreo_autofill_directory_structure_entries">
+  <string-array name="directory_structure_entries">
     <item>work/example.org(.gpg)</item>
     <item>work/example.org/john@doe.org(.gpg)</item>
     <item>work/example.org/john@doe.org/password(.gpg)</item>
   </string-array>
-  <string-array name="oreo_autofill_directory_structure_values">
+  <string-array name="directory_structure_values">
     <item>encrypted_username</item>
     <item>file</item>
     <item>directory</item>

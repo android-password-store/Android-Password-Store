@@ -91,6 +91,7 @@
   <string name="ssh_key_error_dialog_text">Nachricht : \n</string>
   <string name="pref_recursive_filter_title">Suche in Unterordnern</string>
   <string name="pref_recursive_filter_summary">Findet Passwörter auch in Unterordnern.</string>
+  <string name="pref_directory_structure">Passwort-Datei-Organisation</string>
   <string name="pref_sort_order_title">Passwortsortierung</string>
   <string name="pref_folder_first_sort_order">Ordner zuerst</string>
   <string name="pref_file_first_sort_order">Dateien zuerst</string>
@@ -190,7 +191,6 @@
   <string name="oreo_autofill_password_fill_support">Passwörter ausfüllen</string>
   <string name="oreo_autofill_flaky_fill_support">Passwörter ausfüllen (kann manchmal sein, dass Sie den Browser neu starten müssen)</string>
   <string name="oreo_autofill_no_support">Kein Support</string>
-  <string name="oreo_autofill_preference_directory_structure">Passwort-Datei-Organisation</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store kann das Ausfüllen von Anmeldeformularen und sogar das Speichern von Anmeldedaten in Apps oder auf Webseiten übernehmen.</string>
   <string name="oreo_autofill_enable_dialog_instructions">Um diese Funktion zu aktivieren, tippen Sie auf OK, um zu Autofill-Einstellungen zu gelangen. Dort wählen Sie \"Password Store\" aus der Liste und bestätigen Sie die Bestätigungsaufforderung mit \"OK\".</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Autofill-Unterstützung mit installierten Browsern:</string>

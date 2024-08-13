@@ -100,6 +100,7 @@
   <string name="ssh_key_error_dialog_text">Сообщение: \n</string>
   <string name="pref_recursive_filter_title">Рекурсивная фильтрация</string>
   <string name="pref_recursive_filter_summary">Рекурсивный поиск паролей в текущей директории</string>
+  <string name="pref_directory_structure">Организация файла паролей</string>
   <string name="pref_sort_order_title">Порядок сортировки паролей</string>
   <string name="pref_folder_first_sort_order">Сначала папки</string>
   <string name="pref_file_first_sort_order">Сначала файлы</string>
@@ -199,7 +200,6 @@
   <string name="oreo_autofill_password_fill_support">Заполнить пароли</string>
   <string name="oreo_autofill_flaky_fill_support">Заполнить учетные данные (время от времени может требоваться перезапуск браузера)</string>
   <string name="oreo_autofill_no_support">Не поддерживается</string>
-  <string name="oreo_autofill_preference_directory_structure">Организация файла паролей</string>
   <string name="oreo_autofill_enable_dialog_description">Хранилище паролей может предложить заполнить формы входа и даже сохранить учетные данные в приложениях или на веб-сайтах.</string>
   <string name="oreo_autofill_enable_dialog_instructions">Чтобы включить эту функцию, нажмите ОК, чтобы перейти к настройкам автозаполнения. Там выберите Password Store из списка и подтвердите запрос подтверждения, нажав ОК.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Поддержка автозаполнения установленными браузерами:</string>

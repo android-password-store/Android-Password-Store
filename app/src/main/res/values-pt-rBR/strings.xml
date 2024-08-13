@@ -95,6 +95,7 @@
   <string name="ssh_key_error_dialog_text">Mensagem : \n</string>
   <string name="pref_recursive_filter_title">Filtragem recursiva</string>
   <string name="pref_recursive_filter_summary">Encontrar senhas do diretório corrente recursivamente.</string>
+  <string name="pref_directory_structure">Organização do arquivo de senha</string>
   <string name="pref_sort_order_title">Ordenação da Senha</string>
   <string name="pref_folder_first_sort_order">Pastas primeiro</string>
   <string name="pref_file_first_sort_order">Arquivos primeiro</string>
@@ -199,7 +200,6 @@
   <string name="oreo_autofill_password_fill_support">Preencher as senhas</string>
   <string name="oreo_autofill_flaky_fill_support">Preencher senhas (pode ser necessário reiniciar o navegador de vez em quando)</string>
   <string name="oreo_autofill_no_support">Sem suporte</string>
-  <string name="oreo_autofill_preference_directory_structure">Organização do arquivo de senha</string>
   <string name="oreo_autofill_enable_dialog_description">O Password Store pode oferecer para preencher formulários de login e até mesmo salvar credenciais inseridas em aplicativos ou em sites.</string>
   <string name="oreo_autofill_enable_dialog_instructions">Para ativar esse recurso, toque em OK para ir para as configurações de preenchimento automático. Lá, selecione Password Store na lista e confirme na tela confirmação com OK.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Suporte ao preenchimento automático com navegadores instalados:</string>

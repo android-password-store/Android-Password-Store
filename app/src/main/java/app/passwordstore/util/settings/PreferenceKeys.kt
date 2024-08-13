@@ -56,7 +56,7 @@ object PreferenceKeys {
   const val LENGTH = "length"
   const val OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES = "oreo_autofill_custom_public_suffixes"
   const val OREO_AUTOFILL_DEFAULT_USERNAME = "oreo_autofill_default_username"
-  const val OREO_AUTOFILL_DIRECTORY_STRUCTURE = "oreo_autofill_directory_structure"
+  const val DIRECTORY_STRUCTURE = "directory_structure"
   const val PREF_KEY_PWGEN_TYPE = "pref_key_pwgen_type"
   const val REPOSITORY_INITIALIZED = "repository_initialized"
   const val REPO_CHANGED = "repo_changed"

@@ -30,7 +30,6 @@ import app.passwordstore.ui.dialogs.DicewarePasswordGeneratorDialogFragment
 import app.passwordstore.ui.dialogs.OtpImportDialogFragment
 import app.passwordstore.ui.dialogs.PasswordGeneratorDialogFragment
 import app.passwordstore.util.autofill.AutofillPreferences
-import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.asLog
 import app.passwordstore.util.extensions.base64
 import app.passwordstore.util.extensions.commitChange
@@ -39,6 +38,7 @@ import app.passwordstore.util.extensions.isInsideRepository
 import app.passwordstore.util.extensions.snackbar
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
+import app.passwordstore.util.settings.DirectoryStructure
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess

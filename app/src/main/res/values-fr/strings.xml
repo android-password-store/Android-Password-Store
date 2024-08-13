@@ -95,6 +95,7 @@
   <string name="ssh_key_error_dialog_text">Message : \n</string>
   <string name="pref_recursive_filter_title">Filtrage récursif</string>
   <string name="pref_recursive_filter_summary">Cherche le mot de passe dans tous les sous-répertoires du répertoire actuel.</string>
+  <string name="pref_directory_structure">Organisation des fichiers de mot de passe</string>
   <string name="pref_sort_order_title">Ordre de tri des mots de passe</string>
   <string name="pref_folder_first_sort_order">Dossiers en premier</string>
   <string name="pref_file_first_sort_order">Fichiers en premier</string>
@@ -194,7 +195,6 @@
   <string name="oreo_autofill_password_fill_support">Remplir le mot de passe</string>
   <string name="oreo_autofill_flaky_fill_support">Remplir les mots de passe (peut nécessiter un redémarrage du navigateur de temps à autre)</string>
   <string name="oreo_autofill_no_support">Pas de support</string>
-  <string name="oreo_autofill_preference_directory_structure">Organisation des fichiers de mot de passe</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store vous permet de remplir des formulaires de connexion ainsi que d\'enregistrer vos identifiants d\'applications ou de sites Web.</string>
   <string name="oreo_autofill_enable_dialog_instructions">Pour activer cette fonctionnalité, appuyez sur OK pour aller dans les paramètres de saisie automatique, sélectionnez Password Store dans la liste puis confirmez avec OK.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Prise en charge du remplissage automatique avec les navigateurs installés:</string>

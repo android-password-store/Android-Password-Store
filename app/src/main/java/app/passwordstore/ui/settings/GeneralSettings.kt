@@ -14,6 +14,7 @@ import app.passwordstore.R
 import app.passwordstore.util.auth.BiometricAuthenticator
 import app.passwordstore.util.auth.BiometricAuthenticator.Result
 import app.passwordstore.util.extensions.sharedPrefs
+import app.passwordstore.util.settings.DirectoryStructure
 import app.passwordstore.util.settings.PreferenceKeys
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.onClick
@@ -32,6 +33,16 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
       singleChoice(PreferenceKeys.APP_THEME, themeItems) {
         initialSelection = activity.resources.getString(R.string.app_theme_def)
         titleRes = R.string.pref_app_theme_title
+      }
+
+      val values =
+        activity.resources.getStringArray(R.array.directory_structure_values)
+      val titles =
+        activity.resources.getStringArray(R.array.directory_structure_entries)
+      val items = values.zip(titles).map { SelectionItem(it.first, it.second, null) }
+      singleChoice(PreferenceKeys.DIRECTORY_STRUCTURE, items) {
+        initialSelection = DirectoryStructure.DEFAULT.value
+        titleRes = R.string.pref_directory_structure
       }
 
       val sortValues = activity.resources.getStringArray(R.array.sort_order_values)

@@ -96,6 +96,7 @@
   <string name="ssh_key_error_dialog_text">消息: </string>
   <string name="pref_recursive_filter_title">递归过滤</string>
   <string name="pref_recursive_filter_summary">递归式寻找当前目录的密码</string>
+  <string name="pref_directory_structure">密码文件组</string>
   <string name="pref_sort_order_title">密码排序顺序</string>
   <string name="pref_folder_first_sort_order">目录优先</string>
   <string name="pref_file_first_sort_order">文件优先</string>
@@ -208,7 +209,6 @@
   <string name="oreo_autofill_password_fill_support">填写密码</string>
   <string name="oreo_autofill_flaky_fill_support">填充密码 (可能需要偶尔重启浏览器)</string>
   <string name="oreo_autofill_no_support">无支持</string>
-  <string name="oreo_autofill_preference_directory_structure">密码文件组</string>
   <string name="oreo_autofill_enable_dialog_description">密码仓库可以填写登录表单,甚至可以保存您在应用程序或网站上输入的凭据</string>
   <string name="oreo_autofill_enable_dialog_instructions">要启用此功能,请点击确定转到自动填充设置 在那里,从列表中选择密码存储并使用确认确认提示</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">已安装支持自动填充的浏览器:</string>
