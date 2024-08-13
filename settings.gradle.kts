@@ -88,6 +88,8 @@ include("coroutine-utils")
 
 include("crypto:common")
 
+include("crypto:age")
+
 include("crypto:pgpainless")
 
 include("format:common")

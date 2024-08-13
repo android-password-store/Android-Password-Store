@@ -32,6 +32,7 @@ androidx-recyclerview = "androidx.recyclerview:recyclerview:1.4.0-alpha02"
 androidx-recyclerviewSelection = "androidx.recyclerview:recyclerview-selection:1.2.0-alpha01"
 androidx-security = "androidx.security:security-crypto-ktx:1.1.0-alpha06"
 androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
+aps-kage = "com.github.android-password-store:kage:0.2.0"
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:2.3.4"
 aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
 build-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
