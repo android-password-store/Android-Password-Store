@@ -116,6 +116,7 @@
   <string name="ssh_key_error_dialog_text">Message : \n</string>
   <string name="pref_recursive_filter_title">Recursive filtering</string>
   <string name="pref_recursive_filter_summary">Recursively find passwords of the current directory.</string>
+  <string name="pref_directory_structure">Password file organization</string>
   <string name="pref_sort_order_title">Password sort order</string>
   <string name="pref_folder_first_sort_order">Folders first</string>
   <string name="pref_file_first_sort_order">Files first</string>
@@ -236,7 +237,6 @@
   <string name="oreo_autofill_password_fill_support">Fill passwords</string>
   <string name="oreo_autofill_flaky_fill_support">Fill passwords (may require restarting the browser from time to time)</string>
   <string name="oreo_autofill_no_support">No support</string>
-  <string name="oreo_autofill_preference_directory_structure">Password file organization</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store can offer to fill login forms and even save credentials you enter in apps or on websites.</string>
   <string name="oreo_autofill_enable_dialog_instructions">To enable this feature, tap OK to go to Autofill settings. There, select Password Store from the list and confirm the confirmation prompt with OK.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Autofill support with installed browsers:</string>

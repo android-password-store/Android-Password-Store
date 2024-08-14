@@ -95,6 +95,7 @@
   <string name="ssh_key_error_dialog_text">메시지 : \n</string>
   <string name="pref_recursive_filter_title">순환 필터링</string>
   <string name="pref_recursive_filter_summary">현재 위치의 모든 하위 디렉토리에서 암호를 찾습니다.</string>
+  <string name="pref_directory_structure">암허 파일 정리</string>
   <string name="pref_sort_order_title">암호 정렬 순서</string>
   <string name="pref_folder_first_sort_order">폴더 우선</string>
   <string name="pref_file_first_sort_order">파일 우선</string>
@@ -201,7 +202,6 @@
   <string name="oreo_autofill_password_fill_support">암호 입력</string>
   <string name="oreo_autofill_flaky_fill_support">비밀번호 채우기 (때때로 브라우저를 다시 시작해야 할 수 있음)</string>
   <string name="oreo_autofill_no_support">지원하지 않음</string>
-  <string name="oreo_autofill_preference_directory_structure">암허 파일 정리</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store는 로그인 양식을 작성하고 앱이나 웹사이트에 입력한 자격 증명을 저장하는 기능도 제공합니다.</string>
   <string name="oreo_autofill_enable_dialog_instructions">이 기능을 사용하려면 확인을 탭하여 자동 완성 설정으로 이동합니다. 목록에서 암호 저장을 선택하고 확인으로 확인 메시지를 확인합니다.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">자동 완성 지원 하는 설치된 브라우저:</string>

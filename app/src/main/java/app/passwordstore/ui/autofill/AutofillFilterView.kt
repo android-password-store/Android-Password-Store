@@ -27,9 +27,9 @@ import app.passwordstore.data.password.PasswordItem
 import app.passwordstore.databinding.ActivityOreoAutofillFilterBinding
 import app.passwordstore.util.autofill.AutofillMatcher
 import app.passwordstore.util.autofill.AutofillPreferences
-import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.extensions.viewBinding
+import app.passwordstore.util.settings.DirectoryStructure
 import app.passwordstore.util.viewmodel.FilterMode
 import app.passwordstore.util.viewmodel.ListMode
 import app.passwordstore.util.viewmodel.SearchMode

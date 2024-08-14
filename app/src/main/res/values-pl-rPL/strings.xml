@@ -94,6 +94,7 @@
   <string name="ssh_key_error_dialog_text">Wiadomość: \n</string>
   <string name="pref_recursive_filter_title">Filtrowanie rekurencyjne</string>
   <string name="pref_recursive_filter_summary">Rekurencyjnie znajdź hasła aktualnego katalogu.</string>
+  <string name="pref_directory_structure">Organizacja plików haseł</string>
   <string name="pref_sort_order_title">Kolejność sortowania haseł</string>
   <string name="pref_folder_first_sort_order">Najpierw foldery</string>
   <string name="pref_file_first_sort_order">Najpierw pliki</string>
@@ -200,7 +201,6 @@
   <string name="oreo_autofill_password_fill_support">Wypełnij hasła</string>
   <string name="oreo_autofill_flaky_fill_support">Wypełnij hasła (może wymagać ponownego uruchomienia przeglądarki od czasu do czasu)</string>
   <string name="oreo_autofill_no_support">Brak wsparcia</string>
-  <string name="oreo_autofill_preference_directory_structure">Organizacja plików haseł</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store może zaoferować wypełnianie formularzy logowania, a nawet zapisywanie danych logowania, które wpisujesz w aplikacjach lub na stronach internetowych.</string>
   <string name="oreo_autofill_enable_dialog_instructions">Aby włączyć tę funkcję, naciśnij przycisk OK, aby przejść do ustawień autouzupełniania. Następnie wybierz Password Store z listy i potwierdź przyciskiem OK.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Obsługa autouzupełniania w zainstalowanych przeglądarkach:</string>

@@ -95,6 +95,7 @@
   <string name="ssh_key_error_dialog_text">Messaggio : \n</string>
   <string name="pref_recursive_filter_title">Filtro ricorsivo</string>
   <string name="pref_recursive_filter_summary">Trova ricorsivamente le password della directory corrente.</string>
+  <string name="pref_directory_structure">Organizzazione dei file di password</string>
   <string name="pref_sort_order_title">Ordine password</string>
   <string name="pref_folder_first_sort_order">Prima le cartelle</string>
   <string name="pref_file_first_sort_order">Prima i file</string>
@@ -189,7 +190,6 @@
   <string name="oreo_autofill_password_fill_support">Compila le password</string>
   <string name="oreo_autofill_flaky_fill_support">Compila le password (potrebbe richiedere il riavvio del browser di tanto in tanto)</string>
   <string name="oreo_autofill_no_support">Nessun supporto</string>
-  <string name="oreo_autofill_preference_directory_structure">Organizzazione dei file di password</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store può offrire di compilare i moduli di accesso e persino di salvare le credenziali che inserisci in app o su siti web.</string>
   <string name="oreo_autofill_enable_dialog_instructions">Per abilitare questa funzionalità, tocca OK per andare alle impostazioni di Auto-Compilazione. Lì, seleziona Password Store dall\'elenco e conferma la richiesta di conferma con OK.</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Supporto all\'auto-compilazione con i browser installati:</string>

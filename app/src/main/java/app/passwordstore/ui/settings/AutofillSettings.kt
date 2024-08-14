@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import app.passwordstore.BuildConfig
 import app.passwordstore.R
-import app.passwordstore.util.autofill.DirectoryStructure
 import app.passwordstore.util.extensions.autofillManager
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel
@@ -24,10 +23,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.onClick
-import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.helpers.switch
 import de.Maxr1998.modernpreferences.preferences.SwitchPreference
-import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 
 class AutofillSettings(private val activity: FragmentActivity) : SettingsProvider {
 
@@ -100,16 +97,6 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
           }
           false
         }
-      }
-      val values =
-        activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_values)
-      val titles =
-        activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_entries)
-      val items = values.zip(titles).map { SelectionItem(it.first, it.second, null) }
-      singleChoice(PreferenceKeys.OREO_AUTOFILL_DIRECTORY_STRUCTURE, items) {
-        initialSelection = DirectoryStructure.DEFAULT.value
-        dependency = PreferenceKeys.AUTOFILL_ENABLE
-        titleRes = R.string.oreo_autofill_preference_directory_structure
       }
       editText(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME) {
         dependency = PreferenceKeys.AUTOFILL_ENABLE
