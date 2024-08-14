@@ -35,10 +35,8 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
         titleRes = R.string.pref_app_theme_title
       }
 
-      val values =
-        activity.resources.getStringArray(R.array.directory_structure_values)
-      val titles =
-        activity.resources.getStringArray(R.array.directory_structure_entries)
+      val values = activity.resources.getStringArray(R.array.directory_structure_values)
+      val titles = activity.resources.getStringArray(R.array.directory_structure_entries)
       val items = values.zip(titles).map { SelectionItem(it.first, it.second, null) }
       singleChoice(PreferenceKeys.DIRECTORY_STRUCTURE, items) {
         initialSelection = DirectoryStructure.DEFAULT.value
