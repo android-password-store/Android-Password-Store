@@ -96,7 +96,6 @@
   <string name="ssh_key_error_dialog_text">消息: </string>
   <string name="pref_recursive_filter_title">递归过滤</string>
   <string name="pref_recursive_filter_summary">递归式寻找当前目录的密码</string>
-  <string name="pref_directory_structure">密码文件组</string>
   <string name="pref_sort_order_title">密码排序顺序</string>
   <string name="pref_folder_first_sort_order">目录优先</string>
   <string name="pref_file_first_sort_order">文件优先</string>

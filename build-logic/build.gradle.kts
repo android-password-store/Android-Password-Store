@@ -17,10 +17,6 @@ gradlePlugin {
       id = "com.github.android-password-store.android-library"
       implementationClass = "app.passwordstore.gradle.LibraryPlugin"
     }
-    register("crowdin") {
-      id = "com.github.android-password-store.crowdin-plugin"
-      implementationClass = "app.passwordstore.gradle.crowdin.CrowdinDownloadPlugin"
-    }
     register("git-hooks") {
       id = "com.github.android-password-store.git-hooks"
       implementationClass = "app.passwordstore.gradle.GitHooksPlugin"
