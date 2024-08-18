@@ -6,7 +6,6 @@
 
 plugins {
   id("com.github.android-password-store.android-application")
-  id("com.github.android-password-store.crowdin-plugin")
   id("com.github.android-password-store.kotlin-android")
   id("com.github.android-password-store.kotlin-kapt")
   id("com.github.android-password-store.versioning-plugin")
@@ -14,11 +13,6 @@ plugins {
   id("com.github.android-password-store.rename-artifacts")
   alias(libs.plugins.hilt)
   alias(libs.plugins.kotlin.composeCompiler)
-}
-
-crowdin {
-  crowdinIdentifier = "android-password-store"
-  skipCleanup = false
 }
 
 android {
