@@ -100,7 +100,6 @@
   <string name="ssh_key_error_dialog_text">Сообщение: \n</string>
   <string name="pref_recursive_filter_title">Рекурсивная фильтрация</string>
   <string name="pref_recursive_filter_summary">Рекурсивный поиск паролей в текущей директории</string>
-  <string name="pref_directory_structure">Организация файла паролей</string>
   <string name="pref_sort_order_title">Порядок сортировки паролей</string>
   <string name="pref_folder_first_sort_order">Сначала папки</string>
   <string name="pref_file_first_sort_order">Сначала файлы</string>

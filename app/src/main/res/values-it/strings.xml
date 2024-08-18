@@ -95,7 +95,6 @@
   <string name="ssh_key_error_dialog_text">Messaggio : \n</string>
   <string name="pref_recursive_filter_title">Filtro ricorsivo</string>
   <string name="pref_recursive_filter_summary">Trova ricorsivamente le password della directory corrente.</string>
-  <string name="pref_directory_structure">Organizzazione dei file di password</string>
   <string name="pref_sort_order_title">Ordine password</string>
   <string name="pref_folder_first_sort_order">Prima le cartelle</string>
   <string name="pref_file_first_sort_order">Prima i file</string>
