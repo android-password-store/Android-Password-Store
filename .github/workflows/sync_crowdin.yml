@@ -11,35 +11,27 @@ jobs:
       - name: Setup build environment
         uses: android-password-store/android-password-store/.github/reusable-workflows/setup-gradle@develop
 
-      - name: Download new translations from Crowdin
-        shell: bash
-        run: ./gradlew --no-configuration-cache crowdin
-        env:
-          CROWDIN_LOGIN: ${{ secrets.CROWDIN_LOGIN }}
-          CROWDIN_PROJECT_KEY: ${{ secrets.CROWDIN_PROJECT_KEY }}
-
-      - name: Check if PR is required
-        run: if [[ $(git status -s) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
-
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
-        if: "env.UPDATED == 'true'"
+      - name: Sync translations to/from Crowdin
+        id: crowdin
+        uses: crowdin/github-action@v2
         with:
-          author: GitHub Actions <noreply@github.com>
-          base: develop
-          body: This is an automated pull request to sync localisations from Crowdin.
-          branch: bot/crowdin-sync
-          commit-message: "strings: sync with crowdin"
-          labels: A-localisation, S-automerge
-          title: Sync localisations from Crowdin
-          token: ${{ secrets.PSL_UPDATE_TOKEN }}
+          upload_sources: true
+          upload_translations: false
+          download_translations: true
+          localization_branch_name: l10n_crowdin_translations
+          create_pull_request: true
+          pull_request_title: 'New Crowdin Translations'
+          pull_request_body: 'New Crowdin translations by [Crowdin GH Action](https://github.com/crowdin/github-action)'
+          pull_request_base_branch_name: 'develop'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PSL_UPDATE_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_LOGIN }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PROJECT_KEY }}
 
       - name: Enable automerge for PR
-        if: "${{ steps.cpr.outputs.pull-request-operation == 'created' }}"
         shell: bash
         run: |
           gh pr merge --squash --auto "${PR_URL}"
         env:
           GITHUB_TOKEN: ${{ secrets.PSL_UPDATE_TOKEN }}
-          PR_URL: ${{ steps.cpr.outputs.pull-request-url }}
+          PR_URL: ${{ steps.crowdin.outputs.pull-request-url }}
