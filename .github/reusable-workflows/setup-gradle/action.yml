@@ -51,8 +51,8 @@ runs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4
       with:
         add-job-summary: always
+        cache-cleanup: on-success
         cache-read-only: ${{ inputs.cache-read-only }}
         dependency-graph: ${{ inputs.dependency-graph }}
-        gradle-home-cache-cleanup: true
         gradle-version: ${{ inputs.gradle-version }}
         validate-wrappers: true
