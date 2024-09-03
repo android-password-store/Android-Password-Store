@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.5.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.5.0)" variant="all" version="8.5.0">
+<issues format="6" by="lint 8.6.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.6.0)" variant="all" version="8.6.0">
 
     <issue
         id="InvalidPackage"
@@ -181,24 +181,24 @@
 
     <issue
         id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="        childCount.text = &quot;$count&quot;"
-        errorLine2="                          ~~~~~~~~">
+        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
+        errorLine1="    binding.passwordLengthText.setText(prefs.getInt(DICEWARE_LENGTH, 5).toString())"
+        errorLine2="                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/app/passwordstore/ui/adapters/PasswordItemRecyclerAdapter.kt"
-            line="77"
-            column="27"/>
+            file="src/main/java/app/passwordstore/ui/dialogs/DicewarePasswordGeneratorDialogFragment.kt"
+            line="46"
+            column="40"/>
     </issue>
 
     <issue
         id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="        ?.let { proxyPort.setText(&quot;$it&quot;) }"
-        errorLine2="                                  ~~~~~">
+        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
+        errorLine1="    binding.lengthNumber.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())"
+        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/app/passwordstore/ui/proxy/ProxySelectorActivity.kt"
-            line="49"
-            column="35"/>
+            file="src/main/java/app/passwordstore/ui/dialogs/PasswordGeneratorDialogFragment.kt"
+            line="54"
+            column="34"/>
     </issue>
 
 </issues>
