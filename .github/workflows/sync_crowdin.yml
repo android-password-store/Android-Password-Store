@@ -13,7 +13,7 @@ jobs:
 
       - name: Sync translations to/from Crowdin
         id: crowdin
-        uses: crowdin/github-action@6ed209d411599a981ccb978df3be9dc9b8a81699 # v2
+        uses: crowdin/github-action@cf0ccf9a71f614e66e011d461ea11e5dbabb93ca # v2
         with:
           upload_sources: true
           upload_translations: false
