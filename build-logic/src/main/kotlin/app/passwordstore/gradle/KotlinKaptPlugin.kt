@@ -30,7 +30,7 @@ class KotlinKaptPlugin : Plugin<Project> {
             // https://github.com/google/dagger/releases/tag/dagger-2.34
             option("-Adagger.hilt.shareTestComponents=true")
             // KAPT nests errors causing real issues to be suppressed in CI logs
-            option("-Xmaxerrs", 500)
+            option("-Xmaxerrs", "500")
             // Enables per-module validation for faster error detection
             // https://github.com/google/dagger/commit/325b516ac6a53d3fc973d247b5231fafda9870a2
             option("-Adagger.moduleBindingValidation=ERROR")
