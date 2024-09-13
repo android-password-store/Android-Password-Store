@@ -23,6 +23,39 @@
     </issue>
 
     <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="    withContext(Dispatchers.IO) {"
+        errorLine2="                ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/sshj/SshKey.kt"
+            line="238"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="    withContext(Dispatchers.IO) {"
+        errorLine2="                ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/sshj/SshKey.kt"
+            line="247"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="RawDispatchersUse"
+        message="Use SlackDispatchers."
+        errorLine1="    withContext(Dispatchers.IO) {"
+        errorLine2="                ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/passwordstore/util/git/sshj/SshKey.kt"
+            line="259"
+            column="17"/>
+    </issue>
+
+    <issue
         id="DenyListedApi"
         message="Use Context#getDrawableCompat() instead"
         errorLine1="                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)"
