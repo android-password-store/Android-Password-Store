@@ -7,7 +7,7 @@ flowbinding = "1.2.0"
 hilt = "2.52"
 kotlin = "2.0.20"
 kotlinResult = "2.0.0"
-lifecycle = "2.8.5"
+lifecycle = "2.8.6"
 moshi = "1.15.1"
 
 [libraries]
@@ -16,7 +16,7 @@ androidx-activity = { module = "androidx.activity:activity", version.ref = "andr
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-annotation = "androidx.annotation:annotation:1.8.2"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
-androidx-autofill = "androidx.autofill:autofill:1.3.0-alpha01"
+androidx-autofill = "androidx.autofill:autofill:1.3.0-beta01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0-beta01"
 androidx-core-ktx = "androidx.core:core-ktx:1.13.1"
@@ -28,7 +28,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-material = "com.google.android.material:material:1.12.0"
 androidx-preference = "androidx.preference:preference:1.2.1"
-androidx-recyclerview = "androidx.recyclerview:recyclerview:1.4.0-beta01"
+androidx-recyclerview = "androidx.recyclerview:recyclerview:1.4.0-rc01"
 androidx-recyclerviewSelection = "androidx.recyclerview:recyclerview-selection:1.2.0-alpha01"
 androidx-security = "androidx.security:security-crypto-ktx:1.1.0-alpha06"
 androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
@@ -49,7 +49,7 @@ build-semver = "com.github.zafarkhaja:java-semver:0.10.2"
 build-sentry = "io.sentry.android.gradle:io.sentry.android.gradle.gradle.plugin:4.11.0"
 build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:7.0.0.BETA2"
 build-vcu = "nl.littlerobots.version-catalog-update:nl.littlerobots.version-catalog-update.gradle.plugin:0.8.4"
-compose-bom = "androidx.compose:compose-bom:2024.09.01"
+compose-bom = "androidx.compose:compose-bom:2024.09.02"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
