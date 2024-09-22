@@ -11,11 +11,9 @@ import app.passwordstore.crypto.PGPEncryptOptions
 import app.passwordstore.crypto.PGPIdentifier
 import app.passwordstore.crypto.PGPKeyManager
 import app.passwordstore.crypto.PGPainlessCryptoHandler
-import app.passwordstore.crypto.errors.CryptoHandlerException
 import app.passwordstore.injection.prefs.SettingsPreferences
 import app.passwordstore.util.coroutines.DispatcherProvider
 import app.passwordstore.util.settings.PreferenceKeys
-import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.filterValues
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.mapBoth
@@ -39,6 +37,11 @@ constructor(
     }
   }
 
+  suspend fun isPasswordProtected(identifiers: List<PGPIdentifier>): Boolean {
+    val keys = identifiers.map { pgpKeyManager.getKeyById(it) }.filterValues()
+    return pgpCryptoHandler.isPassphraseProtected(keys)
+  }
+
   suspend fun decrypt(
     password: String,
     identities: List<PGPIdentifier>,
@@ -46,41 +49,22 @@ constructor(
     out: ByteArrayOutputStream,
   ) =
     withContext(dispatcherProvider.io()) {
-      decryptPgp(password, identities, message, out).map { out }
+      val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.filterValues()
+      val decryptionOptions = PGPDecryptOptions.Builder().build()
+      pgpCryptoHandler.decrypt(keys, password, message, out, decryptionOptions).map { out }
     }
-
-  suspend fun isPasswordProtected(identifiers: List<PGPIdentifier>): Boolean {
-    val keys = identifiers.map { pgpKeyManager.getKeyById(it) }.filterValues()
-    return pgpCryptoHandler.isPassphraseProtected(keys)
-  }
 
   suspend fun encrypt(
     identities: List<PGPIdentifier>,
     content: ByteArrayInputStream,
     out: ByteArrayOutputStream,
-  ) = withContext(dispatcherProvider.io()) { encryptPgp(identities, content, out).map { out } }
-
-  private suspend fun decryptPgp(
-    password: String,
-    identities: List<PGPIdentifier>,
-    message: ByteArrayInputStream,
-    out: ByteArrayOutputStream,
-  ): Result<Unit, CryptoHandlerException> {
-    val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.filterValues()
-    val decryptionOptions = PGPDecryptOptions.Builder().build()
-    return pgpCryptoHandler.decrypt(keys, password, message, out, decryptionOptions)
-  }
-
-  private suspend fun encryptPgp(
-    identities: List<PGPIdentifier>,
-    content: ByteArrayInputStream,
-    out: ByteArrayOutputStream,
-  ): Result<Unit, CryptoHandlerException> {
-    val encryptionOptions =
-      PGPEncryptOptions.Builder()
-        .withAsciiArmor(settings.getBoolean(PreferenceKeys.ASCII_ARMOR, false))
-        .build()
-    val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.filterValues()
-    return pgpCryptoHandler.encrypt(keys, content, out, encryptionOptions)
-  }
+  ) =
+    withContext(dispatcherProvider.io()) {
+      val encryptionOptions =
+        PGPEncryptOptions.Builder()
+          .withAsciiArmor(settings.getBoolean(PreferenceKeys.ASCII_ARMOR, false))
+          .build()
+      val keys = identities.map { id -> pgpKeyManager.getKeyById(id) }.filterValues()
+      pgpCryptoHandler.encrypt(keys, content, out, encryptionOptions).map { out }
+    }
 }
