@@ -65,7 +65,8 @@ public class PGPainlessCryptoHandler @Inject constructor() :
                 .addDecryptionKeys(keyringCollection, protector)
                 .addDecryptionPassphrase(Passphrase.fromPassword(passphrase))
             )
-        decryptionStream.use { Streams.pipeAll(it, outputStream) }
+        Streams.pipeAll(decryptionStream, outputStream)
+        decryptionStream.close()
         return@runCatching
       }
       .mapError { error ->
@@ -120,7 +121,8 @@ public class PGPainlessCryptoHandler @Inject constructor() :
             .setAsciiArmor(options.isOptionEnabled(PGPEncryptOptions.ASCII_ARMOR))
         val encryptionStream =
           PGPainless.encryptAndOrSign().onOutputStream(outputStream).withOptions(producerOptions)
-        encryptionStream.use { Streams.pipeAll(plaintextStream, it) }
+        Streams.pipeAll(plaintextStream, encryptionStream)
+        encryptionStream.close()
         val result = encryptionStream.result
         publicKeyRingCollection.forEach { keyRing ->
           require(result.isEncryptedFor(keyRing)) {

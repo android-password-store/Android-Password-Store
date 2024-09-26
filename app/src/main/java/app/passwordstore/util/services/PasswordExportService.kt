@@ -89,7 +89,10 @@ class PasswordExportService : Service() {
       val destOutputStream = contentResolver.openOutputStream(targetPasswordFile.uri)
 
       if (destOutputStream != null && sourceInputStream != null) {
-        sourceInputStream.use { source -> destOutputStream.use { dest -> source.copyTo(dest) } }
+        sourceInputStream.copyTo(destOutputStream, 1024)
+
+        sourceInputStream.close()
+        destOutputStream.close()
       }
     }
   }
