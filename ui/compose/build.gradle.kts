@@ -13,7 +13,6 @@ android {
     compose = true
     androidResources = true
   }
-  composeOptions { useLiveLiterals = false }
   namespace = "app.passwordstore.ui.compose"
 }
 
