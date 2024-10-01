@@ -25,7 +25,6 @@ android {
   }
 
   buildFeatures { compose = true }
-  composeOptions { useLiveLiterals = false }
 
   androidResources { generateLocaleConfig = true }
 
