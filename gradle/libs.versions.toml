@@ -89,7 +89,7 @@ thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.4.0-beta
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.1.0"
 thirdparty-nonfree-sentry = "io.sentry:sentry-android:7.14.0"
 thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.6.7"
-thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.7.4"
+thirdparty-slack-lints = "com.slack.lint:slack-lint-checks:0.8.0"
 thirdparty-slf4j-api = { module = "org.slf4j:slf4j-api", version = { strictly = "[1.7, 1.8[", prefer = "1.7.36" } }
 thirdparty-sshj = "com.hierynomus:sshj:0.39.0"
 thirdparty-uri = "com.eygraber:uri-kmp:0.0.18"
