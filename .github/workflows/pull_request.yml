@@ -24,7 +24,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: Build report (check-codestyle)
           path: build/reports/kotlin-build/
@@ -41,14 +41,14 @@ jobs:
 
       - name: (Fail-only) Upload test report
         if: "${{ failure() }}"
-        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: Test report (unit-tests)
           path: app/build/reports
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: Build report (unit-tests)
           path: build/reports/kotlin-build/
@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: Build report (build-apks)
           path: build/reports/kotlin-build/
@@ -82,7 +82,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: Build report (check-api)
           path: build/reports/kotlin-build/
@@ -99,7 +99,7 @@ jobs:
 
       - name: Upload Kotlin build report
         if: "${{ always() }}"
-        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: Build report (lint)
           path: build/reports/kotlin-build/
