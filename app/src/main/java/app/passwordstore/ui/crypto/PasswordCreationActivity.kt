@@ -13,15 +13,49 @@ import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import app.passwordstore.R
 import app.passwordstore.data.passfile.PasswordEntry
@@ -38,7 +72,6 @@ import app.passwordstore.util.extensions.isInsideRepository
 import app.passwordstore.util.extensions.snackbar
 import app.passwordstore.util.extensions.unsafeLazy
 import app.passwordstore.util.extensions.viewBinding
-import app.passwordstore.util.settings.DirectoryStructure
 import app.passwordstore.util.settings.PreferenceKeys
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
@@ -65,6 +98,7 @@ import kotlin.io.path.nameWithoutExtension
 import kotlin.io.path.pathString
 import kotlin.io.path.relativeTo
 import kotlin.io.path.writeBytes
+import kotlin.random.Random
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -140,126 +174,316 @@ class PasswordCreationActivity : BasePGPActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    title =
-      if (editing) getString(R.string.edit_password) else getString(R.string.new_password_title)
-    with(binding) {
-      setContentView(root)
-      generatePassword.setOnClickListener { generatePassword() }
-      otpImportButton.setOnClickListener {
-        supportFragmentManager.setFragmentResultListener(
-          OTP_RESULT_REQUEST_KEY,
-          this@PasswordCreationActivity,
-        ) { requestKey, bundle ->
-          if (requestKey == OTP_RESULT_REQUEST_KEY) {
-            val contents = bundle.getString(RESULT)
-            val currentExtras = binding.extraContent.text.toString()
-            if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
-              binding.extraContent.append("\n$contents")
-            else binding.extraContent.append(contents)
-          }
-        }
-        val hasCamera = packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true
-        if (hasCamera) {
-          val items =
-            arrayOf(
-              getString(R.string.otp_import_qr_code),
-              getString(R.string.otp_import_from_file),
-              getString(R.string.otp_import_manual_entry),
-            )
-          MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-            .setItems(items) { _, index ->
-              when (index) {
-                0 ->
-                  otpImportAction.launch(
-                    IntentIntegrator(this@PasswordCreationActivity)
-                      .setOrientationLocked(false)
-                      .setBeepEnabled(false)
-                      .setDesiredBarcodeFormats(QR_CODE)
-                      .createScanIntent()
-                  )
-                1 -> imageImportAction.launch("image/*")
-                2 -> OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
-              }
-            }
-            .show()
-        } else {
-          OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
-        }
-      }
+    title = if (editing) getString(R.string.edit_password) else getString(R.string.new_password_title)
 
-      directoryInputLayout.apply {
-        if (suggestedName != null || suggestedPass != null || shouldGeneratePassword) {
-          isEnabled = true
-        } else {
-          setBackgroundColor(getColor(android.R.color.transparent))
-        }
-        val path = getRelativePath(fullPath, repoPath)
-        // Keep empty path field visible if it is editable.
-        if (path.isEmpty() && !isEnabled) visibility = View.GONE
-        else {
-          directory.setText(path)
-          oldCategory = path
-        }
-      }
-      if (suggestedName != null) {
-        filename.setText(suggestedName)
-      } else {
-        filename.requestFocus()
-      }
-
-      if (
-        AutofillPreferences.directoryStructure(this@PasswordCreationActivity) ==
-          DirectoryStructure.EncryptedUsername || suggestedUsername != null
-      ) {
-        usernameInputLayout.visibility = View.VISIBLE
-        if (suggestedUsername != null) username.setText(suggestedUsername)
-        else if (suggestedName != null) username.requestFocus()
-      }
-
-      // Allow the user to quickly switch between storing the username as the filename or
-      // in the encrypted extras. This only makes sense if the directory structure is
-      // FileBased.
-      if (
-        suggestedName == null &&
-          AutofillPreferences.directoryStructure(this@PasswordCreationActivity) ==
-            DirectoryStructure.FileBased
-      ) {
-        encryptUsername.apply {
-          visibility = View.VISIBLE
-          setOnClickListener {
-            if (isChecked) {
-              // User wants to enable username encryption, so we use the filename
-              // as username and insert it into the username input field.
-              val login = filename.text.toString()
-              filename.text?.clear()
-              username.setText(login)
-              usernameInputLayout.apply { visibility = View.VISIBLE }
-            } else {
-              // User wants to disable username encryption, so we take the username
-              // from the username text field and insert it into the filename input field.
-              val login = username.text.toString()
-              username.text?.clear()
-              filename.setText(login)
-              usernameInputLayout.apply { visibility = View.GONE }
-            }
-          }
-        }
-      }
-      suggestedPass?.let {
-        password.setText(it)
-        password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-      }
-      suggestedExtra?.let { extraContent.setText(it) }
-      if (shouldGeneratePassword) {
-        generatePassword()
-        password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-      }
+    // Set up Jetpack Compose
+    setContent {
+      PasswordScreen(
+        suggestedName = suggestedName,
+        suggestedPass = suggestedPass,
+        suggestedExtra = suggestedExtra,
+        shouldGeneratePassword = shouldGeneratePassword,
+        onOtpImportClicked = { handleOtpImport() },  // External function for handling OTP logic
+        onGeneratePassword = { generatePassword() }, // Function for password generation
+        modifier = Modifier.padding(16.dp) // Padding for the entire screen
+      )
     }
-    listOf(binding.filename, binding.username, binding.extraContent).forEach {
-      it.doAfterTextChanged { updateViewState() }
-    }
-    updateViewState()
+
+    // Keeping non-Compose logic as is, like OTP handling
+    // Implement `otpImportButton` handling logic here using Compose if needed
   }
+
+
+  @OptIn(ExperimentalMaterial3Api::class)
+  @Composable
+  fun PasswordScreen(
+    suggestedName: String?,
+    suggestedPass: String?,
+    suggestedExtra: String?,
+    shouldGeneratePassword: Boolean,
+    onOtpImportClicked: () -> Unit,
+    onGeneratePassword: () -> Unit,
+    modifier: Modifier = Modifier // Added modifier parameter
+  ) {
+    var name by remember { mutableStateOf(suggestedName ?: "") }
+    var password by remember { mutableStateOf(suggestedPass ?: "") }
+    var extraContent by remember { mutableStateOf(suggestedExtra ?: "") }
+    var generatePassword by remember { mutableStateOf(shouldGeneratePassword) }
+    var showDialog by remember { mutableStateOf(false) }
+    var generatedPassword by remember { mutableStateOf("") }
+
+    Column(modifier = modifier.padding(16.dp)) { // Use modifier here
+      // Filename field
+      OutlinedTextField(
+        value = name,
+        onValueChange = { name = it },
+        label = { Text("Filename") }
+      )
+
+      // Username field
+      var showUsername by remember { mutableStateOf(false) }
+      if (showUsername) {
+        OutlinedTextField(
+          value = name,
+          onValueChange = { /* Handle username changes */ },
+          label = { Text("Username") }
+        )
+      }
+
+      // Password field
+      OutlinedTextField(
+        value = password,
+        onValueChange = { password = it },
+        label = { Text("Password") },
+        visualTransformation = PasswordVisualTransformation(),
+        trailingIcon = {
+          IconButton(onClick = { showDialog = true }) {
+            Icon(Icons.Default.Refresh, contentDescription = "Generate Password")
+          }
+        }
+      )
+
+      // Extra Content field
+      OutlinedTextField(
+        value = extraContent,
+        onValueChange = { extraContent = it },
+        label = { Text("Extra Content") },
+        modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+      )
+
+      Spacer(modifier = Modifier.height(16.dp))
+      // OTP Import Button
+      Button(onClick = { onOtpImportClicked() }) {
+        Text(text = "Import OTP")
+      }
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      // Generate Password button
+      if (!generatePassword) {
+        Button(onClick = { showDialog = true }) {
+          Text(text = "Generate Password")
+        }
+      }
+
+      // Display the generated password
+      if (generatedPassword.isNotEmpty()) {
+        Text(text = "Generated Password: $generatedPassword", modifier = Modifier.padding(top = 16.dp))
+      }
+
+      // Password Generation Dialog
+      if (showDialog) {
+        PasswordGenerationDialog(
+          onDismiss = { showDialog = false },
+          onGenerateClick = { newPassword ->
+            generatedPassword = newPassword
+          },
+          onOkClick = { newPassword ->
+            password = newPassword // Update the password state
+            showDialog = false
+          }
+        )
+      }
+    }
+  }
+
+  @OptIn(ExperimentalMaterial3Api::class)
+  @Composable
+  fun PasswordGenerationDialog(
+    onDismiss: () -> Unit,
+    onGenerateClick: (String) -> Unit,
+    onOkClick: (String) -> Unit
+  ) {
+    var length by remember { mutableStateOf("5") }
+    var separator by remember { mutableStateOf("-") }
+    var generatedPassword by remember { mutableStateOf("chain-geologic-chokehold-re-occupy-cuddly") }
+    var selectedPasswordType by remember { mutableStateOf("XKPasswd") }
+
+    // Use a standard List instead of ImmutableList
+    val passwordTypes = listOf("XKPasswd", "Alphanumeric")
+
+    AlertDialog(
+      onDismissRequest = onDismiss,
+      title = {
+        Text(text = "Generate Password")
+      },
+      text = {
+        Column {
+          Text(text = generatedPassword)
+          Spacer(modifier = Modifier.height(16.dp))
+
+          Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Type")
+            Spacer(modifier = Modifier.width(8.dp))
+            DropdownWithOptions(
+              selectedOption = selectedPasswordType,
+              options = passwordTypes // Changed to standard List
+            ) { selectedPasswordType = it }
+          }
+
+          Spacer(modifier = Modifier.height(16.dp))
+
+          Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Length")
+            Spacer(modifier = Modifier.width(8.dp))
+            TextField(
+              value = length,
+              onValueChange = { length = it },
+              modifier = Modifier.weight(1f),
+              keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            )
+          }
+
+          Spacer(modifier = Modifier.height(16.dp))
+
+          if (selectedPasswordType == "XKPasswd") {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+              Text(text = "Separator")
+              Spacer(modifier = Modifier.width(8.dp))
+              TextField(
+                value = separator,
+                onValueChange = { separator = it },
+                modifier = Modifier.weight(1f)
+              )
+            }
+          }
+        }
+      },
+      confirmButton = {
+        Button(onClick = {
+          onOkClick(generatedPassword) // Pass the generated password back
+        }) {
+          Text(text = "OK")
+        }
+      },
+      dismissButton = {
+        Row {
+          Button(onClick = onDismiss) {
+            Text(text = "Cancel")
+          }
+          Spacer(modifier = Modifier.width(8.dp))
+          Button(onClick = {
+            generatedPassword = when (selectedPasswordType) {
+              "XKPasswd" -> generateXKPasswd(length.toInt(), separator)
+              else -> generateAlphanumericPassword(length.toInt())
+            }
+            onGenerateClick(generatedPassword) // Optional: track the generated password (can be removed if you want)
+          }) {
+            Text(text = "Generate")
+          }
+        }
+      }
+    )
+  }
+
+  @OptIn(ExperimentalMaterial3Api::class)
+  @Composable
+  fun DropdownWithOptions(
+    selectedOption: String,
+    options: List<String>,
+    onOptionSelected: (String) -> Unit
+  ) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box {
+      // The TextField which shows the selected option
+      TextField(
+        value = selectedOption,
+        onValueChange = {},
+        modifier = Modifier
+          .fillMaxWidth()
+          .clickable { expanded = true }, // Expand the menu on click
+        enabled = false,
+        trailingIcon = {
+          Icon(Icons.Filled.ArrowDropDown, contentDescription = "Expand options")
+        },
+        colors = TextFieldDefaults.colors(disabledTextColor = Color.Black)
+      )
+
+      // DropdownMenu from Jetpack Compose Material3
+      DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false }
+      ) {
+        // Populate DropdownMenu with items
+        options.forEach { option ->
+          DropdownMenuItem(
+            text = { Text(option) },
+            onClick = {
+              onOptionSelected(option)  // Invoke callback to handle the selected option
+              expanded = false  // Close the dropdown after selecting an option
+            }
+          )
+        }
+      }
+    }
+  }
+
+
+
+  private fun generateXKPasswd(length: Int, separator: String): String {
+    val wordList = listOf(
+      "apple", "banana", "cherry", "date", "elderberry",
+      "fig", "grape", "honeydew", "kiwi", "lemon",
+      "mango", "nectarine", "orange", "papaya", "quince",
+      "raspberry", "strawberry", "tangerine", "ugli", "vanilla",
+      "watermelon", "xigua", "yuzu", "zucchini"
+    )
+    return (1..length)
+      .map { wordList[Random.nextInt(wordList.size)] }
+      .joinToString(separator)
+  }
+
+  private fun generateAlphanumericPassword(length: Int): String {
+    val charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    return (1..length)
+      .map { charset[Random.nextInt(charset.length)] }
+      .joinToString("")
+  }
+
+
+
+
+  private fun handleOtpImport() {
+    supportFragmentManager.setFragmentResultListener(OTP_RESULT_REQUEST_KEY, this) { requestKey, bundle ->
+      if (requestKey == OTP_RESULT_REQUEST_KEY) {
+        val contents = bundle.getString(RESULT)
+        val currentExtras = binding.extraContent.text.toString()
+        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n') {
+          binding.extraContent.append("\n$contents")
+        } else {
+          binding.extraContent.append(contents)
+        }
+      }
+    }
+
+    val hasCamera = packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true
+    if (hasCamera) {
+      val items = arrayOf(
+        getString(R.string.otp_import_qr_code),
+        getString(R.string.otp_import_from_file),
+        getString(R.string.otp_import_manual_entry)
+      )
+      MaterialAlertDialogBuilder(this)
+        .setItems(items) { _, index ->
+          when (index) {
+            0 -> otpImportAction.launch(
+              IntentIntegrator(this)
+                .setOrientationLocked(false)
+                .setBeepEnabled(false)
+                .setDesiredBarcodeFormats(QR_CODE)
+                .createScanIntent()
+            )
+            1 -> imageImportAction.launch("image/*")
+            2 -> OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
+          }
+        }
+        .show()
+    } else {
+      OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
+    }
+  }
+
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.pgp_handler_new_password, menu)
