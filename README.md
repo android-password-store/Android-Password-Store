@@ -1,3 +1,7 @@
+> [!WARNING]
+>
+> Android Password Store is no longer actively developed. You can find the announcement [here](https://github.com/android-password-store/Android-Password-Store/discussions/3260).
+
 # Password Store
 
 [![GitHub workflow](https://github.com/android-password-store/Android-Password-Store/workflows/Deploy%20snapshot%20builds/badge.svg)](https://github.com/android-password-store/Android-Password-Store/actions)
